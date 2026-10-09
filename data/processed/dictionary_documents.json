@@ -1,0 +1,2754 @@
+[
+  {
+    "id": "commom_schema.txt:641",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO administrative_division (id, name, full_name, province_name, city_name, county_name, level, longitude, latitude)\r\nVALUES\r\n('310000', '上海市', '上海市', '', '', '', 1, NULL, NULL),\r\n('310101', '黄浦区', '上海市-黄浦区', '上海市', '黄浦区', '', 3, NULL, NULL),\r\n('310115', '浦东新区', '上海市-浦东新区', '上海市', '浦东新区', '', 3, NULL, NULL),\r\n('320500', '苏州市', '江苏省-苏州市', '江苏省', '苏州市', '', 2, NULL, NULL),\r\n('320100', '南京市', '江苏省-南京市', '江苏省', '南京市', '', 2, NULL, NULL),\r\n('320102', '玄武区', '江苏省-南京市-玄武区', '江苏省', '南京市', '玄武区', 3, NULL, NULL),\r\n('320115', '江宁区', '江苏省-南京市-江宁区', '江苏省', '南京市', '江宁区', 3, NULL, NULL);"
+  },
+  {
+    "id": "commom_schema.txt:2124",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "vehicle_type_dict",
+    "text": "INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');"
+  },
+  {
+    "id": "commom_schema.txt:2421",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "vessel_type_dict",
+    "text": "INSERT INTO common.vessel_type_dict (type_code, type_name, category) VALUES\r\n(20, '客船', '客运'),\r\n(21, '高速客船', '客运'),\r\n(30, '货船', '货运'),\r\n(31, '散货船', '货运'),\r\n(32, '集装箱船', '货运'),\r\n(33, '滚装船', '货运'),\r\n(34, '液化气船', '特种'),\r\n(35, '油轮', '货运'),\r\n(36, '化学品船', '特种'),\r\n(37, '冷藏船', '货运'),\r\n(40, '拖船', '作业'),\r\n(41, '挖泥船', '作业'),\r\n(42, '消防船', '公务'),\r\n(43, '医疗船', '公务'),\r\n(50, '引航船', '作业'),\r\n(51, '搜救船', '公务'),\r\n(52, '交通船', '作业'),\r\n(53, '公务船', '公务'),\r\n(60, '帆船', '娱乐'),\r\n(70, '渔船', '渔业'),\r\n(71, '拖网渔船', '渔业'),\r\n(80, '军事舰艇', '军事'),\r\n(90, '其他', '其他');"
+  },
+  {
+    "id": "commom_schema.txt:3000",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "employee_type_dict",
+    "text": "INSERT INTO common.employee_type_dict (type_code, type_name) VALUES\r\n('CAPTAIN', '船长'),\r\n('CHIEF_OFFICER', '大副'),\r\n('SECOND_OFFICER', '二副'),\r\n('THIRD_OFFICER', '三副'),\r\n('CHIEF_ENGINEER', '轮机长'),\r\n('SECOND_ENGINEER', '大管轮'),\r\n('THIRD_ENGINEER', '二管轮'),\r\n('ELECTRICIAN', '电机员'),\r\n('BOSUN', '水手长'),\r\n('ABLE_SEAMAN', '一级水手'),\r\n('ORDINARY_SEAMAN', '二级水手'),\r\n('OILER', '加油工'),\r\n('COOK', '厨师'),\r\n('STEWARD', '服务员'),\r\n('PURSER', '事务长'),\r\n('MEDICAL', '船医');"
+  },
+  {
+    "id": "commom_schema.txt:3463",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "license_type_dict",
+    "text": "INSERT INTO common.license_type_dict (license_code, license_name) VALUES\r\n('A1', '大型客车'),\r\n('A2', '牵引车'),\r\n('A3', '城市公交车'),\r\n('B1', '中型客车'),\r\n('B2', '大型货车'),\r\n('C1', '小型汽车'),\r\n('C2', '小型自动挡汽车'),\r\n('C3', '低速载货汽车'),\r\n('C4', '三轮汽车');"
+  },
+  {
+    "id": "commom_schema.txt:3940",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_registration_type",
+    "text": "INSERT INTO dict_registration_type (type_code, type_name) VALUES\r\n('111', '国有独资公司'),\r\n('112', '有限责任公司'),\r\n('113', '股份有限公司'),\r\n('114', '私营有限责任公司'),\r\n('115', '私营股份有限公司'),\r\n('116', '外商投资企业'),\r\n('117', '港澳台商投资企业'),\r\n('118', '合伙企业');"
+  },
+  {
+    "id": "commom_schema.txt:4352",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_size_category",
+    "text": "INSERT INTO dict_size_category (size_code, size_name) VALUES\r\n('L', '大型'),\r\n('M', '中型'),\r\n('S', '小型'),\r\n('XS', '微型');"
+  },
+  {
+    "id": "commom_schema.txt:4726",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_stock_type",
+    "text": "INSERT INTO dict_stock_type (type_category, type_code, type_name) VALUES\r\n('SHARE_RIGHT', 'COMMON', '普通股'),\r\n('SHARE_RIGHT', 'PREFERRED', '优先股'),\r\n('REGISTER', 'REGISTERED', '记名股票'),\r\n('REGISTER', 'BEARER', '无记名股票'),\r\n('PAR_VALUE', 'PAR', '面额股票'),\r\n('PAR_VALUE', 'NO_PAR', '无面额股票'),\r\n('MARKET_CLASS', 'A', 'A股'),\r\n('MARKET_CLASS', 'B', 'B股'),\r\n('MARKET_CLASS', 'H', 'H股'),\r\n('MARKET_CLASS', 'N', 'N股');"
+  },
+  {
+    "id": "commom_schema.txt:5316",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_industry",
+    "text": "INSERT INTO dict_industry (industry_code, industry_name) VALUES\r\n('I65', '软件和信息技术服务业'),\r\n('C39', '计算机、通信和其他电子设备制造业'),\r\n('L72', '商务服务业'),\r\n('C26', '化学原料和化学制品制造业'),\r\n('C27', '医药制造业'),\r\n('B06', '石油和天然气开采业'),\r\n('G60', '交通运输、仓储和邮政业'),\r\n('K70', '房地产业'),\r\n('J66', '金融业');"
+  },
+  {
+    "id": "commom_schema.txt:5881",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "energy_type_dict",
+    "text": "INSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES\r\n('THERMAL', '火电', '传统能源', 0),\r\n('HYDRO', '水电', '清洁能源', 1),\r\n('WIND', '风电', '新能源', 1),\r\n('SOLAR', '光伏', '新能源', 1),\r\n('NUCLEAR', '核电', '清洁能源', 0),\r\n('BIOMASS', '生物质发电', '新能源', 1),\r\n('GAS', '天然气发电', '清洁能源', 0),\r\n('PUMPED', '抽水蓄能', '清洁能源', 1),\r\n('GEOTHERMAL', '地热发电', '新能源', 1),\r\n('HYDROGEN', '氢能', '新能源', 1);"
+  },
+  {
+    "id": "commom_schema.txt:6547",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "voltage_level_dict",
+    "text": "INSERT INTO voltage_level_dict (level_code, level_name, level_value, category) VALUES\r\n('LV', '低压', 0, '低压'),\r\n('MV10', '10kV', 10, '中压'),\r\n('MV35', '35kV', 35, '中压'),\r\n('HV110', '110kV', 110, '高压'),\r\n('HV220', '220kV', 220, '高压'),\r\n('EHV330', '330kV', 330, '超高压'),\r\n('EHV500', '500kV', 500, '超高压'),\r\n('EHV750', '750kV', 750, '超高压'),\r\n('UHV1000', '1000kV', 1000, '特高压');"
+  },
+  {
+    "id": "commom_schema.txt:7162",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "energy_position_dict",
+    "text": "INSERT INTO energy_position_dict (position_code, position_name, category) VALUES\r\n('GM', '总经理', '管理'),\r\n('DM', '副总经理', '管理'),\r\n('CE', '总工程师', '技术'),\r\n('PM', '项目经理', '管理'),\r\n('OE', '运行工程师', '运行'),\r\n('ME', '检修工程师', '检修'),\r\n('SE', '安全工程师', '管理'),\r\n('EE', '电气工程师', '技术'),\r\n('TE', '热控工程师', '技术'),\r\n('CE2', '土建工程师', '技术'),\r\n('OP', '值班员', '运行'),\r\n('MT', '检修工', '检修'),\r\n('EL', '电工', '检修'),\r\n('AD', '行政专员', '管理'),\r\n('HR', '人事专员', '管理');"
+  },
+  {
+    "id": "commom_schema.txt:7823",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "station_type_dict",
+    "text": "INSERT INTO station_type_dict (type_code, type_name, category) VALUES\r\n('PP', '发电厂', '发电'),\r\n('SUB', '变电站', '变电'),\r\n('TL', '输电线路', '输电'),\r\n('DS', '配电站', '配电'),\r\n('WP', '风电场', '发电'),\r\n('SP', '光伏电站', '发电'),\r\n('HP', '水电站', '发电'),\r\n('NP', '核电站', '发电'),\r\n('ES', '储能站', '配电'),\r\n('CC', '集控中心', '变电');"
+  },
+  {
+    "id": "commom_schema.txt:8391",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "cert_type_dict",
+    "text": "INSERT INTO cert_type_dict (cert_type_code, cert_type_name, category, valid_years) VALUES\r\n('POWER_SUPPLY', '供电类电力业务许可证', '电力业务', 20),\r\n('POWER_GEN', '发电类电力业务许可证', '电力业务', 20),\r\n('POWER_NEW', '新能源类电力业务许可证', '电力业务', 20),\r\n('INSTALL_REPAIR', '承装修试许可证', '承装修试', 5),\r\n('SAFETY', '安全生产许可证', '安全', 3);"
+  },
+  {
+    "id": "commom_schema.txt:11897",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "product_category",
+    "text": "INSERT INTO product_category (category_id, category_name, parent_category_id, category_level, sort_order) VALUES\r\n  (1000, '数码家电', NULL, 1, 1),\r\n  (1100, '手机通讯', 1000, 2, 1),\r\n  (1200, '电脑办公', 1000, 2, 2),\r\n  (1300, '家用电器', 1000, 2, 3),\r\n  (2000, '服饰鞋包', NULL, 1, 2),\r\n  (2100, '男装', 2000, 2, 1),\r\n  (2200, '女装', 2000, 2, 2),\r\n  (2300, '鞋靴', 2000, 2, 3),\r\n  (3000, '食品生鲜', NULL, 1, 3),\r\n  (3100, '休闲零食', 3000, 2, 1),\r\n  (3200, '粮油调味', 3000, 2, 2),\r\n  (3300, '水果生鲜', 3000, 2, 3),\r\n  (4000, '美妆个护', NULL, 1, 4),\r\n  (4100, '护肤', 4000, 2, 1),\r\n  (4200, '彩妆', 4000, 2, 2),\r\n  (4300, '个人护理', 4000, 2, 3),\r\n  (5000, '母婴玩具', NULL, 1, 5),\r\n  (5100, '婴童用品', 5000, 2, 1),\r\n  (5200, '玩具乐器', 5000, 2, 2),\r\n  (6000, '运动户外', NULL, 1, 6),\r\n  (6100, '运动服饰', 6000, 2, 1),\r\n  (6200, '户外装备', 6000, 2, 2);"
+  },
+  {
+    "id": "commom_schema.txt:12685",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "customer_level_dict",
+    "text": "INSERT INTO customer_level_dict (level_code, level_name, min_growth_value, description, sort_order) VALUES\r\n  ('NORMAL', '普通会员', 0, '默认会员等级', 1),\r\n  ('SILVER', '银卡会员', 1000, '中等活跃用户', 2),\r\n  ('GOLD', '金卡会员', 5000, '高价值用户', 3),\r\n  ('DIAMOND', '钻石会员', 20000, '核心高价值用户', 4);"
+  },
+  {
+    "id": "commom_schema.txt:12960",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "customer_status_dict",
+    "text": "INSERT INTO customer_status_dict (status_code, status_name, description) VALUES\r\n  ('ACTIVE', '正常', '用户账号可正常下单'),\r\n  ('FROZEN', '冻结', '用户账号被限制操作'),\r\n  ('CANCELLED', '注销', '用户账号已注销');"
+  },
+  {
+    "id": "commom_schema.txt:13146",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "product_status_dict",
+    "text": "INSERT INTO product_status_dict (status_code, status_name, description) VALUES\r\n  ('ON_SALE', '上架', '商品正在销售'),\r\n  ('OFF_SALE', '下架', '商品已停止销售'),\r\n  ('SOLD_OUT', '缺货', '商品暂无可售库存');"
+  },
+  {
+    "id": "commom_schema.txt:13329",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "order_status_dict",
+    "text": "INSERT INTO order_status_dict (status_code, status_name, description) VALUES\r\n  ('PENDING_PAY', '待支付', '订单已创建但未支付'),\r\n  ('PAID', '已支付', '订单已完成支付'),\r\n  ('SHIPPED', '已发货', '订单已发货'),\r\n  ('COMPLETED', '已完成', '订单交易完成'),\r\n  ('CANCELLED', '已取消', '订单已取消'),\r\n  ('REFUNDED', '已退款', '订单已退款');"
+  },
+  {
+    "id": "commom_schema.txt:13614",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "payment_method_dict",
+    "text": "INSERT INTO payment_method_dict (method_code, method_name, description) VALUES\r\n  ('ALIPAY', '支付宝', '使用支付宝支付'),\r\n  ('WECHAT', '微信支付', '使用微信支付'),\r\n  ('BANK_CARD', '银行卡', '使用银行卡支付'),\r\n  ('BALANCE', '账户余额', '使用平台账户余额支付');"
+  },
+  {
+    "id": "commom_schema.txt:13836",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "payment_status_dict",
+    "text": "INSERT INTO payment_status_dict (status_code, status_name, description) VALUES\r\n  ('SUCCESS', '支付成功', '支付已成功入账'),\r\n  ('FAILED', '支付失败', '支付未成功'),\r\n  ('REFUNDING', '退款中', '退款流程处理中'),\r\n  ('REFUNDED', '已退款', '支付金额已退回');"
+  },
+  {
+    "id": "commom_schema.txt:14056",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "refund_reason_dict",
+    "text": "INSERT INTO refund_reason_dict (reason_code, reason_name, description) VALUES\r\n  ('QUALITY', '质量问题', '商品存在质量问题'),\r\n  ('WRONG_ITEM', '错发漏发', '商品错发或漏发'),\r\n  ('NO_REASON', '七天无理由', '用户无理由退货'),\r\n  ('OUT_OF_STOCK', '缺货退款', '商家缺货导致退款'),\r\n  ('OTHER', '其他原因', '其他退款原因');"
+  },
+  {
+    "id": "commom_schema.txt:14322",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "order_channel_dict",
+    "text": "INSERT INTO order_channel_dict (channel_code, channel_name, description) VALUES\r\n  ('APP', '手机App', '用户通过手机App下单'),\r\n  ('MINI_PROGRAM', '小程序', '用户通过小程序下单'),\r\n  ('WEB', '网页端', '用户通过网页端下单'),\r\n  ('LIVE', '直播间', '用户通过直播间下单');"
+  },
+  {
+    "id": "commom_schema.txt:14547",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "platform_dict",
+    "text": "INSERT INTO platform_dict (platform_code, platform_name, description) VALUES\r\n  ('TMALL', '天猫', '天猫销售平台'),\r\n  ('JD', '京东', '京东销售平台'),\r\n  ('PDD', '拼多多', '拼多多销售平台'),\r\n  ('SELF', '自营商城', '品牌自营商城');"
+  },
+  {
+    "id": "commom_schema.txt:16730",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_gender",
+    "text": "INSERT INTO dict_gender (gender_code, gender_name) VALUES\r\n('M', '男'),\r\n('F', '女');"
+  },
+  {
+    "id": "commom_schema.txt:16863",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_academic_level",
+    "text": "INSERT INTO dict_academic_level (level_code, level_name) VALUES\r\n('UNDERGRAD', '本科'),\r\n('MASTER', '硕士'),\r\n('DOCTOR', '博士');"
+  },
+  {
+    "id": "commom_schema.txt:17036",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_student_status",
+    "text": "INSERT INTO dict_student_status (status_code, status_name) VALUES\r\n('ACTIVE', '在读'),\r\n('INACTIVE', '休学'),\r\n('GRADUATED', '已毕业'),\r\n('SUSPENDED', '退学'),\r\n('EXPIRED', '逾期未注册');"
+  },
+  {
+    "id": "commom_schema.txt:17256",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_course_type",
+    "text": "INSERT INTO dict_course_type (type_code, type_name) VALUES\r\n('必修', '必修课'),\r\n('选修', '选修课'),\r\n('通识', '通识选修课'),\r\n('实践', '实践环节');"
+  },
+  {
+    "id": "commom_schema.txt:17426",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_exam_item",
+    "text": "INSERT INTO dict_exam_item (item_code, item_name, default_weight) VALUES\r\n('平时', '平时成绩', 0.35),\r\n('期中', '期中考试', 0.45),\r\n('期末', '期末考试', 0.75);"
+  },
+  {
+    "id": "commom_schema.txt:17612",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_take_mode",
+    "text": "INSERT INTO dict_take_mode (mode_code, mode_name) VALUES\r\n('线下', '线下课程'),\r\n('线上', '线上课程'),\r\n('混合', '线上线下混合');"
+  },
+  {
+    "id": "commom_schema.txt:17770",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_semester_type",
+    "text": "INSERT INTO dict_semester_type (semester_code, semester_name, season, is_current) VALUES\r\n('2024-FALL', '2024年秋季学期', 'FALL', 0),\r\n('2025-SPRING', '2025年春季学期', 'SPRING', 1);"
+  },
+  {
+    "id": "commom_schema.txt:17991",
+    "file": "data/raw/subject/Schema/commom_schema.txt",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "dict_grade_level",
+    "text": "INSERT INTO dict_grade_level (grade_level, min_score, max_score, grade_point) VALUES\r\n('A', 90, 100, 4.0),\r\n('B', 80, 89, 3.0),\r\n('C', 70, 79, 2.0),\r\n('D', 60, 69, 1.0),\r\n('F', 0, 59, 0.0);"
+  },
+  {
+    "id": "administrative_division.sql:0",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('110000', '北京市', '北京市', '北京市', '北京市', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:211",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('110101', '东城区', '北京市-东城区', '北京市', '东城区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:426",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('110102', '西城区', '北京市-西城区', '北京市', '西城区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:641",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('110105', '朝阳区', '北京市-朝阳区', '北京市', '北京市', '朝阳区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:859",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('110108', '海淀区', '北京市-海淀区', '北京市', '北京市', '海淀区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:1077",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('110115', '大兴区', '北京市-大兴区', '北京市', '大兴区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:1292",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('120000', '天津市', '天津市', '天津市', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:1500",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('120101', '和平区', '天津市-和平区', '天津市', '和平区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:1715",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('120116', '滨海新区', '天津市-滨海新区', '天津市', '滨海新区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:1933",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130000', '河北省', '河北省', '河北省', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:2141",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130100', '石家庄市', '河北省-石家庄市', '河北省', '石家庄市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:2359",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130200', '唐山市', '河北省-唐山市', '河北省', '唐山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:2574",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130300', '秦皇岛市', '河北省-秦皇岛市', '河北省', '秦皇岛市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:2792",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130400', '邯郸市', '河北省-邯郸市', '河北省', '邯郸市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:3007",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130702', '桥东区', '河北省-张家口市-桥东区', '河北省', '张家口市', '桥东区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:3231",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130722', '张北县', '河北省-张家口市-张北县', '河北省', '张家口市', '张北县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:3455",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130800', '承德市', '河北省-承德市', '河北省', '承德市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:3670",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130802', '双桥区', '河北省-承德市-双桥区', '河北省', '承德市', '双桥区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:3892",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('130826', '丰宁满族自治县', '河北省-承德市-丰宁县', '河北省', '承德市', '丰宁满族自治县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:4122",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('131000', '廊坊市', '河北省-廊坊市', '河北省', '廊坊市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:4337",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('133100', '雄安新区', '河北省-雄安新区', '河北省', '雄安新区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:4555",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('140000', '山西省', '山西省', '山西省', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:4763",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('140100', '太原市', '山西省-太原市', '山西省', '太原市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:4978",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('140200', '大同市', '山西省-大同市', '山西省', '大同市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:5193",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('140400', '长治市', '山西省-长治市', '山西省', '长治市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:5408",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('140700', '晋中市', '山西省-晋中市', '山西省', '晋中市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:5623",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('140800', '运城市', '山西省-运城市', '山西省', '运城市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:5838",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150000', '内蒙古自治区', '内蒙古自治区', '内蒙古自治区', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:6055",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150100', '呼和浩特市', '内蒙古自治区-呼和浩特市', '内蒙古自治区', '呼和浩特市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:6282",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150122', '托克托县', '内蒙古-呼和浩特市-托克托县', '内蒙古自治区', '呼和浩特市', '托克托县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:6514",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150200', '包头市', '内蒙古-包头市', '内蒙古自治区', '包头市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:6732",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150300', '乌海市', '内蒙古-乌海市', '内蒙古自治区', '乌海市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:6950",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150400', '赤峰市', '内蒙古-赤峰市', '内蒙古自治区', '赤峰市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:7168",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150500', '通辽市', '内蒙古-通辽市', '内蒙古自治区', '通辽市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:7386",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150602', '东胜区', '内蒙古-鄂尔多斯市-东胜区', '内蒙古自治区', '鄂尔多斯市', '东胜区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:7615",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150700', '呼伦贝尔市', '内蒙古-呼伦贝尔市', '内蒙古自治区', '呼伦贝尔市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:7839",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150781', '满洲里市', '内蒙古-呼伦贝尔市-满洲里市', '内蒙古自治区', '呼伦贝尔市', '满洲里市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:8071",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('150900', '乌兰察布市', '内蒙古-乌兰察布市', '内蒙古自治区', '乌兰察布市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:8295",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('152502', '锡林浩特市', '内蒙古-锡林郭勒盟-锡林浩特市', '内蒙古自治区', '锡林郭勒盟', '锡林浩特市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:8530",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('210102', '和平区', '辽宁省-沈阳市-和平区', '辽宁省', '沈阳市', '和平区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:8752",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('210200', '大连市', '辽宁省-大连市', '辽宁省', '大连市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:8967",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('210300', '鞍山市', '辽宁省-鞍山市', '辽宁省', '鞍山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:9182",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('210400', '抚顺市', '辽宁省-抚顺市', '辽宁省', '抚顺市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:9397",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('210500', '本溪市', '辽宁省-本溪市', '辽宁省', '本溪市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:9612",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('210600', '丹东市', '辽宁省-丹东市', '辽宁省', '丹东市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:9827",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('210700', '锦州市', '辽宁省-锦州市', '辽宁省', '锦州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:10042",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('210800', '营口市', '辽宁省-营口市', '辽宁省', '营口市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:10257",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('220100', '长春市', '吉林省-长春市', '吉林省', '长春市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:10472",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('220200', '吉林市', '吉林省-吉林市', '吉林省', '吉林市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:10687",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('220204', '船营区', '吉林省-吉林市-船营区', '吉林省', '吉林市', '船营区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:10909",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('220300', '四平市', '吉林省-四平市', '吉林省', '四平市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:11124",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('220400', '辽源市', '吉林省-辽源市', '吉林省', '辽源市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:11339",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('220500', '通化市', '吉林省-通化市', '吉林省', '通化市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:11554",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('220602', '浑江区', '吉林省-白山市-浑江区', '吉林省', '白山市', '浑江区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:11776",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('220700', '松原市', '吉林省-松原市', '吉林省', '松原市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:11991",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('222401', '延吉市', '吉林省-延边州-延吉市', '吉林省', '延边朝鲜族自治州', '延吉市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:12218",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('230103', '南岗区', '黑龙江省-哈尔滨市-南岗区', '黑龙江省', '哈尔滨市', '南岗区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:12444",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('230200', '齐齐哈尔市', '黑龙江省-齐齐哈尔市', '黑龙江省', '齐齐哈尔市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:12667",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('230300', '鸡西市', '黑龙江省-鸡西市', '黑龙江省', '鸡西市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:12884",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('230400', '鹤岗市', '黑龙江省-鹤岗市', '黑龙江省', '鹤岗市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:13101",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('230500', '双鸭山市', '黑龙江省-双鸭山市', '黑龙江省', '双鸭山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:13321",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('230600', '大庆市', '黑龙江省-大庆市', '黑龙江省', '大庆市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:13538",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('230800', '佳木斯市', '黑龙江省-佳木斯市', '黑龙江省', '佳木斯市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:13758",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310000', '上海市', '上海市', '', '', '', 1, 121.473700, 31.230400);"
+  },
+  {
+    "id": "administrative_division.sql:13974",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310101', '黄浦区', '上海市-黄浦区', '上海市', '黄浦区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:14189",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310104', '徐汇区', '上海市-徐汇区', '上海市', '徐汇区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:14404",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310105', '长宁区', '上海市-长宁区', '上海市', '长宁区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:14619",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310106', '静安区', '上海市-静安区', '上海市', '静安区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:14834",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310107', '普陀区', '上海市-普陀区', '上海市', '普陀区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:15049",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310109', '虹口区', '上海市-虹口区', '上海市', '虹口区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:15264",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310110', '杨浦区', '上海市-杨浦区', '上海市', '杨浦区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:15479",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310112', '闵行区', '上海市-闵行区', '上海市', '闵行区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:15694",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310113', '宝山区', '上海市-宝山区', '上海市', '宝山区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:15909",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310114', '嘉定区', '上海市-嘉定区', '上海市', '嘉定区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:16124",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310115', '浦东新区', '上海市-浦东新区', '上海市', '浦东新区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:16342",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310116', '金山区', '上海市-金山区', '上海市', '金山区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:16557",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310117', '松江区', '上海市-松江区', '上海市', '松江区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:16772",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310118', '青浦区', '上海市-青浦区', '上海市', '青浦区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:16987",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310120', '奉贤区', '上海市-奉贤区', '上海市', '奉贤区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:17202",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('310151', '崇明区', '上海市-崇明区', '上海市', '崇明区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:17417",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320000', '江苏省', '江苏省', '江苏省', '', '', 1, 118.767400, 32.041500);"
+  },
+  {
+    "id": "administrative_division.sql:17636",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320100', '南京市', '江苏省-南京市', '江苏省', '南京市', '', 2, 118.796900, 32.060300);"
+  },
+  {
+    "id": "administrative_division.sql:17862",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320102', '玄武区', '江苏省-南京市-玄武区', '江苏省', '南京市', '玄武区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:18084",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320104', '秦淮区', '江苏省-南京市-秦淮区', '江苏省', '南京市', '秦淮区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:18306",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320105', '建邺区', '江苏省-南京市-建邺区', '江苏省', '南京市', '建邺区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:18528",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320106', '鼓楼区', '江苏省-南京市-鼓楼区', '江苏省', '南京市', '鼓楼区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:18750",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320111', '浦口区', '江苏省-南京市-浦口区', '江苏省', '南京市', '浦口区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:18972",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320113', '栖霞区', '江苏省-南京市-栖霞区', '江苏省', '南京市', '栖霞区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:19194",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320114', '雨花台区', '江苏省-南京市-雨花台区', '江苏省', '南京市', '雨花台区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:19419",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320115', '江宁区', '江苏省-南京市-江宁区', '江苏省', '南京市', '江宁区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:19641",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320116', '六合区', '江苏省-南京市-六合区', '江苏省', '南京市', '六合区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:19863",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320117', '溧水区', '江苏省-南京市-溧水区', '江苏省', '南京市', '溧水区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:20085",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320118', '高淳区', '江苏省-南京市-高淳区', '江苏省', '南京市', '高淳区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:20307",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320200', '无锡市', '江苏省-无锡市', '江苏省', '无锡市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:20522",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320205', '锡山区', '江苏省-无锡市-锡山区', '江苏省', '无锡市', '锡山区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:20744",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320206', '惠山区', '江苏省-无锡市-惠山区', '江苏省', '无锡市', '惠山区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:20966",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320211', '滨湖区', '江苏省-无锡市-滨湖区', '江苏省', '无锡市', '滨湖区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:21188",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320213', '梁溪区', '江苏省-无锡市-梁溪区', '江苏省', '无锡市', '梁溪区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:21410",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320300', '徐州市', '江苏省-徐州市', '江苏省', '徐州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:21625",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320400', '常州市', '江苏省-常州市', '江苏省', '常州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:21840",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320500', '苏州市', '江苏省-苏州市', '江苏省', '苏州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:22055",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320505', '虎丘区', '江苏省-苏州市-虎丘区', '江苏省', '苏州市', '虎丘区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:22277",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320506', '吴中区', '江苏省-苏州市-吴中区', '江苏省', '苏州市', '吴中区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:22499",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320508', '姑苏区', '江苏省-苏州市-姑苏区', '江苏省', '苏州市', '姑苏区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:22721",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320583', '昆山市', '江苏省-苏州市-昆山市', '江苏省', '苏州市', '昆山市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:22943",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320600', '南通市', '江苏省-南通市', '江苏省', '南通市', '', 2, 120.894300, 31.980200);"
+  },
+  {
+    "id": "administrative_division.sql:23169",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320700', '连云港市', '江苏省-连云港市', '江苏省', '连云港市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:23387",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320800', '淮安市', '江苏省-淮安市', '江苏省', '淮安市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:23602",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('320981', '东台市', '江苏省-盐城市-东台市', '江苏省', '盐城市', '东台市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:23824",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('321000', '扬州市', '江苏省-扬州市', '江苏省', '扬州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:24039",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('321102', '京口区', '江苏省-镇江市-京口区', '江苏省', '镇江市', '京口区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:24261",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('321200', '泰州市', '江苏省-泰州市', '江苏省', '泰州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:24476",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('321300', '宿迁市', '江苏省-宿迁市', '江苏省', '宿迁市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:24691",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('321302', '宿城区', '江苏省-宿迁市-宿城区', '江苏省', '宿迁市', '宿城区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:24913",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('321311', '宿豫区', '江苏省-宿迁市-宿豫区', '江苏省', '宿迁市', '宿豫区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:25135",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330000', '浙江省', '浙江省', '浙江省', '', '', 1, 120.153600, 30.287500);"
+  },
+  {
+    "id": "administrative_division.sql:25354",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330100', '杭州市', '浙江省-杭州市', '浙江省', '杭州市', '', 2, 120.155100, 30.274100);"
+  },
+  {
+    "id": "administrative_division.sql:25580",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330106', '西湖区', '浙江省-杭州市-西湖区', '浙江省', '杭州市', '西湖区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:25802",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330108', '滨江区', '浙江省-杭州市-滨江区', '浙江省', '杭州市', '滨江区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:26024",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330200', '宁波市', '浙江省-宁波市', '浙江省', '宁波市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:26239",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330205', '江北区', '浙江省-宁波市-江北区', '浙江省', '宁波市', '江北区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:26461",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330206', '北仑区', '浙江省-宁波市-北仑区', '浙江省', '宁波市', '北仑区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:26683",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330300', '温州市', '浙江省-温州市', '浙江省', '温州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:26898",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330400', '嘉兴市', '浙江省-嘉兴市', '浙江省', '嘉兴市', '', 2, 120.750900, 30.762700);"
+  },
+  {
+    "id": "administrative_division.sql:27124",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330424', '海盐县', '浙江省-嘉兴市-海盐县', '浙江省', '嘉兴市', '海盐县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:27346",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330500', '湖州市', '浙江省-湖州市', '浙江省', '湖州市', '', 2, 120.086800, 30.894200);"
+  },
+  {
+    "id": "administrative_division.sql:27572",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330523', '安吉县', '浙江省-湖州市-安吉县', '浙江省', '湖州市', '安吉县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:27794",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330600', '绍兴市', '浙江省-绍兴市', '浙江省', '绍兴市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:28009",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330782', '义乌市', '浙江省-金华市-义乌市', '浙江省', '金华市', '义乌市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:28231",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330800', '衢州市', '浙江省-衢州市', '浙江省', '衢州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:28446",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('330900', '舟山市', '浙江省-舟山市', '浙江省', '舟山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:28661",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('331000', '台州市', '浙江省-台州市', '浙江省', '台州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:28876",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('331083', '玉环市', '浙江省-台州市-玉环市', '浙江省', '台州市', '玉环市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:29098",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('331100', '丽水市', '浙江省-丽水市', '浙江省', '丽水市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:29313",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('331102', '莲都区', '浙江省-丽水市-莲都区', '浙江省', '丽水市', '莲都区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:29535",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('331123', '遂昌县', '浙江省-丽水市-遂昌县', '浙江省', '丽水市', '遂昌县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:29757",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('340000', '安徽省', '安徽省', '安徽省', '', '', 1, 117.283000, 31.861200);"
+  },
+  {
+    "id": "administrative_division.sql:29976",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('340100', '合肥市', '安徽省-合肥市', '安徽省', '合肥市', '', 2, 117.227200, 31.820600);"
+  },
+  {
+    "id": "administrative_division.sql:30202",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('340104', '蜀山区', '安徽省-合肥市-蜀山区', '安徽省', '合肥市', '蜀山区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:30424",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('340202', '镜湖区', '安徽省-芜湖市-镜湖区', '安徽省', '芜湖市', '镜湖区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:30646",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('340400', '淮南市', '安徽省-淮南市', '安徽省', '淮南市', '', 2, 117.018600, 32.642800);"
+  },
+  {
+    "id": "administrative_division.sql:30872",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('340402', '大通区', '安徽省-淮南市-大通区', '安徽省', '淮南市', '大通区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:31094",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('340500', '马鞍山市', '安徽省-马鞍山市', '安徽省', '马鞍山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:31312",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('340800', '安庆市', '安徽省-安庆市', '安徽省', '安庆市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:31527",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('341000', '黄山市', '安徽省-黄山市', '安徽省', '黄山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:31742",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350100', '福州市', '福建省-福州市', '福建省', '福州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:31957",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350181', '福清市', '福建省-福州市-福清市', '福建省', '福州市', '福清市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:32179",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350200', '厦门市', '福建省-厦门市', '福建省', '厦门市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:32394",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350581', '石狮市', '福建省-泉州市-石狮市', '福建省', '泉州市', '石狮市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:32616",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350582', '晋江市', '福建省-泉州市-晋江市', '福建省', '泉州市', '晋江市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:32838",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350600', '漳州市', '福建省-漳州市', '福建省', '漳州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:33053",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350700', '南平市', '福建省-南平市', '福建省', '南平市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:33268",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350800', '龙岩市', '福建省-龙岩市', '福建省', '龙岩市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:33483",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('350902', '蕉城区', '福建省-宁德市-蕉城区', '福建省', '宁德市', '蕉城区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:33705",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('360000', '江西省', '江西省', '江西省', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:33913",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('360100', '南昌市', '江西省-南昌市', '江西省', '南昌市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:34128",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('360200', '景德镇市', '江西省-景德镇市', '江西省', '景德镇市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:34346",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('360300', '萍乡市', '江西省-萍乡市', '江西省', '萍乡市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:34561",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('360400', '九江市', '江西省-九江市', '江西省', '九江市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:34776",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('360700', '赣州市', '江西省-赣州市', '江西省', '赣州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:34991",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370100', '济南市', '山东省-济南市', '山东省', '济南市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:35206",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370112', '历城区', '山东省-济南市-历城区', '山东省', '济南市', '历城区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:35428",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370200', '青岛市', '山东省-青岛市', '山东省', '青岛市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:35643",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370211', '黄岛区', '山东省-青岛市-黄岛区', '山东省', '青岛市', '黄岛区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:35865",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370212', '崂山区', '山东省-青岛市-崂山区', '山东省', '青岛市', '崂山区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:36087",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370300', '淄博市', '山东省-淄博市', '山东省', '淄博市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:36302",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370400', '枣庄市', '山东省-枣庄市', '山东省', '枣庄市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:36517",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370500', '东营市', '山东省-东营市', '山东省', '东营市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:36732",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370501', '东营区', '山东省-东营市-东营区', '山东省', '东营市', '东营区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:36954",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370687', '海阳市', '山东省-烟台市-海阳市', '山东省', '烟台市', '海阳市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:37176",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370700', '潍坊市', '山东省-潍坊市', '山东省', '潍坊市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:37391",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370800', '济宁市', '山东省-济宁市', '山东省', '济宁市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:37606",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370883', '邹城市', '山东省-济宁市-邹城市', '山东省', '济宁市', '邹城市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:37828",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('370900', '泰安市', '山东省-泰安市', '山东省', '泰安市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:38043",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('371000', '威海市', '山东省-威海市', '山东省', '威海市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:38258",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('371100', '日照市', '山东省-日照市', '山东省', '日照市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:38473",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('371401', '德城区', '山东省-德州市-德城区', '山东省', '德州市', '德城区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:38695",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('410100', '郑州市', '河南省-郑州市', '河南省', '郑州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:38910",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('410200', '开封市', '河南省-开封市', '河南省', '开封市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:39125",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('410300', '洛阳市', '河南省-洛阳市', '河南省', '洛阳市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:39340",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('410400', '平顶山市', '河南省-平顶山市', '河南省', '平顶山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:39558",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('410700', '新乡市', '河南省-新乡市', '河南省', '新乡市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:39773",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('410782', '辉县市', '河南省-新乡市-辉县市', '河南省', '新乡市', '辉县市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:39995",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('420100', '武汉市', '湖北省-武汉市', '湖北省', '武汉市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:40210",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('420106', '武昌区', '湖北省-武汉市-武昌区', '湖北省', '武汉市', '武昌区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:40432",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('420200', '黄石市', '湖北省-黄石市', '湖北省', '黄石市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:40647",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('420300', '十堰市', '湖北省-十堰市', '湖北省', '十堰市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:40862",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('420504', '点军区', '湖北省-宜昌市-点军区', '湖北省', '宜昌市', '点军区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:41084",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('421000', '荆州市', '湖北省-荆州市', '湖北省', '荆州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:41299",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('429004', '仙桃市', '湖北省-仙桃市', '湖北省', '仙桃市', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:41514",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('429005', '潜江市', '湖北省-潜江市', '湖北省', '潜江市', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:41729",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('430100', '长沙市', '湖南省-长沙市', '湖南省', '长沙市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:41944",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('430181', '浏阳市', '湖南省-长沙市-浏阳市', '湖南省', '长沙市', '浏阳市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:42166",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('430200', '株洲市', '湖南省-株洲市', '湖南省', '株洲市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:42381",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('430300', '湘潭市', '湖南省-湘潭市', '湖南省', '湘潭市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:42596",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('430400', '衡阳市', '湖南省-衡阳市', '湖南省', '衡阳市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:42811",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('430500', '邵阳市', '湖南省-邵阳市', '湖南省', '邵阳市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:43026",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('430781', '津市市', '湖南省-常德市-津市市', '湖南省', '常德市', '津市市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:43248",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440000', '广东省', '广东省', '广东省', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:43456",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440100', '广州市', '广东省-广州市', '广东省', '广州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:43671",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440104', '越秀区', '广东省-广州市-越秀区', '广东省', '广州市', '越秀区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:43893",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440106', '天河区', '广东省-广州市-天河区', '广东省', '广州市', '天河区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:44115",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440117', '从化区', '广东省-广州市-从化区', '广东省', '广州市', '从化区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:44337",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440200', '韶关市', '广东省-韶关市', '广东省', '韶关市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:44552",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440300', '深圳市', '广东省-深圳市', '广东省', '深圳市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:44767",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440304', '福田区', '广东省-深圳市-福田区', '广东省', '深圳市', '福田区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:44989",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440305', '南山区', '广东省-深圳市-南山区', '广东省', '深圳市', '南山区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:45211",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440306', '宝安区', '广东省-深圳市-宝安区', '广东省', '深圳市', '宝安区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:45433",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440307', '龙岗区', '广东省-深圳市-龙岗区', '广东省', '深圳市', '龙岗区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:45655",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440400', '珠海市', '广东省-珠海市', '广东省', '珠海市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:45870",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440500', '汕头市', '广东省-汕头市', '广东省', '汕头市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:46085",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440600', '佛山市', '广东省-佛山市', '广东省', '佛山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:46300",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440781', '台山市', '广东省-江门市-台山市', '广东省', '江门市', '台山市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:46522",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440800', '湛江市', '广东省-湛江市', '广东省', '湛江市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:46737",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('440900', '茂名市', '广东省-茂名市', '广东省', '茂名市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:46952",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('441300', '惠州市', '广东省-惠州市', '广东省', '惠州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:47167",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('441302', '惠城区', '广东省-惠州市-惠城区', '广东省', '惠州市', '惠城区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:47389",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('441700', '阳江市', '广东省-阳江市', '广东省', '阳江市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:47604",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('441900', '东莞市', '广东省-东莞市', '广东省', '东莞市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:47819",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('450000', '广西壮族自治区', '广西壮族自治区', '广西壮族自治区', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:48039",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('450100', '南宁市', '广西壮族自治区-南宁市', '广西壮族自治区', '南宁市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:48262",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('450200', '柳州市', '广西-柳州市', '广西壮族自治区', '柳州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:48480",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('450300', '桂林市', '广西-桂林市', '广西壮族自治区', '桂林市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:48698",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('450400', '梧州市', '广西-梧州市', '广西壮族自治区', '梧州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:48916",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('450500', '北海市', '广西-北海市', '广西壮族自治区', '北海市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:49134",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('451300', '来宾市', '广西-来宾市', '广西壮族自治区', '来宾市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:49352",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('451302', '兴宾区', '广西-来宾市-兴宾区', '广西壮族自治区', '来宾市', '兴宾区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:49577",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('460000', '海南省', '海南省', '海南省', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:49785",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('460100', '海口市', '海南省-海口市', '海南省', '海口市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:50000",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('460200', '三亚市', '海南省-三亚市', '海南省', '三亚市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:50215",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('460400', '儋州市', '海南省-儋州市', '海南省', '儋州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:50430",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('469007', '东方市', '海南省-东方市', '海南省', '东方市', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:50645",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('469026', '昌江黎族自治县', '海南省-昌江县', '海南省', '昌江黎族自治县', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:50868",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('500100', '重庆市', '重庆市', '重庆市', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:51076",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('500101', '万州区', '重庆市-万州区', '重庆市', '万州区', '', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:51291",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('510100', '成都市', '四川省-成都市', '四川省', '成都市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:51506",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('510300', '自贡市', '四川省-自贡市', '四川省', '自贡市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:51721",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('510411', '仁和区', '四川省-攀枝花市-仁和区', '四川省', '攀枝花市', '仁和区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:51945",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('510500', '泸州市', '四川省-泸州市', '四川省', '泸州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:52160",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('510600', '德阳市', '四川省-德阳市', '四川省', '德阳市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:52375",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('510700', '绵阳市', '四川省-绵阳市', '四川省', '绵阳市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:52590",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('510800', '广元市', '四川省-广元市', '四川省', '广元市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:52805",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('511400', '眉山市', '四川省-眉山市', '四川省', '眉山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:53020",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('511526', '屏山县', '四川省-宜宾市-屏山县', '四川省', '宜宾市', '屏山县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:53242",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('511721', '达川区', '四川省-达州市-达川区', '四川省', '达州市', '达川区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:53464",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('511801', '雨城区', '四川省-雅安市-雨城区', '四川省', '雅安市', '雨城区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:53686",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('513200', '阿坝藏族羌族自治州', '四川省-阿坝州', '四川省', '阿坝藏族羌族自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:53913",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('513300', '甘孜藏族自治州', '四川省-甘孜州', '四川省', '甘孜藏族自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:54136",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('513400', '凉山彝族自治州', '四川省-凉山州', '四川省', '凉山彝族自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:54359",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('513401', '西昌市', '四川省-凉山州-西昌市', '四川省', '凉山彝族自治州', '西昌市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:54585",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('520100', '贵阳市', '贵州省-贵阳市', '贵州省', '贵阳市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:54800",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('520200', '六盘水市', '贵州省-六盘水市', '贵州省', '六盘水市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:55018",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('520300', '遵义市', '贵州省-遵义市', '贵州省', '遵义市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:55233",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('520328', '湄潭县', '贵州省-遵义市-湄潭县', '贵州省', '遵义市', '湄潭县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:55455",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('520400', '安顺市', '贵州省-安顺市', '贵州省', '安顺市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:55670",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('520500', '毕节市', '贵州省-毕节市', '贵州省', '毕节市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:55885",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('520625', '印江土家族苗族自治县', '贵州省-铜仁市-印江县', '贵州省', '铜仁市', '印江土家族苗族自治县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:56121",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('522600', '黔东南苗族侗族自治州', '贵州省-黔东南州', '贵州省', '黔东南苗族侗族自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:56351",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('522601', '凯里市', '贵州省-黔东南州-凯里市', '贵州省', '黔东南苗族侗族自治州', '凯里市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:56581",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('530100', '昆明市', '云南省-昆明市', '云南省', '昆明市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:56796",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('530300', '曲靖市', '云南省-曲靖市', '云南省', '曲靖市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:57011",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('530400', '玉溪市', '云南省-玉溪市', '云南省', '玉溪市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:57226",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('530500', '保山市', '云南省-保山市', '云南省', '保山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:57441",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('530600', '昭通市', '云南省-昭通市', '云南省', '昭通市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:57656",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('532901', '大理市', '云南省-大理州-大理市', '云南省', '大理白族自治州', '大理市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:57882",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('540000', '西藏自治区', '西藏自治区', '西藏自治区', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:58096",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('540100', '拉萨市', '西藏自治区-拉萨市', '西藏自治区', '拉萨市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:58315",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('610100', '西安市', '陕西省-西安市', '陕西省', '西安市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:58530",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('610115', '临潼区', '陕西省-西安市-临潼区', '陕西省', '西安市', '临潼区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:58752",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('610300', '宝鸡市', '陕西省-宝鸡市', '陕西省', '宝鸡市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:58967",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('610302', '渭滨区', '陕西省-宝鸡市-渭滨区', '陕西省', '宝鸡市', '渭滨区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:59189",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('610400', '咸阳市', '陕西省-咸阳市', '陕西省', '咸阳市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:59404",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('610500', '渭南市', '陕西省-渭南市', '陕西省', '渭南市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:59619",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('610600', '延安市', '陕西省-延安市', '陕西省', '延安市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:59834",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('610802', '榆阳区', '陕西省-榆林市-榆阳区', '陕西省', '榆林市', '榆阳区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:60056",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('620000', '甘肃省', '甘肃省', '甘肃省', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:60264",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('620100', '兰州市', '甘肃省-兰州市', '甘肃省', '兰州市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:60479",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('620300', '金昌市', '甘肃省-金昌市', '甘肃省', '金昌市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:60694",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('620400', '白银市', '甘肃省-白银市', '甘肃省', '白银市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:60909",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('620500', '天水市', '甘肃省-天水市', '甘肃省', '天水市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:61124",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('620600', '武威市', '甘肃省-武威市', '甘肃省', '武威市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:61339",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('620902', '肃州区', '甘肃省-酒泉市-肃州区', '甘肃省', '酒泉市', '肃州区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:61561",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('620982', '敦煌市', '甘肃省-酒泉市-敦煌市', '甘肃省', '酒泉市', '敦煌市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:61783",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('622900', '临夏回族自治州', '甘肃省-临夏州', '甘肃省', '临夏回族自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:62006",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('622923', '永靖县', '甘肃省-临夏州-永靖县', '甘肃省', '临夏回族自治州', '永靖县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:62232",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('630000', '青海省', '青海省', '青海省', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:62440",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('630100', '西宁市', '青海省-西宁市', '青海省', '西宁市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:62655",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('630200', '海东市', '青海省-海东市', '青海省', '海东市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:62870",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('632521', '共和县', '青海省-海南州-共和县', '青海省', '海南藏族自治州', '共和县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:63096",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('632700', '玉树藏族自治州', '青海省-玉树州', '青海省', '玉树藏族自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:63319",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('632801', '格尔木市', '青海省-海西州-格尔木市', '青海省', '海西蒙古族藏族自治州', '格尔木市', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:63551",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640000', '宁夏回族自治区', '宁夏回族自治区', '宁夏回族自治区', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:63771",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640100', '银川市', '宁夏回族自治区-银川市', '宁夏回族自治区', '银川市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:63994",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640106', '金凤区', '宁夏-银川市-金凤区', '宁夏回族自治区', '银川市', '金凤区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:64219",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640200', '石嘴山市', '宁夏-石嘴山市', '宁夏回族自治区', '石嘴山市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:64440",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640300', '吴忠市', '宁夏-吴忠市', '宁夏回族自治区', '吴忠市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:64658",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640400', '固原市', '宁夏-固原市', '宁夏回族自治区', '固原市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:64876",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640500', '中卫市', '宁夏-中卫市', '宁夏回族自治区', '中卫市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:65094",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640502', '沙坡头区', '宁夏-中卫市-沙坡头区', '宁夏回族自治区', '中卫市', '沙坡头区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:65322",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('640521', '中宁县', '宁夏-中卫市-中宁县', '宁夏回族自治区', '中卫市', '中宁县', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:65547",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('650000', '新疆维吾尔自治区', '新疆维吾尔自治区', '新疆维吾尔自治区', '', '', 1, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:65770",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('650100', '乌鲁木齐市', '新疆维吾尔自治区-乌鲁木齐市', '新疆维吾尔自治区', '乌鲁木齐市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:66001",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('650107', '达坂城区', '新疆-乌鲁木齐市-达坂城区', '新疆维吾尔自治区', '乌鲁木齐市', '达坂城区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:66234",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('650200', '克拉玛依市', '新疆-克拉玛依市', '新疆维吾尔自治区', '克拉玛依市', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:66459",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('650401', '高昌区', '新疆-吐鲁番市-高昌区', '新疆维吾尔自治区', '吐鲁番市', '高昌区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:66687",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('650502', '伊州区', '新疆-哈密市-伊州区', '新疆维吾尔自治区', '哈密市', '伊州区', 3, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:66913",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('652300', '昌吉回族自治州', '新疆-昌吉州', '新疆维吾尔自治区', '昌吉回族自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:67140",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('652800', '巴音郭楞蒙古自治州', '新疆-巴州', '新疆维吾尔自治区', '巴音郭楞蒙古自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:67370",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('652900', '阿克苏地区', '新疆-阿克苏地区', '新疆维吾尔自治区', '阿克苏地区', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:67595",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('653100', '喀什地区', '新疆-喀什地区', '新疆维吾尔自治区', '喀什地区', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:67817",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('654000', '伊犁哈萨克自治州', '新疆-伊犁州', '新疆维吾尔自治区', '伊犁哈萨克自治州', '', 2, NULL, NULL);"
+  },
+  {
+    "id": "administrative_division.sql:68046",
+    "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/administrative_division.sql",
+    "source": "MYSQL",
+    "database": "common",
+    "table": "administrative_division",
+    "text": "INSERT INTO `administrative_division`(`id`, `name`, `full_name`, `province_name`, `city_name`, `county_name`, `level`, `longitude`, `latitude`) VALUES ('654301', '阿勒泰市', '新疆-阿勒泰地区-阿勒泰市', '新疆维吾尔自治区', '阿勒泰地区', '阿勒泰市', 3, NULL, NULL);"
+  }
+]

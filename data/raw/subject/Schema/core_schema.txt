@@ -1,0 +1,668 @@
+-- =====================================================
+-- 交通库相关表
+CREATE DATABASE IF NOT EXISTS transportation;
+USE transportation;
+-- 1. 车辆公司表
+CREATE TABLE vehicle_company (
+    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',
+    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',
+    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',
+    establish_date DATE COMMENT '成立日期',
+    legal_person VARCHAR(50) COMMENT '法人',
+    contact_phone VARCHAR(20) COMMENT '联系电话',
+    address VARCHAR(200) COMMENT '公司地址',
+    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',
+    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',
+    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)
+) ENGINE=InnoDB COMMENT='车辆运输公司信息表';
+
+-- 2. 驾驶员表（车辆公司的员工）
+CREATE TABLE driver (
+    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',
+    name VARCHAR(50) NOT NULL COMMENT '姓名',
+    gender ENUM('男','女') NOT NULL COMMENT '性别',
+    birth_date DATE NOT NULL COMMENT '出生日期',
+    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',
+    issue_date DATE NOT NULL COMMENT '发证日期',
+    valid_years TINYINT NOT NULL COMMENT '有效期(年)',
+    phone VARCHAR(20) COMMENT '联系电话',
+    address VARCHAR(200) COMMENT '联系地址',
+    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',
+    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',
+    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',
+    INDEX idx_name (name),
+    INDEX idx_license (license_type),
+    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),
+    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),
+    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)
+) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';
+
+-- 3. 车辆登记表
+CREATE TABLE vehicle (
+    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',
+    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',
+    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',
+    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',
+    brand VARCHAR(30) NOT NULL COMMENT '品牌',
+    model VARCHAR(30) NOT NULL COMMENT '型号',
+    manufacture_year YEAR NOT NULL COMMENT '生产年份',
+    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',
+    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',
+    color VARCHAR(20) COMMENT '颜色',
+    register_date DATE NOT NULL COMMENT '注册日期',
+    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',
+    insurance_expire DATE COMMENT '保险到期日',
+    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',
+    INDEX idx_plate (plate_number),
+    INDEX idx_owner (owner_id),
+    INDEX idx_type (vehicle_type_code),
+    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),
+    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),
+    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),
+    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)
+) ENGINE=InnoDB COMMENT='车辆登记表';
+
+-- 4. 船舶公司表（独立）
+CREATE TABLE shipping_company (
+    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',
+    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',
+    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',
+    establish_date DATE NOT NULL COMMENT '成立日期',
+    legal_person VARCHAR(50) NOT NULL COMMENT '法人',
+    contact_phone VARCHAR(20) COMMENT '联系电话',
+    address VARCHAR(200) COMMENT '公司地址',
+    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',
+    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',
+    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)
+) ENGINE=InnoDB COMMENT='船舶公司信息表';
+
+-- 5. 员工表（船舶公司的员工）
+CREATE TABLE employee (
+    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',
+    name VARCHAR(50) NOT NULL COMMENT '姓名',
+    gender ENUM('男','女') NOT NULL COMMENT '性别',
+    employee_type_code VARCHAR(20) NOT NULL COMMENT '人员类型代码（船长/大副等）',
+    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',
+    hire_date DATE COMMENT '入职日期',
+    phone VARCHAR(20) COMMENT '联系电话',
+    status ENUM('在职','离职','退休') DEFAULT '在职' COMMENT '状态',
+    FOREIGN KEY (employee_type_code) REFERENCES common.employee_type_dict(type_code),
+    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id)
+) ENGINE=InnoDB COMMENT='船舶公司员工表';
+
+-- 6. 船舶基础信息表（船舶公司的子表）（通过mmsi关联Postgre中的ais数据）
+CREATE TABLE vessel (
+    mmsi INT UNSIGNED NOT NULL COMMENT '船舶MMSI，9位唯一标识',
+    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',
+    vessel_type SMALLINT COMMENT '船舶类型代码（参照AIS标准）',
+    max_load DECIMAL(10,2) COMMENT '最大荷载量（吨）',
+    max_speed DECIMAL(4,1) COMMENT '最大航速（节）',
+    endurance VARCHAR(32) COMMENT '自持力（天/海里）',
+    captain_name VARCHAR(32) COMMENT '船长姓名',
+    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',
+    UNIQUE KEY uk_mmsi (mmsi),
+    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),
+    FOREIGN KEY (vessel_type) REFERENCES common.vessel_type_dict(type_code)
+) ENGINE=InnoDB COMMENT='船舶基础信息表';
+
+
+
+
+-- =====================================================
+-- 金融库
+CREATE DATABASE IF NOT EXISTS finance_tax;
+USE finance_tax;
+
+-- 公司主表
+CREATE TABLE companies (
+    company_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '公司唯一ID',
+    company_name VARCHAR(200) NOT NULL UNIQUE COMMENT '公司法定全称',
+    stock_code VARCHAR(20) UNIQUE COMMENT '股票代码（若上市）',
+    established_year YEAR COMMENT '注册/成立年份',
+    registered_capital DECIMAL(18,2) COMMENT '注册资本（万元）',
+    industry_code VARCHAR(20) COMMENT '所属行业代码',
+    registration_type_code VARCHAR(20) COMMENT '登记注册类型代码',
+    is_private BOOLEAN COMMENT '是否民营企业',
+    size_category_code VARCHAR(10) COMMENT '规模划型代码',
+    is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业',
+    is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业',
+
+    FOREIGN KEY (industry_code) REFERENCES common.dict_industry(industry_code),
+    FOREIGN KEY (registration_type_code) REFERENCES common.dict_registration_type(type_code),
+    FOREIGN KEY (size_category_code) REFERENCES common.dict_size_category(size_code)
+) COMMENT='公司基础信息主表';
+
+-- 股票信息表
+CREATE TABLE stocks (
+    stock_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',
+    company_id BIGINT NOT NULL COMMENT '关联公司ID',
+    stock_code VARCHAR(20) NOT NULL UNIQUE COMMENT '股票代码',
+    stock_name VARCHAR(50) NOT NULL COMMENT '股票简称',
+    stock_full_name VARCHAR(200) COMMENT '公司全称（冗余）',
+    share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT '股东权利类型（引用字典）',
+    register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT '记名方式',
+    par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT '面额类型',
+    market_class VARCHAR(5) COMMENT '上市地点分类（A/B/H/N等）',
+    listing_date DATE COMMENT '上市时间',
+    total_shares BIGINT NOT NULL COMMENT '股本（股）',
+    current_price DECIMAL(10,2) COMMENT '最新股票价格（元）',
+
+    FOREIGN KEY (company_id) REFERENCES companies(company_id)
+) COMMENT='股票基本信息表';
+
+-- 股票日成交信息表
+CREATE TABLE stock_daily_trades (
+    trade_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',
+    stock_id BIGINT NOT NULL COMMENT '关联股票ID',
+    trade_date DATE NOT NULL COMMENT '交易日期',
+    volume BIGINT NOT NULL COMMENT '成交量（股）',
+    avg_trade_size INT COMMENT '每笔成交股数',
+    open_price DECIMAL(10,2) NOT NULL COMMENT '开盘价',
+    close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价',
+    high_price DECIMAL(10,2) NOT NULL COMMENT '最高价',
+    low_price DECIMAL(10,2) NOT NULL COMMENT '最低价',
+
+    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),
+    UNIQUE KEY uk_stock_date (stock_id, trade_date)
+) COMMENT='股票每日成交汇总信息';
+
+-- 公司财务信息表
+CREATE TABLE company_financials (
+    financial_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',
+    company_id BIGINT NOT NULL COMMENT '关联公司ID',
+    report_date DATE NOT NULL COMMENT '报表日期',
+    dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）',
+    dividend_stock INT DEFAULT 0 COMMENT '每股股息（分/股）',
+    total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）',
+    total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）',
+
+    FOREIGN KEY (company_id) REFERENCES companies(company_id),
+    UNIQUE KEY uk_company_report (company_id, report_date)
+) COMMENT='公司定期财务摘要信息';
+
+-- 企业所得税申报信息表
+CREATE TABLE corporate_income_tax_returns (
+    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',
+    company_id BIGINT NOT NULL COMMENT '关联公司ID',
+    tax_year YEAR NOT NULL COMMENT '纳税年度',
+    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',
+    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',
+    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',
+    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',
+    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',
+    employee_count INT COMMENT '从业人数（全年季度平均值）',
+    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',
+    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',
+
+    FOREIGN KEY (company_id) REFERENCES companies(company_id),
+    UNIQUE KEY uk_company_year (company_id, tax_year)
+) COMMENT='企业所得税年度申报信息表';
+
+
+
+-- ============================================
+-- 工业库
+CREATE DATABASE IF NOT EXISTS energy;
+USE energy;
+
+-- 能源企业表
+CREATE TABLE energy_company (
+    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',
+    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',
+    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',
+    establish_date DATE COMMENT '成立日期',
+    legal_person VARCHAR(50) COMMENT '法人代表',
+    contact_phone VARCHAR(20) COMMENT '联系电话',
+    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',
+    staff_count INT COMMENT '员工总数',
+    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',
+    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)
+) ENGINE=InnoDB COMMENT='能源企业信息表';
+
+-- 企业资质表
+CREATE TABLE company_certification (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',
+    company_id VARCHAR(20) NOT NULL COMMENT '企业编号',
+    cert_type VARCHAR(50) NOT NULL COMMENT '资质类型',
+    cert_no VARCHAR(50) COMMENT '证书编号',
+    issue_date DATE COMMENT '发证日期',
+    expire_date DATE COMMENT '到期日期',
+    issue_authority VARCHAR(100) COMMENT '发证机关',
+    FOREIGN KEY (company_id) REFERENCES energy_company(company_id)
+) ENGINE=InnoDB COMMENT='企业资质表';
+
+-- 能源场站表
+CREATE TABLE energy_station (
+    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',
+    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',
+    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',
+    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',
+    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',
+    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',
+    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',
+    grid_connect_date DATE COMMENT '并网日期',
+    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',
+    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',
+    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),
+    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),
+    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),
+    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)
+) ENGINE=InnoDB COMMENT='能源场站表';
+
+-- 供电区域表
+CREATE TABLE supply_area (
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',
+    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',
+    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',
+    supply_level VARCHAR(10) COMMENT '供电等级',
+    household_count INT COMMENT '供电户数',
+    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',
+    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),
+    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),
+    UNIQUE KEY uk_company_area (company_id, area_id)
+) ENGINE=InnoDB COMMENT='供电区域表';
+
+-- 员工表
+CREATE TABLE employee (
+    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',
+    name VARCHAR(50) NOT NULL COMMENT '姓名',
+    gender ENUM('男','女') NOT NULL COMMENT '性别',
+    birth_date DATE NOT NULL COMMENT '出生日期',
+    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',
+    station_id VARCHAR(20) COMMENT '所属场站编号',
+    position_code VARCHAR(20) NOT NULL COMMENT '岗位代码',
+    hire_date DATE COMMENT '入职日期',
+    phone VARCHAR(20) COMMENT '联系电话',
+    education VARCHAR(20) COMMENT '学历',
+    status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态',
+    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),
+    FOREIGN KEY (station_id) REFERENCES energy_station(station_id),
+    FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)
+) ENGINE=InnoDB COMMENT='能源企业员工表';
+
+
+-- =====================================================
+-- 2024教育库
+CREATE DATABASE IF NOT EXISTS education_2024;
+USE education_2024;
+-- 学期表
+CREATE TABLE semester (
+    semester_id       INT AUTO_INCREMENT PRIMARY KEY,
+    academic_year     INT NOT NULL,
+    semester_code     VARCHAR(20) NOT NULL,
+    start_date_key    INT NOT NULL,
+    end_date_key      INT NOT NULL
+);
+
+-- 院系表（真实院系名称）
+CREATE TABLE department (
+    department_id     INT AUTO_INCREMENT PRIMARY KEY,
+    department_code   VARCHAR(20) NOT NULL,
+    department_name   VARCHAR(100) NOT NULL
+);
+
+-- 教师表
+CREATE TABLE teacher (
+    teacher_id        INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_no        VARCHAR(20) NOT NULL,
+    teacher_name      VARCHAR(100) NOT NULL,
+    department_id     INT NOT NULL,
+    gender_code       CHAR(1),
+    phone             VARCHAR(20),
+    region_id         INT,
+    FOREIGN KEY (department_id) REFERENCES department(department_id)
+);
+
+-- 班级表
+CREATE TABLE class (
+    class_id          INT AUTO_INCREMENT PRIMARY KEY,
+    class_code        VARCHAR(20) NOT NULL,
+    class_name        VARCHAR(100) NOT NULL,
+    department_id     INT NOT NULL,
+    grade_year        INT,
+    FOREIGN KEY (department_id) REFERENCES department(department_id)
+);
+
+-- 学生表
+CREATE TABLE student (
+    student_id            INT AUTO_INCREMENT PRIMARY KEY,
+    student_no            VARCHAR(20) NOT NULL,
+    student_name          VARCHAR(100) NOT NULL,
+    gender_code           CHAR(1),
+    academic_level_code   VARCHAR(20),
+    department_id         INT NOT NULL,
+    class_id              INT NOT NULL,
+    home_region_id        INT,
+    student_status_code   VARCHAR(20),
+    admit_date_key        INT,
+    FOREIGN KEY (department_id) REFERENCES department(department_id),
+    FOREIGN KEY (class_id) REFERENCES class(class_id)
+);
+
+-- 课程表
+CREATE TABLE course (
+    course_id         INT AUTO_INCREMENT PRIMARY KEY,
+    course_code       VARCHAR(20) NOT NULL,
+    course_name       VARCHAR(200) NOT NULL,
+    department_id     INT NOT NULL,
+    teacher_id        INT NOT NULL,
+    credit            DECIMAL(3,1),
+    course_type       VARCHAR(20),
+    max_score         INT,
+    FOREIGN KEY (department_id) REFERENCES department(department_id),
+    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)
+);
+
+-- 选课表
+CREATE TABLE enrollment (
+    enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,
+    student_id        INT NOT NULL,
+    course_id         INT NOT NULL,
+    semester_id       INT NOT NULL,
+    enroll_date_key   INT,
+    take_mode         VARCHAR(20),
+    is_withdraw       TINYINT(1),
+    FOREIGN KEY (student_id) REFERENCES student(student_id),
+    FOREIGN KEY (course_id) REFERENCES course(course_id),
+    FOREIGN KEY (semester_id) REFERENCES semester(semester_id)
+);
+
+-- 成绩表
+CREATE TABLE exam_score (
+    exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,
+    enrollment_id     INT NOT NULL,
+    exam_item         VARCHAR(20),
+    score             DECIMAL(5,2),
+    score_date_key    INT,
+    FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)
+);
+
+
+
+
+
+
+-- =====================================================
+-- 2025教育库
+CREATE DATABASE IF NOT EXISTS education_2025;
+USE education_2025;
+CREATE TABLE semester (
+    semester_id       INT AUTO_INCREMENT PRIMARY KEY,
+    academic_year     INT NOT NULL,
+    semester_code     VARCHAR(20) NOT NULL,
+    start_date_key    INT NOT NULL,
+    end_date_key      INT NOT NULL
+);
+
+CREATE TABLE department (
+    department_id     INT AUTO_INCREMENT PRIMARY KEY,
+    department_code   VARCHAR(20) NOT NULL,
+    department_name   VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE teacher (
+    teacher_id        INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_no        VARCHAR(20) NOT NULL,
+    teacher_name      VARCHAR(100) NOT NULL,
+    department_id     INT NOT NULL,
+    gender_code       CHAR(1),
+    phone             VARCHAR(20),
+    region_id         INT,
+    FOREIGN KEY (department_id) REFERENCES department(department_id)
+);
+
+CREATE TABLE class (
+    class_id          INT AUTO_INCREMENT PRIMARY KEY,
+    class_code        VARCHAR(20) NOT NULL,
+    class_name        VARCHAR(100) NOT NULL,
+    department_id     INT NOT NULL,
+    grade_year        INT,
+    FOREIGN KEY (department_id) REFERENCES department(department_id)
+);
+
+CREATE TABLE student (
+    student_id            INT AUTO_INCREMENT PRIMARY KEY,
+    student_no            VARCHAR(20) NOT NULL,
+    student_name          VARCHAR(100) NOT NULL,
+    gender_code           CHAR(1),
+    academic_level_code   VARCHAR(20),
+    department_id         INT NOT NULL,
+    class_id              INT NOT NULL,
+    home_region_id        INT,
+    student_status_code   VARCHAR(20),
+    admit_date_key        INT,
+    FOREIGN KEY (department_id) REFERENCES department(department_id),
+    FOREIGN KEY (class_id) REFERENCES class(class_id)
+);
+
+CREATE TABLE course (
+    course_id         INT AUTO_INCREMENT PRIMARY KEY,
+    course_code       VARCHAR(20) NOT NULL,
+    course_name       VARCHAR(200) NOT NULL,
+    department_id     INT NOT NULL,
+    teacher_id        INT NOT NULL,
+    credit            DECIMAL(3,1),
+    course_type       VARCHAR(20),
+    max_score         INT,
+    FOREIGN KEY (department_id) REFERENCES department(department_id),
+    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)
+);
+
+CREATE TABLE enrollment (
+    enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,
+    student_id        INT NOT NULL,
+    course_id         INT NOT NULL,
+    semester_id       INT NOT NULL,
+    enroll_date_key   INT,
+    take_mode         VARCHAR(20),
+    is_withdraw       TINYINT(1),
+    FOREIGN KEY (student_id) REFERENCES student(student_id),
+    FOREIGN KEY (course_id) REFERENCES course(course_id),
+    FOREIGN KEY (semester_id) REFERENCES semester(semester_id)
+);
+
+CREATE TABLE exam_score (
+    exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,
+    enrollment_id     INT NOT NULL,
+    exam_item         VARCHAR(20),
+    score             DECIMAL(5,2),
+    score_date_key    INT,
+    FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)
+);
+
+
+-- =====================================================
+-- 电商库
+CREATE DATABASE IF NOT EXISTS ecommerce
+  DEFAULT CHARACTER SET utf8mb4
+  DEFAULT COLLATE utf8mb4_unicode_ci;
+
+USE ecommerce;
+
+CREATE TABLE customer (
+  customer_id BIGINT NOT NULL COMMENT '用户ID',
+  customer_name VARCHAR(100) NOT NULL COMMENT '用户姓名',
+  gender ENUM('M', 'F', 'U') NOT NULL DEFAULT 'U' COMMENT '性别：M男，F女，U未知',
+  phone VARCHAR(32) DEFAULT NULL COMMENT '手机号',
+  email VARCHAR(128) DEFAULT NULL COMMENT '邮箱',
+  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码，关联common.customer_level_dict.level_code',
+  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码，关联common.customer_status_dict.status_code',
+  province_code VARCHAR(12) NOT NULL COMMENT '省级行政区划编码，关联common.administrative_division.division_code',
+  city_code VARCHAR(12) NOT NULL COMMENT '城市行政区划编码，关联common.administrative_division.division_code',
+  register_time DATETIME NOT NULL COMMENT '注册时间',
+  last_login_time DATETIME DEFAULT NULL COMMENT '最近登录时间',
+  growth_value INT NOT NULL DEFAULT 0 COMMENT '成长值',
+  PRIMARY KEY (customer_id),
+  UNIQUE KEY uk_customer_phone (phone),
+  KEY idx_customer_level (level_code),
+  KEY idx_customer_status (status_code),
+  KEY idx_customer_region (province_code, city_code),
+  KEY idx_customer_register_time (register_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+
+CREATE TABLE product (
+  product_id BIGINT NOT NULL COMMENT '商品ID',
+  product_name VARCHAR(200) NOT NULL COMMENT '商品名称',
+  category_id BIGINT NOT NULL COMMENT '商品分类ID，关联common.product_category.category_id',
+  brand_name VARCHAR(100) NOT NULL COMMENT '品牌名称',
+  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码，关联common.product_status_dict.status_code',
+  sale_price DECIMAL(12,2) NOT NULL COMMENT '销售单价',
+  cost_price DECIMAL(12,2) NOT NULL COMMENT '成本单价',
+  listed_time DATETIME NOT NULL COMMENT '上架时间',
+  PRIMARY KEY (product_id),
+  KEY idx_product_category (category_id),
+  KEY idx_product_status (status_code),
+  KEY idx_product_brand (brand_name),
+  KEY idx_product_price (sale_price)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表';
+
+CREATE TABLE inventory (
+  inventory_id BIGINT NOT NULL COMMENT '库存ID',
+  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',
+  warehouse_code VARCHAR(32) NOT NULL COMMENT '仓库编码',
+  warehouse_name VARCHAR(100) NOT NULL COMMENT '仓库名称',
+  province_code VARCHAR(12) NOT NULL COMMENT '仓库所在省份编码，关联common.administrative_division.division_code',
+  city_code VARCHAR(12) NOT NULL COMMENT '仓库所在城市编码，关联common.administrative_division.division_code',
+  stock_quantity INT NOT NULL DEFAULT 0 COMMENT '当前库存数量',
+  locked_quantity INT NOT NULL DEFAULT 0 COMMENT '锁定库存数量',
+  safety_stock INT NOT NULL DEFAULT 0 COMMENT '安全库存数量',
+  updated_time DATETIME NOT NULL COMMENT '库存更新时间',
+  PRIMARY KEY (inventory_id),
+  UNIQUE KEY uk_inventory_product_warehouse (product_id, warehouse_code),
+  KEY idx_inventory_product (product_id),
+  KEY idx_inventory_region (province_code, city_code),
+  CONSTRAINT fk_inventory_product FOREIGN KEY (product_id) REFERENCES product(product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='库存表';
+
+CREATE TABLE orders (
+  order_id BIGINT NOT NULL COMMENT '订单ID',
+  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',
+  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',
+  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',
+  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',
+  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',
+  order_time DATETIME NOT NULL COMMENT '下单时间',
+  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',
+  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',
+  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',
+  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',
+  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',
+  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',
+  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',
+  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',
+  PRIMARY KEY (order_id),
+  UNIQUE KEY uk_orders_order_no (order_no),
+  KEY idx_orders_customer (customer_id),
+  KEY idx_orders_status (order_status_code),
+  KEY idx_orders_time (order_time),
+  KEY idx_orders_channel_platform (order_channel_code, platform_code),
+  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),
+  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';
+
+CREATE TABLE order_item (
+  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',
+  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',
+  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',
+  quantity INT NOT NULL COMMENT '购买数量',
+  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',
+  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',
+  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',
+  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',
+  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',
+  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',
+  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',
+  PRIMARY KEY (order_item_id),
+  KEY idx_order_item_order (order_id),
+  KEY idx_order_item_product (product_id),
+  KEY idx_order_item_refund_reason (refund_reason_code),
+  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),
+  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';
+
+CREATE TABLE payment (
+  payment_id BIGINT NOT NULL COMMENT '支付ID',
+  payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号',
+  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',
+  payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code',
+  payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code',
+  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',
+  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',
+  paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间',
+  created_time DATETIME NOT NULL COMMENT '支付记录创建时间',
+  PRIMARY KEY (payment_id),
+  UNIQUE KEY uk_payment_no (payment_no),
+  UNIQUE KEY uk_payment_order (order_id),
+  KEY idx_payment_method (payment_method_code),
+  KEY idx_payment_status (payment_status_code),
+  KEY idx_payment_paid_time (paid_time),
+  CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付表';
+
+
+-- =====================================================
+-- 医院库（ES）
+PUT /medical_institutions
+{
+  "mappings": {
+    "properties": {
+      "name": { "type": "text", "fields": { "keyword": { "type": "keyword" } } },
+      "city": { "type": "keyword" },
+      "district": { "type": "keyword" },
+      "address": { "type": "text" },
+      "location": { "type": "geo_point" },
+      "level": { "type": "keyword" },            // 三甲、三乙、二甲、二乙、一甲等
+      "bed_count": { "type": "integer" },
+      "doctor_count": { "type": "integer" },
+      "nurse_count": { "type": "integer" },
+      "ambulance_count": { "type": "integer" },   // 救护车数量
+      "department_count": { "type": "integer" },  // 科室数量
+      "annual_outpatient": { "type": "long" },    // 年门诊量（人次）
+      "has_icu": { "type": "boolean" },           // 是否有ICU
+      "is_teaching_hospital": { "type": "boolean" }, // 是否教学医院
+      "emergency_24h": { "type": "boolean" },
+      "rating": { "type": "float" },
+      "founded_year": { "type": "integer" }       // 成立年份
+    }
+  }
+}
+
+-- =====================================================
+-- 船舶实时库（PG）
+CREATE TABLE public.vessel_ais_data (
+    id bigint NOT NULL,
+    mmsi integer NOT NULL,
+    "timestamp" timestamp without time zone NOT NULL,
+    longitude numeric(9,6) NOT NULL,
+    latitude numeric(8,6) NOT NULL,
+    sog numeric(4,1) NOT NULL,
+    cog numeric(5,1) NOT NULL,
+    heading smallint,
+    nav_status smallint NOT NULL,
+    rot numeric(4,1),
+    destination character varying(32),
+    draught numeric(4,2),
+    vessel_type smallint,
+    imo bigint,
+    call_sign character varying(10),
+    eta timestamp without time zone,
+    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    geom public.geometry(Point,4326) NOT NULL,
+    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),
+    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),
+    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))
+);
+ALTER TABLE public.vessel_ais_data OWNER TO postgres;
+
+COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';
+COMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';
+COMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';
+COMMENT ON COLUMN public.vessel_ais_data."timestamp" IS '数据时间';
+COMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';
+COMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';
+COMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';
+COMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';
+COMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';
+COMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';
+COMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';

@@ -1,0 +1,568 @@
+-- 创建通用字典库
+CREATE DATABASE IF NOT EXISTS common;
+USE common;
+
+-- 行政区划字典表
+CREATE TABLE IF NOT EXISTS administrative_division (
+    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',
+    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',
+    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',
+    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',
+    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',
+    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',
+    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',
+    longitude DECIMAL(10, 6) COMMENT '经度',
+    latitude DECIMAL(10, 6) COMMENT '纬度'
+) ENGINE=InnoDB COMMENT='统一行政区划表';
+
+-- 行政区划示例数据
+INSERT INTO administrative_division (id, name, full_name, province_name, city_name, county_name, level, longitude, latitude)
+VALUES
+('310000', '上海市', '上海市', '', '', '', 1, NULL, NULL),
+('310101', '黄浦区', '上海市-黄浦区', '上海市', '黄浦区', '', 3, NULL, NULL),
+('310115', '浦东新区', '上海市-浦东新区', '上海市', '浦东新区', '', 3, NULL, NULL),
+('320500', '苏州市', '江苏省-苏州市', '江苏省', '苏州市', '', 2, NULL, NULL),
+('320100', '南京市', '江苏省-南京市', '江苏省', '南京市', '', 2, NULL, NULL),
+('320102', '玄武区', '江苏省-南京市-玄武区', '江苏省', '南京市', '玄武区', 3, NULL, NULL),
+('320115', '江宁区', '江苏省-南京市-江宁区', '江苏省', '南京市', '江宁区', 3, NULL, NULL);
+
+-- 交通库
+-- 车辆类型字典表
+CREATE TABLE vehicle_type_dict (
+    type_code VARCHAR(20) PRIMARY KEY COMMENT '类型代码',
+    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（客车/货车/危化品车等）',
+    category VARCHAR(20) COMMENT '大类'
+) ENGINE=InnoDB COMMENT='车辆类型字典';
+
+-- 船舶类型字典表
+CREATE TABLE vessel_type_dict (
+    type_code SMALLINT PRIMARY KEY COMMENT 'AIS船舶类型代码',
+    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',
+    category VARCHAR(20) COMMENT '大类'
+) ENGINE=InnoDB COMMENT='船舶类型字典';
+
+-- 人员类型字典表
+CREATE TABLE employee_type_dict (
+    type_code VARCHAR(20) PRIMARY KEY COMMENT '人员类型代码',
+    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（船长/大副/轮机长/水手等）'
+) ENGINE=InnoDB COMMENT='人员类型字典';
+
+-- 驾照类型字典表
+CREATE TABLE license_type_dict (
+    license_code VARCHAR(5) PRIMARY KEY COMMENT '驾照代码',
+    license_name VARCHAR(50) NOT NULL COMMENT '驾照名称'
+) ENGINE=InnoDB COMMENT='驾照类型字典';
+
+-- 车辆类型字典
+INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES
+('BUS', '客车', '客运'),
+('TRUCK', '货车', '货运'),
+('HAZMAT', '危化品车', '特种'),
+('VAN', '面包车', '货运'),
+('MINIBUS', '小型客车', '客运'),
+('DUMP', '自卸车', '货运'),
+('TANKER', '罐式车', '特种'),
+('REFRIGERATED', '冷藏车', '特种');
+
+-- 船舶类型字典
+INSERT INTO common.vessel_type_dict (type_code, type_name, category) VALUES
+(20, '客船', '客运'),
+(21, '高速客船', '客运'),
+(30, '货船', '货运'),
+(31, '散货船', '货运'),
+(32, '集装箱船', '货运'),
+(33, '滚装船', '货运'),
+(34, '液化气船', '特种'),
+(35, '油轮', '货运'),
+(36, '化学品船', '特种'),
+(37, '冷藏船', '货运'),
+(40, '拖船', '作业'),
+(41, '挖泥船', '作业'),
+(42, '消防船', '公务'),
+(43, '医疗船', '公务'),
+(50, '引航船', '作业'),
+(51, '搜救船', '公务'),
+(52, '交通船', '作业'),
+(53, '公务船', '公务'),
+(60, '帆船', '娱乐'),
+(70, '渔船', '渔业'),
+(71, '拖网渔船', '渔业'),
+(80, '军事舰艇', '军事'),
+(90, '其他', '其他');
+
+-- 人员类型字典 (employee_type_dict) 用于船舶公司员工
+INSERT INTO common.employee_type_dict (type_code, type_name) VALUES
+('CAPTAIN', '船长'),
+('CHIEF_OFFICER', '大副'),
+('SECOND_OFFICER', '二副'),
+('THIRD_OFFICER', '三副'),
+('CHIEF_ENGINEER', '轮机长'),
+('SECOND_ENGINEER', '大管轮'),
+('THIRD_ENGINEER', '二管轮'),
+('ELECTRICIAN', '电机员'),
+('BOSUN', '水手长'),
+('ABLE_SEAMAN', '一级水手'),
+('ORDINARY_SEAMAN', '二级水手'),
+('OILER', '加油工'),
+('COOK', '厨师'),
+('STEWARD', '服务员'),
+('PURSER', '事务长'),
+('MEDICAL', '船医');
+
+-- 驾照类型字典
+INSERT INTO common.license_type_dict (license_code, license_name) VALUES
+('A1', '大型客车'),
+('A2', '牵引车'),
+('A3', '城市公交车'),
+('B1', '中型客车'),
+('B2', '大型货车'),
+('C1', '小型汽车'),
+('C2', '小型自动挡汽车'),
+('C3', '低速载货汽车'),
+('C4', '三轮汽车');
+
+-- 金融库
+-- 登记注册类型字典表
+CREATE TABLE dict_registration_type (
+    type_code VARCHAR(20) PRIMARY KEY COMMENT '注册类型代码',
+    type_name VARCHAR(100) NOT NULL COMMENT '注册类型名称',
+    description VARCHAR(200) COMMENT '说明'
+) COMMENT='企业登记注册类型字典';
+
+INSERT INTO dict_registration_type (type_code, type_name) VALUES
+('111', '国有独资公司'),
+('112', '有限责任公司'),
+('113', '股份有限公司'),
+('114', '私营有限责任公司'),
+('115', '私营股份有限公司'),
+('116', '外商投资企业'),
+('117', '港澳台商投资企业'),
+('118', '合伙企业');
+
+-- 企业规模划型字典表
+CREATE TABLE dict_size_category (
+    size_code VARCHAR(10) PRIMARY KEY COMMENT '规模代码',
+    size_name VARCHAR(20) NOT NULL COMMENT '规模名称'
+) COMMENT='企业规模划型字典';
+
+INSERT INTO dict_size_category (size_code, size_name) VALUES
+('L', '大型'),
+('M', '中型'),
+('S', '小型'),
+('XS', '微型');
+
+-- 股票分类字典表
+CREATE TABLE dict_stock_type (
+    type_category VARCHAR(30) COMMENT '分类维度',
+    type_code VARCHAR(20) COMMENT '类型代码',
+    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',
+    PRIMARY KEY (type_category, type_code)
+) COMMENT='股票分类字典';
+
+INSERT INTO dict_stock_type (type_category, type_code, type_name) VALUES
+('SHARE_RIGHT', 'COMMON', '普通股'),
+('SHARE_RIGHT', 'PREFERRED', '优先股'),
+('REGISTER', 'REGISTERED', '记名股票'),
+('REGISTER', 'BEARER', '无记名股票'),
+('PAR_VALUE', 'PAR', '面额股票'),
+('PAR_VALUE', 'NO_PAR', '无面额股票'),
+('MARKET_CLASS', 'A', 'A股'),
+('MARKET_CLASS', 'B', 'B股'),
+('MARKET_CLASS', 'H', 'H股'),
+('MARKET_CLASS', 'N', 'N股');
+
+-- 行业分类字典表
+CREATE TABLE dict_industry (
+    industry_code VARCHAR(20) PRIMARY KEY COMMENT '行业代码（国标）',
+    industry_name VARCHAR(100) NOT NULL COMMENT '行业名称'
+) COMMENT='行业分类字典';
+
+INSERT INTO dict_industry (industry_code, industry_name) VALUES
+('I65', '软件和信息技术服务业'),
+('C39', '计算机、通信和其他电子设备制造业'),
+('L72', '商务服务业'),
+('C26', '化学原料和化学制品制造业'),
+('C27', '医药制造业'),
+('B06', '石油和天然气开采业'),
+('G60', '交通运输、仓储和邮政业'),
+('K70', '房地产业'),
+('J66', '金融业');
+
+
+
+-- 工业库
+-- 能源类型字典
+CREATE TABLE energy_type_dict (
+    type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码',
+    type_name VARCHAR(30) NOT NULL COMMENT '类型名称',
+    category VARCHAR(20) COMMENT '大类',
+    is_renewable TINYINT(1) DEFAULT 0 COMMENT '是否可再生'
+) ENGINE=InnoDB COMMENT='能源类型字典';
+
+INSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES
+('THERMAL', '火电', '传统能源', 0),
+('HYDRO', '水电', '清洁能源', 1),
+('WIND', '风电', '新能源', 1),
+('SOLAR', '光伏', '新能源', 1),
+('NUCLEAR', '核电', '清洁能源', 0),
+('BIOMASS', '生物质发电', '新能源', 1),
+('GAS', '天然气发电', '清洁能源', 0),
+('PUMPED', '抽水蓄能', '清洁能源', 1),
+('GEOTHERMAL', '地热发电', '新能源', 1),
+('HYDROGEN', '氢能', '新能源', 1);
+
+-- 电压等级字典
+CREATE TABLE voltage_level_dict (
+    level_code VARCHAR(10) PRIMARY KEY COMMENT '电压等级代码',
+    level_name VARCHAR(20) NOT NULL COMMENT '等级名称',
+    level_value INT COMMENT '电压值(kV)',
+    category VARCHAR(20) COMMENT '类别'
+) ENGINE=InnoDB COMMENT='电压等级字典';
+
+INSERT INTO voltage_level_dict (level_code, level_name, level_value, category) VALUES
+('LV', '低压', 0, '低压'),
+('MV10', '10kV', 10, '中压'),
+('MV35', '35kV', 35, '中压'),
+('HV110', '110kV', 110, '高压'),
+('HV220', '220kV', 220, '高压'),
+('EHV330', '330kV', 330, '超高压'),
+('EHV500', '500kV', 500, '超高压'),
+('EHV750', '750kV', 750, '超高压'),
+('UHV1000', '1000kV', 1000, '特高压');
+
+-- 员工岗位字典
+CREATE TABLE energy_position_dict (
+    position_code VARCHAR(20) PRIMARY KEY COMMENT '岗位代码',
+    position_name VARCHAR(50) NOT NULL COMMENT '岗位名称',
+    category VARCHAR(30) COMMENT '类别'
+) ENGINE=InnoDB COMMENT='能源行业岗位字典';
+
+INSERT INTO energy_position_dict (position_code, position_name, category) VALUES
+('GM', '总经理', '管理'),
+('DM', '副总经理', '管理'),
+('CE', '总工程师', '技术'),
+('PM', '项目经理', '管理'),
+('OE', '运行工程师', '运行'),
+('ME', '检修工程师', '检修'),
+('SE', '安全工程师', '管理'),
+('EE', '电气工程师', '技术'),
+('TE', '热控工程师', '技术'),
+('CE2', '土建工程师', '技术'),
+('OP', '值班员', '运行'),
+('MT', '检修工', '检修'),
+('EL', '电工', '检修'),
+('AD', '行政专员', '管理'),
+('HR', '人事专员', '管理');
+
+-- 场站类型字典
+CREATE TABLE station_type_dict (
+    type_code VARCHAR(10) PRIMARY KEY COMMENT '场站类型代码',
+    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',
+    category VARCHAR(30) COMMENT '大类'
+) ENGINE=InnoDB COMMENT='场站类型字典';
+
+INSERT INTO station_type_dict (type_code, type_name, category) VALUES
+('PP', '发电厂', '发电'),
+('SUB', '变电站', '变电'),
+('TL', '输电线路', '输电'),
+('DS', '配电站', '配电'),
+('WP', '风电场', '发电'),
+('SP', '光伏电站', '发电'),
+('HP', '水电站', '发电'),
+('NP', '核电站', '发电'),
+('ES', '储能站', '配电'),
+('CC', '集控中心', '变电');
+
+CREATE TABLE cert_type_dict (
+    cert_type_code VARCHAR(20) PRIMARY KEY COMMENT '资质类型代码',
+    cert_type_name VARCHAR(50) NOT NULL COMMENT '资质类型名称',
+    category VARCHAR(20) COMMENT '类别',
+    valid_years TINYINT COMMENT '有效期(年)'
+) ENGINE=InnoDB COMMENT='资质类型字典';
+
+INSERT INTO cert_type_dict (cert_type_code, cert_type_name, category, valid_years) VALUES
+('POWER_SUPPLY', '供电类电力业务许可证', '电力业务', 20),
+('POWER_GEN', '发电类电力业务许可证', '电力业务', 20),
+('POWER_NEW', '新能源类电力业务许可证', '电力业务', 20),
+('INSTALL_REPAIR', '承装修试许可证', '承装修试', 5),
+('SAFETY', '安全生产许可证', '安全', 3);
+
+
+
+-- 电商
+CREATE TABLE product_category (
+  category_id BIGINT NOT NULL COMMENT '商品分类ID',
+  category_name VARCHAR(100) NOT NULL COMMENT '商品分类名称',
+  parent_category_id BIGINT DEFAULT NULL COMMENT '父级商品分类ID',
+  category_level TINYINT NOT NULL COMMENT '分类层级',
+  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',
+  PRIMARY KEY (category_id),
+  KEY idx_category_parent (parent_category_id),
+  KEY idx_category_level (category_level)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品分类表';
+
+CREATE TABLE customer_level_dict (
+  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码',
+  level_name VARCHAR(64) NOT NULL COMMENT '用户等级名称',
+  min_growth_value INT NOT NULL DEFAULT 0 COMMENT '最低成长值',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',
+  PRIMARY KEY (level_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户等级字典';
+
+CREATE TABLE customer_status_dict (
+  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码',
+  status_name VARCHAR(64) NOT NULL COMMENT '用户状态名称',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (status_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户状态字典';
+
+CREATE TABLE product_status_dict (
+  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码',
+  status_name VARCHAR(64) NOT NULL COMMENT '商品状态名称',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (status_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品状态字典';
+
+CREATE TABLE order_status_dict (
+  status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码',
+  status_name VARCHAR(64) NOT NULL COMMENT '订单状态名称',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (status_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单状态字典';
+
+CREATE TABLE payment_method_dict (
+  method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码',
+  method_name VARCHAR(64) NOT NULL COMMENT '支付方式名称',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (method_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付方式字典';
+
+CREATE TABLE payment_status_dict (
+  status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码',
+  status_name VARCHAR(64) NOT NULL COMMENT '支付状态名称',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (status_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付状态字典';
+
+CREATE TABLE refund_reason_dict (
+  reason_code VARCHAR(32) NOT NULL COMMENT '退款原因编码',
+  reason_name VARCHAR(64) NOT NULL COMMENT '退款原因名称',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (reason_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='退款原因字典';
+
+CREATE TABLE order_channel_dict (
+  channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码',
+  channel_name VARCHAR(64) NOT NULL COMMENT '下单渠道名称',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (channel_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='下单渠道字典';
+
+CREATE TABLE platform_dict (
+  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码',
+  platform_name VARCHAR(64) NOT NULL COMMENT '销售平台名称',
+  description VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (platform_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='销售平台字典';
+
+INSERT INTO product_category (category_id, category_name, parent_category_id, category_level, sort_order) VALUES
+  (1000, '数码家电', NULL, 1, 1),
+  (1100, '手机通讯', 1000, 2, 1),
+  (1200, '电脑办公', 1000, 2, 2),
+  (1300, '家用电器', 1000, 2, 3),
+  (2000, '服饰鞋包', NULL, 1, 2),
+  (2100, '男装', 2000, 2, 1),
+  (2200, '女装', 2000, 2, 2),
+  (2300, '鞋靴', 2000, 2, 3),
+  (3000, '食品生鲜', NULL, 1, 3),
+  (3100, '休闲零食', 3000, 2, 1),
+  (3200, '粮油调味', 3000, 2, 2),
+  (3300, '水果生鲜', 3000, 2, 3),
+  (4000, '美妆个护', NULL, 1, 4),
+  (4100, '护肤', 4000, 2, 1),
+  (4200, '彩妆', 4000, 2, 2),
+  (4300, '个人护理', 4000, 2, 3),
+  (5000, '母婴玩具', NULL, 1, 5),
+  (5100, '婴童用品', 5000, 2, 1),
+  (5200, '玩具乐器', 5000, 2, 2),
+  (6000, '运动户外', NULL, 1, 6),
+  (6100, '运动服饰', 6000, 2, 1),
+  (6200, '户外装备', 6000, 2, 2);
+
+INSERT INTO customer_level_dict (level_code, level_name, min_growth_value, description, sort_order) VALUES
+  ('NORMAL', '普通会员', 0, '默认会员等级', 1),
+  ('SILVER', '银卡会员', 1000, '中等活跃用户', 2),
+  ('GOLD', '金卡会员', 5000, '高价值用户', 3),
+  ('DIAMOND', '钻石会员', 20000, '核心高价值用户', 4);
+
+INSERT INTO customer_status_dict (status_code, status_name, description) VALUES
+  ('ACTIVE', '正常', '用户账号可正常下单'),
+  ('FROZEN', '冻结', '用户账号被限制操作'),
+  ('CANCELLED', '注销', '用户账号已注销');
+
+INSERT INTO product_status_dict (status_code, status_name, description) VALUES
+  ('ON_SALE', '上架', '商品正在销售'),
+  ('OFF_SALE', '下架', '商品已停止销售'),
+  ('SOLD_OUT', '缺货', '商品暂无可售库存');
+
+INSERT INTO order_status_dict (status_code, status_name, description) VALUES
+  ('PENDING_PAY', '待支付', '订单已创建但未支付'),
+  ('PAID', '已支付', '订单已完成支付'),
+  ('SHIPPED', '已发货', '订单已发货'),
+  ('COMPLETED', '已完成', '订单交易完成'),
+  ('CANCELLED', '已取消', '订单已取消'),
+  ('REFUNDED', '已退款', '订单已退款');
+
+INSERT INTO payment_method_dict (method_code, method_name, description) VALUES
+  ('ALIPAY', '支付宝', '使用支付宝支付'),
+  ('WECHAT', '微信支付', '使用微信支付'),
+  ('BANK_CARD', '银行卡', '使用银行卡支付'),
+  ('BALANCE', '账户余额', '使用平台账户余额支付');
+
+INSERT INTO payment_status_dict (status_code, status_name, description) VALUES
+  ('SUCCESS', '支付成功', '支付已成功入账'),
+  ('FAILED', '支付失败', '支付未成功'),
+  ('REFUNDING', '退款中', '退款流程处理中'),
+  ('REFUNDED', '已退款', '支付金额已退回');
+
+INSERT INTO refund_reason_dict (reason_code, reason_name, description) VALUES
+  ('QUALITY', '质量问题', '商品存在质量问题'),
+  ('WRONG_ITEM', '错发漏发', '商品错发或漏发'),
+  ('NO_REASON', '七天无理由', '用户无理由退货'),
+  ('OUT_OF_STOCK', '缺货退款', '商家缺货导致退款'),
+  ('OTHER', '其他原因', '其他退款原因');
+
+INSERT INTO order_channel_dict (channel_code, channel_name, description) VALUES
+  ('APP', '手机App', '用户通过手机App下单'),
+  ('MINI_PROGRAM', '小程序', '用户通过小程序下单'),
+  ('WEB', '网页端', '用户通过网页端下单'),
+  ('LIVE', '直播间', '用户通过直播间下单');
+
+INSERT INTO platform_dict (platform_code, platform_name, description) VALUES
+  ('TMALL', '天猫', '天猫销售平台'),
+  ('JD', '京东', '京东销售平台'),
+  ('PDD', '拼多多', '拼多多销售平台'),
+  ('SELF', '自营商城', '品牌自营商城');
+
+
+-- 教育
+-- 1. 性别字典
+DROP TABLE IF EXISTS dict_gender;
+CREATE TABLE dict_gender (
+    gender_code CHAR(1) PRIMARY KEY COMMENT '性别代码(M/F)',
+    gender_name VARCHAR(10) NOT NULL COMMENT '性别名称'
+);
+
+-- 2. 学历层次字典
+DROP TABLE IF EXISTS dict_academic_level;
+CREATE TABLE dict_academic_level (
+    level_code VARCHAR(20) PRIMARY KEY COMMENT '学历代码(UNDERGRAD/MASTER等)',
+    level_name VARCHAR(50) NOT NULL COMMENT '学历名称'
+);
+
+-- 3. 学生状态字典
+DROP TABLE IF EXISTS dict_student_status;
+CREATE TABLE dict_student_status (
+    status_code VARCHAR(20) PRIMARY KEY COMMENT '状态代码(ACTIVE/INACTIVE/GRADUATED等)',
+    status_name VARCHAR(50) NOT NULL COMMENT '状态名称'
+);
+
+-- 4. 课程类型字典
+DROP TABLE IF EXISTS dict_course_type;
+CREATE TABLE dict_course_type (
+    type_code VARCHAR(20) PRIMARY KEY COMMENT '课程类型代码',
+    type_name VARCHAR(50) NOT NULL COMMENT '课程类型名称'
+);
+
+-- 5. 考试项目字典
+DROP TABLE IF EXISTS dict_exam_item;
+CREATE TABLE dict_exam_item (
+    item_code VARCHAR(20) PRIMARY KEY COMMENT '考试项目代码',
+    item_name VARCHAR(50) NOT NULL COMMENT '考试项目名称',
+    default_weight DECIMAL(5,2) COMMENT '默认权重（如平时成绩占30%）'
+);
+
+-- 6. 选课方式字典
+DROP TABLE IF EXISTS dict_take_mode;
+CREATE TABLE dict_take_mode (
+    mode_code VARCHAR(20) PRIMARY KEY COMMENT '选课方式代码',
+    mode_name VARCHAR(50) NOT NULL COMMENT '选课方式名称'
+);
+
+-- 7. 学期字典（与业务库中的 semester 表互补，用于描述学期性质）
+DROP TABLE IF EXISTS dict_semester_type;
+CREATE TABLE dict_semester_type (
+    semester_code VARCHAR(20) PRIMARY KEY COMMENT '学期代码（如2024-FALL）',
+    semester_name VARCHAR(50) NOT NULL COMMENT '学期名称',
+    season VARCHAR(10) COMMENT '季节(SPRING/FALL/SUMMER)',
+    is_current TINYINT(1) COMMENT '是否为当前学期'
+);
+
+-- 8. 成绩等级参考表
+DROP TABLE IF EXISTS dict_grade_level;
+CREATE TABLE dict_grade_level (
+    grade_level CHAR(2) PRIMARY KEY COMMENT '等级(A/B/C/D/F)',
+    min_score INT COMMENT '最低分数',
+    max_score INT COMMENT '最高分数',
+    grade_point DECIMAL(3,2) COMMENT '绩点'
+);
+
+-- 1. 性别
+DELETE FROM dict_gender;
+INSERT INTO dict_gender (gender_code, gender_name) VALUES
+('M', '男'),
+('F', '女');
+
+-- 2. 学历层次
+DELETE FROM dict_academic_level;
+INSERT INTO dict_academic_level (level_code, level_name) VALUES
+('UNDERGRAD', '本科'),
+('MASTER', '硕士'),
+('DOCTOR', '博士');
+
+-- 3. 学生状态
+DELETE FROM dict_student_status;
+INSERT INTO dict_student_status (status_code, status_name) VALUES
+('ACTIVE', '在读'),
+('INACTIVE', '休学'),
+('GRADUATED', '已毕业'),
+('SUSPENDED', '退学'),
+('EXPIRED', '逾期未注册');
+
+-- 4. 课程类型
+DELETE FROM dict_course_type;
+INSERT INTO dict_course_type (type_code, type_name) VALUES
+('必修', '必修课'),
+('选修', '选修课'),
+('通识', '通识选修课'),
+('实践', '实践环节');
+
+-- 5. 考试项目
+DELETE FROM dict_exam_item;
+INSERT INTO dict_exam_item (item_code, item_name, default_weight) VALUES
+('平时', '平时成绩', 0.35),
+('期中', '期中考试', 0.45),
+('期末', '期末考试', 0.75);
+
+-- 6. 选课方式
+DELETE FROM dict_take_mode;
+INSERT INTO dict_take_mode (mode_code, mode_name) VALUES
+('线下', '线下课程'),
+('线上', '线上课程'),
+('混合', '线上线下混合');
+
+-- 7. 学期字典
+DELETE FROM dict_semester_type;
+INSERT INTO dict_semester_type (semester_code, semester_name, season, is_current) VALUES
+('2024-FALL', '2024年秋季学期', 'FALL', 0),
+('2025-SPRING', '2025年春季学期', 'SPRING', 1);
+
+-- 8. 成绩等级参考
+DELETE FROM dict_grade_level;
+INSERT INTO dict_grade_level (grade_level, min_score, max_score, grade_point) VALUES
+('A', 90, 100, 4.0),
+('B', 80, 89, 3.0),
+('C', 70, 79, 2.0),
+('D', 60, 69, 1.0),
+('F', 0, 59, 0.0);

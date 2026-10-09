@@ -1,0 +1,173 @@
+[
+  {
+    "rule_id": "education_teacher_latest_union",
+    "source": "用户补充的业务口径，非官方数据集标注",
+    "entity": "teacher",
+    "trigger_terms": [
+      "教师"
+    ],
+    "scope": "教师查询未明确年份时；明确2024或2025时按问题年份查询",
+    "tables": [
+      "education_2024.teacher",
+      "education_2025.teacher"
+    ],
+    "dedup_key": "teacher_no",
+    "instruction": "未指定年份的教师查询同时访问education_2024.teacher和education_2025.teacher，以业务教师编号teacher_no去重。同编号出现两年时，整条记录以2025年为准；2024年仅补充2025年不存在的教师。问题要求电话不为空时，先选最新记录，再判断phone是否非NULL且不为空字符串；2025年电话为空时不能回退使用2024年的电话。不要用各年度自增teacher_id跨年去重。统计教师人数时最终使用COUNT(DISTINCT teacher_no)，避免同年重复编号被计为多人；合并两年后直接COUNT(*)仍可能重复计数。",
+    "kind": "education_merge",
+    "trigger_pattern": "教师|老师|工号"
+  },
+  {
+    "rule_id": "education_department_latest_union",
+    "kind": "education_merge",
+    "source": "用户授权将教师跨年处理方式推广至教育年度库；业务键与同年排序是实现约定",
+    "entity": "department",
+    "trigger_pattern": "院系",
+    "scope": "未明确查询年度时；字段参数中的年份不选择数据库；明确年度或两年对比时分别按题意查询",
+    "tables": [
+      "education_2024.department",
+      "education_2025.department"
+    ],
+    "dedup_key": [
+      "department_code"
+    ],
+    "instruction": "未指定查询年度时同时访问2024和2025，使用edu_department合并视图，按department_code识别同一业务记录，以2025整条记录为准，缺失时补2024。先合并去重，再筛选、聚合、排序和取前N。不同学期的选课/成绩保留为不同历史事件；跨表按业务身份关联，不按年度自增ID关联。问题中的前缀、入学年份、代码字符串、阈值和排序方向保持原值。"
+  },
+  {
+    "rule_id": "education_semester_latest_union",
+    "kind": "education_merge",
+    "source": "用户授权将教师跨年处理方式推广至教育年度库；业务键与同年排序是实现约定",
+    "entity": "semester",
+    "trigger_pattern": "学期",
+    "scope": "未明确查询年度时；字段参数中的年份不选择数据库；明确年度或两年对比时分别按题意查询",
+    "tables": [
+      "education_2024.semester",
+      "education_2025.semester"
+    ],
+    "dedup_key": [
+      "academic_year",
+      "semester_code"
+    ],
+    "instruction": "未指定查询年度时同时访问2024和2025，使用edu_semester合并视图，按academic_year,semester_code识别同一业务记录，以2025整条记录为准，缺失时补2024。先合并去重，再筛选、聚合、排序和取前N。不同学期的选课/成绩保留为不同历史事件；跨表按业务身份关联，不按年度自增ID关联。问题中的前缀、入学年份、代码字符串、阈值和排序方向保持原值。"
+  },
+  {
+    "rule_id": "education_student_latest_union",
+    "kind": "education_merge",
+    "source": "用户授权将教师跨年处理方式推广至教育年度库；业务键与同年排序是实现约定",
+    "entity": "student",
+    "trigger_pattern": "学生|学号|在读|学籍",
+    "scope": "未明确查询年度时；字段参数中的年份不选择数据库；明确年度或两年对比时分别按题意查询",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "dedup_key": [
+      "student_no"
+    ],
+    "instruction": "未指定查询年度时同时访问2024和2025，使用edu_student合并视图，按student_no识别同一业务记录，以2025整条记录为准，缺失时补2024。先合并去重，再筛选、聚合、排序和取前N。不同学期的选课/成绩保留为不同历史事件；跨表按业务身份关联，不按年度自增ID关联。问题中的前缀、入学年份、代码字符串、阈值和排序方向保持原值。"
+  },
+  {
+    "rule_id": "education_class_latest_union",
+    "kind": "education_merge",
+    "source": "用户授权将教师跨年处理方式推广至教育年度库；业务键与同年排序是实现约定",
+    "entity": "class",
+    "trigger_pattern": "班级",
+    "scope": "未明确查询年度时；字段参数中的年份不选择数据库；明确年度或两年对比时分别按题意查询",
+    "tables": [
+      "education_2024.class",
+      "education_2025.class"
+    ],
+    "dedup_key": [
+      "class_code"
+    ],
+    "instruction": "未指定查询年度时同时访问2024和2025，使用edu_class合并视图，按class_code识别同一业务记录，以2025整条记录为准，缺失时补2024。先合并去重，再筛选、聚合、排序和取前N。不同学期的选课/成绩保留为不同历史事件；跨表按业务身份关联，不按年度自增ID关联。问题中的前缀、入学年份、代码字符串、阈值和排序方向保持原值。"
+  },
+  {
+    "rule_id": "education_course_latest_union",
+    "kind": "education_merge",
+    "source": "用户授权将教师跨年处理方式推广至教育年度库；业务键与同年排序是实现约定",
+    "entity": "course",
+    "trigger_pattern": "课程|学分|选修|必修",
+    "scope": "未明确查询年度时；字段参数中的年份不选择数据库；明确年度或两年对比时分别按题意查询",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "dedup_key": [
+      "course_code"
+    ],
+    "instruction": "未指定查询年度时同时访问2024和2025，使用edu_course合并视图，按course_code识别同一业务记录，以2025整条记录为准，缺失时补2024。先合并去重，再筛选、聚合、排序和取前N。不同学期的选课/成绩保留为不同历史事件；跨表按业务身份关联，不按年度自增ID关联。问题中的前缀、入学年份、代码字符串、阈值和排序方向保持原值。"
+  },
+  {
+    "rule_id": "education_enrollment_latest_union",
+    "kind": "education_merge",
+    "source": "用户授权将教师跨年处理方式推广至教育年度库；业务键与同年排序是实现约定",
+    "entity": "enrollment",
+    "trigger_pattern": "选课|退课|选修过|总评|折算|通过率",
+    "scope": "未明确查询年度时；字段参数中的年份不选择数据库；明确年度或两年对比时分别按题意查询",
+    "tables": [
+      "education_2024.enrollment",
+      "education_2025.enrollment"
+    ],
+    "dedup_key": [
+      "student_no",
+      "course_code",
+      "academic_year",
+      "semester_code"
+    ],
+    "instruction": "未指定查询年度时同时访问2024和2025，使用edu_enrollment合并视图，按student_no,course_code,academic_year,semester_code识别同一业务记录，以2025整条记录为准，缺失时补2024。先合并去重，再筛选、聚合、排序和取前N。不同学期的选课/成绩保留为不同历史事件；跨表按业务身份关联，不按年度自增ID关联。问题中的前缀、入学年份、代码字符串、阈值和排序方向保持原值。"
+  },
+  {
+    "rule_id": "education_exam_score_latest_union",
+    "kind": "education_merge",
+    "source": "用户授权将教师跨年处理方式推广至教育年度库；业务键与同年排序是实现约定",
+    "entity": "exam_score",
+    "trigger_pattern": "成绩|总评|折算|得分|分项|平时|期中|期末",
+    "scope": "未明确查询年度时；字段参数中的年份不选择数据库；明确年度或两年对比时分别按题意查询",
+    "tables": [
+      "education_2024.exam_score",
+      "education_2025.exam_score"
+    ],
+    "dedup_key": [
+      "student_no",
+      "course_code",
+      "academic_year",
+      "semester_code",
+      "exam_item"
+    ],
+    "instruction": "未指定查询年度时同时访问2024和2025，使用edu_exam_score合并视图，按student_no,course_code,academic_year,semester_code,exam_item识别同一业务记录，以2025整条记录为准，缺失时补2024。先合并去重，再筛选、聚合、排序和取前N。不同学期的选课/成绩保留为不同历史事件；跨表按业务身份关联，不按年度自增ID关联。问题中的前缀、入学年份、代码字符串、阈值和排序方向保持原值。"
+  },
+  {
+    "rule_id": "education_student_2023_cohort_trial",
+    "kind": "education_question_override",
+    "status": "implemented",
+    "source": "用户于2026-10-09指定grade_year=2023并取消LIKE，随后授权自主修正全部冲突；非官方标注",
+    "question_exact": "查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。",
+    "entity": "student",
+    "scope": "仅当前完整题目的规范化精确匹配，不推广到其他学号前缀查询",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student",
+      "education_2024.class",
+      "education_2025.class"
+    ],
+    "display_fields": [
+      "student_no",
+      "student_name"
+    ],
+    "required_filters": [
+      {
+        "field": "grade_year",
+        "value": 2023
+      },
+      {
+        "field": "student_status_code",
+        "value": "ACTIVE"
+      }
+    ],
+    "forbid_like_fields": [
+      "student_no"
+    ],
+    "class_cohort_filter": true,
+    "instruction": "当前题目按用户明确修正口径解释为2023级在读学生：关联edu_student s与edu_class cl，使用s._class_code=cl.class_code业务身份关联，筛选cl.grade_year=2023与s.student_status_code='ACTIVE'。取消学号LIKE过滤，不再要求student_no以2023开头，也不要照搬S0001%或S0009%。只返回s.student_no和s.student_name，按s.student_no ASC排序，LIMIT 25。先按原跨年规则选定学生和班级的最新记录，再筛选；最新非在读或最新班级grade_year不为2023时不能回退旧年记录。此修正优先于原始问句及候选SQL的前缀写法。"
+  }
+]

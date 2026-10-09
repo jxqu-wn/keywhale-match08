@@ -1,0 +1,1502 @@
+{
+  "counts": {
+    "raw_train": 5830,
+    "test": 400,
+    "knowledge": 1800,
+    "clean": 5605,
+    "train": 4483,
+    "dev": 1122,
+    "schema_entries": 265
+  },
+  "sources": {
+    "MYSQL": 1969,
+    "Elasticsearch": 370,
+    "POSTGRESQL": 410,
+    "MYSQL->POSTGRESQL": 50,
+    "POSTGRESQL->MYSQL": 40,
+    "SQLite": 2991
+  },
+  "encodings": {
+    "bird_schemas.txt": "utf-8-sig",
+    "commom_schema.txt": "utf-8-sig",
+    "core_schema.txt": "gb18030"
+  },
+  "duplicate_groups": [
+    [
+      86,
+      109
+    ],
+    [
+      1052,
+      1536
+    ],
+    [
+      1057,
+      1611
+    ],
+    [
+      1059,
+      1103
+    ],
+    [
+      1060,
+      1195
+    ],
+    [
+      1064,
+      1452
+    ],
+    [
+      1066,
+      1360
+    ],
+    [
+      1067,
+      1126
+    ],
+    [
+      1070,
+      1208
+    ],
+    [
+      1074,
+      1598
+    ],
+    [
+      1075,
+      1515
+    ],
+    [
+      1077,
+      1087
+    ],
+    [
+      1084,
+      1446
+    ],
+    [
+      1086,
+      1581
+    ],
+    [
+      1090,
+      1292
+    ],
+    [
+      1092,
+      1307
+    ],
+    [
+      1093,
+      1397
+    ],
+    [
+      1094,
+      1333
+    ],
+    [
+      1098,
+      1565
+    ],
+    [
+      1105,
+      1395
+    ],
+    [
+      1107,
+      1128
+    ],
+    [
+      1113,
+      1500
+    ],
+    [
+      1116,
+      1440
+    ],
+    [
+      1117,
+      1438
+    ],
+    [
+      1120,
+      1559
+    ],
+    [
+      1122,
+      1377
+    ],
+    [
+      1135,
+      1163
+    ],
+    [
+      1138,
+      1345
+    ],
+    [
+      1140,
+      1526
+    ],
+    [
+      1141,
+      1238
+    ],
+    [
+      1144,
+      1501
+    ],
+    [
+      1146,
+      1472
+    ],
+    [
+      1151,
+      1334
+    ],
+    [
+      1153,
+      1405
+    ],
+    [
+      1155,
+      1263
+    ],
+    [
+      1161,
+      1387
+    ],
+    [
+      1162,
+      1322
+    ],
+    [
+      1168,
+      1219
+    ],
+    [
+      1178,
+      1400
+    ],
+    [
+      1185,
+      1585
+    ],
+    [
+      1187,
+      1245
+    ],
+    [
+      1189,
+      1574
+    ],
+    [
+      1191,
+      1518
+    ],
+    [
+      1193,
+      1369
+    ],
+    [
+      1197,
+      1491
+    ],
+    [
+      1199,
+      1442
+    ],
+    [
+      1201,
+      1603
+    ],
+    [
+      1203,
+      1517
+    ],
+    [
+      1205,
+      1268
+    ],
+    [
+      1213,
+      1372
+    ],
+    [
+      1217,
+      1474
+    ],
+    [
+      1222,
+      1241
+    ],
+    [
+      1227,
+      1534
+    ],
+    [
+      1228,
+      1423
+    ],
+    [
+      1234,
+      1548
+    ],
+    [
+      1235,
+      1594
+    ],
+    [
+      1236,
+      1346
+    ],
+    [
+      1240,
+      1279
+    ],
+    [
+      1242,
+      1396
+    ],
+    [
+      1251,
+      1494
+    ],
+    [
+      1253,
+      1401
+    ],
+    [
+      1258,
+      1523
+    ],
+    [
+      1261,
+      1325
+    ],
+    [
+      1277,
+      1532
+    ],
+    [
+      1280,
+      1381
+    ],
+    [
+      1283,
+      1509
+    ],
+    [
+      1284,
+      1375
+    ],
+    [
+      1291,
+      1315
+    ],
+    [
+      1296,
+      1414
+    ],
+    [
+      1297,
+      1447
+    ],
+    [
+      1308,
+      1488
+    ],
+    [
+      1311,
+      1607
+    ],
+    [
+      1316,
+      1407
+    ],
+    [
+      1318,
+      1430
+    ],
+    [
+      1337,
+      1352
+    ],
+    [
+      1340,
+      1538
+    ],
+    [
+      1342,
+      1359
+    ],
+    [
+      1349,
+      1484
+    ],
+    [
+      1355,
+      1489
+    ],
+    [
+      1361,
+      1606
+    ],
+    [
+      1367,
+      1480
+    ],
+    [
+      1379,
+      1409
+    ],
+    [
+      1390,
+      1567
+    ],
+    [
+      1398,
+      1578
+    ],
+    [
+      1413,
+      1542
+    ],
+    [
+      1417,
+      1463
+    ],
+    [
+      1418,
+      1544
+    ],
+    [
+      1425,
+      1561
+    ],
+    [
+      1428,
+      1516
+    ],
+    [
+      1434,
+      1497
+    ],
+    [
+      1443,
+      1466
+    ],
+    [
+      1470,
+      1562
+    ],
+    [
+      1482,
+      1590
+    ],
+    [
+      1485,
+      1560
+    ],
+    [
+      1490,
+      1583
+    ],
+    [
+      1498,
+      1550
+    ],
+    [
+      1503,
+      1533
+    ],
+    [
+      1508,
+      1617
+    ],
+    [
+      1546,
+      1596
+    ],
+    [
+      1669,
+      1682,
+      1732
+    ],
+    [
+      1670,
+      1720
+    ],
+    [
+      1671,
+      1721
+    ],
+    [
+      1672,
+      1722
+    ],
+    [
+      1673,
+      1723
+    ],
+    [
+      1674,
+      1724
+    ],
+    [
+      1675,
+      1725
+    ],
+    [
+      1676,
+      1726
+    ],
+    [
+      1677,
+      1727
+    ],
+    [
+      1678,
+      1728
+    ],
+    [
+      1679,
+      1729
+    ],
+    [
+      1680,
+      1730
+    ],
+    [
+      1681,
+      1731
+    ],
+    [
+      1683,
+      1733
+    ],
+    [
+      1684,
+      1734
+    ],
+    [
+      1685,
+      1735
+    ],
+    [
+      1686,
+      1736
+    ],
+    [
+      1688,
+      1738
+    ],
+    [
+      1689,
+      1739
+    ],
+    [
+      1690,
+      1740
+    ],
+    [
+      1691,
+      1741
+    ],
+    [
+      1692,
+      1742
+    ],
+    [
+      1693,
+      1743
+    ],
+    [
+      1694,
+      1744
+    ],
+    [
+      1695,
+      1745
+    ],
+    [
+      1696,
+      1746
+    ],
+    [
+      1697,
+      1747
+    ],
+    [
+      1698,
+      1748
+    ],
+    [
+      1699,
+      1749
+    ],
+    [
+      1700,
+      1750
+    ],
+    [
+      1701,
+      1751
+    ],
+    [
+      1702,
+      1752
+    ],
+    [
+      1703,
+      1753
+    ],
+    [
+      1704,
+      1754
+    ],
+    [
+      1705,
+      1755
+    ],
+    [
+      1706,
+      1756
+    ],
+    [
+      1707,
+      1757
+    ],
+    [
+      1708,
+      1758
+    ],
+    [
+      1709,
+      1759
+    ],
+    [
+      1710,
+      1760
+    ],
+    [
+      1711,
+      1761
+    ],
+    [
+      1712,
+      1762
+    ],
+    [
+      1713,
+      1763
+    ],
+    [
+      1714,
+      1764
+    ],
+    [
+      1715,
+      1765
+    ],
+    [
+      1716,
+      1766
+    ],
+    [
+      1717,
+      1767
+    ],
+    [
+      1718,
+      1768
+    ],
+    [
+      1719,
+      1769
+    ],
+    [
+      1881,
+      2020
+    ],
+    [
+      1891,
+      1976,
+      2037,
+      2059
+    ],
+    [
+      1921,
+      2030
+    ],
+    [
+      1954,
+      2045
+    ],
+    [
+      1965,
+      2058
+    ],
+    [
+      1974,
+      2029
+    ],
+    [
+      1978,
+      2066
+    ],
+    [
+      3803,
+      3861
+    ],
+    [
+      3851,
+      3884
+    ],
+    [
+      4009,
+      4095
+    ],
+    [
+      4835,
+      4933
+    ],
+    [
+      4849,
+      4936
+    ],
+    [
+      5141,
+      5164
+    ],
+    [
+      5194,
+      5251
+    ],
+    [
+      5196,
+      5237
+    ],
+    [
+      5827,
+      5841
+    ],
+    [
+      5952,
+      5996
+    ]
+  ],
+  "conflicting_groups": [
+    [
+      {
+        "question_id": 1669,
+        "question": "统计教师中电话不为空的数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_cnt FROM education_2024.teacher t WHERE t.phone IS NOT NULL AND t.phone<>'';"
+      },
+      {
+        "question_id": 1682,
+        "question": "统计教师中电话不为空的数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_cnt FROM education_2024.teacher t WHERE t.phone IS NOT NULL AND t.phone<>'';"
+      },
+      {
+        "question_id": 1732,
+        "question": "统计教师中电话不为空的数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_cnt FROM education_2025.teacher t WHERE t.phone IS NOT NULL AND t.phone<>'';"
+      }
+    ],
+    [
+      {
+        "question_id": 1670,
+        "question": "查询课程学分大于等于5的课程数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS course_credit_ge_5_cnt FROM education_2024.course c WHERE c.credit >= 5;"
+      },
+      {
+        "question_id": 1720,
+        "question": "查询课程学分大于等于5的课程数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS course_credit_ge_5_cnt FROM education_2025.course c WHERE c.credit >= 5;"
+      }
+    ],
+    [
+      {
+        "question_id": 1671,
+        "question": "查询院系编号为6的课程，返回课程编号与课程名，并按课程编号升序取前50。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.department_id=6 ORDER BY c.course_id ASC LIMIT 50;"
+      },
+      {
+        "question_id": 1721,
+        "question": "查询院系编号为6的课程，返回课程编号与课程名，并按课程编号升序取前50。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.department_id=6 ORDER BY c.course_id ASC LIMIT 50;"
+      }
+    ],
+    [
+      {
+        "question_id": 1672,
+        "question": "查询学籍状态为在读的学生，返回学号、家庭地区编号与姓名，并按家庭地区编号降序取前30。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.home_region_id, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' ORDER BY s.home_region_id DESC, s.student_no ASC LIMIT 30;"
+      },
+      {
+        "question_id": 1722,
+        "question": "查询学籍状态为在读的学生，返回学号、家庭地区编号与姓名，并按家庭地区编号降序取前30。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.home_region_id, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' ORDER BY s.home_region_id DESC, s.student_no ASC LIMIT 30;"
+      }
+    ],
+    [
+      {
+        "question_id": 1673,
+        "question": "统计学期表共有多少条记录，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS semester_cnt FROM education_2024.semester sem;"
+      },
+      {
+        "question_id": 1723,
+        "question": "统计学期表共有多少条记录，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS semester_cnt FROM education_2025.semester sem;"
+      }
+    ],
+    [
+      {
+        "question_id": 1674,
+        "question": "查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.student_no LIKE 'S0001%' ORDER BY s.student_no ASC LIMIT 25;"
+      },
+      {
+        "question_id": 1724,
+        "question": "查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.student_no LIKE 'S0009%' ORDER BY s.student_no DESC LIMIT 25;"
+      }
+    ],
+    [
+      {
+        "question_id": 1675,
+        "question": "查询院系编号为3的教师，返回教师工号、姓名与电话，并按工号升序取前20条。",
+        "db": "MYSQL",
+        "query": "SELECT t.teacher_no, t.teacher_name, t.phone FROM education_2024.teacher t WHERE t.department_id=3 ORDER BY t.teacher_no ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1725,
+        "question": "查询院系编号为3的教师，返回教师工号、姓名与电话，并按工号升序取前20条。",
+        "db": "MYSQL",
+        "query": "SELECT t.teacher_no, t.teacher_name, t.phone FROM education_2025.teacher t WHERE t.department_id=3 ORDER BY t.teacher_no ASC LIMIT 20;"
+      }
+    ],
+    [
+      {
+        "question_id": 1676,
+        "question": "查询课程名称包含“数据库”的课程，返回课程编号与课程名，并按课程编号升序取前20门。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.course_name LIKE '%数据库%' ORDER BY c.course_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1726,
+        "question": "查询课程名称包含“数据库”的课程，返回课程编号与课程名，并按课程编号升序取前20门。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.course_name LIKE '%数据库%' ORDER BY c.course_id ASC LIMIT 20;"
+      }
+    ],
+    [
+      {
+        "question_id": 1677,
+        "question": "统计每个院系的课程数量，返回院系编号与课程数，按课程数降序取前15。",
+        "db": "MYSQL",
+        "query": "SELECT c.department_id, COUNT(*) AS course_cnt FROM education_2024.course c GROUP BY c.department_id ORDER BY course_cnt DESC, c.department_id ASC LIMIT 15;"
+      },
+      {
+        "question_id": 1727,
+        "question": "统计每个院系的课程数量，返回院系编号与课程数，按课程数降序取前15。",
+        "db": "MYSQL",
+        "query": "SELECT c.department_id, COUNT(*) AS course_cnt FROM education_2025.course c GROUP BY c.department_id ORDER BY course_cnt DESC, c.department_id ASC LIMIT 15;"
+      }
+    ],
+    [
+      {
+        "question_id": 1678,
+        "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+        "db": "MYSQL",
+        "query": "SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.department_id=2 ORDER BY cl.class_id ASC LIMIT 30;"
+      },
+      {
+        "question_id": 1728,
+        "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+        "db": "MYSQL",
+        "query": "SELECT cl.class_id, cl.class_name FROM education_2025.class cl WHERE cl.department_id=2 ORDER BY cl.class_id ASC LIMIT 30;"
+      }
+    ],
+    [
+      {
+        "question_id": 1679,
+        "question": "统计学期编号为1的有效选课记录数，排除退课，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_enroll_record_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0;"
+      },
+      {
+        "question_id": 1729,
+        "question": "统计学期编号为1的有效选课记录数，排除退课，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_enroll_record_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0;"
+      }
+    ],
+    [
+      {
+        "question_id": 1680,
+        "question": "查询学期编号为1中选课人数排名第一的课程，返回课程编号与课程名。",
+        "db": "MYSQL",
+        "query": "SELECT x.course_id, x.course_name FROM (SELECT c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name) x ORDER BY x.cnt DESC, x.course_id ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1730,
+        "question": "查询学期编号为1中选课人数排名第一的课程，返回课程编号与课程名。",
+        "db": "MYSQL",
+        "query": "SELECT x.course_id, x.course_name FROM (SELECT c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name) x ORDER BY x.cnt DESC, x.course_id ASC LIMIT 1;"
+      }
+    ],
+    [
+      {
+        "question_id": 1681,
+        "question": "查询姓名以“张”开头的学生，返回学号与姓名，并按学号升序取前20名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_name LIKE '张%' ORDER BY s.student_no ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1731,
+        "question": "查询姓名以“张”开头的学生，返回学号与姓名，并按学号升序取前20名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_name LIKE '张%' ORDER BY s.student_no ASC LIMIT 20;"
+      }
+    ],
+    [
+      {
+        "question_id": 1683,
+        "question": "查询学分不低于3且不高于4的课程，返回课程编号与课程名，并按学分降序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.credit BETWEEN 3 AND 4 ORDER BY c.credit DESC, c.course_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1733,
+        "question": "查询学分不低于3且不高于4的课程，返回课程编号与课程名，并按学分降序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.credit BETWEEN 3 AND 4 ORDER BY c.credit DESC, c.course_id ASC LIMIT 20;"
+      }
+    ],
+    [
+      {
+        "question_id": 1684,
+        "question": "查询入学年份为2022的班级，返回班级编号与名称，并按班级编号升序取前20条。",
+        "db": "MYSQL",
+        "query": "SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.grade_year=2024 ORDER BY cl.class_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1734,
+        "question": "查询入学年份为2022的班级，返回班级编号与名称，并按班级编号升序取前20条。",
+        "db": "MYSQL",
+        "query": "SELECT cl.class_id, cl.class_name FROM education_2025.class cl WHERE cl.grade_year=2025 ORDER BY cl.class_id DESC LIMIT 20;"
+      }
+    ],
+    [
+      {
+        "question_id": 1685,
+        "question": "统计每个班级的在读学生数量，返回班级编号与在读人数，并按在读人数降序取前20个班级。",
+        "db": "MYSQL",
+        "query": "SELECT s.class_id, COUNT(*) AS active_student_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.class_id IS NOT NULL GROUP BY s.class_id ORDER BY active_student_cnt DESC, s.class_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1735,
+        "question": "统计每个班级的在读学生数量，返回班级编号与在读人数，并按在读人数降序取前20个班级。",
+        "db": "MYSQL",
+        "query": "SELECT s.class_id, COUNT(*) AS active_student_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.class_id IS NOT NULL GROUP BY s.class_id ORDER BY active_student_cnt DESC, s.class_id ASC LIMIT 20;"
+      }
+    ],
+    [
+      {
+        "question_id": 1686,
+        "question": "查询课程类型为选修的课程，返回课程编号与课程名，并按课程名升序取前30。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.course_type='选修' ORDER BY c.course_name ASC LIMIT 30;"
+      },
+      {
+        "question_id": 1736,
+        "question": "查询课程类型为选修的课程，返回课程编号与课程名，并按课程名升序取前30。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.course_type='选修' ORDER BY c.course_name ASC LIMIT 30;"
+      }
+    ],
+    [
+      {
+        "question_id": 1688,
+        "question": "统计学生中性别为女性的数量，并返回女性人数。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS female_student_cnt FROM education_2024.student s WHERE s.gender_code='F';"
+      },
+      {
+        "question_id": 1738,
+        "question": "统计学生中性别为女性的数量，并返回女性人数。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS female_student_cnt FROM education_2025.student s WHERE s.gender_code='F';"
+      }
+    ],
+    [
+      {
+        "question_id": 1689,
+        "question": "查询院系编号为4的教师姓名，按姓名升序取前25。",
+        "db": "MYSQL",
+        "query": "SELECT t.teacher_name FROM education_2024.teacher t WHERE t.department_id=4 ORDER BY t.teacher_name ASC LIMIT 25;"
+      },
+      {
+        "question_id": 1739,
+        "question": "查询院系编号为4的教师姓名，按姓名升序取前25。",
+        "db": "MYSQL",
+        "query": "SELECT t.teacher_name FROM education_2025.teacher t WHERE t.department_id=4 ORDER BY t.teacher_name ASC LIMIT 25;"
+      }
+    ],
+    [
+      {
+        "question_id": 1690,
+        "question": "统计课程表中平均学分，保留两位小数，并返回平均值。",
+        "db": "MYSQL",
+        "query": "SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2024.course c;"
+      },
+      {
+        "question_id": 1740,
+        "question": "统计课程表中平均学分，保留两位小数，并返回平均值。",
+        "db": "MYSQL",
+        "query": "SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2025.course c;"
+      }
+    ],
+    [
+      {
+        "question_id": 1691,
+        "question": "查询院系编号为1的学生中，按学籍状态分组统计人数，返回学籍状态与人数。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_status_code, COUNT(*) AS student_cnt FROM education_2024.student s WHERE s.department_id=1 GROUP BY s.student_status_code ORDER BY student_cnt DESC, s.student_status_code ASC;"
+      },
+      {
+        "question_id": 1741,
+        "question": "查询院系编号为1的学生中，按学籍状态分组统计人数，返回学籍状态与人数。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_status_code, COUNT(*) AS student_cnt FROM education_2025.student s WHERE s.department_id=1 GROUP BY s.student_status_code ORDER BY student_cnt DESC, s.student_status_code ASC;"
+      }
+    ],
+    [
+      {
+        "question_id": 1692,
+        "question": "查询每个学期的有效选课记录数，排除退课，返回学期编号与有效选课数量，并按学期编号升序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT e.semester_id, COUNT(*) AS active_enroll_cnt FROM education_2024.enrollment e WHERE e.is_withdraw=0 GROUP BY e.semester_id ORDER BY e.semester_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1742,
+        "question": "查询每个学期的有效选课记录数，排除退课，返回学期编号与有效选课数量，并按学期编号升序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT e.semester_id, COUNT(*) AS active_enroll_cnt FROM education_2025.enrollment e WHERE e.is_withdraw=0 GROUP BY e.semester_id ORDER BY e.semester_id ASC LIMIT 10;"
+      }
+    ],
+    [
+      {
+        "question_id": 1693,
+        "question": "统计未分配班级的在读学生数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_unassigned_class_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND (s.class_id IS NULL OR s.class_id='');"
+      },
+      {
+        "question_id": 1743,
+        "question": "统计未分配班级的在读学生数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_unassigned_class_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND (s.class_id IS NULL OR s.class_id='');"
+      }
+    ],
+    [
+      {
+        "question_id": 1694,
+        "question": "查询课程学分小于2的课程，返回课程编号与课程名，并按学分升序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.credit<2 ORDER BY c.credit ASC, c.course_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1744,
+        "question": "查询课程学分小于2的课程，返回课程编号与课程名，并按学分升序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.credit<2 ORDER BY c.credit ASC, c.course_id ASC LIMIT 20;"
+      }
+    ],
+    [
+      {
+        "question_id": 1695,
+        "question": "统计是否存在学分为0的课程，若存在返回该数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS credit_zero_cnt FROM education_2024.course c WHERE c.credit=0;"
+      },
+      {
+        "question_id": 1745,
+        "question": "统计是否存在学分为0的课程，若存在返回该数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS credit_zero_cnt FROM education_2025.course c WHERE c.credit=0;"
+      }
+    ],
+    [
+      {
+        "question_id": 1696,
+        "question": "查询学期编号为1中选修过“数据结构”的去重学生数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(DISTINCT s.student_id) AS distinct_student_cnt FROM education_2024.student s JOIN education_2024.enrollment e ON e.student_id=s.student_id JOIN education_2024.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND c.course_name='数据结构';"
+      },
+      {
+        "question_id": 1746,
+        "question": "查询学期编号为1中选修过“数据结构”的去重学生数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(DISTINCT s.student_id) AS distinct_student_cnt FROM education_2025.student s JOIN education_2025.enrollment e ON e.student_id=s.student_id JOIN education_2025.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND c.course_name='数据结构';"
+      }
+    ],
+    [
+      {
+        "question_id": 1697,
+        "question": "查询在读且性别为女性的学生，按姓名升序取前15名的学号与姓名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.gender_code='F' ORDER BY s.student_name ASC, s.student_no ASC LIMIT 15;"
+      },
+      {
+        "question_id": 1747,
+        "question": "查询在读且性别为女性的学生，按姓名升序取前15名的学号与姓名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.gender_code='F' ORDER BY s.student_name ASC, s.student_no ASC LIMIT 15;"
+      }
+    ],
+    [
+      {
+        "question_id": 1698,
+        "question": "统计学期一中每门课程的通过人数，按总评折算不低于60，且排除退课，返回课程编号、课程名与通过人数，并按通过人数降序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN s.student_id ELSE NULL END) AS pass_student_cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name ORDER BY pass_student_cnt DESC, c.course_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1748,
+        "question": "统计学期一中每门课程的通过人数，按总评折算不低于60，且排除退课，返回课程编号、课程名与通过人数，并按通过人数降序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN s.student_id ELSE NULL END) AS pass_student_cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name ORDER BY pass_student_cnt DESC, c.course_id ASC LIMIT 10;"
+      }
+    ],
+    [
+      {
+        "question_id": 1699,
+        "question": "统计学期一中在读学生参与的每门课程，其平均总评折算分，返回课程编号、课程名与平均总评，按平均总评降序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, ROUND(AVG(t.total_score),2) AS avg_total_score FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.course_id, c.course_name ORDER BY avg_total_score DESC, c.course_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1749,
+        "question": "统计学期一中在读学生参与的每门课程，其平均总评折算分，返回课程编号、课程名与平均总评，按平均总评降序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, ROUND(AVG(t.total_score),2) AS avg_total_score FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.course_id, c.course_name ORDER BY avg_total_score DESC, c.course_id ASC LIMIT 10;"
+      }
+    ],
+    [
+      {
+        "question_id": 1700,
+        "question": "统计学期一中每个院系选课人数排名前三的课程，返回院系编号、课程编号与课程名、选课人数，并按院系与选课人数降序排序。",
+        "db": "MYSQL",
+        "query": "WITH course_enroll AS (SELECT c.department_id, c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.department_id, c.course_id, c.course_name), ranked AS (SELECT department_id, course_id, course_name, active_enroll_cnt, ROW_NUMBER() OVER(PARTITION BY department_id ORDER BY active_enroll_cnt DESC, course_id ASC) AS rn FROM course_enroll) SELECT department_id, course_id, course_name, active_enroll_cnt FROM ranked WHERE rn<=3 ORDER BY department_id ASC, active_enroll_cnt DESC, course_id ASC;"
+      },
+      {
+        "question_id": 1750,
+        "question": "统计学期一中每个院系选课人数排名前三的课程，返回院系编号、课程编号与课程名、选课人数，并按院系与选课人数降序排序。",
+        "db": "MYSQL",
+        "query": "WITH course_enroll AS (SELECT c.department_id, c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.department_id, c.course_id, c.course_name), ranked AS (SELECT department_id, course_id, course_name, active_enroll_cnt, ROW_NUMBER() OVER(PARTITION BY department_id ORDER BY active_enroll_cnt DESC, course_id ASC) AS rn FROM course_enroll) SELECT department_id, course_id, course_name, active_enroll_cnt FROM ranked WHERE rn<=3 ORDER BY department_id ASC, active_enroll_cnt DESC, course_id ASC;"
+      }
+    ],
+    [
+      {
+        "question_id": 1701,
+        "question": "统计学期一中每门课程最低总评折算分对应的学生学号，若并列取学号最小，返回课程编号、课程名与学号。",
+        "db": "MYSQL",
+        "query": "WITH per_enroll AS (SELECT e.course_id, e.student_id, s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.student s ON s.student_id=e.student_id JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id, e.student_id, s.student_no), ranked AS (SELECT p.course_id, p.student_no, p.total_score, ROW_NUMBER() OVER(PARTITION BY p.course_id ORDER BY p.total_score ASC, p.student_no ASC) AS rn FROM per_enroll p) SELECT c.course_id, c.course_name, r.student_no FROM ranked r JOIN education_2024.course c ON c.course_id=r.course_id WHERE r.rn=1 ORDER BY c.course_id ASC;"
+      },
+      {
+        "question_id": 1751,
+        "question": "统计学期一中每门课程最低总评折算分对应的学生学号，若并列取学号最小，返回课程编号、课程名与学号。",
+        "db": "MYSQL",
+        "query": "WITH per_enroll AS (SELECT e.course_id, e.student_id, s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.student s ON s.student_id=e.student_id JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id, e.student_id, s.student_no), ranked AS (SELECT p.course_id, p.student_no, p.total_score, ROW_NUMBER() OVER(PARTITION BY p.course_id ORDER BY p.total_score ASC, p.student_no ASC) AS rn FROM per_enroll p) SELECT c.course_id, c.course_name, r.student_no FROM ranked r JOIN education_2025.course c ON c.course_id=r.course_id WHERE r.rn=1 ORDER BY c.course_id ASC;"
+      }
+    ],
+    [
+      {
+        "question_id": 1702,
+        "question": "统计学期一中每位在读学生的总评折算总分，返回总评最高学生的学号与总分。",
+        "db": "MYSQL",
+        "query": "WITH per_student AS (SELECT s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.student s ON s.student_id=e.student_id JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY s.student_no) SELECT student_no, ROUND(total_score,2) AS total_score FROM per_student ORDER BY total_score DESC, student_no ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1752,
+        "question": "统计学期一中每位在读学生的总评折算总分，返回总评最高学生的学号与总分。",
+        "db": "MYSQL",
+        "query": "WITH per_student AS (SELECT s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.student s ON s.student_id=e.student_id JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY s.student_no) SELECT student_no, ROUND(total_score,2) AS total_score FROM per_student ORDER BY total_score DESC, student_no ASC LIMIT 1;"
+      }
+    ],
+    [
+      {
+        "question_id": 1703,
+        "question": "查询课程表中学分平均是否大于等于3，并返回平均学分。",
+        "db": "MYSQL",
+        "query": "SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2024.course c HAVING ROUND(AVG(c.credit),2)<=4;"
+      },
+      {
+        "question_id": 1753,
+        "question": "查询课程表中学分平均是否大于等于3，并返回平均学分。",
+        "db": "MYSQL",
+        "query": "SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2025.course c HAVING ROUND(AVG(c.credit),2)>=2;"
+      }
+    ],
+    [
+      {
+        "question_id": 1704,
+        "question": "统计教师表中教师的联系电话为空或空字符串的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_empty_cnt FROM education_2024.teacher t WHERE t.phone IS NULL OR t.phone='';"
+      },
+      {
+        "question_id": 1754,
+        "question": "统计教师表中教师的联系电话为空或空字符串的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_empty_cnt FROM education_2025.teacher t WHERE t.phone IS NULL OR t.phone='';"
+      }
+    ],
+    [
+      {
+        "question_id": 1705,
+        "question": "查询学期编号为1中每个课程的有效选课人数，并按课程编号升序取前10门。",
+        "db": "MYSQL",
+        "query": "SELECT e.course_id, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id ORDER BY e.course_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1755,
+        "question": "查询学期编号为1中每个课程的有效选课人数，并按课程编号升序取前10门。",
+        "db": "MYSQL",
+        "query": "SELECT e.course_id, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id ORDER BY e.course_id ASC LIMIT 10;"
+      }
+    ],
+    [
+      {
+        "question_id": 1706,
+        "question": "查询课程类型为必修的课程数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS compulsory_course_cnt FROM education_2024.course c WHERE c.course_type='必修';"
+      },
+      {
+        "question_id": 1756,
+        "question": "查询课程类型为必修的课程数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS compulsory_course_cnt FROM education_2025.course c WHERE c.course_type='必修';"
+      }
+    ],
+    [
+      {
+        "question_id": 1707,
+        "question": "查询院系编号为1的班级数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS class_cnt_dept1 FROM education_2024.class cl WHERE cl.department_id=1;"
+      },
+      {
+        "question_id": 1757,
+        "question": "查询院系编号为1的班级数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS class_cnt_dept1 FROM education_2025.class cl WHERE cl.department_id=1;"
+      }
+    ],
+    [
+      {
+        "question_id": 1708,
+        "question": "查询学期表中学期代码包含“2024”的学期，返回学期代码，并按学期代码升序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT sem.semester_code FROM education_2024.semester sem WHERE sem.semester_code LIKE '%2024%' ORDER BY sem.semester_code ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1758,
+        "question": "查询学期表中学期代码包含“2024”的学期，返回学期代码，并按学期代码升序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT sem.semester_code FROM education_2025.semester sem WHERE sem.semester_code LIKE '%2025%' ORDER BY sem.semester_code ASC LIMIT 20;"
+      }
+    ],
+    [
+      {
+        "question_id": 1709,
+        "question": "查询学生中学籍状态为在读且所属院系编号为2的学生数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_students_dept2_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.department_id=2;"
+      },
+      {
+        "question_id": 1759,
+        "question": "查询学生中学籍状态为在读且所属院系编号为2的学生数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_students_dept2_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.department_id=2;"
+      }
+    ],
+    [
+      {
+        "question_id": 1710,
+        "question": "查询院系编号为3的课程，返回课程编号与课程名，并按课程名升序取前15。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.department_id=3 ORDER BY c.course_name ASC LIMIT 15;"
+      },
+      {
+        "question_id": 1760,
+        "question": "查询院系编号为3的课程，返回课程编号与课程名，并按课程名升序取前15。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.department_id=3 ORDER BY c.course_name ASC LIMIT 15;"
+      }
+    ],
+    [
+      {
+        "question_id": 1711,
+        "question": "查询在读学生中家庭地区编号为空或为0的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_home_region_empty_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND (s.home_region_id IS NULL OR s.home_region_id=0);"
+      },
+      {
+        "question_id": 1761,
+        "question": "查询在读学生中家庭地区编号为空或为0的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_home_region_empty_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND (s.home_region_id IS NULL OR s.home_region_id=0);"
+      }
+    ],
+    [
+      {
+        "question_id": 1712,
+        "question": "统计学期一中每门课程的通过率，通过总评不低于60，排除退课，返回课程编号、课程名与通过率，以百分比表示并保留两位小数，按通过率降序取前10。",
+        "db": "MYSQL",
+        "query": "WITH course_tot AS (SELECT e.course_id, COUNT(DISTINCT e.student_id) AS total_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id), course_pass AS (SELECT e.course_id, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN e.student_id ELSE NULL END) AS pass_cnt FROM education_2024.enrollment e JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id) SELECT c.course_id, c.course_name, ROUND( (p.pass_cnt / NULLIF(t.total_cnt,0))*100, 2) AS pass_rate_pct FROM course_pass p JOIN course_tot t ON t.course_id=p.course_id JOIN education_2024.course c ON c.course_id=p.course_id ORDER BY pass_rate_pct DESC, c.course_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1762,
+        "question": "统计学期一中每门课程的通过率，通过总评不低于60，排除退课，返回课程编号、课程名与通过率，以百分比表示并保留两位小数，按通过率降序取前10。",
+        "db": "MYSQL",
+        "query": "WITH course_tot AS (SELECT e.course_id, COUNT(DISTINCT e.student_id) AS total_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id), course_pass AS (SELECT e.course_id, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN e.student_id ELSE NULL END) AS pass_cnt FROM education_2025.enrollment e JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id) SELECT c.course_id, c.course_name, ROUND( (p.pass_cnt / NULLIF(t.total_cnt,0))*100, 2) AS pass_rate_pct FROM course_pass p JOIN course_tot t ON t.course_id=p.course_id JOIN education_2025.course c ON c.course_id=p.course_id ORDER BY pass_rate_pct DESC, c.course_id ASC LIMIT 10;"
+      }
+    ],
+    [
+      {
+        "question_id": 1713,
+        "question": "统计学期一中得分分项中出现次数最多的分项名称，在平时、期中、期末中出现次数最大，若并列按名称升序，返回分项名称与出现次数。",
+        "db": "MYSQL",
+        "query": "SELECT es.exam_item, COUNT(*) AS item_cnt FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY es.exam_item ORDER BY item_cnt DESC, es.exam_item ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1763,
+        "question": "统计学期一中得分分项中出现次数最多的分项名称，在平时、期中、期末中出现次数最大，若并列按名称升序，返回分项名称与出现次数。",
+        "db": "MYSQL",
+        "query": "SELECT es.exam_item, COUNT(*) AS item_cnt FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY es.exam_item ORDER BY item_cnt DESC, es.exam_item ASC LIMIT 1;"
+      }
+    ],
+    [
+      {
+        "question_id": 1714,
+        "question": "统计学期一中每位学生的平均总评折算分，按其所有选课的总评求平均并排除退课，返回平均总评最高的学生学号与平均分。",
+        "db": "MYSQL",
+        "query": "WITH per_enroll AS (SELECT e.student_id, e.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.enrollment_id), per_student AS (SELECT s.student_no, AVG(p.total_score) AS avg_total_score FROM per_enroll p JOIN education_2024.student s ON s.student_id=p.student_id GROUP BY s.student_no) SELECT student_no, ROUND(avg_total_score,2) AS avg_total_score FROM per_student ORDER BY avg_total_score DESC, student_no ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1764,
+        "question": "统计学期一中每位学生的平均总评折算分，按其所有选课的总评求平均并排除退课，返回平均总评最高的学生学号与平均分。",
+        "db": "MYSQL",
+        "query": "WITH per_enroll AS (SELECT e.student_id, e.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.enrollment_id), per_student AS (SELECT s.student_no, AVG(p.total_score) AS avg_total_score FROM per_enroll p JOIN education_2025.student s ON s.student_id=p.student_id GROUP BY s.student_no) SELECT student_no, ROUND(avg_total_score,2) AS avg_total_score FROM per_student ORDER BY avg_total_score DESC, student_no ASC LIMIT 1;"
+      }
+    ],
+    [
+      {
+        "question_id": 1715,
+        "question": "查询课程学分为偶数的课程数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS even_credit_course_cnt FROM education_2024.course c WHERE MOD(c.credit,2)=0;"
+      },
+      {
+        "question_id": 1765,
+        "question": "查询课程学分为偶数的课程数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS even_credit_course_cnt FROM education_2025.course c WHERE MOD(c.credit,2)=0;"
+      }
+    ],
+    [
+      {
+        "question_id": 1716,
+        "question": "查询院系编号为5的教师中电话非空的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_dept5_cnt FROM education_2024.teacher t WHERE t.department_id=5 AND t.phone IS NOT NULL AND t.phone<>'';"
+      },
+      {
+        "question_id": 1766,
+        "question": "查询院系编号为5的教师中电话非空的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_dept5_cnt FROM education_2025.teacher t WHERE t.department_id=5 AND t.phone IS NOT NULL AND t.phone<>'';"
+      }
+    ],
+    [
+      {
+        "question_id": 1717,
+        "question": "查询课程表里是否存在课程名以“数”开头的课程，若存在返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS course_name_start_with_num_cnt FROM education_2024.course c WHERE c.course_name LIKE '数%';"
+      },
+      {
+        "question_id": 1767,
+        "question": "查询课程表里是否存在课程名以“数”开头的课程，若存在返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS course_name_start_with_num_cnt FROM education_2025.course c WHERE c.course_name LIKE '数%';"
+      }
+    ],
+    [
+      {
+        "question_id": 1718,
+        "question": "查询课程表里必修课程是否不足5门的情况，并返回必修课程数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS compulsory_course_cnt FROM education_2024.course c WHERE c.course_type='必修';"
+      },
+      {
+        "question_id": 1768,
+        "question": "查询课程表里必修课程是否不足5门的情况，并返回必修课程数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS compulsory_course_cnt FROM education_2025.course c WHERE c.course_type='必修';"
+      }
+    ],
+    [
+      {
+        "question_id": 1719,
+        "question": "查询课程表中学分最高的排名第一的课程，返回课程编号、课程名与学分。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, c.credit FROM education_2024.course c ORDER BY c.credit DESC, c.course_id ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1769,
+        "question": "查询课程表中学分最高的排名第一的课程，返回课程编号、课程名与学分。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, c.credit FROM education_2025.course c ORDER BY c.credit DESC, c.course_id ASC LIMIT 1;"
+      }
+    ],
+    [
+      {
+        "question_id": 1891,
+        "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+        "db": "MYSQL",
+        "query": "SELECT '2024' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2025.course WHERE credit=0;"
+      },
+      {
+        "question_id": 1976,
+        "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+        "db": "MYSQL",
+        "query": "SELECT '2024' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2025.course WHERE credit=0;"
+      },
+      {
+        "question_id": 2037,
+        "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+        "db": "MYSQL",
+        "query": "SELECT '2024' AS year, COUNT(*) AS credit_0_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_0_course_cnt FROM education_2025.course WHERE credit=0;"
+      },
+      {
+        "question_id": 2059,
+        "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+        "db": "MYSQL",
+        "query": "SELECT '2024' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2025.course WHERE credit=0;"
+      }
+    ],
+    [
+      {
+        "question_id": 1921,
+        "question": "比较2024与2025课程表中课程类型为必修且学分不低于4的课程数量差，即2025减2024，返回差值与两年数量。",
+        "db": "MYSQL",
+        "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.course WHERE course_type='必修' AND credit>=4), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.course WHERE course_type='必修' AND credit>=4) SELECT (b.cnt_2025-a.cnt_2024) AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+      },
+      {
+        "question_id": 2030,
+        "question": "比较2024与2025课程表中课程类型为必修且学分不低于4的课程数量差，即2025减2024，返回差值与两年数量。",
+        "db": "MYSQL",
+        "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.course WHERE course_type='必修' AND credit>=4), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.course WHERE course_type='必修' AND credit>=4) SELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+      }
+    ],
+    [
+      {
+        "question_id": 3803,
+        "question": "哪个发行商发行的游戏最多？",
+        "db": "SQLite",
+        "query": "SELECT T.publisher_name FROM ( SELECT T2.publisher_name, COUNT(DISTINCT T1.game_id) FROM video_games.game_publisher AS T1 INNER JOIN video_games.publisher AS T2 ON T1.publisher_id = T2.id GROUP BY T2.publisher_name ORDER BY COUNT(DISTINCT T1.game_id) DESC LIMIT 1 ) t"
+      },
+      {
+        "question_id": 3861,
+        "question": "哪个发行商发行的游戏最多？",
+        "db": "SQLite",
+        "query": "SELECT T1.publisher_name FROM video_games.publisher AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.publisher_id GROUP BY T1.publisher_name ORDER BY COUNT(DISTINCT T2.game_id) DESC LIMIT 1"
+      }
+    ],
+    [
+      {
+        "question_id": 3851,
+        "question": "2001年发行了多少款游戏？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(T.id) FROM video_games.game_platform AS T WHERE T.release_year = 2001"
+      },
+      {
+        "question_id": 3884,
+        "question": "2001年发行了多少款游戏？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(id) FROM video_games.game_platform AS T WHERE T.release_year = 2001"
+      }
+    ],
+    [
+      {
+        "question_id": 4009,
+        "question": "有多少篇论文是预印本或未发表的？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(Id) FROM authors.Paper WHERE Year = 0"
+      },
+      {
+        "question_id": 4095,
+        "question": "有多少篇论文是预印本或未发表的？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(Id) FROM authors.Paper WHERE Year = 0 OR (ConferenceId = 0 AND JournalId = 0)"
+      }
+    ],
+    [
+      {
+        "question_id": 5196,
+        "question": "出版书籍数量最多的出版社名称是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.publisher_name FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id GROUP BY T2.publisher_name ORDER BY COUNT(T1.book_id) DESC LIMIT 1"
+      },
+      {
+        "question_id": 5237,
+        "question": "出版书籍数量最多的出版社名称是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.publisher_name FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id GROUP BY T2.publisher_name ORDER BY COUNT(T2.publisher_id) DESC LIMIT 1"
+      }
+    ]
+  ],
+  "unknown_qualified_references": {},
+  "train_test_exact_overlap": [
+    507,
+    1737,
+    3247,
+    5248
+  ],
+  "manual_issues": [
+    "船舶类型字典油轮=35，与部分标注油轮=80冲突",
+    "电商引用administrative_division.division_code，但通用表定义id"
+  ],
+  "split": {
+    "seed": 42,
+    "method": "normalized question parameter-template grouping, source-stratified; semantic paraphrase leakage remains possible"
+  },
+  "sha256": {
+    "data/raw/subject/QA_test.json": "c5aba24c0d9f8d5ab9aa80d6ca1044afc93bc2f1a1633c2426455a30f304efa9",
+    "data/raw/subject/QA_train.json": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+    "data/raw/subject/Schema/bird_schemas.txt": "ac29c850c2507718656a9cb89ceba95796d3bf286a26413b4bd43486ad39db6c",
+    "data/raw/subject/Schema/commom_schema.txt": "a6e0b1048576e4d55b66e496aff505047c2aca0a8f87ae0bde87329ca8ed8e94",
+    "data/raw/subject/Schema/core_schema.txt": "936e4a96d43515d3570dc213dee83a836cc74d9584a9a1ce875c97dfb8248bad",
+    "data/raw/subject/knowledge.json": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0"
+  }
+}

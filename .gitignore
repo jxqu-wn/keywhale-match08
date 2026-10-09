@@ -1,0 +1,42 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local credentials and environment-owned directories
+.env
+.env.*
+!.env.example
+*.header
+*.key
+*.pem
+/.aws/
+/.agents/
+/.codex/
+
+# Generated runs stay local. Keep only the snapshots read by regression tests.
+/artifacts/runs/**
+!/artifacts/runs/**/
+!/artifacts/runs/prediction/predict-ee19c0abd953/predictions.json
+!/artifacts/runs/regression/rag-improvements-20261009/baseline.json
+!/artifacts/runs/regression/test20-20261009/predict-94f84ad400f2/3674.json
+!/artifacts/runs/regression/test20-20261009/predict-94f84ad400f2/4123.json
+!/artifacts/runs/regression/test20-20261009/predict-94f84ad400f2/4682.json
+!/artifacts/runs/regression/test20-20261009/predict-94f84ad400f2/5686.json
+/artifacts/baseline/*
+/artifacts/logs/*
+*.log
+
+# Editor and office temporary files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.~lock.*#

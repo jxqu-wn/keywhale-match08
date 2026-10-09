@@ -1,0 +1,232 @@
+[
+  {
+    "group_id": "ambiguous-1674",
+    "question_ids": [
+      1674,
+      1724
+    ],
+    "question": "查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。",
+    "db": "MYSQL",
+    "query": "SELECT s.student_no,s.student_name FROM edu_student s\nJOIN edu_class cl ON s._class_code=cl.class_code\nWHERE s.student_status_code='ACTIVE' AND cl.grade_year=2023\nORDER BY s.student_no ASC LIMIT 25",
+    "tables": [
+      "education_2024.class",
+      "education_2024.student",
+      "education_2025.class",
+      "education_2025.student"
+    ],
+    "decision": "按用户明确指定，用所属班级grade_year=2023替代学号LIKE；保留在读、学号升序和前25条。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [],
+    "implementation_assumptions": ""
+  },
+  {
+    "group_id": "ambiguous-1684",
+    "question_ids": [
+      1684,
+      1734
+    ],
+    "question": "查询入学年份为2022的班级，返回班级编号与名称，并按班级编号升序取前20条。",
+    "db": "MYSQL",
+    "query": "SELECT cl.class_id,cl.class_name FROM edu_class cl\nWHERE cl.grade_year=2022 ORDER BY cl.class_id ASC,cl.class_code ASC LIMIT 20",
+    "tables": [
+      "education_2024.class",
+      "education_2025.class"
+    ],
+    "decision": "按问题入学年份2022筛选，不把字段参数改为数据库年份；升序取20条。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [],
+    "implementation_assumptions": ""
+  },
+  {
+    "group_id": "ambiguous-1700",
+    "question_ids": [
+      1700,
+      1750
+    ],
+    "question": "统计学期一中每个院系选课人数排名前三的课程，返回院系编号、课程编号与课程名、选课人数，并按院系与选课人数降序排序。",
+    "db": "MYSQL",
+    "query": "WITH course_enroll AS (\n SELECT c._department_code,c.department_id,c.course_code,c.course_id,c.course_name,\n        COUNT(DISTINCT e.student_no) AS enroll_cnt\n FROM edu_course c JOIN edu_enrollment e ON e.course_code=c.course_code\n WHERE e.semester_id=1 AND e.is_withdraw=0\n GROUP BY c._department_code,c.department_id,c.course_code,c.course_id,c.course_name\n), ranked AS (\n SELECT *,ROW_NUMBER() OVER(PARTITION BY _department_code\n   ORDER BY enroll_cnt DESC,course_id ASC,course_code ASC) AS rn FROM course_enroll\n)\nSELECT department_id,course_id,course_name,enroll_cnt FROM ranked WHERE rn<=3\nORDER BY department_id DESC,enroll_cnt DESC,course_id ASC,course_code ASC",
+    "tables": [
+      "education_2024.course",
+      "education_2024.enrollment",
+      "education_2024.student",
+      "education_2025.course",
+      "education_2025.enrollment",
+      "education_2025.student"
+    ],
+    "decision": "统计全部未退课选课学生，不加题目未要求的ACTIVE；按业务院系分区取前三，院系与人数均降序，并列按课程编号/业务代码稳定选择。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [
+      1575
+    ],
+    "implementation_assumptions": ""
+  },
+  {
+    "group_id": "ambiguous-1703",
+    "question_ids": [
+      1703,
+      1753
+    ],
+    "question": "查询课程表中学分平均是否大于等于3，并返回平均学分。",
+    "db": "MYSQL",
+    "query": "SELECT AVG(c.credit) AS avg_credit FROM edu_course c HAVING AVG(c.credit)>=3",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "decision": "先按业务课程合并，再计算明细AVG；用未四舍五入的平均值比较>=3，返回原平均值。低于3时返回空结果。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [],
+    "implementation_assumptions": "原始平均值作为阈值比较及返回值"
+  },
+  {
+    "group_id": "ambiguous-1708",
+    "question_ids": [
+      1708,
+      1758
+    ],
+    "question": "查询学期表中学期代码包含“2024”的学期，返回学期代码，并按学期代码升序取前20。",
+    "db": "MYSQL",
+    "query": "SELECT sem.semester_code FROM edu_semester sem\nWHERE sem.semester_code LIKE '%2024%' ORDER BY sem.semester_code ASC,sem.academic_year ASC LIMIT 20",
+    "tables": [
+      "education_2024.semester",
+      "education_2025.semester"
+    ],
+    "decision": "保留问题字符串2024，合并两年学期后筛选代码包含2024、升序取20条；数字属于代码参数。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [],
+    "implementation_assumptions": ""
+  },
+  {
+    "group_id": "ambiguous-1891",
+    "question_ids": [
+      1891,
+      1976,
+      2037,
+      2059
+    ],
+    "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+    "db": "MYSQL",
+    "query": "SELECT '2024' AS year,COUNT(*) AS credit_zero_course_cnt FROM education_2024.course WHERE credit=0\nUNION ALL SELECT '2025' AS year,COUNT(*) AS credit_zero_course_cnt FROM education_2025.course WHERE credit=0\nORDER BY year ASC",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "decision": "两年分别统计credit=0，统一列别名；按2024、2025稳定输出，不采用最新合并快照替代年度对比。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [],
+    "implementation_assumptions": ""
+  },
+  {
+    "group_id": "ambiguous-1921",
+    "question_ids": [
+      1921,
+      2030
+    ],
+    "question": "比较2024与2025课程表中课程类型为必修且学分不低于4的课程数量差，即2025减2024，返回差值与两年数量。",
+    "db": "MYSQL",
+    "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.course WHERE course_type='必修' AND credit>=4),\nb AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.course WHERE course_type='必修' AND credit>=4)\nSELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024,a.cnt_2024,b.cnt_2025 FROM a CROSS JOIN b",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "decision": "统一等价表达式；保留2025减2024、必修且credit>=4及差值/两年数量三个返回列。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [],
+    "implementation_assumptions": ""
+  },
+  {
+    "group_id": "ambiguous-3803",
+    "question_ids": [
+      3803,
+      3861
+    ],
+    "question": "哪个发行商发行的游戏最多？",
+    "db": "SQLite",
+    "query": "SELECT p.publisher_name FROM video_games.publisher p\nJOIN video_games.game_publisher gp ON gp.publisher_id=p.id\nGROUP BY p.id,p.publisher_name ORDER BY COUNT(DISTINCT gp.game_id) DESC,p.id ASC LIMIT 1",
+    "tables": [
+      "video_games.game_publisher",
+      "video_games.publisher"
+    ],
+    "decision": "修复候选A外层未定义的T别名；以发行商ID区分同名实体，按去重游戏数排名，第一名并列时取ID最小者。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [
+      121
+    ],
+    "implementation_assumptions": "并列取ID最小者；同名主体按主键区分"
+  },
+  {
+    "group_id": "ambiguous-3851",
+    "question_ids": [
+      3851,
+      3884
+    ],
+    "question": "2001年发行了多少款游戏？",
+    "db": "SQLite",
+    "query": "SELECT COUNT(DISTINCT gp.game_id) AS game_count FROM video_games.game_platform gpl\nJOIN video_games.game_publisher gp ON gp.id=gpl.game_publisher_id WHERE gpl.release_year=2001",
+    "tables": [
+      "video_games.game_platform",
+      "video_games.game_publisher"
+    ],
+    "decision": "游戏款数按game_id去重；沿game_platform.game_publisher_id关联，避免把跨平台发行记录当作不同游戏。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [
+      120,
+      123,
+      1539
+    ],
+    "implementation_assumptions": ""
+  },
+  {
+    "group_id": "ambiguous-4009",
+    "question_ids": [
+      4009,
+      4095
+    ],
+    "question": "有多少篇论文是预印本或未发表的？",
+    "db": "SQLite",
+    "query": "SELECT COUNT(p.Id) AS unpublished_count FROM authors.Paper p WHERE p.Year=0",
+    "tables": [
+      "authors.Paper"
+    ],
+    "decision": "知识129/134/405支持Year=0，134明确Year>0已发表；选择Year为主判断，避免仅因载体ID均0误计已发表论文。NULL或负年份未被定义为未发表，不自行纳入。知识85/407的载体缺失信号不覆盖正年份。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [
+      85,
+      129,
+      134,
+      405,
+      407
+    ],
+    "implementation_assumptions": "相冲突的专家知识优先采用明确发表年份定义"
+  },
+  {
+    "group_id": "ambiguous-5196",
+    "question_ids": [
+      5196,
+      5237
+    ],
+    "question": "出版书籍数量最多的出版社名称是什么？",
+    "db": "SQLite",
+    "query": "SELECT p.publisher_name FROM books.publisher p JOIN books.book b ON b.publisher_id=p.publisher_id\nGROUP BY p.publisher_id,p.publisher_name ORDER BY COUNT(b.book_id) DESC,p.publisher_id ASC LIMIT 1",
+    "tables": [
+      "books.book",
+      "books.publisher"
+    ],
+    "decision": "以出版社ID区分同名实体，统一按书籍主键计数；并列取出版社ID最小者，返回名称。",
+    "status": "implemented",
+    "source": "用户授权根据问题、Schema和知识自主修正；独立于官方原标注",
+    "knowledge_ids": [],
+    "implementation_assumptions": "并列取ID最小者；同名主体按主键区分"
+  }
+]

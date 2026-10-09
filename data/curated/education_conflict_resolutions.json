@@ -1,0 +1,855 @@
+{
+  "policy": "教育年度库按业务身份合并，2025整条记录优先；不同学期事件保留；明确年度/对比时按题意分别查询",
+  "source": "用户明确授权推广教师处理方式",
+  "verification_run": "artifacts/runs/regression/education-ee34fe4ec1e9",
+  "synthetic_execution_only": true,
+  "annual_differences_handled": 45,
+  "year_policy_applied_groups": 49,
+  "fully_resolved_groups": 55,
+  "remaining_groups": 0,
+  "groups": {
+    "ambiguous-1669": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1669,
+        1682,
+        1732
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1670": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1670,
+        1720
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1671": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1671,
+        1721
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1672": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1672,
+        1722
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1673": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1673,
+        1723
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1674": {
+      "status": "resolved_by_query_correction",
+      "reason": "按用户明确指定，用所属班级grade_year=2023替代学号LIKE；保留在读、学号升序和前25条。",
+      "question_ids": [
+        1674,
+        1724
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "user_trial_rule_ids": [
+        "education_student_2023_cohort_trial"
+      ],
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-1675": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1675,
+        1725
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1676": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1676,
+        1726
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1677": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1677,
+        1727
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1678": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1678,
+        1728
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1679": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1679,
+        1729
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1680": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1680,
+        1730
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1681": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1681,
+        1731
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1683": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1683,
+        1733
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1684": {
+      "status": "resolved_by_query_correction",
+      "reason": "按问题入学年份2022筛选，不把字段参数改为数据库年份；升序取20条。",
+      "question_ids": [
+        1684,
+        1734
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-1685": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1685,
+        1735
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1686": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1686,
+        1736
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1688": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1688,
+        1738
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1689": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1689,
+        1739
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1690": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1690,
+        1740
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1691": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1691,
+        1741
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1692": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1692,
+        1742
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1693": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1693,
+        1743
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1694": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1694,
+        1744
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1695": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1695,
+        1745
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1696": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1696,
+        1746
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1697": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1697,
+        1747
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1698": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1698,
+        1748
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1699": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1699,
+        1749
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1700": {
+      "status": "resolved_by_query_correction",
+      "reason": "统计全部未退课选课学生，不加题目未要求的ACTIVE；按业务院系分区取前三，院系与人数均降序，并列按课程编号/业务代码稳定选择。",
+      "question_ids": [
+        1700,
+        1750
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-1701": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1701,
+        1751
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1702": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1702,
+        1752
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1703": {
+      "status": "resolved_by_query_correction",
+      "reason": "先按业务课程合并，再计算明细AVG；用未四舍五入的平均值比较>=3，返回原平均值。低于3时返回空结果。",
+      "question_ids": [
+        1703,
+        1753
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-1704": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1704,
+        1754
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1705": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1705,
+        1755
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1706": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1706,
+        1756
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1707": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1707,
+        1757
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1708": {
+      "status": "resolved_by_query_correction",
+      "reason": "保留问题字符串2024，合并两年学期后筛选代码包含2024、升序取20条；数字属于代码参数。",
+      "question_ids": [
+        1708,
+        1758
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-1709": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1709,
+        1759
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1710": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1710,
+        1760
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1711": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1711,
+        1761
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1712": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1712,
+        1762
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1713": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1713,
+        1763
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1714": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1714,
+        1764
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1715": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1715,
+        1765
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1716": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1716,
+        1766
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1717": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1717,
+        1767
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1718": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1718,
+        1768
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1719": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1719,
+        1769
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    },
+    "ambiguous-1891": {
+      "status": "resolved_by_query_correction",
+      "reason": "两年分别统计credit=0，统一列别名；按2024、2025稳定输出，不采用最新合并快照替代年度对比。",
+      "question_ids": [
+        1891,
+        1976,
+        2037,
+        2059
+      ],
+      "year_mode": {
+        "mode": "separate_years",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-1921": {
+      "status": "resolved_by_query_correction",
+      "reason": "统一等价表达式；保留2025减2024、必修且credit>=4及差值/两年数量三个返回列。",
+      "question_ids": [
+        1921,
+        2030
+      ],
+      "year_mode": {
+        "mode": "separate_years",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-3803": {
+      "status": "resolved_by_query_correction",
+      "reason": "修复候选A外层未定义的T别名；以发行商ID区分同名实体，按去重游戏数排名，第一名并列时取ID最小者。",
+      "question_ids": [
+        3803,
+        3861
+      ],
+      "year_mode": null,
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-3851": {
+      "status": "resolved_by_query_correction",
+      "reason": "游戏款数按game_id去重；沿game_platform.game_publisher_id关联，避免把跨平台发行记录当作不同游戏。",
+      "question_ids": [
+        3851,
+        3884
+      ],
+      "year_mode": null,
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-4009": {
+      "status": "resolved_by_query_correction",
+      "reason": "知识129/134/405支持Year=0，134明确Year>0已发表；选择Year为主判断，避免仅因载体ID均0误计已发表论文。NULL或负年份未被定义为未发表，不自行纳入。知识85/407的载体缺失信号不覆盖正年份。",
+      "question_ids": [
+        4009,
+        4095
+      ],
+      "year_mode": null,
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    },
+    "ambiguous-5196": {
+      "status": "resolved_by_query_correction",
+      "reason": "以出版社ID区分同名实体，统一按书籍主键计数；并列取出版社ID最小者，返回名称。",
+      "question_ids": [
+        5196,
+        5237
+      ],
+      "year_mode": null,
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  "user_trial_groups": 0,
+  "query_corrected_groups": 11,
+  "query_correction_verification_run": "artifacts/runs/regression/conflict-corrections-20261009"
+}

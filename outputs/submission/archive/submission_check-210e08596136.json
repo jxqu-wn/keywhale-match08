@@ -1,0 +1,21 @@
+{
+  "count": 400,
+  "unique_ids": 400,
+  "coverage": "complete",
+  "encoding": "UTF-8",
+  "sha256": "210e0859613681fe36f23fcb1e5430145796f89891007c250565f1300bd8c7a6",
+  "source_counts": {
+    "MYSQL": 100,
+    "Elasticsearch": 50,
+    "POSTGRESQL": 38,
+    "MYSQL->POSTGRESQL": 9,
+    "POSTGRESQL->MYSQL": 3,
+    "SQLite": 200
+  },
+  "execution_validated": false,
+  "model_run": "artifacts/runs/prediction/predict-ee19c0abd953",
+  "manual_query_edits": false,
+  "pipeline_sha256": "fdfa9452f2766d9bb4c271c52b7ffc2e83c7e3f8f155082da16501b7bbefdbd8",
+  "recovery_sha256": "6c2bc83c1b5ea47a8723814265a4c470a7c5e0e23f6dba2f1cf909cdbaf21ef1",
+  "relocation_note": "源码与目录已整理；原实现校验和保留为该次运行的历史记录。路径映射见docs/project/path_migration.json。"
+}

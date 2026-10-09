@@ -1,0 +1,309 @@
+{
+  "question_id": 4682,
+  "question": "美国调查受访者的平均年龄是多少？",
+  "context": {
+    "question": "美国调查受访者的平均年龄是多少？",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "mental_health_survey"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "strong",
+      "reason": "领域词：受访者|心理健康|精神病|精神健康",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema": [
+      {
+        "source": "SQLite",
+        "database": "mental_health_survey",
+        "table": "Question",
+        "columns": [
+          {
+            "name": "questiontext",
+            "type": "TEXT",
+            "definition": "questiontext TEXT"
+          },
+          {
+            "name": "questionid",
+            "type": "INTEGER",
+            "definition": "questionid   INTEGER\r\n        constraint Question_pk\r\n            primary key"
+          }
+        ],
+        "ddl": "CREATE TABLE Question\r\n(\r\n    questiontext TEXT,\r\n    questionid   INTEGER\r\n        constraint Question_pk\r\n            primary key\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "mental_health_survey",
+        "table": "Survey",
+        "columns": [
+          {
+            "name": "SurveyID",
+            "type": "INTEGER",
+            "definition": "SurveyID    INTEGER\r\n        constraint Survey_pk\r\n            primary key"
+          },
+          {
+            "name": "Description",
+            "type": "TEXT",
+            "definition": "Description TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Survey\r\n(\r\n    SurveyID    INTEGER\r\n        constraint Survey_pk\r\n            primary key,\r\n    Description TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "mental_health_survey",
+        "table": "Answer",
+        "columns": [
+          {
+            "name": "AnswerText",
+            "type": "TEXT",
+            "definition": "AnswerText TEXT"
+          },
+          {
+            "name": "SurveyID",
+            "type": "INTEGER",
+            "definition": "SurveyID   INTEGER\r\n        constraint Answer_Survey_SurveyID_fk\r\n            references Survey"
+          },
+          {
+            "name": "UserID",
+            "type": "INTEGER",
+            "definition": "UserID     INTEGER"
+          },
+          {
+            "name": "QuestionID",
+            "type": "INTEGER",
+            "definition": "QuestionID INTEGER\r\n        constraint Answer_Question_questionid_fk\r\n            references Question"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Answer\"\r\n(\r\n    AnswerText TEXT,\r\n    SurveyID   INTEGER\r\n        constraint Answer_Survey_SurveyID_fk\r\n            references Survey,\r\n    UserID     INTEGER,\r\n    QuestionID INTEGER\r\n        constraint Answer_Question_questionid_fk\r\n            references Question,\r\n    constraint Answer_pk\r\n        primary key (UserID, QuestionID)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      }
+    ],
+    "knowledge": [
+      {
+        "knowledge_id": 186,
+        "knowledge_text": "在数据库mental_health_survey的表Survey中，SurveyID表示调查年份，Description表示调查描述（如'mental health survey for 2014'表示2014年心理健康调查）。",
+        "scope": {
+          "databases": [
+            "mental_health_survey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "字段/公式依赖，必须同时提供"
+      },
+      {
+        "knowledge_id": 188,
+        "knowledge_text": "在数据库mental_health_survey的表中，QuestionID=1表示年龄问题（questiontext='What is your age?'），QuestionID=2表示性别问题，QuestionID=3表示所在国家问题，QuestionID=4表示所在州问题，QuestionID=6表示家族精神病史问题，QuestionID=7表示是否寻求过专业治疗。",
+        "scope": {
+          "databases": [
+            "mental_health_survey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "字段/公式依赖，必须同时提供"
+      },
+      {
+        "knowledge_id": 189,
+        "knowledge_text": "在数据库mental_health_survey的表中，QuestionID=3的questiontext='What country do you live in?'，AnswerText='United States'表示美国，'Canada'表示加拿大。QuestionID=4的questiontext='What US state or territory do you work in?'。",
+        "scope": {
+          "databases": [
+            "mental_health_survey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "字段/公式依赖，必须同时提供"
+      },
+      {
+        "knowledge_id": 1071,
+        "knowledge_text": "在数据库mental_health_survey的表Answer中，字段SurveyID，数据类型为整数（integer），表示每份调查的ID，取值为SurveyID 即调查年份，例如 2014、2016、2017、2018、2019。",
+        "scope": {
+          "databases": [
+            "mental_health_survey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1076,
+        "knowledge_text": "在数据库mental_health_survey的表Survey中，字段SurveyID，数据类型为整数（integer），表示每份调查的唯一ID，取值为常识证据：每个 SurveyID 都是唯一的。SurveyID 即调查年份，例如 2014、2016、2017、2018、2019。",
+        "scope": {
+          "databases": [
+            "mental_health_survey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1077,
+        "knowledge_text": "在数据库mental_health_survey的表Survey中，字段Description，数据类型为文本（text），表示特定调查的描述。",
+        "scope": {
+          "databases": [
+            "mental_health_survey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 184,
+        "knowledge_text": "在数据库mental_health_survey的表Answer中，UserID表示用户ID，QuestionID表示问题ID，AnswerText表示回答文本，SurveyID表示调查年份（如2014、2016、2017、2018、2019）。",
+        "scope": {
+          "databases": [
+            "mental_health_survey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      }
+    ],
+    "dictionary": [],
+    "examples": [
+      {
+        "question_id": 4717,
+        "question": "2014年至2019年间每次调查的平均受访者数量是多少？",
+        "db": "SQLite",
+        "query": "SELECT CAST(COUNT(DISTINCT UserID) AS REAL) / COUNT(DISTINCT SurveyID) FROM mental_health_survey.Answer WHERE SurveyID BETWEEN 2014 AND 2019",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "mental_health_survey",
+            "table": "Answer"
+          }
+        ]
+      },
+      {
+        "question_id": 4721,
+        "question": "有多少心理健康调查受访者被诊断为物质使用障碍？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(AnswerText) FROM mental_health_survey.Answer WHERE AnswerText LIKE 'Substance Use Disorder'",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "mental_health_survey",
+            "table": "Answer"
+          }
+        ]
+      },
+      {
+        "question_id": 4685,
+        "question": "2014年调查中用户的最年长年龄是多少？",
+        "db": "SQLite",
+        "query": "SELECT MAX(CAST(T2.AnswerText AS INTEGER)) FROM mental_health_survey.Question AS T1 INNER JOIN mental_health_survey.Answer AS T2 ON T1.questionid = T2.QuestionID WHERE T1.questiontext = 'What is your age?' AND T2.SurveyID = 2014",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "mental_health_survey",
+            "table": "Question"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "mental_health_survey",
+            "table": "Answer"
+          }
+        ]
+      },
+      {
+        "question_id": 4716,
+        "question": "2016年调查中有多少25岁以下的受访者？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(DISTINCT T1.UserID) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid WHERE T1.QuestionID = 1 AND T1.SurveyID = 2016 AND CAST(T1.AnswerText AS INTEGER) < 25",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "mental_health_survey",
+            "table": "Question"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "mental_health_survey",
+            "table": "Answer"
+          }
+        ]
+      },
+      {
+        "question_id": 4719,
+        "question": "2014年参与调查的受访者中有多少人至少50%的时间远程工作？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(T1.UserID) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid WHERE T1.QuestionID = 93 AND T1.SurveyID = 2014 AND T1.AnswerText = 'Yes'",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "mental_health_survey",
+            "table": "Question"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "mental_health_survey",
+            "table": "Answer"
+          }
+        ]
+      }
+    ],
+    "corrected_examples": [],
+    "question_correction": null,
+    "schema_adjudications": [],
+    "query_helpers": [],
+    "ambiguous_examples": []
+  },
+  "attempts": [
+    {
+      "content": "{\"db\":\"SQLite\",\"query\":\"SELECT AVG(CAST(T1.AnswerText AS REAL)) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid WHERE T1.QuestionID = 1 AND T1.AnswerText IN (SELECT AnswerText FROM mental_health_survey.Answer WHERE QuestionID = 3 AND AnswerText = 'United States')\"}",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3372,
+        "total_tokens": 3460,
+        "completion_tokens": 88,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    }
+  ],
+  "prediction": {
+    "db": "SQLite",
+    "query": "SELECT AVG(CAST(T1.AnswerText AS REAL)) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid WHERE T1.QuestionID = 1 AND T1.AnswerText IN (SELECT AnswerText FROM mental_health_survey.Answer WHERE QuestionID = 3 AND AnswerText = 'United States')"
+  },
+  "model_prediction": {
+    "db": "SQLite",
+    "query": "SELECT AVG(CAST(T1.AnswerText AS REAL)) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid WHERE T1.QuestionID = 1 AND T1.AnswerText IN (SELECT AnswerText FROM mental_health_survey.Answer WHERE QuestionID = 3 AND AnswerText = 'United States')"
+  },
+  "automatic_transforms": [],
+  "errors": [],
+  "seconds": 0.0
+}

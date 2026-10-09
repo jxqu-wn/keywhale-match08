@@ -1,0 +1,1258 @@
+[
+  {
+    "id": 3069,
+    "kind": "shared_error",
+    "title": "年初销售的旧书被错误日期筛选排除",
+    "expected": [
+      [
+        "Early Book",
+        "Publisher"
+      ]
+    ],
+    "rows": {
+      "books.publisher": [
+        {
+          "publisher_id": 1,
+          "publisher_name": "Publisher"
+        }
+      ],
+      "books.book": [
+        {
+          "book_id": 1,
+          "title": "Early Book",
+          "publisher_id": 1,
+          "publication_date": "2025-01-01"
+        },
+        {
+          "book_id": 2,
+          "title": "Current Book",
+          "publisher_id": 1,
+          "publication_date": "2025-01-01"
+        }
+      ],
+      "books.cust_order": [
+        {
+          "order_id": 1,
+          "order_date": "2026-01-01"
+        },
+        {
+          "order_id": 2,
+          "order_date": "2026-10-01"
+        }
+      ],
+      "books.order_line": [
+        {
+          "line_id": 1,
+          "order_id": 1,
+          "book_id": 1,
+          "price": 120
+        },
+        {
+          "line_id": 2,
+          "order_id": 2,
+          "book_id": 2,
+          "price": 100
+        }
+      ]
+    },
+    "question_id": 3069,
+    "outputs": {
+      "qwen": {
+        "actual": [],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 3531,
+    "kind": "shared_error",
+    "title": "姓名要求不能由ID代替（仅检查输出含义，身份映射为构造前提）",
+    "expected": [
+      [
+        "Ada Coach"
+      ]
+    ],
+    "rows": {
+      "professional_basketball.players": [
+        {
+          "playerID": "coach-x",
+          "firstName": "Ada",
+          "lastName": "Coach"
+        }
+      ],
+      "professional_basketball.coaches": [
+        {
+          "coachID": "coach-x",
+          "year": 2000,
+          "tmID": "A",
+          "lgID": "NBA",
+          "stint": 1
+        },
+        {
+          "coachID": "coach-x",
+          "year": 2000,
+          "tmID": "B",
+          "lgID": "NBA",
+          "stint": 1
+        },
+        {
+          "coachID": "coach-x",
+          "year": 2000,
+          "tmID": "C",
+          "lgID": "NBA",
+          "stint": 1
+        }
+      ]
+    },
+    "question_id": 3531,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            "coach-x"
+          ]
+        ],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [
+          [
+            "coach-x"
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 4279,
+    "kind": "shared_error",
+    "title": "点赞最高用户与评论最多商家内任意用户不同",
+    "expected": [
+      [
+        "High"
+      ]
+    ],
+    "rows": {
+      "public_review_platform.Business": [
+        {
+          "business_id": 1
+        },
+        {
+          "business_id": 2
+        }
+      ],
+      "public_review_platform.Users": [
+        {
+          "user_id": 1,
+          "user_fans": "Low"
+        },
+        {
+          "user_id": 2,
+          "user_fans": "High"
+        },
+        {
+          "user_id": 3,
+          "user_fans": "Low"
+        },
+        {
+          "user_id": 4,
+          "user_fans": "Low"
+        }
+      ],
+      "public_review_platform.Reviews": [
+        {
+          "business_id": 1,
+          "user_id": 1,
+          "review_votes_useful": "Low"
+        },
+        {
+          "business_id": 1,
+          "user_id": 3,
+          "review_votes_useful": "Low"
+        },
+        {
+          "business_id": 1,
+          "user_id": 4,
+          "review_votes_useful": "Low"
+        },
+        {
+          "business_id": 2,
+          "user_id": 2,
+          "review_votes_useful": "High"
+        }
+      ],
+      "public_review_platform.Tips": [
+        {
+          "business_id": 1,
+          "user_id": 1,
+          "likes": 1
+        },
+        {
+          "business_id": 2,
+          "user_id": 2,
+          "likes": 100
+        }
+      ]
+    },
+    "question_id": 4279,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            "Low"
+          ]
+        ],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [
+          [
+            "Low"
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 4689,
+    "kind": "shared_error",
+    "title": "-1、空字符串和NULL均不应作有效回答",
+    "expected": [
+      [
+        "A note"
+      ]
+    ],
+    "rows": {
+      "mental_health_survey.Question": [
+        {
+          "questionid": 99,
+          "questiontext": "Any additional notes or comments"
+        }
+      ],
+      "mental_health_survey.Answer": [
+        {
+          "UserID": 1,
+          "QuestionID": 99,
+          "SurveyID": 2014,
+          "AnswerText": "-1"
+        },
+        {
+          "UserID": 2,
+          "QuestionID": 99,
+          "SurveyID": 2014,
+          "AnswerText": ""
+        },
+        {
+          "UserID": 3,
+          "QuestionID": 99,
+          "SurveyID": 2014,
+          "AnswerText": "A note"
+        },
+        {
+          "UserID": 4,
+          "QuestionID": 99,
+          "SurveyID": 2014,
+          "AnswerText": null
+        }
+      ]
+    },
+    "question_id": 4689,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            "-1"
+          ],
+          [
+            "A note"
+          ]
+        ],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [
+          [
+            "-1"
+          ],
+          [
+            ""
+          ],
+          [
+            "A note"
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5775,
+    "kind": "shared_error",
+    "title": "ISO8601时区日期无法直接匹配空格时间文本",
+    "expected": [
+      [
+        "Content"
+      ]
+    ],
+    "rows": {
+      "music_platform_2.reviews": [
+        {
+          "podcast_id": "p",
+          "title": "really interesting!",
+          "content": "Content",
+          "rating": 5,
+          "author_id": "a",
+          "created_at": "2018-04-24T12:05:16-07:00"
+        }
+      ]
+    },
+    "question_id": 5775,
+    "outputs": {
+      "qwen": {
+        "actual": [],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 3902,
+    "kind": "conditional_risk",
+    "title": "游戏总体包括没有发行关系的游戏（构造前提）",
+    "expected": [
+      [
+        33.333333333333336
+      ]
+    ],
+    "rows": {
+      "video_games.game": [
+        {
+          "id": 1,
+          "game_name": "Game1"
+        },
+        {
+          "id": 2,
+          "game_name": "Game2"
+        },
+        {
+          "id": 3,
+          "game_name": "Game3"
+        }
+      ],
+      "video_games.publisher": [
+        {
+          "id": 1,
+          "publisher_name": "Brash Entertainment"
+        },
+        {
+          "id": 2,
+          "publisher_name": "Other"
+        }
+      ],
+      "video_games.game_publisher": [
+        {
+          "id": 1,
+          "game_id": 1,
+          "publisher_id": 1
+        },
+        {
+          "id": 2,
+          "game_id": 2,
+          "publisher_id": 2
+        }
+      ]
+    },
+    "question_id": 3902,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            50.0
+          ]
+        ],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [
+          [
+            50.0
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 3674,
+    "kind": "conditional_risk",
+    "title": "所有作品包含零角色作品（构造前提）",
+    "expected": [
+      [
+        0.5
+      ]
+    ],
+    "rows": {
+      "shakespeare.works": [
+        {
+          "id": 1,
+          "Title": "Work1",
+          "LongTitle": "Work1",
+          "Date": 1600,
+          "GenreType": "Comedy"
+        },
+        {
+          "id": 2,
+          "Title": "Work2",
+          "LongTitle": "Work2",
+          "Date": 1600,
+          "GenreType": "Comedy"
+        }
+      ],
+      "shakespeare.chapters": [
+        {
+          "id": 1,
+          "work_id": 1,
+          "Act": 1,
+          "Scene": 1,
+          "Description": "Scene"
+        }
+      ],
+      "shakespeare.characters": [
+        {
+          "id": 1,
+          "CharName": "Character",
+          "Abbrev": "C",
+          "Description": "Character"
+        }
+      ],
+      "shakespeare.paragraphs": [
+        {
+          "id": 1,
+          "chapter_id": 1,
+          "character_id": 1,
+          "ParagraphNum": 1,
+          "PlainText": "Line"
+        }
+      ]
+    },
+    "question_id": 3674,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            1.0
+          ]
+        ],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [
+          [
+            1.0
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 4682,
+    "kind": "new_error",
+    "title": "按同一受访者关联年龄和国家答案",
+    "expected": [
+      [
+        20
+      ]
+    ],
+    "rows": {
+      "mental_health_survey.Question": [
+        {
+          "questionid": 1,
+          "questiontext": "What is your age?"
+        },
+        {
+          "questionid": 3,
+          "questiontext": "What country do you live in?"
+        }
+      ],
+      "mental_health_survey.Answer": [
+        {
+          "UserID": 1,
+          "QuestionID": 1,
+          "SurveyID": 2016,
+          "AnswerText": "20"
+        },
+        {
+          "UserID": 1,
+          "QuestionID": 3,
+          "SurveyID": 2016,
+          "AnswerText": "United States"
+        },
+        {
+          "UserID": 2,
+          "QuestionID": 1,
+          "SurveyID": 2016,
+          "AnswerText": "40"
+        },
+        {
+          "UserID": 2,
+          "QuestionID": 3,
+          "SurveyID": 2016,
+          "AnswerText": "Canada"
+        }
+      ]
+    },
+    "question_id": 4682,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            20.0
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            null
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5099,
+    "kind": "new_error",
+    "title": "区分页面ID和修订页面ID",
+    "expected": [
+      [
+        "Right"
+      ]
+    ],
+    "rows": {
+      "language_corpus.pages": [
+        {
+          "pid": 1,
+          "page": 7,
+          "revision": 16203226,
+          "title": "Right"
+        },
+        {
+          "pid": 2,
+          "page": 16203226,
+          "revision": 9,
+          "title": "Wrong"
+        }
+      ]
+    },
+    "question_id": 5099,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            "Right"
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            "Wrong"
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5206,
+    "kind": "new_error",
+    "title": "一个订单多本书时，每订单均价与每本均价不同",
+    "expected": [
+      [
+        30
+      ]
+    ],
+    "rows": {
+      "books.customer": [
+        {
+          "customer_id": 1,
+          "first_name": "Lucas",
+          "last_name": "Wyldbore"
+        }
+      ],
+      "books.cust_order": [
+        {
+          "order_id": 1,
+          "customer_id": 1
+        },
+        {
+          "order_id": 2,
+          "customer_id": 1
+        }
+      ],
+      "books.order_line": [
+        {
+          "line_id": 1,
+          "order_id": 1,
+          "price": 10
+        },
+        {
+          "line_id": 2,
+          "order_id": 1,
+          "price": 20
+        },
+        {
+          "line_id": 3,
+          "order_id": 2,
+          "price": 30
+        }
+      ]
+    },
+    "question_id": 5206,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            30.0
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            20.0
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5215,
+    "kind": "new_error",
+    "title": "返回全部书籍不等于畅销书",
+    "expected": [
+      [
+        "Z Bestseller"
+      ]
+    ],
+    "rows": {
+      "books.book": [
+        {
+          "book_id": 1,
+          "title": "A Other"
+        },
+        {
+          "book_id": 2,
+          "title": "Z Bestseller"
+        }
+      ],
+      "books.order_line": [
+        {
+          "line_id": 1,
+          "book_id": 2,
+          "price": 10
+        },
+        {
+          "line_id": 2,
+          "book_id": 2,
+          "price": 10
+        },
+        {
+          "line_id": 3,
+          "book_id": 2,
+          "price": 10
+        },
+        {
+          "line_id": 4,
+          "book_id": 1,
+          "price": 10
+        }
+      ]
+    },
+    "question_id": 5215,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            "Z Bestseller"
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            "A Other"
+          ],
+          [
+            "Z Bestseller"
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5411,
+    "kind": "new_error",
+    "title": "white是对象属性，不是car等对象类别",
+    "expected": [
+      [
+        1
+      ]
+    ],
+    "rows": {
+      "image_and_language.OBJ_CLASSES": [
+        {
+          "OBJ_CLASS_ID": 1,
+          "OBJ_CLASS": "car"
+        }
+      ],
+      "image_and_language.IMG_OBJ": [
+        {
+          "IMG_ID": 2347915,
+          "OBJ_SAMPLE_ID": 1,
+          "OBJ_CLASS_ID": 1
+        }
+      ],
+      "image_and_language.ATT_CLASSES": [
+        {
+          "ATT_CLASS_ID": 1,
+          "ATT_CLASS": "white"
+        }
+      ],
+      "image_and_language.IMG_OBJ_ATT": [
+        {
+          "IMG_ID": 2347915,
+          "OBJ_SAMPLE_ID": 1,
+          "ATT_CLASS_ID": 1
+        }
+      ]
+    },
+    "question_id": 5411,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            1
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            0
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 6103,
+    "kind": "new_error",
+    "title": "Gansu是地址district而不是country",
+    "expected": [
+      [
+        1
+      ]
+    ],
+    "rows": {
+      "movie_3.country": [
+        {
+          "country_id": 1,
+          "country": "China"
+        }
+      ],
+      "movie_3.city": [
+        {
+          "city_id": 1,
+          "city": "Lanzhou",
+          "country_id": 1
+        }
+      ],
+      "movie_3.address": [
+        {
+          "address_id": 1,
+          "address": "Address",
+          "district": "Gansu",
+          "city_id": 1,
+          "phone": "123"
+        }
+      ]
+    },
+    "question_id": 6103,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            1
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5011,
+    "kind": "new_error",
+    "title": "瓶数不包括罐装（两种日期均设在范围内，以隔离容器遗漏）",
+    "expected": [
+      [
+        1
+      ]
+    ],
+    "rows": {
+      "beer_factory.customers": [
+        {
+          "CustomerID": 1,
+          "First": "Tom",
+          "Last": "Hanks"
+        }
+      ],
+      "beer_factory.rootbeer": [
+        {
+          "RootBeerID": 1,
+          "ContainerType": "Bottle",
+          "PurchaseDate": "2016-01-01"
+        },
+        {
+          "RootBeerID": 2,
+          "ContainerType": "Can",
+          "PurchaseDate": "2016-01-01"
+        }
+      ],
+      "beer_factory.transaction": [
+        {
+          "TransactionID": 1,
+          "CustomerID": 1,
+          "RootBeerID": 1,
+          "TransactionDate": "2016-01-01"
+        },
+        {
+          "TransactionID": 2,
+          "CustomerID": 1,
+          "RootBeerID": 2,
+          "TransactionDate": "2016-01-01"
+        }
+      ]
+    },
+    "question_id": 5011,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            1
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            2
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5028,
+    "kind": "new_error",
+    "title": "同一天瓶装和罐装同时出售，隔离瓶装条件遗漏",
+    "expected": [
+      [
+        2
+      ]
+    ],
+    "rows": {
+      "beer_factory.rootbeerbrand": [
+        {
+          "BrandID": 1,
+          "Caffeinated": "TRUE"
+        }
+      ],
+      "beer_factory.rootbeer": [
+        {
+          "RootBeerID": 1,
+          "BrandID": 1,
+          "ContainerType": "Bottle"
+        },
+        {
+          "RootBeerID": 2,
+          "BrandID": 1,
+          "ContainerType": "Bottle"
+        },
+        {
+          "RootBeerID": 3,
+          "BrandID": 1,
+          "ContainerType": "Can"
+        }
+      ],
+      "beer_factory.transaction": [
+        {
+          "TransactionID": 1,
+          "RootBeerID": 1,
+          "TransactionDate": "2016-01-01"
+        },
+        {
+          "TransactionID": 2,
+          "RootBeerID": 2,
+          "TransactionDate": "2016-01-01"
+        },
+        {
+          "TransactionID": 3,
+          "RootBeerID": 3,
+          "TransactionDate": "2016-01-01"
+        }
+      ]
+    },
+    "question_id": 5028,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            2.0
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            3.0
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 4661,
+    "kind": "new_error",
+    "title": "未列入演职员表的高投票记录不能取代credited=true记录",
+    "expected": [
+      [
+        "Actor"
+      ]
+    ],
+    "rows": {
+      "simpson_episodes.Episode": [
+        {
+          "episode_id": "e1",
+          "votes": 100
+        },
+        {
+          "episode_id": "e2",
+          "votes": 10
+        }
+      ],
+      "simpson_episodes.Credit": [
+        {
+          "episode_id": "e1",
+          "person": "Carlton Batten",
+          "category": "Other",
+          "credited": "false"
+        },
+        {
+          "episode_id": "e2",
+          "person": "Carlton Batten",
+          "category": "Actor",
+          "credited": "true"
+        }
+      ]
+    },
+    "question_id": 4661,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            "Actor"
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            "Other"
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5576,
+    "kind": "new_error",
+    "title": "名人堂建设者不能作为球员返回",
+    "expected": [
+      [
+        "Player"
+      ]
+    ],
+    "rows": {
+      "hockey.HOF": [
+        {
+          "hofID": "h1",
+          "category": "Player"
+        },
+        {
+          "hofID": "h2",
+          "category": "Builder"
+        }
+      ],
+      "hockey.Master": [
+        {
+          "playerID": "p1",
+          "hofID": "h1",
+          "lastName": "P",
+          "nameGiven": "Player",
+          "shootCatch": null
+        },
+        {
+          "playerID": null,
+          "coachID": "c1",
+          "hofID": "h2",
+          "lastName": "B",
+          "nameGiven": "Builder",
+          "shootCatch": null
+        }
+      ]
+    },
+    "question_id": 5576,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            "Player"
+          ]
+        ],
+        "matches_fixture_expected": true
+      },
+      "deepseek": {
+        "actual": [
+          [
+            "Player"
+          ],
+          [
+            "Builder"
+          ]
+        ],
+        "matches_fixture_expected": false
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5686,
+    "kind": "better_constraint",
+    "title": "题目明确候选年份，排除不在候选中的相同罚时年份",
+    "expected": [
+      [
+        1924
+      ]
+    ],
+    "rows": {
+      "hockey.Teams": [
+        {
+          "year": 1924,
+          "tmID": "MTL",
+          "name": "Montreal Canadiens"
+        },
+        {
+          "year": 1940,
+          "tmID": "MTL",
+          "name": "Montreal Canadiens"
+        }
+      ],
+      "hockey.TeamsSC": [
+        {
+          "year": 1924,
+          "tmID": "MTL",
+          "PIM": "49"
+        },
+        {
+          "year": 1940,
+          "tmID": "MTL",
+          "PIM": "49"
+        }
+      ]
+    },
+    "question_id": 5686,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            1924
+          ],
+          [
+            1940
+          ]
+        ],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [
+          [
+            1924
+          ]
+        ],
+        "matches_fixture_expected": true
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5855,
+    "kind": "better_key",
+    "title": "不同站点重名时，站点ID准确定位归还地点（构造前提）",
+    "expected": [
+      [
+        1,
+        "2013-01-01"
+      ]
+    ],
+    "rows": {
+      "bike_share_1.station": [
+        {
+          "id": 1,
+          "name": "Same Name",
+          "lat": 37.331415,
+          "long": -121.8932
+        },
+        {
+          "id": 2,
+          "name": "Same Name",
+          "lat": 38,
+          "long": -120
+        }
+      ],
+      "bike_share_1.trip": [
+        {
+          "id": 1,
+          "start_date": "2013-01-01",
+          "end_station_name": "Same Name",
+          "end_station_id": 1
+        },
+        {
+          "id": 2,
+          "start_date": "2013-01-01",
+          "end_station_name": "Same Name",
+          "end_station_id": 2
+        }
+      ]
+    },
+    "question_id": 5855,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            1,
+            "2013-01-01"
+          ],
+          [
+            2,
+            "2013-01-01"
+          ]
+        ],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [
+          [
+            1,
+            "2013-01-01"
+          ]
+        ],
+        "matches_fixture_expected": true
+      }
+    },
+    "synthetic": true
+  },
+  {
+    "id": 5893,
+    "kind": "better_key",
+    "title": "同名不同站不能计作起终站相同（构造前提）",
+    "expected": [
+      [
+        1
+      ]
+    ],
+    "rows": {
+      "bike_share_1.trip": [
+        {
+          "id": 1,
+          "start_station_id": 1,
+          "end_station_id": 2,
+          "start_station_name": "Same Name",
+          "end_station_name": "Same Name"
+        },
+        {
+          "id": 2,
+          "start_station_id": 1,
+          "end_station_id": 1,
+          "start_station_name": "Same Name",
+          "end_station_name": "Same Name"
+        }
+      ]
+    },
+    "question_id": 5893,
+    "outputs": {
+      "qwen": {
+        "actual": [
+          [
+            2
+          ]
+        ],
+        "matches_fixture_expected": false
+      },
+      "deepseek": {
+        "actual": [
+          [
+            1
+          ]
+        ],
+        "matches_fixture_expected": true
+      }
+    },
+    "synthetic": true
+  }
+]

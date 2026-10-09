@@ -1,0 +1,466 @@
+{
+  "question_id": 3674,
+  "question": "莎士比亚所有作品的平均角色数是多少？",
+  "context": {
+    "question": "莎士比亚所有作品的平均角色数是多少？",
+    "requirements": [
+      {
+        "rule": "entity_grain",
+        "instruction": "明确实体主键：商家business_id、球员playerID、游戏game_id、角色(character_id,work_id)。一对多关联不得重复计实体，属性值相同的不同实体不能被AVG(DISTINCT 属性)合并。"
+      }
+    ],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "shakespeare"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "strong",
+      "reason": "领域词：莎士比亚",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema": [
+      {
+        "source": "SQLite",
+        "database": "shakespeare",
+        "table": "chapters",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "definition": "id          INTEGER\r\n        primary key autoincrement"
+          },
+          {
+            "name": "Act",
+            "type": "INTEGER",
+            "definition": "Act         INTEGER not null"
+          },
+          {
+            "name": "Scene",
+            "type": "INTEGER",
+            "definition": "Scene       INTEGER not null"
+          },
+          {
+            "name": "Description",
+            "type": "TEXT",
+            "definition": "Description TEXT    not null"
+          },
+          {
+            "name": "work_id",
+            "type": "INTEGER",
+            "definition": "work_id     INTEGER not null\r\n        references works"
+          }
+        ],
+        "ddl": "CREATE TABLE \"chapters\"\r\n(\r\n    id          INTEGER\r\n        primary key autoincrement,\r\n    Act         INTEGER not null,\r\n    Scene       INTEGER not null,\r\n    Description TEXT    not null,\r\n    work_id     INTEGER not null\r\n        references works\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "shakespeare",
+        "table": "characters",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "definition": "id          INTEGER\r\n        primary key autoincrement"
+          },
+          {
+            "name": "CharName",
+            "type": "TEXT",
+            "definition": "CharName    TEXT not null"
+          },
+          {
+            "name": "Abbrev",
+            "type": "TEXT",
+            "definition": "Abbrev      TEXT not null"
+          },
+          {
+            "name": "Description",
+            "type": "TEXT",
+            "definition": "Description TEXT not null"
+          }
+        ],
+        "ddl": "CREATE TABLE \"characters\"\r\n(\r\n    id          INTEGER\r\n        primary key autoincrement,\r\n    CharName    TEXT not null,\r\n    Abbrev      TEXT not null,\r\n    Description TEXT not null\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "shakespeare",
+        "table": "paragraphs",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "definition": "id           INTEGER\r\n        primary key autoincrement"
+          },
+          {
+            "name": "ParagraphNum",
+            "type": "INTEGER",
+            "definition": "ParagraphNum INTEGER           not null"
+          },
+          {
+            "name": "PlainText",
+            "type": "TEXT",
+            "definition": "PlainText    TEXT              not null"
+          },
+          {
+            "name": "character_id",
+            "type": "INTEGER",
+            "definition": "character_id INTEGER           not null\r\n        references characters"
+          },
+          {
+            "name": "chapter_id",
+            "type": "INTEGER",
+            "definition": "chapter_id   INTEGER default 0 not null\r\n        references chapters"
+          }
+        ],
+        "ddl": "CREATE TABLE \"paragraphs\"\r\n(\r\n    id           INTEGER\r\n        primary key autoincrement,\r\n    ParagraphNum INTEGER           not null,\r\n    PlainText    TEXT              not null,\r\n    character_id INTEGER           not null\r\n        references characters,\r\n    chapter_id   INTEGER default 0 not null\r\n        references chapters\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "shakespeare",
+        "table": "works",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "definition": "id        INTEGER\r\n        primary key autoincrement"
+          },
+          {
+            "name": "Title",
+            "type": "TEXT",
+            "definition": "Title     TEXT    not null"
+          },
+          {
+            "name": "LongTitle",
+            "type": "TEXT",
+            "definition": "LongTitle TEXT    not null"
+          },
+          {
+            "name": "Date",
+            "type": "INTEGER",
+            "definition": "Date      INTEGER not null"
+          },
+          {
+            "name": "GenreType",
+            "type": "TEXT",
+            "definition": "GenreType TEXT    not null"
+          }
+        ],
+        "ddl": "CREATE TABLE \"works\"\r\n(\r\n    id        INTEGER\r\n        primary key autoincrement,\r\n    Title     TEXT    not null,\r\n    LongTitle TEXT    not null,\r\n    Date      INTEGER not null,\r\n    GenreType TEXT    not null\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      }
+    ],
+    "knowledge": [
+      {
+        "knowledge_id": 1404,
+        "knowledge_text": "在数据库shakespeare的表works中，字段Date，数据类型为整数（integer），表示作品的日期。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1391,
+        "knowledge_text": "在数据库shakespeare的表chapters中，字段work_id，数据类型为整数（integer），表示标识作品的ID编号。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1401,
+        "knowledge_text": "在数据库shakespeare的表works中，字段id，数据类型为整数（integer），表示标识作品的唯一ID编号。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1388,
+        "knowledge_text": "在数据库shakespeare的表chapters中，字段Act，数据类型为整数（integer），表示一幕是戏剧作品的一个主要部分，包括话剧、电影、歌剧或音乐剧，取值为常识证据：一幕可以由一个或多个场景组成。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 101,
+        "knowledge_text": "在数据库shakespeare的表works中，GenreType表示作品体裁：'Comedy'（喜剧）、'Tragedy'（悲剧）、'History'（历史剧）、'Poem'（诗歌），Date表示作品完成年份。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 102,
+        "knowledge_text": "在数据库shakespeare的表characters中，CharName表示角色名称，Abbrev表示角色缩写，Description表示角色描述。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1403,
+        "knowledge_text": "在数据库shakespeare的表works中，字段LongTitle，数据类型为文本（text），表示作品全称。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 116,
+        "knowledge_text": "在数据库shakespeare的表characters中，CharName = '(stage directions)' 表示舞台指导，不是实际角色，在统计角色出现次数时通常需要排除。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1402,
+        "knowledge_text": "在数据库shakespeare的表works中，字段Title，数据类型为文本（text），表示作品标题，取值为常识证据：短标题或缩写标题。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1393,
+        "knowledge_text": "在数据库shakespeare的表characters中，字段CharName，数据类型为文本（text），表示角色名称。",
+        "scope": {
+          "databases": [
+            "shakespeare"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      }
+    ],
+    "dictionary": [],
+    "examples": [
+      {
+        "question_id": 3690,
+        "question": "莎士比亚1599年作品的平均章节数是多少？",
+        "db": "SQLite",
+        "query": "SELECT CAST(COUNT(T1.id) AS REAL) / COUNT(DISTINCT T2.id) FROM shakespeare.chapters AS T1 INNER JOIN shakespeare.works AS T2 ON T1.work_id = T2.id WHERE T2.Date = 1599",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "chapters"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "works"
+          }
+        ]
+      },
+      {
+        "question_id": 3762,
+        "question": "列出莎士比亚中创作年份高于所有作品平均年份89%的作品的章节ID。",
+        "db": "SQLite",
+        "query": "SELECT T2.id FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id WHERE T1.Date > ( SELECT AVG(Date) FROM shakespeare.works ) * 0.89",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "chapters"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "works"
+          }
+        ]
+      },
+      {
+        "question_id": 3673,
+        "question": "莎士比亚哪部作品的角色最多？请给出作品标题。",
+        "db": "SQLite",
+        "query": "SELECT T.Title FROM ( SELECT T1.Title, COUNT(T3.character_id) AS num FROM shakespeare.works T1 INNER JOIN shakespeare.chapters T2 ON T1.id = T2.work_id INNER JOIN shakespeare.paragraphs T3 ON T2.id = T3.chapter_id INNER JOIN shakespeare.characters T4 ON T3.character_id = T4.id GROUP BY T3.character_id, T1.Title ) T ORDER BY T.num DESC LIMIT 1",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "chapters"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "characters"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "paragraphs"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "works"
+          }
+        ]
+      },
+      {
+        "question_id": 3763,
+        "question": "莎士比亚喜剧中含有角色名为'Antonio'的作品占所有喜剧作品的百分比是多少？",
+        "db": "SQLite",
+        "query": "SELECT CAST(COUNT(DISTINCT T1.id) AS REAL) * 100 / (SELECT COUNT(id) FROM shakespeare.works WHERE GenreType = 'Comedy') FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id INNER JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id INNER JOIN shakespeare.characters AS T4 ON T3.character_id = T4.id WHERE T1.GenreType = 'Comedy' AND T4.CharName = 'Antonio'",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "chapters"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "characters"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "paragraphs"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "works"
+          }
+        ]
+      },
+      {
+        "question_id": 3753,
+        "question": "给出莎士比亚最新作品的标题和角色名称。",
+        "db": "SQLite",
+        "query": "SELECT T1.Title, T4.CharName FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id INNER JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id INNER JOIN shakespeare.characters AS T4 ON T3.character_id = T4.id ORDER BY T1.Date DESC LIMIT 1",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "chapters"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "characters"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "paragraphs"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "shakespeare",
+            "table": "works"
+          }
+        ]
+      }
+    ],
+    "corrected_examples": [],
+    "question_correction": null,
+    "schema_adjudications": [],
+    "query_helpers": [],
+    "ambiguous_examples": []
+  },
+  "attempts": [
+    {
+      "content": "{\"db\":\"SQLite\",\"query\":\"SELECT CAST(COUNT(DISTINCT T3.character_id) AS REAL) / COUNT(DISTINCT T1.id) FROM shakespeare.works AS T1 LEFT JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id LEFT JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id\"}",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4208,
+        "total_tokens": 4286,
+        "completion_tokens": 78,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    }
+  ],
+  "prediction": {
+    "db": "SQLite",
+    "query": "SELECT CAST(COUNT(DISTINCT T3.character_id) AS REAL) / COUNT(DISTINCT T1.id) FROM shakespeare.works AS T1 LEFT JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id LEFT JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id"
+  },
+  "model_prediction": {
+    "db": "SQLite",
+    "query": "SELECT CAST(COUNT(DISTINCT T3.character_id) AS REAL) / COUNT(DISTINCT T1.id) FROM shakespeare.works AS T1 LEFT JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id LEFT JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id"
+  },
+  "automatic_transforms": [],
+  "errors": [],
+  "seconds": 0.07
+}

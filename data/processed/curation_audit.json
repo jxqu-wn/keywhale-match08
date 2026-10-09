@@ -1,0 +1,39 @@
+{
+  "training_patch_ids": [
+    4298,
+    4148,
+    4159,
+    4309,
+    4332,
+    3579,
+    3596,
+    3518,
+    3772,
+    3875,
+    3896,
+    5293,
+    4401,
+    4205,
+    4375,
+    4134,
+    4169,
+    4175,
+    4366,
+    4416
+  ],
+  "knowledge_patch_ids": [
+    150,
+    1355,
+    153,
+    158,
+    83,
+    1624,
+    1757
+  ],
+  "excluded_example_ids": [
+    4249,
+    4380
+  ],
+  "validation_targets_unchanged": true,
+  "overlay_file": "data/curated/rag_curation.json"
+}

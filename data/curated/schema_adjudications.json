@@ -1,0 +1,24 @@
+[
+  {
+    "rule_id": "vessel_type_source_specific_codes",
+    "status": "implemented",
+    "source": "依据当前库表外键、通用字典及明确油轮（80）的AIS题目；用户授权自主处理",
+    "tables": [
+      "common.vessel_type_dict",
+      "public.vessel_ais_data",
+      "transportation.vessel"
+    ],
+    "trigger_pattern": "油轮|货船|船舶类型",
+    "instruction": "船舶类型编码按数据源区分：MySQL的common.vessel_type_dict中type_name='油轮'对应type_code=35，实际外键指向该字典的基础表按35解释；PostgreSQL的public.vessel_ais_data训练题明确油轮vessel_type=80，AIS查询使用80，不能因检索到MySQL字典而改成35。问题明确给出代码时优先当前问题；不同源的枚举不能直接等值关联。此口径来自本地Schema/问题，不证明真实数据已经统一编码。 货船也按数据源区分：MySQL common.vessel_type_dict货船为30；PG训练题2502/2513/2703等显式货船vessel_type=70，PG AIS查询按70。当前问题明确提供类型代码时以当前问题为准，不把字典30迁移到PG。"
+  },
+  {
+    "rule_id": "administrative_division_actual_key",
+    "status": "implemented",
+    "source": "以common.administrative_division实际CREATE TABLE定义为准，电商字段注释存在过时引用；用户授权自主处理",
+    "tables": [
+      "common.administrative_division"
+    ],
+    "trigger_pattern": "行政|区划|省份|城市|收货|家庭地区",
+    "instruction": "common.administrative_division的行政区划代码字段是id CHAR(6)，没有division_code。电商Schema注释中common.administrative_division.division_code是过时引用，关联省、市或收货区划代码时使用common.administrative_division.id，保留业务表自身province_code/city_code/receiver_province_code等真实列名。区划代码按字符串比较，保留前导零；不臆造division_code。"
+  }
+]

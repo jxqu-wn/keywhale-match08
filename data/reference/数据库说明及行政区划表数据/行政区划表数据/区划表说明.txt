@@ -1,0 +1,7 @@
+administrative_division是common库下的行政区划表，现在开放给所有参赛队伍，数据包含初赛中用到的行政区划信息。
+参赛队伍可以将其视为知识其进行重构，改造为更加适合大模型检索匹配的形式存储,也可以当做字典表进行关联查询。
+注：表中数据未必全部符合现实情况，请参赛选手构建解决方案时让大模型以该表数据为准，而不是利用模型本身的常识。
+
+涉及到区域查询的查询指令中，区划代码可以是两种查询形式：
+1.检索行政区划知识后匹配到行政区划代码，例如：SELECT COUNT（*） FROM FACTORY  WHERE area_id LIKE '11%';
+2.关联通用数据库中的行政区划表，例如：SELECT COUNT(*) FROM FACTORY f JOIN common.administrative_division ad ON f.area_id = ad.id WHERE ad.name = '北京市';

@@ -1,0 +1,2220 @@
+[
+  {
+    "group_id": "ambiguous-1669",
+    "question": "统计教师中电话不为空的数量，并返回数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.teacher",
+      "education_2025.teacher"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1669,
+        "question": "统计教师中电话不为空的数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_cnt FROM education_2024.teacher t WHERE t.phone IS NOT NULL AND t.phone<>'';"
+      },
+      {
+        "question_id": 1682,
+        "question": "统计教师中电话不为空的数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_cnt FROM education_2024.teacher t WHERE t.phone IS NOT NULL AND t.phone<>'';"
+      },
+      {
+        "question_id": 1732,
+        "question": "统计教师中电话不为空的数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_cnt FROM education_2025.teacher t WHERE t.phone IS NOT NULL AND t.phone<>'';"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1669,
+        1682,
+        1732
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1670",
+    "question": "查询课程学分大于等于5的课程数量，并返回数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1670,
+        "question": "查询课程学分大于等于5的课程数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS course_credit_ge_5_cnt FROM education_2024.course c WHERE c.credit >= 5;"
+      },
+      {
+        "question_id": 1720,
+        "question": "查询课程学分大于等于5的课程数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS course_credit_ge_5_cnt FROM education_2025.course c WHERE c.credit >= 5;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1670,
+        1720
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1671",
+    "question": "查询院系编号为6的课程，返回课程编号与课程名，并按课程编号升序取前50。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1671,
+        "question": "查询院系编号为6的课程，返回课程编号与课程名，并按课程编号升序取前50。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.department_id=6 ORDER BY c.course_id ASC LIMIT 50;"
+      },
+      {
+        "question_id": 1721,
+        "question": "查询院系编号为6的课程，返回课程编号与课程名，并按课程编号升序取前50。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.department_id=6 ORDER BY c.course_id ASC LIMIT 50;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1671,
+        1721
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1672",
+    "question": "查询学籍状态为在读的学生，返回学号、家庭地区编号与姓名，并按家庭地区编号降序取前30。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1672,
+        "question": "查询学籍状态为在读的学生，返回学号、家庭地区编号与姓名，并按家庭地区编号降序取前30。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.home_region_id, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' ORDER BY s.home_region_id DESC, s.student_no ASC LIMIT 30;"
+      },
+      {
+        "question_id": 1722,
+        "question": "查询学籍状态为在读的学生，返回学号、家庭地区编号与姓名，并按家庭地区编号降序取前30。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.home_region_id, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' ORDER BY s.home_region_id DESC, s.student_no ASC LIMIT 30;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1672,
+        1722
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1673",
+    "question": "统计学期表共有多少条记录，并返回数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.semester",
+      "education_2025.semester"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1673,
+        "question": "统计学期表共有多少条记录，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS semester_cnt FROM education_2024.semester sem;"
+      },
+      {
+        "question_id": 1723,
+        "question": "统计学期表共有多少条记录，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS semester_cnt FROM education_2025.semester sem;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1673,
+        1723
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1674",
+    "question": "查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。",
+    "status": "query_correction_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 1674,
+        "question": "查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.student_no LIKE 'S0001%' ORDER BY s.student_no ASC LIMIT 25;"
+      },
+      {
+        "question_id": 1724,
+        "question": "查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.student_no LIKE 'S0009%' ORDER BY s.student_no DESC LIMIT 25;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "按用户明确指定，用所属班级grade_year=2023替代学号LIKE；保留在读、学号升序和前25条。",
+      "question_ids": [
+        1674,
+        1724
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "user_trial_rule_ids": [
+        "education_student_2023_cohort_trial"
+      ],
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-1675",
+    "question": "查询院系编号为3的教师，返回教师工号、姓名与电话，并按工号升序取前20条。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.teacher",
+      "education_2025.teacher"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1675,
+        "question": "查询院系编号为3的教师，返回教师工号、姓名与电话，并按工号升序取前20条。",
+        "db": "MYSQL",
+        "query": "SELECT t.teacher_no, t.teacher_name, t.phone FROM education_2024.teacher t WHERE t.department_id=3 ORDER BY t.teacher_no ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1725,
+        "question": "查询院系编号为3的教师，返回教师工号、姓名与电话，并按工号升序取前20条。",
+        "db": "MYSQL",
+        "query": "SELECT t.teacher_no, t.teacher_name, t.phone FROM education_2025.teacher t WHERE t.department_id=3 ORDER BY t.teacher_no ASC LIMIT 20;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1675,
+        1725
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1676",
+    "question": "查询课程名称包含“数据库”的课程，返回课程编号与课程名，并按课程编号升序取前20门。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1676,
+        "question": "查询课程名称包含“数据库”的课程，返回课程编号与课程名，并按课程编号升序取前20门。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.course_name LIKE '%数据库%' ORDER BY c.course_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1726,
+        "question": "查询课程名称包含“数据库”的课程，返回课程编号与课程名，并按课程编号升序取前20门。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.course_name LIKE '%数据库%' ORDER BY c.course_id ASC LIMIT 20;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1676,
+        1726
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1677",
+    "question": "统计每个院系的课程数量，返回院系编号与课程数，按课程数降序取前15。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1677,
+        "question": "统计每个院系的课程数量，返回院系编号与课程数，按课程数降序取前15。",
+        "db": "MYSQL",
+        "query": "SELECT c.department_id, COUNT(*) AS course_cnt FROM education_2024.course c GROUP BY c.department_id ORDER BY course_cnt DESC, c.department_id ASC LIMIT 15;"
+      },
+      {
+        "question_id": 1727,
+        "question": "统计每个院系的课程数量，返回院系编号与课程数，按课程数降序取前15。",
+        "db": "MYSQL",
+        "query": "SELECT c.department_id, COUNT(*) AS course_cnt FROM education_2025.course c GROUP BY c.department_id ORDER BY course_cnt DESC, c.department_id ASC LIMIT 15;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1677,
+        1727
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1678",
+    "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.class",
+      "education_2025.class"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1678,
+        "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+        "db": "MYSQL",
+        "query": "SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.department_id=2 ORDER BY cl.class_id ASC LIMIT 30;"
+      },
+      {
+        "question_id": 1728,
+        "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+        "db": "MYSQL",
+        "query": "SELECT cl.class_id, cl.class_name FROM education_2025.class cl WHERE cl.department_id=2 ORDER BY cl.class_id ASC LIMIT 30;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1678,
+        1728
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1679",
+    "question": "统计学期编号为1的有效选课记录数，排除退课，并返回数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.enrollment",
+      "education_2025.enrollment"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1679,
+        "question": "统计学期编号为1的有效选课记录数，排除退课，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_enroll_record_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0;"
+      },
+      {
+        "question_id": 1729,
+        "question": "统计学期编号为1的有效选课记录数，排除退课，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_enroll_record_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1679,
+        1729
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1680",
+    "question": "查询学期编号为1中选课人数排名第一的课程，返回课程编号与课程名。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2024.enrollment",
+      "education_2025.course",
+      "education_2025.enrollment"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1680,
+        "question": "查询学期编号为1中选课人数排名第一的课程，返回课程编号与课程名。",
+        "db": "MYSQL",
+        "query": "SELECT x.course_id, x.course_name FROM (SELECT c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name) x ORDER BY x.cnt DESC, x.course_id ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1730,
+        "question": "查询学期编号为1中选课人数排名第一的课程，返回课程编号与课程名。",
+        "db": "MYSQL",
+        "query": "SELECT x.course_id, x.course_name FROM (SELECT c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name) x ORDER BY x.cnt DESC, x.course_id ASC LIMIT 1;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1680,
+        1730
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1681",
+    "question": "查询姓名以“张”开头的学生，返回学号与姓名，并按学号升序取前20名。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1681,
+        "question": "查询姓名以“张”开头的学生，返回学号与姓名，并按学号升序取前20名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_name LIKE '张%' ORDER BY s.student_no ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1731,
+        "question": "查询姓名以“张”开头的学生，返回学号与姓名，并按学号升序取前20名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_name LIKE '张%' ORDER BY s.student_no ASC LIMIT 20;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1681,
+        1731
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1683",
+    "question": "查询学分不低于3且不高于4的课程，返回课程编号与课程名，并按学分降序取前20。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1683,
+        "question": "查询学分不低于3且不高于4的课程，返回课程编号与课程名，并按学分降序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.credit BETWEEN 3 AND 4 ORDER BY c.credit DESC, c.course_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1733,
+        "question": "查询学分不低于3且不高于4的课程，返回课程编号与课程名，并按学分降序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.credit BETWEEN 3 AND 4 ORDER BY c.credit DESC, c.course_id ASC LIMIT 20;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1683,
+        1733
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1684",
+    "question": "查询入学年份为2022的班级，返回班级编号与名称，并按班级编号升序取前20条。",
+    "status": "query_correction_resolved",
+    "tables": [
+      "education_2024.class",
+      "education_2025.class"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 1684,
+        "question": "查询入学年份为2022的班级，返回班级编号与名称，并按班级编号升序取前20条。",
+        "db": "MYSQL",
+        "query": "SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.grade_year=2024 ORDER BY cl.class_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1734,
+        "question": "查询入学年份为2022的班级，返回班级编号与名称，并按班级编号升序取前20条。",
+        "db": "MYSQL",
+        "query": "SELECT cl.class_id, cl.class_name FROM education_2025.class cl WHERE cl.grade_year=2025 ORDER BY cl.class_id DESC LIMIT 20;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "按问题入学年份2022筛选，不把字段参数改为数据库年份；升序取20条。",
+      "question_ids": [
+        1684,
+        1734
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-1685",
+    "question": "统计每个班级的在读学生数量，返回班级编号与在读人数，并按在读人数降序取前20个班级。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1685,
+        "question": "统计每个班级的在读学生数量，返回班级编号与在读人数，并按在读人数降序取前20个班级。",
+        "db": "MYSQL",
+        "query": "SELECT s.class_id, COUNT(*) AS active_student_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.class_id IS NOT NULL GROUP BY s.class_id ORDER BY active_student_cnt DESC, s.class_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1735,
+        "question": "统计每个班级的在读学生数量，返回班级编号与在读人数，并按在读人数降序取前20个班级。",
+        "db": "MYSQL",
+        "query": "SELECT s.class_id, COUNT(*) AS active_student_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.class_id IS NOT NULL GROUP BY s.class_id ORDER BY active_student_cnt DESC, s.class_id ASC LIMIT 20;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1685,
+        1735
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1686",
+    "question": "查询课程类型为选修的课程，返回课程编号与课程名，并按课程名升序取前30。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1686,
+        "question": "查询课程类型为选修的课程，返回课程编号与课程名，并按课程名升序取前30。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.course_type='选修' ORDER BY c.course_name ASC LIMIT 30;"
+      },
+      {
+        "question_id": 1736,
+        "question": "查询课程类型为选修的课程，返回课程编号与课程名，并按课程名升序取前30。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.course_type='选修' ORDER BY c.course_name ASC LIMIT 30;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1686,
+        1736
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1688",
+    "question": "统计学生中性别为女性的数量，并返回女性人数。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1688,
+        "question": "统计学生中性别为女性的数量，并返回女性人数。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS female_student_cnt FROM education_2024.student s WHERE s.gender_code='F';"
+      },
+      {
+        "question_id": 1738,
+        "question": "统计学生中性别为女性的数量，并返回女性人数。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS female_student_cnt FROM education_2025.student s WHERE s.gender_code='F';"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1688,
+        1738
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1689",
+    "question": "查询院系编号为4的教师姓名，按姓名升序取前25。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.teacher",
+      "education_2025.teacher"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1689,
+        "question": "查询院系编号为4的教师姓名，按姓名升序取前25。",
+        "db": "MYSQL",
+        "query": "SELECT t.teacher_name FROM education_2024.teacher t WHERE t.department_id=4 ORDER BY t.teacher_name ASC LIMIT 25;"
+      },
+      {
+        "question_id": 1739,
+        "question": "查询院系编号为4的教师姓名，按姓名升序取前25。",
+        "db": "MYSQL",
+        "query": "SELECT t.teacher_name FROM education_2025.teacher t WHERE t.department_id=4 ORDER BY t.teacher_name ASC LIMIT 25;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1689,
+        1739
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1690",
+    "question": "统计课程表中平均学分，保留两位小数，并返回平均值。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1690,
+        "question": "统计课程表中平均学分，保留两位小数，并返回平均值。",
+        "db": "MYSQL",
+        "query": "SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2024.course c;"
+      },
+      {
+        "question_id": 1740,
+        "question": "统计课程表中平均学分，保留两位小数，并返回平均值。",
+        "db": "MYSQL",
+        "query": "SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2025.course c;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1690,
+        1740
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1691",
+    "question": "查询院系编号为1的学生中，按学籍状态分组统计人数，返回学籍状态与人数。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1691,
+        "question": "查询院系编号为1的学生中，按学籍状态分组统计人数，返回学籍状态与人数。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_status_code, COUNT(*) AS student_cnt FROM education_2024.student s WHERE s.department_id=1 GROUP BY s.student_status_code ORDER BY student_cnt DESC, s.student_status_code ASC;"
+      },
+      {
+        "question_id": 1741,
+        "question": "查询院系编号为1的学生中，按学籍状态分组统计人数，返回学籍状态与人数。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_status_code, COUNT(*) AS student_cnt FROM education_2025.student s WHERE s.department_id=1 GROUP BY s.student_status_code ORDER BY student_cnt DESC, s.student_status_code ASC;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1691,
+        1741
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1692",
+    "question": "查询每个学期的有效选课记录数，排除退课，返回学期编号与有效选课数量，并按学期编号升序取前10。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.enrollment",
+      "education_2025.enrollment"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1692,
+        "question": "查询每个学期的有效选课记录数，排除退课，返回学期编号与有效选课数量，并按学期编号升序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT e.semester_id, COUNT(*) AS active_enroll_cnt FROM education_2024.enrollment e WHERE e.is_withdraw=0 GROUP BY e.semester_id ORDER BY e.semester_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1742,
+        "question": "查询每个学期的有效选课记录数，排除退课，返回学期编号与有效选课数量，并按学期编号升序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT e.semester_id, COUNT(*) AS active_enroll_cnt FROM education_2025.enrollment e WHERE e.is_withdraw=0 GROUP BY e.semester_id ORDER BY e.semester_id ASC LIMIT 10;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1692,
+        1742
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1693",
+    "question": "统计未分配班级的在读学生数量，并返回数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1693,
+        "question": "统计未分配班级的在读学生数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_unassigned_class_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND (s.class_id IS NULL OR s.class_id='');"
+      },
+      {
+        "question_id": 1743,
+        "question": "统计未分配班级的在读学生数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_unassigned_class_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND (s.class_id IS NULL OR s.class_id='');"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1693,
+        1743
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1694",
+    "question": "查询课程学分小于2的课程，返回课程编号与课程名，并按学分升序取前20。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1694,
+        "question": "查询课程学分小于2的课程，返回课程编号与课程名，并按学分升序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.credit<2 ORDER BY c.credit ASC, c.course_id ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1744,
+        "question": "查询课程学分小于2的课程，返回课程编号与课程名，并按学分升序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.credit<2 ORDER BY c.credit ASC, c.course_id ASC LIMIT 20;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1694,
+        1744
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1695",
+    "question": "统计是否存在学分为0的课程，若存在返回该数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1695,
+        "question": "统计是否存在学分为0的课程，若存在返回该数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS credit_zero_cnt FROM education_2024.course c WHERE c.credit=0;"
+      },
+      {
+        "question_id": 1745,
+        "question": "统计是否存在学分为0的课程，若存在返回该数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS credit_zero_cnt FROM education_2025.course c WHERE c.credit=0;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1695,
+        1745
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1696",
+    "question": "查询学期编号为1中选修过“数据结构”的去重学生数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2024.enrollment",
+      "education_2024.student",
+      "education_2025.course",
+      "education_2025.enrollment",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1696,
+        "question": "查询学期编号为1中选修过“数据结构”的去重学生数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(DISTINCT s.student_id) AS distinct_student_cnt FROM education_2024.student s JOIN education_2024.enrollment e ON e.student_id=s.student_id JOIN education_2024.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND c.course_name='数据结构';"
+      },
+      {
+        "question_id": 1746,
+        "question": "查询学期编号为1中选修过“数据结构”的去重学生数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(DISTINCT s.student_id) AS distinct_student_cnt FROM education_2025.student s JOIN education_2025.enrollment e ON e.student_id=s.student_id JOIN education_2025.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND c.course_name='数据结构';"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1696,
+        1746
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1697",
+    "question": "查询在读且性别为女性的学生，按姓名升序取前15名的学号与姓名。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1697,
+        "question": "查询在读且性别为女性的学生，按姓名升序取前15名的学号与姓名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.gender_code='F' ORDER BY s.student_name ASC, s.student_no ASC LIMIT 15;"
+      },
+      {
+        "question_id": 1747,
+        "question": "查询在读且性别为女性的学生，按姓名升序取前15名的学号与姓名。",
+        "db": "MYSQL",
+        "query": "SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.gender_code='F' ORDER BY s.student_name ASC, s.student_no ASC LIMIT 15;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1697,
+        1747
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1698",
+    "question": "统计学期一中每门课程的通过人数，按总评折算不低于60，且排除退课，返回课程编号、课程名与通过人数，并按通过人数降序取前10。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2024.enrollment",
+      "education_2024.exam_score",
+      "education_2024.student",
+      "education_2025.course",
+      "education_2025.enrollment",
+      "education_2025.exam_score",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1698,
+        "question": "统计学期一中每门课程的通过人数，按总评折算不低于60，且排除退课，返回课程编号、课程名与通过人数，并按通过人数降序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN s.student_id ELSE NULL END) AS pass_student_cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name ORDER BY pass_student_cnt DESC, c.course_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1748,
+        "question": "统计学期一中每门课程的通过人数，按总评折算不低于60，且排除退课，返回课程编号、课程名与通过人数，并按通过人数降序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN s.student_id ELSE NULL END) AS pass_student_cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name ORDER BY pass_student_cnt DESC, c.course_id ASC LIMIT 10;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1698,
+        1748
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1699",
+    "question": "统计学期一中在读学生参与的每门课程，其平均总评折算分，返回课程编号、课程名与平均总评，按平均总评降序取前10。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2024.enrollment",
+      "education_2024.exam_score",
+      "education_2024.student",
+      "education_2025.course",
+      "education_2025.enrollment",
+      "education_2025.exam_score",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1699,
+        "question": "统计学期一中在读学生参与的每门课程，其平均总评折算分，返回课程编号、课程名与平均总评，按平均总评降序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, ROUND(AVG(t.total_score),2) AS avg_total_score FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.course_id, c.course_name ORDER BY avg_total_score DESC, c.course_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1749,
+        "question": "统计学期一中在读学生参与的每门课程，其平均总评折算分，返回课程编号、课程名与平均总评，按平均总评降序取前10。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, ROUND(AVG(t.total_score),2) AS avg_total_score FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.course_id, c.course_name ORDER BY avg_total_score DESC, c.course_id ASC LIMIT 10;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1699,
+        1749
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1700",
+    "question": "统计学期一中每个院系选课人数排名前三的课程，返回院系编号、课程编号与课程名、选课人数，并按院系与选课人数降序排序。",
+    "status": "query_correction_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2024.enrollment",
+      "education_2024.student",
+      "education_2025.course",
+      "education_2025.enrollment",
+      "education_2025.student"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 1700,
+        "question": "统计学期一中每个院系选课人数排名前三的课程，返回院系编号、课程编号与课程名、选课人数，并按院系与选课人数降序排序。",
+        "db": "MYSQL",
+        "query": "WITH course_enroll AS (SELECT c.department_id, c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.department_id, c.course_id, c.course_name), ranked AS (SELECT department_id, course_id, course_name, active_enroll_cnt, ROW_NUMBER() OVER(PARTITION BY department_id ORDER BY active_enroll_cnt DESC, course_id ASC) AS rn FROM course_enroll) SELECT department_id, course_id, course_name, active_enroll_cnt FROM ranked WHERE rn<=3 ORDER BY department_id ASC, active_enroll_cnt DESC, course_id ASC;"
+      },
+      {
+        "question_id": 1750,
+        "question": "统计学期一中每个院系选课人数排名前三的课程，返回院系编号、课程编号与课程名、选课人数，并按院系与选课人数降序排序。",
+        "db": "MYSQL",
+        "query": "WITH course_enroll AS (SELECT c.department_id, c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.department_id, c.course_id, c.course_name), ranked AS (SELECT department_id, course_id, course_name, active_enroll_cnt, ROW_NUMBER() OVER(PARTITION BY department_id ORDER BY active_enroll_cnt DESC, course_id ASC) AS rn FROM course_enroll) SELECT department_id, course_id, course_name, active_enroll_cnt FROM ranked WHERE rn<=3 ORDER BY department_id ASC, active_enroll_cnt DESC, course_id ASC;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "统计全部未退课选课学生，不加题目未要求的ACTIVE；按业务院系分区取前三，院系与人数均降序，并列按课程编号/业务代码稳定选择。",
+      "question_ids": [
+        1700,
+        1750
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-1701",
+    "question": "统计学期一中每门课程最低总评折算分对应的学生学号，若并列取学号最小，返回课程编号、课程名与学号。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2024.enrollment",
+      "education_2024.exam_score",
+      "education_2024.student",
+      "education_2025.course",
+      "education_2025.enrollment",
+      "education_2025.exam_score",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1701,
+        "question": "统计学期一中每门课程最低总评折算分对应的学生学号，若并列取学号最小，返回课程编号、课程名与学号。",
+        "db": "MYSQL",
+        "query": "WITH per_enroll AS (SELECT e.course_id, e.student_id, s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.student s ON s.student_id=e.student_id JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id, e.student_id, s.student_no), ranked AS (SELECT p.course_id, p.student_no, p.total_score, ROW_NUMBER() OVER(PARTITION BY p.course_id ORDER BY p.total_score ASC, p.student_no ASC) AS rn FROM per_enroll p) SELECT c.course_id, c.course_name, r.student_no FROM ranked r JOIN education_2024.course c ON c.course_id=r.course_id WHERE r.rn=1 ORDER BY c.course_id ASC;"
+      },
+      {
+        "question_id": 1751,
+        "question": "统计学期一中每门课程最低总评折算分对应的学生学号，若并列取学号最小，返回课程编号、课程名与学号。",
+        "db": "MYSQL",
+        "query": "WITH per_enroll AS (SELECT e.course_id, e.student_id, s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.student s ON s.student_id=e.student_id JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id, e.student_id, s.student_no), ranked AS (SELECT p.course_id, p.student_no, p.total_score, ROW_NUMBER() OVER(PARTITION BY p.course_id ORDER BY p.total_score ASC, p.student_no ASC) AS rn FROM per_enroll p) SELECT c.course_id, c.course_name, r.student_no FROM ranked r JOIN education_2025.course c ON c.course_id=r.course_id WHERE r.rn=1 ORDER BY c.course_id ASC;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1701,
+        1751
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1702",
+    "question": "统计学期一中每位在读学生的总评折算总分，返回总评最高学生的学号与总分。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.enrollment",
+      "education_2024.exam_score",
+      "education_2024.student",
+      "education_2025.enrollment",
+      "education_2025.exam_score",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1702,
+        "question": "统计学期一中每位在读学生的总评折算总分，返回总评最高学生的学号与总分。",
+        "db": "MYSQL",
+        "query": "WITH per_student AS (SELECT s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.student s ON s.student_id=e.student_id JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY s.student_no) SELECT student_no, ROUND(total_score,2) AS total_score FROM per_student ORDER BY total_score DESC, student_no ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1752,
+        "question": "统计学期一中每位在读学生的总评折算总分，返回总评最高学生的学号与总分。",
+        "db": "MYSQL",
+        "query": "WITH per_student AS (SELECT s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.student s ON s.student_id=e.student_id JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY s.student_no) SELECT student_no, ROUND(total_score,2) AS total_score FROM per_student ORDER BY total_score DESC, student_no ASC LIMIT 1;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1702,
+        1752
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1703",
+    "question": "查询课程表中学分平均是否大于等于3，并返回平均学分。",
+    "status": "query_correction_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 1703,
+        "question": "查询课程表中学分平均是否大于等于3，并返回平均学分。",
+        "db": "MYSQL",
+        "query": "SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2024.course c HAVING ROUND(AVG(c.credit),2)<=4;"
+      },
+      {
+        "question_id": 1753,
+        "question": "查询课程表中学分平均是否大于等于3，并返回平均学分。",
+        "db": "MYSQL",
+        "query": "SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2025.course c HAVING ROUND(AVG(c.credit),2)>=2;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "先按业务课程合并，再计算明细AVG；用未四舍五入的平均值比较>=3，返回原平均值。低于3时返回空结果。",
+      "question_ids": [
+        1703,
+        1753
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-1704",
+    "question": "统计教师表中教师的联系电话为空或空字符串的数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.teacher",
+      "education_2025.teacher"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1704,
+        "question": "统计教师表中教师的联系电话为空或空字符串的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_empty_cnt FROM education_2024.teacher t WHERE t.phone IS NULL OR t.phone='';"
+      },
+      {
+        "question_id": 1754,
+        "question": "统计教师表中教师的联系电话为空或空字符串的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_empty_cnt FROM education_2025.teacher t WHERE t.phone IS NULL OR t.phone='';"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1704,
+        1754
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1705",
+    "question": "查询学期编号为1中每个课程的有效选课人数，并按课程编号升序取前10门。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.enrollment",
+      "education_2025.enrollment"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1705,
+        "question": "查询学期编号为1中每个课程的有效选课人数，并按课程编号升序取前10门。",
+        "db": "MYSQL",
+        "query": "SELECT e.course_id, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id ORDER BY e.course_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1755,
+        "question": "查询学期编号为1中每个课程的有效选课人数，并按课程编号升序取前10门。",
+        "db": "MYSQL",
+        "query": "SELECT e.course_id, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id ORDER BY e.course_id ASC LIMIT 10;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1705,
+        1755
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1706",
+    "question": "查询课程类型为必修的课程数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1706,
+        "question": "查询课程类型为必修的课程数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS compulsory_course_cnt FROM education_2024.course c WHERE c.course_type='必修';"
+      },
+      {
+        "question_id": 1756,
+        "question": "查询课程类型为必修的课程数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS compulsory_course_cnt FROM education_2025.course c WHERE c.course_type='必修';"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1706,
+        1756
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1707",
+    "question": "查询院系编号为1的班级数量，并返回数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.class",
+      "education_2025.class"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1707,
+        "question": "查询院系编号为1的班级数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS class_cnt_dept1 FROM education_2024.class cl WHERE cl.department_id=1;"
+      },
+      {
+        "question_id": 1757,
+        "question": "查询院系编号为1的班级数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS class_cnt_dept1 FROM education_2025.class cl WHERE cl.department_id=1;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1707,
+        1757
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1708",
+    "question": "查询学期表中学期代码包含“2024”的学期，返回学期代码，并按学期代码升序取前20。",
+    "status": "query_correction_resolved",
+    "tables": [
+      "education_2024.semester",
+      "education_2025.semester"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 1708,
+        "question": "查询学期表中学期代码包含“2024”的学期，返回学期代码，并按学期代码升序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT sem.semester_code FROM education_2024.semester sem WHERE sem.semester_code LIKE '%2024%' ORDER BY sem.semester_code ASC LIMIT 20;"
+      },
+      {
+        "question_id": 1758,
+        "question": "查询学期表中学期代码包含“2024”的学期，返回学期代码，并按学期代码升序取前20。",
+        "db": "MYSQL",
+        "query": "SELECT sem.semester_code FROM education_2025.semester sem WHERE sem.semester_code LIKE '%2025%' ORDER BY sem.semester_code ASC LIMIT 20;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "保留问题字符串2024，合并两年学期后筛选代码包含2024、升序取20条；数字属于代码参数。",
+      "question_ids": [
+        1708,
+        1758
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-1709",
+    "question": "查询学生中学籍状态为在读且所属院系编号为2的学生数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1709,
+        "question": "查询学生中学籍状态为在读且所属院系编号为2的学生数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_students_dept2_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.department_id=2;"
+      },
+      {
+        "question_id": 1759,
+        "question": "查询学生中学籍状态为在读且所属院系编号为2的学生数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_students_dept2_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.department_id=2;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1709,
+        1759
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1710",
+    "question": "查询院系编号为3的课程，返回课程编号与课程名，并按课程名升序取前15。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1710,
+        "question": "查询院系编号为3的课程，返回课程编号与课程名，并按课程名升序取前15。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.department_id=3 ORDER BY c.course_name ASC LIMIT 15;"
+      },
+      {
+        "question_id": 1760,
+        "question": "查询院系编号为3的课程，返回课程编号与课程名，并按课程名升序取前15。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.department_id=3 ORDER BY c.course_name ASC LIMIT 15;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1710,
+        1760
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1711",
+    "question": "查询在读学生中家庭地区编号为空或为0的数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.student",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1711,
+        "question": "查询在读学生中家庭地区编号为空或为0的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_home_region_empty_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND (s.home_region_id IS NULL OR s.home_region_id=0);"
+      },
+      {
+        "question_id": 1761,
+        "question": "查询在读学生中家庭地区编号为空或为0的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS active_home_region_empty_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND (s.home_region_id IS NULL OR s.home_region_id=0);"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1711,
+        1761
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1712",
+    "question": "统计学期一中每门课程的通过率，通过总评不低于60，排除退课，返回课程编号、课程名与通过率，以百分比表示并保留两位小数，按通过率降序取前10。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2024.enrollment",
+      "education_2024.exam_score",
+      "education_2025.course",
+      "education_2025.enrollment",
+      "education_2025.exam_score"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1712,
+        "question": "统计学期一中每门课程的通过率，通过总评不低于60，排除退课，返回课程编号、课程名与通过率，以百分比表示并保留两位小数，按通过率降序取前10。",
+        "db": "MYSQL",
+        "query": "WITH course_tot AS (SELECT e.course_id, COUNT(DISTINCT e.student_id) AS total_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id), course_pass AS (SELECT e.course_id, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN e.student_id ELSE NULL END) AS pass_cnt FROM education_2024.enrollment e JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id) SELECT c.course_id, c.course_name, ROUND( (p.pass_cnt / NULLIF(t.total_cnt,0))*100, 2) AS pass_rate_pct FROM course_pass p JOIN course_tot t ON t.course_id=p.course_id JOIN education_2024.course c ON c.course_id=p.course_id ORDER BY pass_rate_pct DESC, c.course_id ASC LIMIT 10;"
+      },
+      {
+        "question_id": 1762,
+        "question": "统计学期一中每门课程的通过率，通过总评不低于60，排除退课，返回课程编号、课程名与通过率，以百分比表示并保留两位小数，按通过率降序取前10。",
+        "db": "MYSQL",
+        "query": "WITH course_tot AS (SELECT e.course_id, COUNT(DISTINCT e.student_id) AS total_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id), course_pass AS (SELECT e.course_id, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN e.student_id ELSE NULL END) AS pass_cnt FROM education_2025.enrollment e JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id) SELECT c.course_id, c.course_name, ROUND( (p.pass_cnt / NULLIF(t.total_cnt,0))*100, 2) AS pass_rate_pct FROM course_pass p JOIN course_tot t ON t.course_id=p.course_id JOIN education_2025.course c ON c.course_id=p.course_id ORDER BY pass_rate_pct DESC, c.course_id ASC LIMIT 10;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1712,
+        1762
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1713",
+    "question": "统计学期一中得分分项中出现次数最多的分项名称，在平时、期中、期末中出现次数最大，若并列按名称升序，返回分项名称与出现次数。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.enrollment",
+      "education_2024.exam_score",
+      "education_2025.enrollment",
+      "education_2025.exam_score"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1713,
+        "question": "统计学期一中得分分项中出现次数最多的分项名称，在平时、期中、期末中出现次数最大，若并列按名称升序，返回分项名称与出现次数。",
+        "db": "MYSQL",
+        "query": "SELECT es.exam_item, COUNT(*) AS item_cnt FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY es.exam_item ORDER BY item_cnt DESC, es.exam_item ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1763,
+        "question": "统计学期一中得分分项中出现次数最多的分项名称，在平时、期中、期末中出现次数最大，若并列按名称升序，返回分项名称与出现次数。",
+        "db": "MYSQL",
+        "query": "SELECT es.exam_item, COUNT(*) AS item_cnt FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY es.exam_item ORDER BY item_cnt DESC, es.exam_item ASC LIMIT 1;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1713,
+        1763
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1714",
+    "question": "统计学期一中每位学生的平均总评折算分，按其所有选课的总评求平均并排除退课，返回平均总评最高的学生学号与平均分。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.enrollment",
+      "education_2024.exam_score",
+      "education_2024.student",
+      "education_2025.enrollment",
+      "education_2025.exam_score",
+      "education_2025.student"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1714,
+        "question": "统计学期一中每位学生的平均总评折算分，按其所有选课的总评求平均并排除退课，返回平均总评最高的学生学号与平均分。",
+        "db": "MYSQL",
+        "query": "WITH per_enroll AS (SELECT e.student_id, e.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.enrollment_id), per_student AS (SELECT s.student_no, AVG(p.total_score) AS avg_total_score FROM per_enroll p JOIN education_2024.student s ON s.student_id=p.student_id GROUP BY s.student_no) SELECT student_no, ROUND(avg_total_score,2) AS avg_total_score FROM per_student ORDER BY avg_total_score DESC, student_no ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1764,
+        "question": "统计学期一中每位学生的平均总评折算分，按其所有选课的总评求平均并排除退课，返回平均总评最高的学生学号与平均分。",
+        "db": "MYSQL",
+        "query": "WITH per_enroll AS (SELECT e.student_id, e.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.enrollment_id), per_student AS (SELECT s.student_no, AVG(p.total_score) AS avg_total_score FROM per_enroll p JOIN education_2025.student s ON s.student_id=p.student_id GROUP BY s.student_no) SELECT student_no, ROUND(avg_total_score,2) AS avg_total_score FROM per_student ORDER BY avg_total_score DESC, student_no ASC LIMIT 1;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1714,
+        1764
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1715",
+    "question": "查询课程学分为偶数的课程数量，并返回数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1715,
+        "question": "查询课程学分为偶数的课程数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS even_credit_course_cnt FROM education_2024.course c WHERE MOD(c.credit,2)=0;"
+      },
+      {
+        "question_id": 1765,
+        "question": "查询课程学分为偶数的课程数量，并返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS even_credit_course_cnt FROM education_2025.course c WHERE MOD(c.credit,2)=0;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1715,
+        1765
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1716",
+    "question": "查询院系编号为5的教师中电话非空的数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.teacher",
+      "education_2025.teacher"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1716,
+        "question": "查询院系编号为5的教师中电话非空的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_dept5_cnt FROM education_2024.teacher t WHERE t.department_id=5 AND t.phone IS NOT NULL AND t.phone<>'';"
+      },
+      {
+        "question_id": 1766,
+        "question": "查询院系编号为5的教师中电话非空的数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS teacher_phone_not_null_dept5_cnt FROM education_2025.teacher t WHERE t.department_id=5 AND t.phone IS NOT NULL AND t.phone<>'';"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1716,
+        1766
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1717",
+    "question": "查询课程表里是否存在课程名以“数”开头的课程，若存在返回数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1717,
+        "question": "查询课程表里是否存在课程名以“数”开头的课程，若存在返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS course_name_start_with_num_cnt FROM education_2024.course c WHERE c.course_name LIKE '数%';"
+      },
+      {
+        "question_id": 1767,
+        "question": "查询课程表里是否存在课程名以“数”开头的课程，若存在返回数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS course_name_start_with_num_cnt FROM education_2025.course c WHERE c.course_name LIKE '数%';"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1717,
+        1767
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1718",
+    "question": "查询课程表里必修课程是否不足5门的情况，并返回必修课程数量。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1718,
+        "question": "查询课程表里必修课程是否不足5门的情况，并返回必修课程数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS compulsory_course_cnt FROM education_2024.course c WHERE c.course_type='必修';"
+      },
+      {
+        "question_id": 1768,
+        "question": "查询课程表里必修课程是否不足5门的情况，并返回必修课程数量。",
+        "db": "MYSQL",
+        "query": "SELECT COUNT(*) AS compulsory_course_cnt FROM education_2025.course c WHERE c.course_type='必修';"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1718,
+        1768
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1719",
+    "question": "查询课程表中学分最高的排名第一的课程，返回课程编号、课程名与学分。",
+    "status": "business_rule_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "年度口径已由用户确认；原始候选仅保留来源线索，查询使用教育年度合并视图。",
+    "candidate_annotations": [
+      {
+        "question_id": 1719,
+        "question": "查询课程表中学分最高的排名第一的课程，返回课程编号、课程名与学分。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, c.credit FROM education_2024.course c ORDER BY c.credit DESC, c.course_id ASC LIMIT 1;"
+      },
+      {
+        "question_id": 1769,
+        "question": "查询课程表中学分最高的排名第一的课程，返回课程编号、课程名与学分。",
+        "db": "MYSQL",
+        "query": "SELECT c.course_id, c.course_name, c.credit FROM education_2025.course c ORDER BY c.credit DESC, c.course_id ASC LIMIT 1;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_year_policy",
+      "reason": "已采用统一教育年度合并视图，模型定向查询通过构造数据验证",
+      "question_ids": [
+        1719,
+        1769
+      ],
+      "year_mode": {
+        "mode": "merged_latest",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      }
+    }
+  },
+  {
+    "group_id": "ambiguous-1891",
+    "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+    "status": "query_correction_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 1891,
+        "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+        "db": "MYSQL",
+        "query": "SELECT '2024' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2025.course WHERE credit=0;"
+      },
+      {
+        "question_id": 1976,
+        "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+        "db": "MYSQL",
+        "query": "SELECT '2024' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2025.course WHERE credit=0;"
+      },
+      {
+        "question_id": 2037,
+        "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+        "db": "MYSQL",
+        "query": "SELECT '2024' AS year, COUNT(*) AS credit_0_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_0_course_cnt FROM education_2025.course WHERE credit=0;"
+      },
+      {
+        "question_id": 2059,
+        "question": "比较2024与2025课程表中学分为0的课程数量，返回两年数量。",
+        "db": "MYSQL",
+        "query": "SELECT '2024' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2025.course WHERE credit=0;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "两年分别统计credit=0，统一列别名；按2024、2025稳定输出，不采用最新合并快照替代年度对比。",
+      "question_ids": [
+        1891,
+        1976,
+        2037,
+        2059
+      ],
+      "year_mode": {
+        "mode": "separate_years",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-1921",
+    "question": "比较2024与2025课程表中课程类型为必修且学分不低于4的课程数量差，即2025减2024，返回差值与两年数量。",
+    "status": "query_correction_resolved",
+    "tables": [
+      "education_2024.course",
+      "education_2025.course"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 1921,
+        "question": "比较2024与2025课程表中课程类型为必修且学分不低于4的课程数量差，即2025减2024，返回差值与两年数量。",
+        "db": "MYSQL",
+        "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.course WHERE course_type='必修' AND credit>=4), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.course WHERE course_type='必修' AND credit>=4) SELECT (b.cnt_2025-a.cnt_2024) AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+      },
+      {
+        "question_id": 2030,
+        "question": "比较2024与2025课程表中课程类型为必修且学分不低于4的课程数量差，即2025减2024，返回差值与两年数量。",
+        "db": "MYSQL",
+        "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.course WHERE course_type='必修' AND credit>=4), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.course WHERE course_type='必修' AND credit>=4) SELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "统一等价表达式；保留2025减2024、必修且credit>=4及差值/两年数量三个返回列。",
+      "question_ids": [
+        1921,
+        2030
+      ],
+      "year_mode": {
+        "mode": "separate_years",
+        "years": [
+          "2024",
+          "2025"
+        ]
+      },
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-3803",
+    "question": "哪个发行商发行的游戏最多？",
+    "status": "query_correction_resolved",
+    "tables": [
+      "video_games.game_publisher",
+      "video_games.publisher"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 3803,
+        "question": "哪个发行商发行的游戏最多？",
+        "db": "SQLite",
+        "query": "SELECT T.publisher_name FROM ( SELECT T2.publisher_name, COUNT(DISTINCT T1.game_id) FROM video_games.game_publisher AS T1 INNER JOIN video_games.publisher AS T2 ON T1.publisher_id = T2.id GROUP BY T2.publisher_name ORDER BY COUNT(DISTINCT T1.game_id) DESC LIMIT 1 ) t"
+      },
+      {
+        "question_id": 3861,
+        "question": "哪个发行商发行的游戏最多？",
+        "db": "SQLite",
+        "query": "SELECT T1.publisher_name FROM video_games.publisher AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.publisher_id GROUP BY T1.publisher_name ORDER BY COUNT(DISTINCT T2.game_id) DESC LIMIT 1"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "修复候选A外层未定义的T别名；以发行商ID区分同名实体，按去重游戏数排名，第一名并列时取ID最小者。",
+      "question_ids": [
+        3803,
+        3861
+      ],
+      "year_mode": null,
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-3851",
+    "question": "2001年发行了多少款游戏？",
+    "status": "query_correction_resolved",
+    "tables": [
+      "video_games.game_platform"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 3851,
+        "question": "2001年发行了多少款游戏？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(T.id) FROM video_games.game_platform AS T WHERE T.release_year = 2001"
+      },
+      {
+        "question_id": 3884,
+        "question": "2001年发行了多少款游戏？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(id) FROM video_games.game_platform AS T WHERE T.release_year = 2001"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "游戏款数按game_id去重；沿game_platform.game_publisher_id关联，避免把跨平台发行记录当作不同游戏。",
+      "question_ids": [
+        3851,
+        3884
+      ],
+      "year_mode": null,
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-4009",
+    "question": "有多少篇论文是预印本或未发表的？",
+    "status": "query_correction_resolved",
+    "tables": [
+      "authors.Paper"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 4009,
+        "question": "有多少篇论文是预印本或未发表的？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(Id) FROM authors.Paper WHERE Year = 0"
+      },
+      {
+        "question_id": 4095,
+        "question": "有多少篇论文是预印本或未发表的？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(Id) FROM authors.Paper WHERE Year = 0 OR (ConferenceId = 0 AND JournalId = 0)"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "知识129/134/405支持Year=0，134明确Year>0已发表；选择Year为主判断，避免仅因载体ID均0误计已发表论文。NULL或负年份未被定义为未发表，不自行纳入。知识85/407的载体缺失信号不覆盖正年份。",
+      "question_ids": [
+        4009,
+        4095
+      ],
+      "year_mode": null,
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  },
+  {
+    "group_id": "ambiguous-5196",
+    "question": "出版书籍数量最多的出版社名称是什么？",
+    "status": "query_correction_resolved",
+    "tables": [
+      "books.book",
+      "books.publisher"
+    ],
+    "instruction": "已按问题、Schema和知识修正；原始候选保留证据，优先使用当前修正示例。",
+    "candidate_annotations": [
+      {
+        "question_id": 5196,
+        "question": "出版书籍数量最多的出版社名称是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.publisher_name FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id GROUP BY T2.publisher_name ORDER BY COUNT(T1.book_id) DESC LIMIT 1"
+      },
+      {
+        "question_id": 5237,
+        "question": "出版书籍数量最多的出版社名称是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.publisher_name FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id GROUP BY T2.publisher_name ORDER BY COUNT(T2.publisher_id) DESC LIMIT 1"
+      }
+    ],
+    "resolution": {
+      "status": "resolved_by_query_correction",
+      "reason": "以出版社ID区分同名实体，统一按书籍主键计数；并列取出版社ID最小者，返回名称。",
+      "question_ids": [
+        5196,
+        5237
+      ],
+      "year_mode": null,
+      "correction_file": "data/curated/question_corrections.json",
+      "verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+      "synthetic_execution_only": true
+    }
+  }
+]

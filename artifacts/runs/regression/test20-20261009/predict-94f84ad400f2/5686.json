@@ -1,0 +1,2061 @@
+{
+  "question_id": 5686,
+  "question": "蒙特利尔加拿大人队在斯坦利杯决赛中罚时49分钟是在哪一年？是1924年、1923年还是1918年？",
+  "context": {
+    "question": "蒙特利尔加拿大人队在斯坦利杯决赛中罚时49分钟是在哪一年？是1924年、1923年还是1918年？",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "hockey"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "strong",
+      "reason": "领域词：斯坦利杯|冰球|加拿大人队",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema": [
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "AwardsMisc",
+        "columns": [
+          {
+            "name": "name",
+            "type": "TEXT",
+            "definition": "name  TEXT not null\r\n        primary key"
+          },
+          {
+            "name": "ID",
+            "type": "TEXT",
+            "definition": "ID    TEXT"
+          },
+          {
+            "name": "award",
+            "type": "TEXT",
+            "definition": "award TEXT"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year  INTEGER"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID  TEXT"
+          },
+          {
+            "name": "note",
+            "type": "TEXT",
+            "definition": "note  TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE AwardsMisc\r\n(\r\n    name  TEXT not null\r\n        primary key,\r\n    ID    TEXT,\r\n    award TEXT,\r\n    year  INTEGER,\r\n    lgID  TEXT,\r\n    note  TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "HOF",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year     INTEGER"
+          },
+          {
+            "name": "hofID",
+            "type": "TEXT",
+            "definition": "hofID    TEXT not null\r\n        primary key"
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "definition": "name     TEXT"
+          },
+          {
+            "name": "category",
+            "type": "TEXT",
+            "definition": "category TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE HOF\r\n(\r\n    year     INTEGER,\r\n    hofID    TEXT not null\r\n        primary key,\r\n    name     TEXT,\r\n    category TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "Teams",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year       INTEGER          not null"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID       TEXT"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID       TEXT not null"
+          },
+          {
+            "name": "franchID",
+            "type": "TEXT",
+            "definition": "franchID   TEXT"
+          },
+          {
+            "name": "confID",
+            "type": "TEXT",
+            "definition": "confID     TEXT"
+          },
+          {
+            "name": "divID",
+            "type": "TEXT",
+            "definition": "divID      TEXT"
+          },
+          {
+            "name": "rank",
+            "type": "INTEGER",
+            "definition": "rank       INTEGER"
+          },
+          {
+            "name": "playoff",
+            "type": "TEXT",
+            "definition": "playoff    TEXT"
+          },
+          {
+            "name": "G",
+            "type": "INTEGER",
+            "definition": "G          INTEGER"
+          },
+          {
+            "name": "W",
+            "type": "INTEGER",
+            "definition": "W          INTEGER"
+          },
+          {
+            "name": "L",
+            "type": "INTEGER",
+            "definition": "L          INTEGER"
+          },
+          {
+            "name": "T",
+            "type": "INTEGER",
+            "definition": "T          INTEGER"
+          },
+          {
+            "name": "OTL",
+            "type": "TEXT",
+            "definition": "OTL        TEXT"
+          },
+          {
+            "name": "Pts",
+            "type": "INTEGER",
+            "definition": "Pts        INTEGER"
+          },
+          {
+            "name": "SoW",
+            "type": "TEXT",
+            "definition": "SoW        TEXT"
+          },
+          {
+            "name": "SoL",
+            "type": "TEXT",
+            "definition": "SoL        TEXT"
+          },
+          {
+            "name": "GF",
+            "type": "INTEGER",
+            "definition": "GF         INTEGER"
+          },
+          {
+            "name": "GA",
+            "type": "INTEGER",
+            "definition": "GA         INTEGER"
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "definition": "name       TEXT"
+          },
+          {
+            "name": "PIM",
+            "type": "TEXT",
+            "definition": "PIM        TEXT"
+          },
+          {
+            "name": "BenchMinor",
+            "type": "TEXT",
+            "definition": "BenchMinor TEXT"
+          },
+          {
+            "name": "PPG",
+            "type": "TEXT",
+            "definition": "PPG        TEXT"
+          },
+          {
+            "name": "PPC",
+            "type": "TEXT",
+            "definition": "PPC       TEXT"
+          },
+          {
+            "name": "SHA",
+            "type": "TEXT",
+            "definition": "SHA        TEXT"
+          },
+          {
+            "name": "PKG",
+            "type": "TEXT",
+            "definition": "PKG       TEXT"
+          },
+          {
+            "name": "PKC",
+            "type": "TEXT",
+            "definition": "PKC        TEXT"
+          },
+          {
+            "name": "SHF",
+            "type": "TEXT",
+            "definition": "SHF        TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Teams\r\n(\r\n    year       INTEGER          not null,\r\n    lgID       TEXT,\r\n    tmID       TEXT not null,\r\n    franchID   TEXT,\r\n    confID     TEXT,\r\n    divID      TEXT,\r\n    rank       INTEGER,\r\n    playoff    TEXT,\r\n    G          INTEGER,\r\n    W          INTEGER,\r\n    L          INTEGER,\r\n    T          INTEGER,\r\n    OTL        TEXT,\r\n    Pts        INTEGER,\r\n    SoW        TEXT,\r\n    SoL        TEXT,\r\n    GF         INTEGER,\r\n    GA         INTEGER,\r\n    name       TEXT,\r\n    PIM        TEXT,\r\n    BenchMinor TEXT,\r\n    PPG        TEXT,\r\n    PPC       TEXT,\r\n    SHA        TEXT,\r\n    PKG       TEXT,\r\n    PKC        TEXT,\r\n    SHF        TEXT,\r\n    primary key (year, tmID)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "Coaches",
+        "columns": [
+          {
+            "name": "coachID",
+            "type": "TEXT",
+            "definition": "coachID TEXT    not null"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year    INTEGER not null"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID    TEXT    not null"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID    TEXT"
+          },
+          {
+            "name": "stint",
+            "type": "INTEGER",
+            "definition": "stint   INTEGER not null"
+          },
+          {
+            "name": "notes",
+            "type": "TEXT",
+            "definition": "notes   TEXT"
+          },
+          {
+            "name": "g",
+            "type": "INTEGER",
+            "definition": "g       INTEGER"
+          },
+          {
+            "name": "w",
+            "type": "INTEGER",
+            "definition": "w       INTEGER"
+          },
+          {
+            "name": "l",
+            "type": "INTEGER",
+            "definition": "l       INTEGER"
+          },
+          {
+            "name": "t",
+            "type": "INTEGER",
+            "definition": "t       INTEGER"
+          },
+          {
+            "name": "postg",
+            "type": "TEXT",
+            "definition": "postg   TEXT"
+          },
+          {
+            "name": "postw",
+            "type": "TEXT",
+            "definition": "postw   TEXT"
+          },
+          {
+            "name": "postl",
+            "type": "TEXT",
+            "definition": "postl   TEXT"
+          },
+          {
+            "name": "postt",
+            "type": "TEXT",
+            "definition": "postt   TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Coaches\r\n(\r\n    coachID TEXT    not null,\r\n    year    INTEGER not null,\r\n    tmID    TEXT    not null,\r\n    lgID    TEXT,\r\n    stint   INTEGER not null,\r\n    notes   TEXT,\r\n    g       INTEGER,\r\n    w       INTEGER,\r\n    l       INTEGER,\r\n    t       INTEGER,\r\n    postg   TEXT,\r\n    postw   TEXT,\r\n    postl   TEXT,\r\n    postt   TEXT,\r\n    primary key (coachID, year, tmID, stint),\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "AwardsCoaches",
+        "columns": [
+          {
+            "name": "coachID",
+            "type": "TEXT",
+            "definition": "coachID TEXT"
+          },
+          {
+            "name": "award",
+            "type": "TEXT",
+            "definition": "award   TEXT"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year    INTEGER"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID    TEXT"
+          },
+          {
+            "name": "note",
+            "type": "TEXT",
+            "definition": "note    TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE AwardsCoaches\r\n(\r\n    coachID TEXT,\r\n    award   TEXT,\r\n    year    INTEGER,\r\n    lgID    TEXT,\r\n    note    TEXT,\r\n    foreign key (coachID) references Coaches (coachID)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (coachID) references Coaches (coachID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "Master",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID     TEXT"
+          },
+          {
+            "name": "coachID",
+            "type": "TEXT",
+            "definition": "coachID      TEXT"
+          },
+          {
+            "name": "hofID",
+            "type": "TEXT",
+            "definition": "hofID        TEXT"
+          },
+          {
+            "name": "firstName",
+            "type": "TEXT",
+            "definition": "firstName    TEXT"
+          },
+          {
+            "name": "lastName",
+            "type": "TEXT",
+            "definition": "lastName     TEXT not null"
+          },
+          {
+            "name": "nameNote",
+            "type": "TEXT",
+            "definition": "nameNote     TEXT"
+          },
+          {
+            "name": "nameGiven",
+            "type": "TEXT",
+            "definition": "nameGiven    TEXT"
+          },
+          {
+            "name": "nameNick",
+            "type": "TEXT",
+            "definition": "nameNick     TEXT"
+          },
+          {
+            "name": "height",
+            "type": "TEXT",
+            "definition": "height       TEXT"
+          },
+          {
+            "name": "weight",
+            "type": "TEXT",
+            "definition": "weight       TEXT"
+          },
+          {
+            "name": "shootCatch",
+            "type": "TEXT",
+            "definition": "shootCatch   TEXT"
+          },
+          {
+            "name": "legendsID",
+            "type": "TEXT",
+            "definition": "legendsID    TEXT"
+          },
+          {
+            "name": "ihdbID",
+            "type": "TEXT",
+            "definition": "ihdbID       TEXT"
+          },
+          {
+            "name": "hrefID",
+            "type": "TEXT",
+            "definition": "hrefID       TEXT"
+          },
+          {
+            "name": "firstNHL",
+            "type": "TEXT",
+            "definition": "firstNHL     TEXT"
+          },
+          {
+            "name": "lastNHL",
+            "type": "TEXT",
+            "definition": "lastNHL      TEXT"
+          },
+          {
+            "name": "firstWHA",
+            "type": "TEXT",
+            "definition": "firstWHA     TEXT"
+          },
+          {
+            "name": "lastWHA",
+            "type": "TEXT",
+            "definition": "lastWHA     TEXT"
+          },
+          {
+            "name": "pos",
+            "type": "TEXT",
+            "definition": "pos          TEXT"
+          },
+          {
+            "name": "birthYear",
+            "type": "TEXT",
+            "definition": "birthYear    TEXT"
+          },
+          {
+            "name": "birthMon",
+            "type": "TEXT",
+            "definition": "birthMon     TEXT"
+          },
+          {
+            "name": "birthDay",
+            "type": "TEXT",
+            "definition": "birthDay     TEXT"
+          },
+          {
+            "name": "birthCountry",
+            "type": "TEXT",
+            "definition": "birthCountry TEXT"
+          },
+          {
+            "name": "birthState",
+            "type": "TEXT",
+            "definition": "birthState   TEXT"
+          },
+          {
+            "name": "birthCity",
+            "type": "TEXT",
+            "definition": "birthCity    TEXT"
+          },
+          {
+            "name": "deathYear",
+            "type": "TEXT",
+            "definition": "deathYear    TEXT"
+          },
+          {
+            "name": "deathMon",
+            "type": "TEXT",
+            "definition": "deathMon     TEXT"
+          },
+          {
+            "name": "deathDay",
+            "type": "TEXT",
+            "definition": "deathDay     TEXT"
+          },
+          {
+            "name": "deathCountry",
+            "type": "TEXT",
+            "definition": "deathCountry TEXT"
+          },
+          {
+            "name": "deathState",
+            "type": "TEXT",
+            "definition": "deathState   TEXT"
+          },
+          {
+            "name": "deathCity",
+            "type": "TEXT",
+            "definition": "deathCity    TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Master\r\n(\r\n    playerID     TEXT,\r\n    coachID      TEXT,\r\n    hofID        TEXT,\r\n    firstName    TEXT,\r\n    lastName     TEXT not null,\r\n    nameNote     TEXT,\r\n    nameGiven    TEXT,\r\n    nameNick     TEXT,\r\n    height       TEXT,\r\n    weight       TEXT,\r\n    shootCatch   TEXT,\r\n    legendsID    TEXT,\r\n    ihdbID       TEXT,\r\n    hrefID       TEXT,\r\n    firstNHL     TEXT,\r\n    lastNHL      TEXT,\r\n    firstWHA     TEXT,\r\n    lastWHA     TEXT,\r\n    pos          TEXT,\r\n    birthYear    TEXT,\r\n    birthMon     TEXT,\r\n    birthDay     TEXT,\r\n    birthCountry TEXT,\r\n    birthState   TEXT,\r\n    birthCity    TEXT,\r\n    deathYear    TEXT,\r\n    deathMon     TEXT,\r\n    deathDay     TEXT,\r\n    deathCountry TEXT,\r\n    deathState   TEXT,\r\n    deathCity    TEXT,\r\n    foreign key (coachID) references Coaches (coachID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (coachID) references Coaches (coachID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "AwardsPlayers",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID TEXT    not null"
+          },
+          {
+            "name": "award",
+            "type": "TEXT",
+            "definition": "award    TEXT    not null"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year     INTEGER not null"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID     TEXT"
+          },
+          {
+            "name": "note",
+            "type": "TEXT",
+            "definition": "note     TEXT"
+          },
+          {
+            "name": "pos",
+            "type": "TEXT",
+            "definition": "pos      TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE AwardsPlayers\r\n(\r\n    playerID TEXT    not null,\r\n    award    TEXT    not null,\r\n    year     INTEGER not null,\r\n    lgID     TEXT,\r\n    note     TEXT,\r\n    pos      TEXT,\r\n    primary key (playerID, award, year),\r\n    foreign key (playerID) references Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (playerID) references Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "CombinedShutouts",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year      INTEGER"
+          },
+          {
+            "name": "month",
+            "type": "INTEGER",
+            "definition": "month     INTEGER"
+          },
+          {
+            "name": "date",
+            "type": "INTEGER",
+            "definition": "date      INTEGER"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID      TEXT"
+          },
+          {
+            "name": "oppID",
+            "type": "TEXT",
+            "definition": "oppID     TEXT"
+          },
+          {
+            "name": "R/P",
+            "type": "TEXT",
+            "definition": "\"R/P\"     TEXT"
+          },
+          {
+            "name": "IDgoalie1",
+            "type": "TEXT",
+            "definition": "IDgoalie1 TEXT"
+          },
+          {
+            "name": "IDgoalie2",
+            "type": "TEXT",
+            "definition": "IDgoalie2 TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE CombinedShutouts\r\n(\r\n    year      INTEGER,\r\n    month     INTEGER,\r\n    date      INTEGER,\r\n    tmID      TEXT,\r\n    oppID     TEXT,\r\n    \"R/P\"     TEXT,\r\n    IDgoalie1 TEXT,\r\n    IDgoalie2 TEXT,\r\n    foreign key (IDgoalie1) references Master (playerID)\r\n            on update cascade on delete cascade,\r\n    foreign key (IDgoalie2) references  Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (IDgoalie1) references Master (playerID)\r",
+          "foreign key (IDgoalie2) references  Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "Goalies",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID TEXT    not null"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year     INTEGER not null"
+          },
+          {
+            "name": "stint",
+            "type": "INTEGER",
+            "definition": "stint    INTEGER not null"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID     TEXT"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID     TEXT"
+          },
+          {
+            "name": "GP",
+            "type": "TEXT",
+            "definition": "GP       TEXT"
+          },
+          {
+            "name": "Min",
+            "type": "TEXT",
+            "definition": "Min      TEXT"
+          },
+          {
+            "name": "W",
+            "type": "TEXT",
+            "definition": "W        TEXT"
+          },
+          {
+            "name": "L",
+            "type": "TEXT",
+            "definition": "L        TEXT"
+          },
+          {
+            "name": "T/OL",
+            "type": "TEXT",
+            "definition": "\"T/OL\"   TEXT"
+          },
+          {
+            "name": "ENG",
+            "type": "TEXT",
+            "definition": "ENG      TEXT"
+          },
+          {
+            "name": "SHO",
+            "type": "TEXT",
+            "definition": "SHO      TEXT"
+          },
+          {
+            "name": "GA",
+            "type": "TEXT",
+            "definition": "GA       TEXT"
+          },
+          {
+            "name": "SA",
+            "type": "TEXT",
+            "definition": "SA       TEXT"
+          },
+          {
+            "name": "PostGP",
+            "type": "TEXT",
+            "definition": "PostGP   TEXT"
+          },
+          {
+            "name": "PostMin",
+            "type": "TEXT",
+            "definition": "PostMin  TEXT"
+          },
+          {
+            "name": "PostW",
+            "type": "TEXT",
+            "definition": "PostW    TEXT"
+          },
+          {
+            "name": "PostL",
+            "type": "TEXT",
+            "definition": "PostL    TEXT"
+          },
+          {
+            "name": "PostT",
+            "type": "TEXT",
+            "definition": "PostT    TEXT"
+          },
+          {
+            "name": "PostENG",
+            "type": "TEXT",
+            "definition": "PostENG  TEXT"
+          },
+          {
+            "name": "PostSHO",
+            "type": "TEXT",
+            "definition": "PostSHO  TEXT"
+          },
+          {
+            "name": "PostGA",
+            "type": "TEXT",
+            "definition": "PostGA   TEXT"
+          },
+          {
+            "name": "PostSA",
+            "type": "TEXT",
+            "definition": "PostSA   TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Goalies\r\n(\r\n    playerID TEXT    not null,\r\n    year     INTEGER not null,\r\n    stint    INTEGER not null,\r\n    tmID     TEXT,\r\n    lgID     TEXT,\r\n    GP       TEXT,\r\n    Min      TEXT,\r\n    W        TEXT,\r\n    L        TEXT,\r\n    \"T/OL\"   TEXT,\r\n    ENG      TEXT,\r\n    SHO      TEXT,\r\n    GA       TEXT,\r\n    SA       TEXT,\r\n    PostGP   TEXT,\r\n    PostMin  TEXT,\r\n    PostW    TEXT,\r\n    PostL    TEXT,\r\n    PostT    TEXT,\r\n    PostENG  TEXT,\r\n    PostSHO  TEXT,\r\n    PostGA   TEXT,\r\n    PostSA   TEXT,\r\n    primary key (playerID, year, stint),\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade,\r\n    foreign key (playerID) references Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r",
+          "foreign key (playerID) references Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "GoaliesSC",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID TEXT    not null"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year     INTEGER not null"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID     TEXT"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID     TEXT"
+          },
+          {
+            "name": "GP",
+            "type": "INTEGER",
+            "definition": "GP       INTEGER"
+          },
+          {
+            "name": "Min",
+            "type": "INTEGER",
+            "definition": "Min      INTEGER"
+          },
+          {
+            "name": "W",
+            "type": "INTEGER",
+            "definition": "W        INTEGER"
+          },
+          {
+            "name": "L",
+            "type": "INTEGER",
+            "definition": "L        INTEGER"
+          },
+          {
+            "name": "T",
+            "type": "INTEGER",
+            "definition": "T        INTEGER"
+          },
+          {
+            "name": "SHO",
+            "type": "INTEGER",
+            "definition": "SHO      INTEGER"
+          },
+          {
+            "name": "GA",
+            "type": "INTEGER",
+            "definition": "GA       INTEGER"
+          }
+        ],
+        "ddl": "CREATE TABLE GoaliesSC\r\n(\r\n    playerID TEXT    not null,\r\n    year     INTEGER not null,\r\n    tmID     TEXT,\r\n    lgID     TEXT,\r\n    GP       INTEGER,\r\n    Min      INTEGER,\r\n    W        INTEGER,\r\n    L        INTEGER,\r\n    T        INTEGER,\r\n    SHO      INTEGER,\r\n    GA       INTEGER,\r\n    primary key (playerID, year),\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade,\r\n    foreign key (playerID) references Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r",
+          "foreign key (playerID) references Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "GoaliesShootout",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID TEXT"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year     INTEGER"
+          },
+          {
+            "name": "stint",
+            "type": "INTEGER",
+            "definition": "stint    INTEGER"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID     TEXT"
+          },
+          {
+            "name": "W",
+            "type": "INTEGER",
+            "definition": "W        INTEGER"
+          },
+          {
+            "name": "L",
+            "type": "INTEGER",
+            "definition": "L        INTEGER"
+          },
+          {
+            "name": "SA",
+            "type": "INTEGER",
+            "definition": "SA       INTEGER"
+          },
+          {
+            "name": "GA",
+            "type": "INTEGER",
+            "definition": "GA       INTEGER"
+          }
+        ],
+        "ddl": "CREATE TABLE GoaliesShootout\r\n(\r\n    playerID TEXT,\r\n    year     INTEGER,\r\n    stint    INTEGER,\r\n    tmID     TEXT,\r\n    W        INTEGER,\r\n    L        INTEGER,\r\n    SA       INTEGER,\r\n    GA       INTEGER,\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade,\r\n    foreign key (playerID)  references Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r",
+          "foreign key (playerID)  references Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "Scoring",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID  TEXT"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year      INTEGER"
+          },
+          {
+            "name": "stint",
+            "type": "INTEGER",
+            "definition": "stint     INTEGER"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID      TEXT"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID      TEXT"
+          },
+          {
+            "name": "pos",
+            "type": "TEXT",
+            "definition": "pos       TEXT"
+          },
+          {
+            "name": "GP",
+            "type": "INTEGER",
+            "definition": "GP        INTEGER"
+          },
+          {
+            "name": "G",
+            "type": "INTEGER",
+            "definition": "G         INTEGER"
+          },
+          {
+            "name": "A",
+            "type": "INTEGER",
+            "definition": "A         INTEGER"
+          },
+          {
+            "name": "Pts",
+            "type": "INTEGER",
+            "definition": "Pts       INTEGER"
+          },
+          {
+            "name": "PIM",
+            "type": "INTEGER",
+            "definition": "PIM       INTEGER"
+          },
+          {
+            "name": "+/-",
+            "type": "TEXT",
+            "definition": "\"+/-\"     TEXT"
+          },
+          {
+            "name": "PPG",
+            "type": "TEXT",
+            "definition": "PPG       TEXT"
+          },
+          {
+            "name": "PPA",
+            "type": "TEXT",
+            "definition": "PPA       TEXT"
+          },
+          {
+            "name": "SHG",
+            "type": "TEXT",
+            "definition": "SHG       TEXT"
+          },
+          {
+            "name": "SHA",
+            "type": "TEXT",
+            "definition": "SHA       TEXT"
+          },
+          {
+            "name": "GWG",
+            "type": "TEXT",
+            "definition": "GWG       TEXT"
+          },
+          {
+            "name": "GTG",
+            "type": "TEXT",
+            "definition": "GTG       TEXT"
+          },
+          {
+            "name": "SOG",
+            "type": "TEXT",
+            "definition": "SOG       TEXT"
+          },
+          {
+            "name": "PostGP",
+            "type": "TEXT",
+            "definition": "PostGP    TEXT"
+          },
+          {
+            "name": "PostG",
+            "type": "TEXT",
+            "definition": "PostG     TEXT"
+          },
+          {
+            "name": "PostA",
+            "type": "TEXT",
+            "definition": "PostA     TEXT"
+          },
+          {
+            "name": "PostPts",
+            "type": "TEXT",
+            "definition": "PostPts   TEXT"
+          },
+          {
+            "name": "PostPIM",
+            "type": "TEXT",
+            "definition": "PostPIM   TEXT"
+          },
+          {
+            "name": "Post+/-",
+            "type": "TEXT",
+            "definition": "\"Post+/-\" TEXT"
+          },
+          {
+            "name": "PostPPG",
+            "type": "TEXT",
+            "definition": "PostPPG   TEXT"
+          },
+          {
+            "name": "PostPPA",
+            "type": "TEXT",
+            "definition": "PostPPA   TEXT"
+          },
+          {
+            "name": "PostSHG",
+            "type": "TEXT",
+            "definition": "PostSHG   TEXT"
+          },
+          {
+            "name": "PostSHA",
+            "type": "TEXT",
+            "definition": "PostSHA   TEXT"
+          },
+          {
+            "name": "PostGWG",
+            "type": "TEXT",
+            "definition": "PostGWG  TEXT"
+          },
+          {
+            "name": "PostSOG",
+            "type": "TEXT",
+            "definition": "PostSOG   TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Scoring\r\n(\r\n    playerID  TEXT,\r\n    year      INTEGER,\r\n    stint     INTEGER,\r\n    tmID      TEXT,\r\n    lgID      TEXT,\r\n    pos       TEXT,\r\n    GP        INTEGER,\r\n    G         INTEGER,\r\n    A         INTEGER,\r\n    Pts       INTEGER,\r\n    PIM       INTEGER,\r\n    \"+/-\"     TEXT,\r\n    PPG       TEXT,\r\n    PPA       TEXT,\r\n    SHG       TEXT,\r\n    SHA       TEXT,\r\n    GWG       TEXT,\r\n    GTG       TEXT,\r\n    SOG       TEXT,\r\n    PostGP    TEXT,\r\n    PostG     TEXT,\r\n    PostA     TEXT,\r\n    PostPts   TEXT,\r\n    PostPIM   TEXT,\r\n    \"Post+/-\" TEXT,\r\n    PostPPG   TEXT,\r\n    PostPPA   TEXT,\r\n    PostSHG   TEXT,\r\n    PostSHA   TEXT,\r\n    PostGWG  TEXT,\r\n    PostSOG   TEXT,\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade,\r\n    foreign key (playerID) references Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r",
+          "foreign key (playerID) references Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "ScoringSC",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID TEXT"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year     INTEGER"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID     TEXT"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID     TEXT"
+          },
+          {
+            "name": "pos",
+            "type": "TEXT",
+            "definition": "pos      TEXT"
+          },
+          {
+            "name": "GP",
+            "type": "INTEGER",
+            "definition": "GP       INTEGER"
+          },
+          {
+            "name": "G",
+            "type": "INTEGER",
+            "definition": "G        INTEGER"
+          },
+          {
+            "name": "A",
+            "type": "INTEGER",
+            "definition": "A        INTEGER"
+          },
+          {
+            "name": "Pts",
+            "type": "INTEGER",
+            "definition": "Pts      INTEGER"
+          },
+          {
+            "name": "PIM",
+            "type": "INTEGER",
+            "definition": "PIM      INTEGER"
+          }
+        ],
+        "ddl": "CREATE TABLE ScoringSC\r\n(\r\n    playerID TEXT,\r\n    year     INTEGER,\r\n    tmID     TEXT,\r\n    lgID     TEXT,\r\n    pos      TEXT,\r\n    GP       INTEGER,\r\n    G        INTEGER,\r\n    A        INTEGER,\r\n    Pts      INTEGER,\r\n    PIM      INTEGER,\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade,\r\n    foreign key (playerID) references Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r",
+          "foreign key (playerID) references Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "ScoringShootout",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID TEXT"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year     INTEGER"
+          },
+          {
+            "name": "stint",
+            "type": "INTEGER",
+            "definition": "stint    INTEGER"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID     TEXT"
+          },
+          {
+            "name": "S",
+            "type": "INTEGER",
+            "definition": "S        INTEGER"
+          },
+          {
+            "name": "G",
+            "type": "INTEGER",
+            "definition": "G        INTEGER"
+          },
+          {
+            "name": "GDG",
+            "type": "INTEGER",
+            "definition": "GDG      INTEGER"
+          }
+        ],
+        "ddl": "CREATE TABLE ScoringShootout\r\n(\r\n    playerID TEXT,\r\n    year     INTEGER,\r\n    stint    INTEGER,\r\n    tmID     TEXT,\r\n    S        INTEGER,\r\n    G        INTEGER,\r\n    GDG      INTEGER,\r\n     foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade,\r\n    foreign key (playerID) references Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r",
+          "foreign key (playerID) references Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "ScoringSup",
+        "columns": [
+          {
+            "name": "playerID",
+            "type": "TEXT",
+            "definition": "playerID TEXT"
+          },
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year     INTEGER"
+          },
+          {
+            "name": "PPA",
+            "type": "TEXT",
+            "definition": "PPA      TEXT"
+          },
+          {
+            "name": "SHA",
+            "type": "TEXT",
+            "definition": "SHA      TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE ScoringSup\r\n(\r\n    playerID TEXT,\r\n    year     INTEGER,\r\n    PPA      TEXT,\r\n    SHA      TEXT,\r\n     foreign key (playerID) references Master (playerID)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (playerID) references Master (playerID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "SeriesPost",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year        INTEGER"
+          },
+          {
+            "name": "round",
+            "type": "TEXT",
+            "definition": "round       TEXT"
+          },
+          {
+            "name": "series",
+            "type": "TEXT",
+            "definition": "series      TEXT"
+          },
+          {
+            "name": "tmIDWinner",
+            "type": "TEXT",
+            "definition": "tmIDWinner  TEXT"
+          },
+          {
+            "name": "lgIDWinner",
+            "type": "TEXT",
+            "definition": "lgIDWinner  TEXT"
+          },
+          {
+            "name": "tmIDLoser",
+            "type": "TEXT",
+            "definition": "tmIDLoser   TEXT"
+          },
+          {
+            "name": "lgIDLoser",
+            "type": "TEXT",
+            "definition": "lgIDLoser   TEXT"
+          },
+          {
+            "name": "W",
+            "type": "INTEGER",
+            "definition": "W           INTEGER"
+          },
+          {
+            "name": "L",
+            "type": "INTEGER",
+            "definition": "L           INTEGER"
+          },
+          {
+            "name": "T",
+            "type": "INTEGER",
+            "definition": "T           INTEGER"
+          },
+          {
+            "name": "GoalsWinner",
+            "type": "INTEGER",
+            "definition": "GoalsWinner INTEGER"
+          },
+          {
+            "name": "GoalsLoser",
+            "type": "INTEGER",
+            "definition": "GoalsLoser  INTEGER"
+          },
+          {
+            "name": "note",
+            "type": "TEXT",
+            "definition": "note        TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE SeriesPost\r\n(\r\n    year        INTEGER,\r\n    round       TEXT,\r\n    series      TEXT,\r\n    tmIDWinner  TEXT,\r\n    lgIDWinner  TEXT,\r\n    tmIDLoser   TEXT,\r\n    lgIDLoser   TEXT,\r\n    W           INTEGER,\r\n    L           INTEGER,\r\n    T           INTEGER,\r\n    GoalsWinner INTEGER,\r\n    GoalsLoser  INTEGER,\r\n    note        TEXT,\r\n    foreign key (year, tmIDWinner) references Teams (year, tmID)\r\n        on update cascade on delete cascade,\r\n    foreign key (year, tmIDLoser) references Teams (year, tmID)\r\n        on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmIDWinner) references Teams (year, tmID)\r",
+          "foreign key (year, tmIDLoser) references Teams (year, tmID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "TeamSplits",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year  INTEGER          not null"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID  TEXT"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID  TEXT not null"
+          },
+          {
+            "name": "hW",
+            "type": "INTEGER",
+            "definition": "hW    INTEGER"
+          },
+          {
+            "name": "hL",
+            "type": "INTEGER",
+            "definition": "hL    INTEGER"
+          },
+          {
+            "name": "hT",
+            "type": "INTEGER",
+            "definition": "hT    INTEGER"
+          },
+          {
+            "name": "hOTL",
+            "type": "TEXT",
+            "definition": "hOTL  TEXT"
+          },
+          {
+            "name": "rW",
+            "type": "INTEGER",
+            "definition": "rW    INTEGER"
+          },
+          {
+            "name": "rL",
+            "type": "INTEGER",
+            "definition": "rL    INTEGER"
+          },
+          {
+            "name": "rT",
+            "type": "INTEGER",
+            "definition": "rT    INTEGER"
+          },
+          {
+            "name": "rOTL",
+            "type": "TEXT",
+            "definition": "rOTL  TEXT"
+          },
+          {
+            "name": "SepW",
+            "type": "TEXT",
+            "definition": "SepW  TEXT"
+          },
+          {
+            "name": "SepL",
+            "type": "TEXT",
+            "definition": "SepL  TEXT"
+          },
+          {
+            "name": "SepT",
+            "type": "TEXT",
+            "definition": "SepT  TEXT"
+          },
+          {
+            "name": "SepOL",
+            "type": "TEXT",
+            "definition": "SepOL TEXT"
+          },
+          {
+            "name": "OctW",
+            "type": "TEXT",
+            "definition": "OctW TEXT"
+          },
+          {
+            "name": "OctL",
+            "type": "TEXT",
+            "definition": "OctL  TEXT"
+          },
+          {
+            "name": "OctT",
+            "type": "TEXT",
+            "definition": "OctT  TEXT"
+          },
+          {
+            "name": "OctOL",
+            "type": "TEXT",
+            "definition": "OctOL TEXT"
+          },
+          {
+            "name": "NovW",
+            "type": "TEXT",
+            "definition": "NovW  TEXT"
+          },
+          {
+            "name": "NovL",
+            "type": "TEXT",
+            "definition": "NovL  TEXT"
+          },
+          {
+            "name": "NovT",
+            "type": "TEXT",
+            "definition": "NovT  TEXT"
+          },
+          {
+            "name": "NovOL",
+            "type": "TEXT",
+            "definition": "NovOL TEXT"
+          },
+          {
+            "name": "DecW",
+            "type": "TEXT",
+            "definition": "DecW  TEXT"
+          },
+          {
+            "name": "DecL",
+            "type": "TEXT",
+            "definition": "DecL  TEXT"
+          },
+          {
+            "name": "DecT",
+            "type": "TEXT",
+            "definition": "DecT  TEXT"
+          },
+          {
+            "name": "DecOL",
+            "type": "TEXT",
+            "definition": "DecOL TEXT"
+          },
+          {
+            "name": "JanW",
+            "type": "INTEGER",
+            "definition": "JanW  INTEGER"
+          },
+          {
+            "name": "JanL",
+            "type": "INTEGER",
+            "definition": "JanL  INTEGER"
+          },
+          {
+            "name": "JanT",
+            "type": "INTEGER",
+            "definition": "JanT  INTEGER"
+          },
+          {
+            "name": "JanOL",
+            "type": "TEXT",
+            "definition": "JanOL TEXT"
+          },
+          {
+            "name": "FebW",
+            "type": "INTEGER",
+            "definition": "FebW  INTEGER"
+          },
+          {
+            "name": "FebL",
+            "type": "INTEGER",
+            "definition": "FebL  INTEGER"
+          },
+          {
+            "name": "FebT",
+            "type": "INTEGER",
+            "definition": "FebT  INTEGER"
+          },
+          {
+            "name": "FebOL",
+            "type": "TEXT",
+            "definition": "FebOL TEXT"
+          },
+          {
+            "name": "MarW",
+            "type": "TEXT",
+            "definition": "MarW  TEXT"
+          },
+          {
+            "name": "MarL",
+            "type": "TEXT",
+            "definition": "MarL  TEXT"
+          },
+          {
+            "name": "MarT",
+            "type": "TEXT",
+            "definition": "MarT  TEXT"
+          },
+          {
+            "name": "MarOL",
+            "type": "TEXT",
+            "definition": "MarOL TEXT"
+          },
+          {
+            "name": "AprW",
+            "type": "TEXT",
+            "definition": "AprW  TEXT"
+          },
+          {
+            "name": "AprL",
+            "type": "TEXT",
+            "definition": "AprL  TEXT"
+          },
+          {
+            "name": "AprT",
+            "type": "TEXT",
+            "definition": "AprT  TEXT"
+          },
+          {
+            "name": "AprOL",
+            "type": "TEXT",
+            "definition": "AprOL TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE TeamSplits\r\n(\r\n    year  INTEGER          not null,\r\n    lgID  TEXT,\r\n    tmID  TEXT not null,\r\n    hW    INTEGER,\r\n    hL    INTEGER,\r\n    hT    INTEGER,\r\n    hOTL  TEXT,\r\n    rW    INTEGER,\r\n    rL    INTEGER,\r\n    rT    INTEGER,\r\n    rOTL  TEXT,\r\n    SepW  TEXT,\r\n    SepL  TEXT,\r\n    SepT  TEXT,\r\n    SepOL TEXT,\r\n    OctW TEXT,\r\n    OctL  TEXT,\r\n    OctT  TEXT,\r\n    OctOL TEXT,\r\n    NovW  TEXT,\r\n    NovL  TEXT,\r\n    NovT  TEXT,\r\n    NovOL TEXT,\r\n    DecW  TEXT,\r\n    DecL  TEXT,\r\n    DecT  TEXT,\r\n    DecOL TEXT,\r\n    JanW  INTEGER,\r\n    JanL  INTEGER,\r\n    JanT  INTEGER,\r\n    JanOL TEXT,\r\n    FebW  INTEGER,\r\n    FebL  INTEGER,\r\n    FebT  INTEGER,\r\n    FebOL TEXT,\r\n    MarW  TEXT,\r\n    MarL  TEXT,\r\n    MarT  TEXT,\r\n    MarOL TEXT,\r\n    AprW  TEXT,\r\n    AprL  TEXT,\r\n    AprT  TEXT,\r\n    AprOL TEXT,\r\n    primary key (year, tmID),\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "TeamVsTeam",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year  INTEGER          not null"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID  TEXT"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID  TEXT not null"
+          },
+          {
+            "name": "oppID",
+            "type": "TEXT",
+            "definition": "oppID TEXT not null"
+          },
+          {
+            "name": "W",
+            "type": "INTEGER",
+            "definition": "W     INTEGER"
+          },
+          {
+            "name": "L",
+            "type": "INTEGER",
+            "definition": "L     INTEGER"
+          },
+          {
+            "name": "T",
+            "type": "INTEGER",
+            "definition": "T     INTEGER"
+          },
+          {
+            "name": "OTL",
+            "type": "TEXT",
+            "definition": "OTL   TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE TeamVsTeam\r\n(\r\n    year  INTEGER          not null,\r\n    lgID  TEXT,\r\n    tmID  TEXT not null,\r\n    oppID TEXT not null,\r\n    W     INTEGER,\r\n    L     INTEGER,\r\n    T     INTEGER,\r\n    OTL   TEXT,\r\n    primary key (year, tmID, oppID),\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade,\r\n    foreign key (oppID, year) references Teams (tmID, year)\r\n        on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r",
+          "foreign key (oppID, year) references Teams (tmID, year)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "TeamsHalf",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year INTEGER          not null"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID TEXT"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID TEXT not null"
+          },
+          {
+            "name": "half",
+            "type": "INTEGER",
+            "definition": "half INTEGER          not null"
+          },
+          {
+            "name": "rank",
+            "type": "INTEGER",
+            "definition": "rank INTEGER"
+          },
+          {
+            "name": "G",
+            "type": "INTEGER",
+            "definition": "G    INTEGER"
+          },
+          {
+            "name": "W",
+            "type": "INTEGER",
+            "definition": "W    INTEGER"
+          },
+          {
+            "name": "L",
+            "type": "INTEGER",
+            "definition": "L    INTEGER"
+          },
+          {
+            "name": "T",
+            "type": "INTEGER",
+            "definition": "T    INTEGER"
+          },
+          {
+            "name": "GF",
+            "type": "INTEGER",
+            "definition": "GF   INTEGER"
+          },
+          {
+            "name": "GA",
+            "type": "INTEGER",
+            "definition": "GA   INTEGER"
+          }
+        ],
+        "ddl": "CREATE TABLE TeamsHalf\r\n(\r\n    year INTEGER          not null,\r\n    lgID TEXT,\r\n    tmID TEXT not null,\r\n    half INTEGER          not null,\r\n    rank INTEGER,\r\n    G    INTEGER,\r\n    W    INTEGER,\r\n    L    INTEGER,\r\n    T    INTEGER,\r\n    GF   INTEGER,\r\n    GA   INTEGER,\r\n    primary key (year, tmID, half),\r\n    foreign key (tmID, year) references Teams (tmID, year)\r\n        on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (tmID, year) references Teams (tmID, year)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "TeamsPost",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year       INTEGER          not null"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID       TEXT"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID       TEXT not null"
+          },
+          {
+            "name": "G",
+            "type": "INTEGER",
+            "definition": "G          INTEGER"
+          },
+          {
+            "name": "W",
+            "type": "INTEGER",
+            "definition": "W          INTEGER"
+          },
+          {
+            "name": "L",
+            "type": "INTEGER",
+            "definition": "L          INTEGER"
+          },
+          {
+            "name": "T",
+            "type": "INTEGER",
+            "definition": "T          INTEGER"
+          },
+          {
+            "name": "GF",
+            "type": "INTEGER",
+            "definition": "GF         INTEGER"
+          },
+          {
+            "name": "GA",
+            "type": "INTEGER",
+            "definition": "GA         INTEGER"
+          },
+          {
+            "name": "PIM",
+            "type": "TEXT",
+            "definition": "PIM        TEXT"
+          },
+          {
+            "name": "BenchMinor",
+            "type": "TEXT",
+            "definition": "BenchMinor TEXT"
+          },
+          {
+            "name": "PPG",
+            "type": "TEXT",
+            "definition": "PPG        TEXT"
+          },
+          {
+            "name": "PPC",
+            "type": "TEXT",
+            "definition": "PPC        TEXT"
+          },
+          {
+            "name": "SHA",
+            "type": "TEXT",
+            "definition": "SHA        TEXT"
+          },
+          {
+            "name": "PKG",
+            "type": "TEXT",
+            "definition": "PKG        TEXT"
+          },
+          {
+            "name": "PKC",
+            "type": "TEXT",
+            "definition": "PKC        TEXT"
+          },
+          {
+            "name": "SHF",
+            "type": "TEXT",
+            "definition": "SHF        TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE TeamsPost\r\n(\r\n    year       INTEGER          not null,\r\n    lgID       TEXT,\r\n    tmID       TEXT not null,\r\n    G          INTEGER,\r\n    W          INTEGER,\r\n    L          INTEGER,\r\n    T          INTEGER,\r\n    GF         INTEGER,\r\n    GA         INTEGER,\r\n    PIM        TEXT,\r\n    BenchMinor TEXT,\r\n    PPG        TEXT,\r\n    PPC        TEXT,\r\n    SHA        TEXT,\r\n    PKG        TEXT,\r\n    PKC        TEXT,\r\n    SHF        TEXT,\r\n    primary key (year, tmID),\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "TeamsSC",
+        "columns": [
+          {
+            "name": "year",
+            "type": "INTEGER",
+            "definition": "year INTEGER          not null"
+          },
+          {
+            "name": "lgID",
+            "type": "TEXT",
+            "definition": "lgID TEXT"
+          },
+          {
+            "name": "tmID",
+            "type": "TEXT",
+            "definition": "tmID TEXT not null"
+          },
+          {
+            "name": "G",
+            "type": "INTEGER",
+            "definition": "G    INTEGER"
+          },
+          {
+            "name": "W",
+            "type": "INTEGER",
+            "definition": "W    INTEGER"
+          },
+          {
+            "name": "L",
+            "type": "INTEGER",
+            "definition": "L    INTEGER"
+          },
+          {
+            "name": "T",
+            "type": "INTEGER",
+            "definition": "T    INTEGER"
+          },
+          {
+            "name": "GF",
+            "type": "INTEGER",
+            "definition": "GF   INTEGER"
+          },
+          {
+            "name": "GA",
+            "type": "INTEGER",
+            "definition": "GA   INTEGER"
+          },
+          {
+            "name": "PIM",
+            "type": "TEXT",
+            "definition": "PIM  TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE TeamsSC\r\n(\r\n    year INTEGER          not null,\r\n    lgID TEXT,\r\n    tmID TEXT not null,\r\n    G    INTEGER,\r\n    W    INTEGER,\r\n    L    INTEGER,\r\n    T    INTEGER,\r\n    GF   INTEGER,\r\n    GA   INTEGER,\r\n    PIM  TEXT,\r\n    primary key (year, tmID),\r\n    foreign key (year, tmID) references Teams (year, tmID)\r\n        on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (year, tmID) references Teams (year, tmID)\r"
+        ]
+      },
+      {
+        "source": "SQLite",
+        "database": "hockey",
+        "table": "abbrev",
+        "columns": [
+          {
+            "name": "Type",
+            "type": "TEXT",
+            "definition": "Type     TEXT not null"
+          },
+          {
+            "name": "Code",
+            "type": "TEXT",
+            "definition": "Code     TEXT not null"
+          },
+          {
+            "name": "Fullname",
+            "type": "TEXT",
+            "definition": "Fullname TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE abbrev\r\n(\r\n    Type     TEXT not null,\r\n    Code     TEXT not null,\r\n    Fullname TEXT,\r\n    primary key (Type, Code)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      }
+    ],
+    "knowledge": [
+      {
+        "knowledge_id": 273,
+        "knowledge_text": "在数据库hockey的表Teams中，name字段存储球队全称，如'Boston Bruins'（波士顿棕熊队）、'Montreal Canadiens'（蒙特利尔加拿大人队）、'Buffalo Sabres'（水牛城军刀队）、'Philadelphia Flyers'（费城飞人队）、'Vancouver Canucks'（温哥华加人队）、'New York Rangers'（纽约游骑兵队）、'Tampa Bay Lightning'（坦帕湾闪电队）、'Florida Panthers'（佛罗里达美洲豹队）、'Edmonton Oilers'（埃德蒙顿油人队）、'Los Angeles Kings'（洛杉矶国王队）、'St. Louis Blues'（圣路易斯蓝调队）、'Quebec Bulldogs'（魁北克斗牛犬队）、'Calgary Flames'（卡尔加里火焰队）、'Minnesota North Stars'（明尼苏达北方之星队）、'Haileybury Hockey Club'（海利伯里曲棍球俱乐部）等；Pts表示积分，BenchMinor表示替补席违例罚时，T表示平局场次。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 750,
+        "knowledge_text": "在数据库hockey的表Coaches中，字段year，数据类型为整数（integer），表示教练在哪一年执教该球队。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 252,
+        "knowledge_text": "在数据库hockey的表Master中，birthCountry表示球员出生国籍，'USA'表示美国，'Canada'表示加拿大，'Finland'表示芬兰；非美国籍需使用birthCountry != 'USA'进行筛选。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 856,
+        "knowledge_text": "在数据库hockey的表Scoring中，字段PIM，数据类型为整数（integer），表示受罚时间（分钟）。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 886,
+        "knowledge_text": "在数据库hockey的表ScoringSC中，字段PIM，数据类型为整数（integer），表示受罚时间（分钟）。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 929,
+        "knowledge_text": "在数据库hockey的表Teams中，字段PIM，数据类型为文本（text），表示受罚时间（分钟）。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1000,
+        "knowledge_text": "在数据库hockey的表TeamsPost中，字段PIM，数据类型为文本（text），表示受罚时间（分钟）。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1017,
+        "knowledge_text": "在数据库hockey的表TeamsSC中，字段PIM，数据类型为文本（text），表示受罚时间（分钟）。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 869,
+        "knowledge_text": "在数据库hockey的表Scoring中，字段PostPIM，数据类型为文本（text），表示季后赛受罚时间（分钟）。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 278,
+        "knowledge_text": "在数据库hockey的Scoring表中，year表示赛季年份；G表示进球数，A表示助攻数，SHA表示少打多助攻数，PIM表示罚时（分钟），GWG表示制胜球，SOG表示射正次数，+/-字段表示球员在场上的正负值，PPG表示多打少进球数，PPC表示多打少机会数，SHG表示少打多进球数，PKC表示少防多次数。",
+        "scope": {
+          "databases": [
+            "hockey"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      }
+    ],
+    "dictionary": [],
+    "examples": [
+      {
+        "question_id": 5684,
+        "question": "蒙特利尔加拿大人队在1918年斯坦利杯决赛中有多少罚时？",
+        "db": "SQLite",
+        "query": "SELECT T2.PIM FROM hockey.Teams AS T1 INNER JOIN hockey.TeamsSC AS T2 ON T1.tmID = T2.tmID AND T1.year = T2.year WHERE T1.name = 'Montreal Canadiens' AND T1.year = 1918",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "Teams"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "TeamsSC"
+          }
+        ]
+      },
+      {
+        "question_id": 5689,
+        "question": "蒙特利尔加拿大人队在斯坦利杯决赛中的平均罚时是多少？",
+        "db": "SQLite",
+        "query": "SELECT CAST(SUM(T2.PIM) AS REAL) / COUNT(T2.PIM) FROM hockey.Teams AS T1 INNER JOIN hockey.TeamsSC AS T2 ON T1.tmID = T2.tmID AND T1.year = T2.year WHERE T1.name = 'Montreal Canadiens'",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "Teams"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "TeamsSC"
+          }
+        ]
+      },
+      {
+        "question_id": 5690,
+        "question": "蒙特利尔加拿大人队在斯坦利杯决赛中的平均胜率是多少？",
+        "db": "SQLite",
+        "query": "SELECT SUM(T2.W / T2.G) / SUM(T2.G + T2.W) FROM hockey.Teams AS T1 INNER JOIN hockey.TeamsSC AS T2 ON T1.tmID = T2.tmID AND T1.year = T2.year WHERE T1.name = 'Montreal Canadiens'",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "Teams"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "TeamsSC"
+          }
+        ]
+      },
+      {
+        "question_id": 5685,
+        "question": "在蒙特利尔加拿大人队斯坦利杯决赛罚时为24分钟的那一年，该队总共赢了多少场比赛？",
+        "db": "SQLite",
+        "query": "SELECT T2.W FROM hockey.Teams AS T1 INNER JOIN hockey.TeamsSC AS T2 ON T1.tmID = T2.tmID AND T1.year = T2.year WHERE T1.name = 'Montreal Canadiens' AND T2.PIM = 24",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "Teams"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "TeamsSC"
+          }
+        ]
+      },
+      {
+        "question_id": 5675,
+        "question": "请给出蒙特利尔加拿大人队最高教练的身高。",
+        "db": "SQLite",
+        "query": "SELECT T3.height FROM hockey.Coaches AS T1 INNER JOIN hockey.Teams AS T2 ON T1.year = T2.year AND T1.tmID = T2.tmID INNER JOIN hockey.Master AS T3 ON T1.coachID = T3.coachID WHERE T2.name = 'Montreal Canadiens' AND T3.coachID IS NOT NULL ORDER BY T3.height DESC LIMIT 1",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "Teams"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "Coaches"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "hockey",
+            "table": "Master"
+          }
+        ]
+      }
+    ],
+    "corrected_examples": [],
+    "question_correction": null,
+    "schema_adjudications": [],
+    "query_helpers": [],
+    "ambiguous_examples": []
+  },
+  "attempts": [
+    {
+      "content": "{\"db\":\"SQLite\",\"query\":\"SELECT year FROM hockey.Teams WHERE name = 'Montreal Canadiens' AND PIM = '49'\"}",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 14688,
+        "total_tokens": 14719,
+        "completion_tokens": 31,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    }
+  ],
+  "prediction": {
+    "db": "SQLite",
+    "query": "SELECT year FROM hockey.Teams WHERE name = 'Montreal Canadiens' AND PIM = '49'"
+  },
+  "model_prediction": {
+    "db": "SQLite",
+    "query": "SELECT year FROM hockey.Teams WHERE name = 'Montreal Canadiens' AND PIM = '49'"
+  },
+  "automatic_transforms": [],
+  "errors": [],
+  "seconds": 0.04
+}

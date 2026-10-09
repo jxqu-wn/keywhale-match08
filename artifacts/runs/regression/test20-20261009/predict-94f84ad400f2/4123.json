@@ -1,0 +1,836 @@
+{
+  "question_id": 4123,
+  "question": "汽车类商家占所有Yelp商家的百分比是多少？",
+  "context": {
+    "question": "汽车类商家占所有Yelp商家的百分比是多少？",
+    "requirements": [
+      {
+        "rule": "entity_grain",
+        "instruction": "明确实体主键：商家business_id、球员playerID、游戏game_id、角色(character_id,work_id)。一对多关联不得重复计实体，属性值相同的不同实体不能被AVG(DISTINCT 属性)合并。"
+      }
+    ],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "public_review_platform"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "strong",
+      "reason": "领域词：Yelp|精英用户|商家.*营业|商家.*评论|有趣投票|营业时间",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema": [
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Attributes",
+        "columns": [
+          {
+            "name": "attribute_id",
+            "type": "INTEGER",
+            "definition": "attribute_id   INTEGER\r\n        constraint Attributes_pk\r\n            primary key"
+          },
+          {
+            "name": "attribute_name",
+            "type": "TEXT",
+            "definition": "attribute_name TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Attributes\r\n(\r\n    attribute_id   INTEGER\r\n        constraint Attributes_pk\r\n            primary key,\r\n    attribute_name TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Categories",
+        "columns": [
+          {
+            "name": "category_id",
+            "type": "INTEGER",
+            "definition": "category_id   INTEGER\r\n        constraint Categories_pk\r\n            primary key"
+          },
+          {
+            "name": "category_name",
+            "type": "TEXT",
+            "definition": "category_name TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Categories\r\n(\r\n    category_id   INTEGER\r\n        constraint Categories_pk\r\n            primary key,\r\n    category_name TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Compliments",
+        "columns": [
+          {
+            "name": "compliment_id",
+            "type": "INTEGER",
+            "definition": "compliment_id   INTEGER\r\n        constraint Compliments_pk\r\n            primary key"
+          },
+          {
+            "name": "compliment_type",
+            "type": "TEXT",
+            "definition": "compliment_type TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Compliments\r\n(\r\n    compliment_id   INTEGER\r\n        constraint Compliments_pk\r\n            primary key,\r\n    compliment_type TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Days",
+        "columns": [
+          {
+            "name": "day_id",
+            "type": "INTEGER",
+            "definition": "day_id      INTEGER\r\n        constraint Days_pk\r\n            primary key"
+          },
+          {
+            "name": "day_of_week",
+            "type": "TEXT",
+            "definition": "day_of_week TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE Days\r\n(\r\n    day_id      INTEGER\r\n        constraint Days_pk\r\n            primary key,\r\n    day_of_week TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Years",
+        "columns": [
+          {
+            "name": "year_id",
+            "type": "INTEGER",
+            "definition": "year_id     INTEGER\r\n        constraint Years_pk\r\n            primary key"
+          },
+          {
+            "name": "actual_year",
+            "type": "INTEGER",
+            "definition": "actual_year INTEGER"
+          }
+        ],
+        "ddl": "CREATE TABLE Years\r\n(\r\n    year_id     INTEGER\r\n        constraint Years_pk\r\n            primary key,\r\n    actual_year INTEGER\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Business_Attributes",
+        "columns": [
+          {
+            "name": "attribute_id",
+            "type": "INTEGER",
+            "definition": "attribute_id    INTEGER\r\n        constraint Business_Attributes_Attributes_attribute_id_fk\r\n            references Attributes"
+          },
+          {
+            "name": "business_id",
+            "type": "INTEGER",
+            "definition": "business_id     INTEGER\r\n        constraint Business_Attributes_Business_business_id_fk\r\n            references Business"
+          },
+          {
+            "name": "attribute_value",
+            "type": "TEXT",
+            "definition": "attribute_value TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Business_Attributes\"\r\n(\r\n    attribute_id    INTEGER\r\n        constraint Business_Attributes_Attributes_attribute_id_fk\r\n            references Attributes,\r\n    business_id     INTEGER\r\n        constraint Business_Attributes_Business_business_id_fk\r\n            references Business,\r\n    attribute_value TEXT,\r\n    constraint Business_Attributes_pk\r\n        primary key (attribute_id, business_id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Business_Categories",
+        "columns": [
+          {
+            "name": "business_id",
+            "type": "INTEGER",
+            "definition": "business_id INTEGER\r\n        constraint Business_Categories_Business_business_id_fk\r\n            references Business"
+          },
+          {
+            "name": "category_id",
+            "type": "INTEGER",
+            "definition": "category_id INTEGER\r\n        constraint Business_Categories_Categories_category_id_fk\r\n            references Categories"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Business_Categories\"\r\n(\r\n    business_id INTEGER\r\n        constraint Business_Categories_Business_business_id_fk\r\n            references Business,\r\n    category_id INTEGER\r\n        constraint Business_Categories_Categories_category_id_fk\r\n            references Categories,\r\n    constraint Business_Categories_pk\r\n        primary key (business_id, category_id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Business_Hours",
+        "columns": [
+          {
+            "name": "business_id",
+            "type": "INTEGER",
+            "definition": "business_id  INTEGER\r\n        constraint Business_Hours_Business_business_id_fk\r\n            references Business"
+          },
+          {
+            "name": "day_id",
+            "type": "INTEGER",
+            "definition": "day_id       INTEGER\r\n        constraint Business_Hours_Days_day_id_fk\r\n            references Days"
+          },
+          {
+            "name": "opening_time",
+            "type": "TEXT",
+            "definition": "opening_time TEXT"
+          },
+          {
+            "name": "closing_time",
+            "type": "TEXT",
+            "definition": "closing_time TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Business_Hours\"\r\n(\r\n    business_id  INTEGER\r\n        constraint Business_Hours_Business_business_id_fk\r\n            references Business,\r\n    day_id       INTEGER\r\n        constraint Business_Hours_Days_day_id_fk\r\n            references Days,\r\n    opening_time TEXT,\r\n    closing_time TEXT,\r\n    constraint Business_Hours_pk\r\n        primary key (business_id, day_id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Checkins",
+        "columns": [
+          {
+            "name": "business_id",
+            "type": "INTEGER",
+            "definition": "business_id   INTEGER\r\n        constraint Checkins_Business_business_id_fk\r\n            references Business"
+          },
+          {
+            "name": "day_id",
+            "type": "INTEGER",
+            "definition": "day_id        INTEGER\r\n        constraint Checkins_Days_day_id_fk\r\n            references Days"
+          },
+          {
+            "name": "label_time_0",
+            "type": "TEXT",
+            "definition": "label_time_0  TEXT"
+          },
+          {
+            "name": "label_time_1",
+            "type": "TEXT",
+            "definition": "label_time_1  TEXT"
+          },
+          {
+            "name": "label_time_2",
+            "type": "TEXT",
+            "definition": "label_time_2  TEXT"
+          },
+          {
+            "name": "label_time_3",
+            "type": "TEXT",
+            "definition": "label_time_3  TEXT"
+          },
+          {
+            "name": "label_time_4",
+            "type": "TEXT",
+            "definition": "label_time_4  TEXT"
+          },
+          {
+            "name": "label_time_5",
+            "type": "TEXT",
+            "definition": "label_time_5  TEXT"
+          },
+          {
+            "name": "label_time_6",
+            "type": "TEXT",
+            "definition": "label_time_6  TEXT"
+          },
+          {
+            "name": "label_time_7",
+            "type": "TEXT",
+            "definition": "label_time_7  TEXT"
+          },
+          {
+            "name": "label_time_8",
+            "type": "TEXT",
+            "definition": "label_time_8  TEXT"
+          },
+          {
+            "name": "label_time_9",
+            "type": "TEXT",
+            "definition": "label_time_9  TEXT"
+          },
+          {
+            "name": "label_time_10",
+            "type": "TEXT",
+            "definition": "label_time_10 TEXT"
+          },
+          {
+            "name": "label_time_11",
+            "type": "TEXT",
+            "definition": "label_time_11 TEXT"
+          },
+          {
+            "name": "label_time_12",
+            "type": "TEXT",
+            "definition": "label_time_12 TEXT"
+          },
+          {
+            "name": "label_time_13",
+            "type": "TEXT",
+            "definition": "label_time_13 TEXT"
+          },
+          {
+            "name": "label_time_14",
+            "type": "TEXT",
+            "definition": "label_time_14 TEXT"
+          },
+          {
+            "name": "label_time_15",
+            "type": "TEXT",
+            "definition": "label_time_15 TEXT"
+          },
+          {
+            "name": "label_time_16",
+            "type": "TEXT",
+            "definition": "label_time_16 TEXT"
+          },
+          {
+            "name": "label_time_17",
+            "type": "TEXT",
+            "definition": "label_time_17 TEXT"
+          },
+          {
+            "name": "label_time_18",
+            "type": "TEXT",
+            "definition": "label_time_18 TEXT"
+          },
+          {
+            "name": "label_time_19",
+            "type": "TEXT",
+            "definition": "label_time_19 TEXT"
+          },
+          {
+            "name": "label_time_20",
+            "type": "TEXT",
+            "definition": "label_time_20 TEXT"
+          },
+          {
+            "name": "label_time_21",
+            "type": "TEXT",
+            "definition": "label_time_21 TEXT"
+          },
+          {
+            "name": "label_time_22",
+            "type": "TEXT",
+            "definition": "label_time_22 TEXT"
+          },
+          {
+            "name": "label_time_23",
+            "type": "TEXT",
+            "definition": "label_time_23 TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Checkins\"\r\n(\r\n    business_id   INTEGER\r\n        constraint Checkins_Business_business_id_fk\r\n            references Business,\r\n    day_id        INTEGER\r\n        constraint Checkins_Days_day_id_fk\r\n            references Days,\r\n    label_time_0  TEXT,\r\n    label_time_1  TEXT,\r\n    label_time_2  TEXT,\r\n    label_time_3  TEXT,\r\n    label_time_4  TEXT,\r\n    label_time_5  TEXT,\r\n    label_time_6  TEXT,\r\n    label_time_7  TEXT,\r\n    label_time_8  TEXT,\r\n    label_time_9  TEXT,\r\n    label_time_10 TEXT,\r\n    label_time_11 TEXT,\r\n    label_time_12 TEXT,\r\n    label_time_13 TEXT,\r\n    label_time_14 TEXT,\r\n    label_time_15 TEXT,\r\n    label_time_16 TEXT,\r\n    label_time_17 TEXT,\r\n    label_time_18 TEXT,\r\n    label_time_19 TEXT,\r\n    label_time_20 TEXT,\r\n    label_time_21 TEXT,\r\n    label_time_22 TEXT,\r\n    label_time_23 TEXT,\r\n    constraint Checkins_pk\r\n        primary key (business_id, day_id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Elite",
+        "columns": [
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "definition": "user_id INTEGER\r\n        constraint Elite_Users_user_id_fk\r\n            references Users"
+          },
+          {
+            "name": "year_id",
+            "type": "INTEGER",
+            "definition": "year_id INTEGER\r\n        constraint Elite_Years_year_id_fk\r\n            references Years"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Elite\"\r\n(\r\n    user_id INTEGER\r\n        constraint Elite_Users_user_id_fk\r\n            references Users,\r\n    year_id INTEGER\r\n        constraint Elite_Years_year_id_fk\r\n            references Years,\r\n    constraint Elite_pk\r\n        primary key (user_id, year_id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Reviews",
+        "columns": [
+          {
+            "name": "business_id",
+            "type": "INTEGER",
+            "definition": "business_id         INTEGER\r\n        constraint Reviews_Business_business_id_fk\r\n            references Business"
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "definition": "user_id             INTEGER\r\n        constraint Reviews_Users_user_id_fk\r\n            references Users"
+          },
+          {
+            "name": "review_stars",
+            "type": "INTEGER",
+            "definition": "review_stars        INTEGER"
+          },
+          {
+            "name": "review_votes_funny",
+            "type": "TEXT",
+            "definition": "review_votes_funny  TEXT"
+          },
+          {
+            "name": "review_votes_useful",
+            "type": "TEXT",
+            "definition": "review_votes_useful TEXT"
+          },
+          {
+            "name": "review_votes_cool",
+            "type": "TEXT",
+            "definition": "review_votes_cool   TEXT"
+          },
+          {
+            "name": "review_length",
+            "type": "TEXT",
+            "definition": "review_length       TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Reviews\"\r\n(\r\n    business_id         INTEGER\r\n        constraint Reviews_Business_business_id_fk\r\n            references Business,\r\n    user_id             INTEGER\r\n        constraint Reviews_Users_user_id_fk\r\n            references Users,\r\n    review_stars        INTEGER,\r\n    review_votes_funny  TEXT,\r\n    review_votes_useful TEXT,\r\n    review_votes_cool   TEXT,\r\n    review_length       TEXT,\r\n    constraint Reviews_pk\r\n        primary key (business_id, user_id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Tips",
+        "columns": [
+          {
+            "name": "business_id",
+            "type": "INTEGER",
+            "definition": "business_id INTEGER\r\n        constraint Tips_Business_business_id_fk\r\n            references Business"
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "definition": "user_id     INTEGER\r\n        constraint Tips_Users_user_id_fk\r\n            references Users"
+          },
+          {
+            "name": "likes",
+            "type": "INTEGER",
+            "definition": "likes       INTEGER"
+          },
+          {
+            "name": "tip_length",
+            "type": "TEXT",
+            "definition": "tip_length  TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Tips\"\r\n(\r\n    business_id INTEGER\r\n        constraint Tips_Business_business_id_fk\r\n            references Business,\r\n    user_id     INTEGER\r\n        constraint Tips_Users_user_id_fk\r\n            references Users,\r\n    likes       INTEGER,\r\n    tip_length  TEXT,\r\n    constraint Tips_pk\r\n        primary key (business_id, user_id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Users_Compliments",
+        "columns": [
+          {
+            "name": "compliment_id",
+            "type": "INTEGER",
+            "definition": "compliment_id         INTEGER\r\n        constraint Users_Compliments_Compliments_compliment_id_fk\r\n            references Compliments"
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "definition": "user_id               INTEGER\r\n        constraint Users_Compliments_Users_user_id_fk\r\n            references Users"
+          },
+          {
+            "name": "number_of_compliments",
+            "type": "TEXT",
+            "definition": "number_of_compliments TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Users_Compliments\"\r\n(\r\n    compliment_id         INTEGER\r\n        constraint Users_Compliments_Compliments_compliment_id_fk\r\n            references Compliments,\r\n    user_id               INTEGER\r\n        constraint Users_Compliments_Users_user_id_fk\r\n            references Users,\r\n    number_of_compliments TEXT,\r\n    constraint Users_Compliments_pk\r\n        primary key (compliment_id, user_id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Business",
+        "columns": [
+          {
+            "name": "business_id",
+            "type": "INTEGER",
+            "definition": "business_id  INTEGER\r\n        constraint Business_pk\r\n            primary key"
+          },
+          {
+            "name": "active",
+            "type": "TEXT",
+            "definition": "active       TEXT"
+          },
+          {
+            "name": "city",
+            "type": "TEXT",
+            "definition": "city         TEXT"
+          },
+          {
+            "name": "state",
+            "type": "TEXT",
+            "definition": "state        TEXT"
+          },
+          {
+            "name": "stars",
+            "type": "REAL",
+            "definition": "stars        REAL"
+          },
+          {
+            "name": "review_count",
+            "type": "TEXT",
+            "definition": "review_count TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Business\"\r\n(\r\n    business_id  INTEGER\r\n        constraint Business_pk\r\n            primary key,\r\n    active       TEXT,\r\n    city         TEXT,\r\n    state        TEXT,\r\n    stars        REAL,\r\n    review_count TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      },
+      {
+        "source": "SQLite",
+        "database": "public_review_platform",
+        "table": "Users",
+        "columns": [
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "definition": "user_id                 INTEGER\r\n        constraint Users_pk\r\n            primary key"
+          },
+          {
+            "name": "user_yelping_since_year",
+            "type": "INTEGER",
+            "definition": "user_yelping_since_year INTEGER"
+          },
+          {
+            "name": "user_average_stars",
+            "type": "TEXT",
+            "definition": "user_average_stars      TEXT"
+          },
+          {
+            "name": "user_votes_funny",
+            "type": "TEXT",
+            "definition": "user_votes_funny        TEXT"
+          },
+          {
+            "name": "user_votes_useful",
+            "type": "TEXT",
+            "definition": "user_votes_useful       TEXT"
+          },
+          {
+            "name": "user_votes_cool",
+            "type": "TEXT",
+            "definition": "user_votes_cool         TEXT"
+          },
+          {
+            "name": "user_review_count",
+            "type": "TEXT",
+            "definition": "user_review_count       TEXT"
+          },
+          {
+            "name": "user_fans",
+            "type": "TEXT",
+            "definition": "user_fans               TEXT"
+          }
+        ],
+        "ddl": "CREATE TABLE \"Users\"\r\n(\r\n    user_id                 INTEGER\r\n        constraint Users_pk\r\n            primary key,\r\n    user_yelping_since_year INTEGER,\r\n    user_average_stars      TEXT,\r\n    user_votes_funny        TEXT,\r\n    user_votes_useful       TEXT,\r\n    user_votes_cool         TEXT,\r\n    user_review_count       TEXT,\r\n    user_fans               TEXT\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": []
+      }
+    ],
+    "knowledge": [
+      {
+        "knowledge_id": 1766,
+        "knowledge_text": "计算某类别数量占总数的百分比公式：ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM 总表), 2)。",
+        "declared_scope": {
+          "databases": [],
+          "sources": [
+            "MYSQL",
+            "SQLite",
+            "POSTGRESQL",
+            "Elasticsearch"
+          ]
+        },
+        "scope": {
+          "databases": [],
+          "sources": [
+            "MYSQL",
+            "SQLite",
+            "POSTGRESQL",
+            "Elasticsearch"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1348,
+        "knowledge_text": "在数据库public_review_platform的表Business_Attributes中，字段business_id，数据类型为整数（integer），表示标识商家的ID编号。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1350,
+        "knowledge_text": "在数据库public_review_platform的表Business_Categories中，字段business_id，数据类型为整数（integer），表示标识商家的ID编号。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1352,
+        "knowledge_text": "在数据库public_review_platform的表Business_Hours中，字段business_id，数据类型为整数（integer），表示标识商家的ID编号。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1356,
+        "knowledge_text": "在数据库public_review_platform的表Checkins中，字段business_id，数据类型为整数（integer），表示标识商家的ID编号。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1363,
+        "knowledge_text": "在数据库public_review_platform的表Reviews中，字段business_id，数据类型为整数（integer），表示标识商家的编号。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1370,
+        "knowledge_text": "在数据库public_review_platform的表Tips中，字段business_id，数据类型为整数（integer），表示标识商家的编号。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1341,
+        "knowledge_text": "在数据库public_review_platform的表Business中，字段business_id，数据类型为整数（integer），表示标识商家的唯一编号。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1354,
+        "knowledge_text": "在数据库public_review_platform的表Business_Hours中，字段opening_time，数据类型为文本（text），表示商家的营业开始时间。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1364,
+        "knowledge_text": "在数据库public_review_platform的表Reviews中，字段user_id，数据类型为整数（integer），表示标识评论该商家的用户的编号。",
+        "scope": {
+          "databases": [
+            "public_review_platform"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      }
+    ],
+    "dictionary": [],
+    "examples": [
+      {
+        "question_id": 4298,
+        "question": "Yelp宠物类商家占所有商家的百分比是多少？",
+        "db": "SQLite",
+        "query": "SELECT 100.0*COUNT(DISTINCT bc.business_id)/NULLIF((SELECT COUNT(*) FROM public_review_platform.Business),0) AS percentage FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON c.category_id=bc.category_id WHERE c.category_name='Pets'",
+        "annotation_origin": "reviewed_training_overlay",
+        "curation_reason": "所有商家是Business实体；类别关系不是分母。",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Categories"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business_Categories"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business"
+          }
+        ]
+      },
+      {
+        "question_id": 4301,
+        "question": "计算Yelp上活跃商家占所有商家的百分比。",
+        "db": "SQLite",
+        "query": "SELECT CAST(SUM(CASE WHEN active = 'true' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(business_id) FROM public_review_platform.Business",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business"
+          }
+        ]
+      },
+      {
+        "question_id": 4148,
+        "question": "Yelp上Phoenix市有多少商家？Phoenix市商家占所有城市的百分比是多少？",
+        "db": "SQLite",
+        "query": "SELECT SUM(CASE WHEN city='Phoenix' THEN 1 ELSE 0 END) AS num,100.0*SUM(CASE WHEN city='Phoenix' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0) AS percentage FROM public_review_platform.Business",
+        "annotation_origin": "reviewed_training_overlay",
+        "curation_reason": "城市商家计数与占比不需要关联类别表，避免重复及遗漏无类别商家。",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business"
+          }
+        ]
+      },
+      {
+        "question_id": 4309,
+        "question": "计算Yelp上具备接受信用卡属性的商家占所有商家的百分比。",
+        "db": "SQLite",
+        "query": "SELECT 100.0*COUNT(*)/NULLIF((SELECT COUNT(*) FROM public_review_platform.Business),0) AS percentage FROM public_review_platform.Business b WHERE EXISTS (SELECT 1 FROM public_review_platform.Business_Attributes ba JOIN public_review_platform.Attributes a ON a.attribute_id=ba.attribute_id WHERE ba.business_id=b.business_id AND a.attribute_name='Accepts Credit Cards' AND LOWER(ba.attribute_value)='true')",
+        "annotation_origin": "reviewed_training_overlay",
+        "curation_reason": "接受信用卡需属性值为true；分母含全部商家，避免按属性行计数。",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Attributes"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business_Attributes"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business"
+          }
+        ]
+      },
+      {
+        "question_id": 4358,
+        "question": "计算Yelp上Mesa市商家占所有商家的百分比，以及这些商家的属性值是什么。",
+        "db": "SQLite",
+        "query": "SELECT CAST(COUNT(T1.city) AS REAL) * 100 / ( SELECT COUNT(business_id) FROM public_review_platform.Business ), T2.attribute_value FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Attributes AS T2 ON T1.business_id = T2.business_id WHERE T1.city = 'Mesa'",
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business_Attributes"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business"
+          }
+        ]
+      }
+    ],
+    "corrected_examples": [],
+    "question_correction": null,
+    "schema_adjudications": [],
+    "query_helpers": [],
+    "ambiguous_examples": []
+  },
+  "attempts": [
+    {
+      "content": "{\"db\":\"SQLite\",\"query\":\"SELECT ROUND(100.0 * COUNT(DISTINCT bc.business_id) / NULLIF((SELECT COUNT(*) FROM public_review_platform.Business), 0), 2) AS percentage FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON bc.category_id = c.category_id WHERE c.category_name = 'Cars'\"}",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 7306,
+        "total_tokens": 7383,
+        "completion_tokens": 77,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    }
+  ],
+  "prediction": {
+    "db": "SQLite",
+    "query": "SELECT ROUND(100.0 * COUNT(DISTINCT bc.business_id) / NULLIF((SELECT COUNT(*) FROM public_review_platform.Business), 0), 2) AS percentage FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON bc.category_id = c.category_id WHERE c.category_name = 'Cars'"
+  },
+  "model_prediction": {
+    "db": "SQLite",
+    "query": "SELECT ROUND(100.0 * COUNT(DISTINCT bc.business_id) / NULLIF((SELECT COUNT(*) FROM public_review_platform.Business), 0), 2) AS percentage FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON bc.category_id = c.category_id WHERE c.category_name = 'Cars'"
+  },
+  "automatic_transforms": [],
+  "errors": [],
+  "seconds": 0.08
+}

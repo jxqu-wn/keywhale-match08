@@ -1,0 +1,12 @@
+本赛题的数据源包含MySQL、PostgreSQL、Elasticsearch和SQLite四种数据库系统
+
+其中BIRD数据集改造的问答对，其对应数据均在SQLite中
+通用数据库Common的数据全部存储于MySQL
+医疗库存储于Elasticsearch
+船舶库存储于PostgreSQL
+其他领域数据存储于MySQL
+
+请参赛队伍在构建解决方案时注意查询指令方言特性。
+
+说明1：在Elasticsearch、PostgreSQL中仅包含一个库，可以查询指令可以直接对表名进行查询，SQLite和MySQL中包含多个数据库，查询指令中要以库名.表名的形式进行查询。
+说明2：通用数据库Common中的行政区划表和字典表，参赛队伍可以将其视为知识，允许进行重构，以其他形式存储查询。字典表全部数据在commom_schema中，行政区划表数据在administrative_division.sql中。

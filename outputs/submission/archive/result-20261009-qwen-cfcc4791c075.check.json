@@ -1,0 +1,28 @@
+{
+  "count": 400,
+  "unique_ids": 400,
+  "coverage": "complete",
+  "encoding": "UTF-8",
+  "sha256": "cfcc4791c0758c85d2ff3ce908f9617967c3673c62c3e48ae5c1f97179a89965",
+  "source_counts": {
+    "MYSQL": 100,
+    "Elasticsearch": 50,
+    "POSTGRESQL": 38,
+    "MYSQL->POSTGRESQL": 9,
+    "POSTGRESQL->MYSQL": 3,
+    "SQLite": 200
+  },
+  "execution_validated": false,
+  "model_run": "artifacts/runs/prediction/predict-db04585845d5",
+  "manual_query_edits": false,
+  "model": "contest-qwen",
+  "base_url": "http://192.168.15.119:28081/v1",
+  "automated_test_count": 44,
+  "original_backup": "outputs/submission/archive/result-20261009-before-rerun-210e08596136.json",
+  "normalized_es_ids": [
+    2286,
+    2399,
+    2475
+  ],
+  "historical_submitted_queries_reused": false
+}

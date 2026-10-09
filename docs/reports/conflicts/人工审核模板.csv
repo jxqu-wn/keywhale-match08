@@ -1,0 +1,299 @@
+﻿组编号,优先级,类别,原始题号,问题,差异分析,涉及库表,候选A题号,候选A查询,候选B题号,候选B查询,需人工确认,已有用户规则,审核状态,处理方式,业务身份键,新旧记录优先规则,历史记录保留规则,合并与筛选顺序,跨表关联方法,问题参数与标注修正,结果粒度/并列/空值规则,补充说明
+ambiguous-1669,P1,仅年度库不同,"1669,1682,1732",统计教师中电话不为空的数量，并返回数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.teacher
+education_2025.teacher","1669,1682",SELECT COUNT(*) AS teacher_phone_not_null_cnt FROM education_2024.teacher t WHERE t.phone IS NOT NULL AND t.phone<>'';,1732,SELECT COUNT(*) AS teacher_phone_not_null_cnt FROM education_2025.teacher t WHERE t.phone IS NOT NULL AND t.phone<>'';,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",未指定年份的教师查询同时访问education_2024.teacher和education_2025.teacher，以业务教师编号teacher_no去重。同编号出现两年时，整条记录以2025年为准；2024年仅补充2025年不存在的教师。问题要求电话不为空时，先选最新记录，再判断phone是否非NULL且不为空字符串；2025年电话为空时不能回退使用2024年的电话。不要用各年度自增teacher_id跨年去重。统计教师人数时最终使用COUNT(DISTINCT teacher_no)，避免同年重复编号被计为多人；合并两年后直接COUNT(*)仍可能重复计数。,待审核,,,,,,,,,
+ambiguous-1670,P1,仅年度库不同,"1670,1720",查询课程学分大于等于5的课程数量，并返回数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1670,SELECT COUNT(*) AS course_credit_ge_5_cnt FROM education_2024.course c WHERE c.credit >= 5;,1720,SELECT COUNT(*) AS course_credit_ge_5_cnt FROM education_2025.course c WHERE c.credit >= 5;,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1671,P1,仅年度库不同,"1671,1721",查询院系编号为6的课程，返回课程编号与课程名，并按课程编号升序取前50。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1671,"SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.department_id=6 ORDER BY c.course_id ASC LIMIT 50;",1721,"SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.department_id=6 ORDER BY c.course_id ASC LIMIT 50;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1672,P1,仅年度库不同,"1672,1722",查询学籍状态为在读的学生，返回学号、家庭地区编号与姓名，并按家庭地区编号降序取前30。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1672,"SELECT s.student_no, s.home_region_id, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' ORDER BY s.home_region_id DESC, s.student_no ASC LIMIT 30;",1722,"SELECT s.student_no, s.home_region_id, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' ORDER BY s.home_region_id DESC, s.student_no ASC LIMIT 30;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1673,P1,仅年度库不同,"1673,1723",统计学期表共有多少条记录，并返回数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.semester
+education_2025.semester",1673,SELECT COUNT(*) AS semester_cnt FROM education_2024.semester sem;,1723,SELECT COUNT(*) AS semester_cnt FROM education_2025.semester sem;,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1674,P0,年度库不同且标注与问题不一致,"1674,1724",查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。,问题要求学号前缀2023、升序；2024候选用S0001%且升序，2025候选用S0009%且降序。两条均未按原文前缀筛选，2025候选还改变排序。,"education_2024.student
+education_2025.student",1674,"SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.student_no LIKE 'S0001%' ORDER BY s.student_no ASC LIMIT 25;",1724,"SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.student_no LIKE 'S0009%' ORDER BY s.student_no DESC LIMIT 25;","确认2023确为学号文字前缀，还是入学年份概念；按原文两条LIKE均不符。
+选择年度口径后仍须独立保留问题要求的升序和前25名。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1675,P1,仅年度库不同,"1675,1725",查询院系编号为3的教师，返回教师工号、姓名与电话，并按工号升序取前20条。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.teacher
+education_2025.teacher",1675,"SELECT t.teacher_no, t.teacher_name, t.phone FROM education_2024.teacher t WHERE t.department_id=3 ORDER BY t.teacher_no ASC LIMIT 20;",1725,"SELECT t.teacher_no, t.teacher_name, t.phone FROM education_2025.teacher t WHERE t.department_id=3 ORDER BY t.teacher_no ASC LIMIT 20;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",未指定年份的教师查询同时访问education_2024.teacher和education_2025.teacher，以业务教师编号teacher_no去重。同编号出现两年时，整条记录以2025年为准；2024年仅补充2025年不存在的教师。问题要求电话不为空时，先选最新记录，再判断phone是否非NULL且不为空字符串；2025年电话为空时不能回退使用2024年的电话。不要用各年度自增teacher_id跨年去重。统计教师人数时最终使用COUNT(DISTINCT teacher_no)，避免同年重复编号被计为多人；合并两年后直接COUNT(*)仍可能重复计数。,待审核,,,,,,,,,
+ambiguous-1676,P1,仅年度库不同,"1676,1726",查询课程名称包含“数据库”的课程，返回课程编号与课程名，并按课程编号升序取前20门。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1676,"SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.course_name LIKE '%数据库%' ORDER BY c.course_id ASC LIMIT 20;",1726,"SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.course_name LIKE '%数据库%' ORDER BY c.course_id ASC LIMIT 20;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1677,P1,仅年度库不同,"1677,1727",统计每个院系的课程数量，返回院系编号与课程数，按课程数降序取前15。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1677,"SELECT c.department_id, COUNT(*) AS course_cnt FROM education_2024.course c GROUP BY c.department_id ORDER BY course_cnt DESC, c.department_id ASC LIMIT 15;",1727,"SELECT c.department_id, COUNT(*) AS course_cnt FROM education_2025.course c GROUP BY c.department_id ORDER BY course_cnt DESC, c.department_id ASC LIMIT 15;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1678,P1,仅年度库不同,"1678,1728",查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.class
+education_2025.class",1678,"SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.department_id=2 ORDER BY cl.class_id ASC LIMIT 30;",1728,"SELECT cl.class_id, cl.class_name FROM education_2025.class cl WHERE cl.department_id=2 ORDER BY cl.class_id ASC LIMIT 30;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1679,P1,仅年度库不同,"1679,1729",统计学期编号为1的有效选课记录数，排除退课，并返回数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.enrollment
+education_2025.enrollment",1679,SELECT COUNT(*) AS active_enroll_record_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0;,1729,SELECT COUNT(*) AS active_enroll_record_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0;,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1680,P1,仅年度库不同,"1680,1730",查询学期编号为1中选课人数排名第一的课程，返回课程编号与课程名。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2024.enrollment
+education_2025.course
+education_2025.enrollment",1680,"SELECT x.course_id, x.course_name FROM (SELECT c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name) x ORDER BY x.cnt DESC, x.course_id ASC LIMIT 1;",1730,"SELECT x.course_id, x.course_name FROM (SELECT c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name) x ORDER BY x.cnt DESC, x.course_id ASC LIMIT 1;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1681,P1,仅年度库不同,"1681,1731",查询姓名以“张”开头的学生，返回学号与姓名，并按学号升序取前20名。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1681,"SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_name LIKE '张%' ORDER BY s.student_no ASC LIMIT 20;",1731,"SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_name LIKE '张%' ORDER BY s.student_no ASC LIMIT 20;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1683,P1,仅年度库不同,"1683,1733",查询学分不低于3且不高于4的课程，返回课程编号与课程名，并按学分降序取前20。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1683,"SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.credit BETWEEN 3 AND 4 ORDER BY c.credit DESC, c.course_id ASC LIMIT 20;",1733,"SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.credit BETWEEN 3 AND 4 ORDER BY c.credit DESC, c.course_id ASC LIMIT 20;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1684,P0,年度库不同且标注与问题不一致,"1684,1734",查询入学年份为2022的班级，返回班级编号与名称，并按班级编号升序取前20条。,问题要求入学年份2022、班级编号升序；候选分别使用grade_year=2024/2025，2025候选还改为降序。,"education_2024.class
+education_2025.class",1684,"SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.grade_year=2024 ORDER BY cl.class_id ASC LIMIT 20;",1734,"SELECT cl.class_id, cl.class_name FROM education_2025.class cl WHERE cl.grade_year=2025 ORDER BY cl.class_id DESC LIMIT 20;","确认过滤字段为grade_year并将问题参数2022与年度库选择区分。
+候选均有参数偏移，不能仅挑选较新的候选作为最终逻辑。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1685,P1,仅年度库不同,"1685,1735",统计每个班级的在读学生数量，返回班级编号与在读人数，并按在读人数降序取前20个班级。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1685,"SELECT s.class_id, COUNT(*) AS active_student_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.class_id IS NOT NULL GROUP BY s.class_id ORDER BY active_student_cnt DESC, s.class_id ASC LIMIT 20;",1735,"SELECT s.class_id, COUNT(*) AS active_student_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.class_id IS NOT NULL GROUP BY s.class_id ORDER BY active_student_cnt DESC, s.class_id ASC LIMIT 20;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1686,P1,仅年度库不同,"1686,1736",查询课程类型为选修的课程，返回课程编号与课程名，并按课程名升序取前30。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1686,"SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.course_type='选修' ORDER BY c.course_name ASC LIMIT 30;",1736,"SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.course_type='选修' ORDER BY c.course_name ASC LIMIT 30;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1688,P1,仅年度库不同,"1688,1738",统计学生中性别为女性的数量，并返回女性人数。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1688,SELECT COUNT(*) AS female_student_cnt FROM education_2024.student s WHERE s.gender_code='F';,1738,SELECT COUNT(*) AS female_student_cnt FROM education_2025.student s WHERE s.gender_code='F';,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1689,P1,仅年度库不同,"1689,1739",查询院系编号为4的教师姓名，按姓名升序取前25。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.teacher
+education_2025.teacher",1689,SELECT t.teacher_name FROM education_2024.teacher t WHERE t.department_id=4 ORDER BY t.teacher_name ASC LIMIT 25;,1739,SELECT t.teacher_name FROM education_2025.teacher t WHERE t.department_id=4 ORDER BY t.teacher_name ASC LIMIT 25;,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",未指定年份的教师查询同时访问education_2024.teacher和education_2025.teacher，以业务教师编号teacher_no去重。同编号出现两年时，整条记录以2025年为准；2024年仅补充2025年不存在的教师。问题要求电话不为空时，先选最新记录，再判断phone是否非NULL且不为空字符串；2025年电话为空时不能回退使用2024年的电话。不要用各年度自增teacher_id跨年去重。统计教师人数时最终使用COUNT(DISTINCT teacher_no)，避免同年重复编号被计为多人；合并两年后直接COUNT(*)仍可能重复计数。,待审核,,,,,,,,,
+ambiguous-1690,P1,仅年度库不同,"1690,1740",统计课程表中平均学分，保留两位小数，并返回平均值。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1690,"SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2024.course c;",1740,"SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2025.course c;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+平均值应按选定口径的明细重算，不能直接平均两个年度的平均值；确认NULL和四舍五入。",,待审核,,,,,,,,,
+ambiguous-1691,P1,仅年度库不同,"1691,1741",查询院系编号为1的学生中，按学籍状态分组统计人数，返回学籍状态与人数。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1691,"SELECT s.student_status_code, COUNT(*) AS student_cnt FROM education_2024.student s WHERE s.department_id=1 GROUP BY s.student_status_code ORDER BY student_cnt DESC, s.student_status_code ASC;",1741,"SELECT s.student_status_code, COUNT(*) AS student_cnt FROM education_2025.student s WHERE s.department_id=1 GROUP BY s.student_status_code ORDER BY student_cnt DESC, s.student_status_code ASC;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1692,P1,仅年度库不同,"1692,1742",查询每个学期的有效选课记录数，排除退课，返回学期编号与有效选课数量，并按学期编号升序取前10。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.enrollment
+education_2025.enrollment",1692,"SELECT e.semester_id, COUNT(*) AS active_enroll_cnt FROM education_2024.enrollment e WHERE e.is_withdraw=0 GROUP BY e.semester_id ORDER BY e.semester_id ASC LIMIT 10;",1742,"SELECT e.semester_id, COUNT(*) AS active_enroll_cnt FROM education_2025.enrollment e WHERE e.is_withdraw=0 GROUP BY e.semester_id ORDER BY e.semester_id ASC LIMIT 10;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1693,P1,仅年度库不同,"1693,1743",统计未分配班级的在读学生数量，并返回数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1693,SELECT COUNT(*) AS active_unassigned_class_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND (s.class_id IS NULL OR s.class_id='');,1743,SELECT COUNT(*) AS active_unassigned_class_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND (s.class_id IS NULL OR s.class_id='');,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1694,P1,仅年度库不同,"1694,1744",查询课程学分小于2的课程，返回课程编号与课程名，并按学分升序取前20。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1694,"SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.credit<2 ORDER BY c.credit ASC, c.course_id ASC LIMIT 20;",1744,"SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.credit<2 ORDER BY c.credit ASC, c.course_id ASC LIMIT 20;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1695,P1,仅年度库不同,"1695,1745",统计是否存在学分为0的课程，若存在返回该数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1695,SELECT COUNT(*) AS credit_zero_cnt FROM education_2024.course c WHERE c.credit=0;,1745,SELECT COUNT(*) AS credit_zero_cnt FROM education_2025.course c WHERE c.credit=0;,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1696,P1,仅年度库不同,"1696,1746",查询学期编号为1中选修过“数据结构”的去重学生数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2024.enrollment
+education_2024.student
+education_2025.course
+education_2025.enrollment
+education_2025.student",1696,SELECT COUNT(DISTINCT s.student_id) AS distinct_student_cnt FROM education_2024.student s JOIN education_2024.enrollment e ON e.student_id=s.student_id JOIN education_2024.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND c.course_name='数据结构';,1746,SELECT COUNT(DISTINCT s.student_id) AS distinct_student_cnt FROM education_2025.student s JOIN education_2025.enrollment e ON e.student_id=s.student_id JOIN education_2025.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND c.course_name='数据结构';,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1697,P1,仅年度库不同,"1697,1747",查询在读且性别为女性的学生，按姓名升序取前15名的学号与姓名。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1697,"SELECT s.student_no, s.student_name FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.gender_code='F' ORDER BY s.student_name ASC, s.student_no ASC LIMIT 15;",1747,"SELECT s.student_no, s.student_name FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.gender_code='F' ORDER BY s.student_name ASC, s.student_no ASC LIMIT 15;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1698,P1,仅年度库不同,"1698,1748",统计学期一中每门课程的通过人数，按总评折算不低于60，且排除退课，返回课程编号、课程名与通过人数，并按通过人数降序取前10。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2024.enrollment
+education_2024.exam_score
+education_2024.student
+education_2025.course
+education_2025.enrollment
+education_2025.exam_score
+education_2025.student",1698,"SELECT c.course_id, c.course_name, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN s.student_id ELSE NULL END) AS pass_student_cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name ORDER BY pass_student_cnt DESC, c.course_id ASC LIMIT 10;",1748,"SELECT c.course_id, c.course_name, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN s.student_id ELSE NULL END) AS pass_student_cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.course_id, c.course_name ORDER BY pass_student_cnt DESC, c.course_id ASC LIMIT 10;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1699,P1,仅年度库不同,"1699,1749",统计学期一中在读学生参与的每门课程，其平均总评折算分，返回课程编号、课程名与平均总评，按平均总评降序取前10。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2024.enrollment
+education_2024.exam_score
+education_2024.student
+education_2025.course
+education_2025.enrollment
+education_2025.exam_score
+education_2025.student",1699,"SELECT c.course_id, c.course_name, ROUND(AVG(t.total_score),2) AS avg_total_score FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.course_id, c.course_name ORDER BY avg_total_score DESC, c.course_id ASC LIMIT 10;",1749,"SELECT c.course_id, c.course_name, ROUND(AVG(t.total_score),2) AS avg_total_score FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.course_id, c.course_name ORDER BY avg_total_score DESC, c.course_id ASC LIMIT 10;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+平均值应按选定口径的明细重算，不能直接平均两个年度的平均值；确认NULL和四舍五入。",,待审核,,,,,,,,,
+ambiguous-1700,P1,仅年度库不同,"1700,1750",统计学期一中每个院系选课人数排名前三的课程，返回院系编号、课程编号与课程名、选课人数，并按院系与选课人数降序排序。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2024.enrollment
+education_2024.student
+education_2025.course
+education_2025.enrollment
+education_2025.student",1700,"WITH course_enroll AS (SELECT c.department_id, c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2024.course c JOIN education_2024.enrollment e ON e.course_id=c.course_id JOIN education_2024.student s ON s.student_id=e.student_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.department_id, c.course_id, c.course_name), ranked AS (SELECT department_id, course_id, course_name, active_enroll_cnt, ROW_NUMBER() OVER(PARTITION BY department_id ORDER BY active_enroll_cnt DESC, course_id ASC) AS rn FROM course_enroll) SELECT department_id, course_id, course_name, active_enroll_cnt FROM ranked WHERE rn<=3 ORDER BY department_id ASC, active_enroll_cnt DESC, course_id ASC;",1750,"WITH course_enroll AS (SELECT c.department_id, c.course_id, c.course_name, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.department_id, c.course_id, c.course_name), ranked AS (SELECT department_id, course_id, course_name, active_enroll_cnt, ROW_NUMBER() OVER(PARTITION BY department_id ORDER BY active_enroll_cnt DESC, course_id ASC) AS rn FROM course_enroll) SELECT department_id, course_id, course_name, active_enroll_cnt FROM ranked WHERE rn<=3 ORDER BY department_id ASC, active_enroll_cnt DESC, course_id ASC;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1701,P1,仅年度库不同,"1701,1751",统计学期一中每门课程最低总评折算分对应的学生学号，若并列取学号最小，返回课程编号、课程名与学号。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2024.enrollment
+education_2024.exam_score
+education_2024.student
+education_2025.course
+education_2025.enrollment
+education_2025.exam_score
+education_2025.student",1701,"WITH per_enroll AS (SELECT e.course_id, e.student_id, s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.student s ON s.student_id=e.student_id JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id, e.student_id, s.student_no), ranked AS (SELECT p.course_id, p.student_no, p.total_score, ROW_NUMBER() OVER(PARTITION BY p.course_id ORDER BY p.total_score ASC, p.student_no ASC) AS rn FROM per_enroll p) SELECT c.course_id, c.course_name, r.student_no FROM ranked r JOIN education_2024.course c ON c.course_id=r.course_id WHERE r.rn=1 ORDER BY c.course_id ASC;",1751,"WITH per_enroll AS (SELECT e.course_id, e.student_id, s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.student s ON s.student_id=e.student_id JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id, e.student_id, s.student_no), ranked AS (SELECT p.course_id, p.student_no, p.total_score, ROW_NUMBER() OVER(PARTITION BY p.course_id ORDER BY p.total_score ASC, p.student_no ASC) AS rn FROM per_enroll p) SELECT c.course_id, c.course_name, r.student_no FROM ranked r JOIN education_2025.course c ON c.course_id=r.course_id WHERE r.rn=1 ORDER BY c.course_id ASC;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1702,P1,仅年度库不同,"1702,1752",统计学期一中每位在读学生的总评折算总分，返回总评最高学生的学号与总分。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.enrollment
+education_2024.exam_score
+education_2024.student
+education_2025.enrollment
+education_2025.exam_score
+education_2025.student",1702,"WITH per_student AS (SELECT s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.student s ON s.student_id=e.student_id JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY s.student_no) SELECT student_no, ROUND(total_score,2) AS total_score FROM per_student ORDER BY total_score DESC, student_no ASC LIMIT 1;",1752,"WITH per_student AS (SELECT s.student_no, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.student s ON s.student_id=e.student_id JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY s.student_no) SELECT student_no, ROUND(total_score,2) AS total_score FROM per_student ORDER BY total_score DESC, student_no ASC LIMIT 1;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1703,P0,年度库不同且标注与问题不一致,"1703,1753",查询课程表中学分平均是否大于等于3，并返回平均学分。,"问题要求平均学分大于等于3；2024候选HAVING ROUND(AVG(credit),2)<=4，2025候选使用>=2。两条均未使用要求的>=3。","education_2024.course
+education_2025.course",1703,"SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2024.course c HAVING ROUND(AVG(c.credit),2)<=4;",1753,"SELECT ROUND(AVG(c.credit),2) AS avg_credit FROM education_2025.course c HAVING ROUND(AVG(c.credit),2)>=2;","确认应比较原始平均值还是四舍五入后的平均值。
+先确认年度与去重口径，再修正阈值和比较方向。
+平均值应按选定口径的明细重算，不能直接平均两个年度的平均值；确认NULL和四舍五入。",,待审核,,,,,,,,,
+ambiguous-1704,P1,仅年度库不同,"1704,1754",统计教师表中教师的联系电话为空或空字符串的数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.teacher
+education_2025.teacher",1704,SELECT COUNT(*) AS teacher_phone_empty_cnt FROM education_2024.teacher t WHERE t.phone IS NULL OR t.phone='';,1754,SELECT COUNT(*) AS teacher_phone_empty_cnt FROM education_2025.teacher t WHERE t.phone IS NULL OR t.phone='';,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",未指定年份的教师查询同时访问education_2024.teacher和education_2025.teacher，以业务教师编号teacher_no去重。同编号出现两年时，整条记录以2025年为准；2024年仅补充2025年不存在的教师。问题要求电话不为空时，先选最新记录，再判断phone是否非NULL且不为空字符串；2025年电话为空时不能回退使用2024年的电话。不要用各年度自增teacher_id跨年去重。统计教师人数时最终使用COUNT(DISTINCT teacher_no)，避免同年重复编号被计为多人；合并两年后直接COUNT(*)仍可能重复计数。,待审核,,,,,,,,,
+ambiguous-1705,P1,仅年度库不同,"1705,1755",查询学期编号为1中每个课程的有效选课人数，并按课程编号升序取前10门。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.enrollment
+education_2025.enrollment",1705,"SELECT e.course_id, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id ORDER BY e.course_id ASC LIMIT 10;",1755,"SELECT e.course_id, COUNT(DISTINCT e.student_id) AS active_enroll_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id ORDER BY e.course_id ASC LIMIT 10;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1706,P1,仅年度库不同,"1706,1756",查询课程类型为必修的课程数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1706,SELECT COUNT(*) AS compulsory_course_cnt FROM education_2024.course c WHERE c.course_type='必修';,1756,SELECT COUNT(*) AS compulsory_course_cnt FROM education_2025.course c WHERE c.course_type='必修';,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1707,P1,仅年度库不同,"1707,1757",查询院系编号为1的班级数量，并返回数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.class
+education_2025.class",1707,SELECT COUNT(*) AS class_cnt_dept1 FROM education_2024.class cl WHERE cl.department_id=1;,1757,SELECT COUNT(*) AS class_cnt_dept1 FROM education_2025.class cl WHERE cl.department_id=1;,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1708,P0,年度库不同且标注与问题不一致,"1708,1758",查询学期表中学期代码包含“2024”的学期，返回学期代码，并按学期代码升序取前20。,问题要求semester_code包含2024；2024候选LIKE %2024%，2025候选改为%2025%。2025候选改变了问题字符串参数。,"education_2024.semester
+education_2025.semester",1708,SELECT sem.semester_code FROM education_2024.semester sem WHERE sem.semester_code LIKE '%2024%' ORDER BY sem.semester_code ASC LIMIT 20;,1758,SELECT sem.semester_code FROM education_2025.semester sem WHERE sem.semester_code LIKE '%2025%' ORDER BY sem.semester_code ASC LIMIT 20;,"查询参数2024不自动等于只允许访问education_2024库。
+确认两年是否保存同一学期；即使访问2025库，也应保留原问题的代码筛选参数。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1709,P1,仅年度库不同,"1709,1759",查询学生中学籍状态为在读且所属院系编号为2的学生数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1709,SELECT COUNT(*) AS active_students_dept2_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND s.department_id=2;,1759,SELECT COUNT(*) AS active_students_dept2_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND s.department_id=2;,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1710,P1,仅年度库不同,"1710,1760",查询院系编号为3的课程，返回课程编号与课程名，并按课程名升序取前15。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1710,"SELECT c.course_id, c.course_name FROM education_2024.course c WHERE c.department_id=3 ORDER BY c.course_name ASC LIMIT 15;",1760,"SELECT c.course_id, c.course_name FROM education_2025.course c WHERE c.department_id=3 ORDER BY c.course_name ASC LIMIT 15;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1711,P1,仅年度库不同,"1711,1761",查询在读学生中家庭地区编号为空或为0的数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.student
+education_2025.student",1711,SELECT COUNT(*) AS active_home_region_empty_cnt FROM education_2024.student s WHERE s.student_status_code='ACTIVE' AND (s.home_region_id IS NULL OR s.home_region_id=0);,1761,SELECT COUNT(*) AS active_home_region_empty_cnt FROM education_2025.student s WHERE s.student_status_code='ACTIVE' AND (s.home_region_id IS NULL OR s.home_region_id=0);,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1712,P1,仅年度库不同,"1712,1762",统计学期一中每门课程的通过率，通过总评不低于60，排除退课，返回课程编号、课程名与通过率，以百分比表示并保留两位小数，按通过率降序取前10。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2024.enrollment
+education_2024.exam_score
+education_2025.course
+education_2025.enrollment
+education_2025.exam_score",1712,"WITH course_tot AS (SELECT e.course_id, COUNT(DISTINCT e.student_id) AS total_cnt FROM education_2024.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id), course_pass AS (SELECT e.course_id, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN e.student_id ELSE NULL END) AS pass_cnt FROM education_2024.enrollment e JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id) SELECT c.course_id, c.course_name, ROUND( (p.pass_cnt / NULLIF(t.total_cnt,0))*100, 2) AS pass_rate_pct FROM course_pass p JOIN course_tot t ON t.course_id=p.course_id JOIN education_2024.course c ON c.course_id=p.course_id ORDER BY pass_rate_pct DESC, c.course_id ASC LIMIT 10;",1762,"WITH course_tot AS (SELECT e.course_id, COUNT(DISTINCT e.student_id) AS total_cnt FROM education_2025.enrollment e WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id), course_pass AS (SELECT e.course_id, COUNT(DISTINCT CASE WHEN t.total_score>=60 THEN e.student_id ELSE NULL END) AS pass_cnt FROM education_2025.enrollment e JOIN (SELECT es.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.exam_score es GROUP BY es.enrollment_id) t ON t.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.course_id) SELECT c.course_id, c.course_name, ROUND( (p.pass_cnt / NULLIF(t.total_cnt,0))*100, 2) AS pass_rate_pct FROM course_pass p JOIN course_tot t ON t.course_id=p.course_id JOIN education_2025.course c ON c.course_id=p.course_id ORDER BY pass_rate_pct DESC, c.course_id ASC LIMIT 10;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1713,P1,仅年度库不同,"1713,1763",统计学期一中得分分项中出现次数最多的分项名称，在平时、期中、期末中出现次数最大，若并列按名称升序，返回分项名称与出现次数。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.enrollment
+education_2024.exam_score
+education_2025.enrollment
+education_2025.exam_score",1713,"SELECT es.exam_item, COUNT(*) AS item_cnt FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY es.exam_item ORDER BY item_cnt DESC, es.exam_item ASC LIMIT 1;",1763,"SELECT es.exam_item, COUNT(*) AS item_cnt FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY es.exam_item ORDER BY item_cnt DESC, es.exam_item ASC LIMIT 1;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1714,P1,仅年度库不同,"1714,1764",统计学期一中每位学生的平均总评折算分，按其所有选课的总评求平均并排除退课，返回平均总评最高的学生学号与平均分。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.enrollment
+education_2024.exam_score
+education_2024.student
+education_2025.enrollment
+education_2025.exam_score
+education_2025.student",1714,"WITH per_enroll AS (SELECT e.student_id, e.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.enrollment_id), per_student AS (SELECT s.student_no, AVG(p.total_score) AS avg_total_score FROM per_enroll p JOIN education_2024.student s ON s.student_id=p.student_id GROUP BY s.student_no) SELECT student_no, ROUND(avg_total_score,2) AS avg_total_score FROM per_student ORDER BY avg_total_score DESC, student_no ASC LIMIT 1;",1764,"WITH per_enroll AS (SELECT e.student_id, e.enrollment_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.enrollment_id), per_student AS (SELECT s.student_no, AVG(p.total_score) AS avg_total_score FROM per_enroll p JOIN education_2025.student s ON s.student_id=p.student_id GROUP BY s.student_no) SELECT student_no, ROUND(avg_total_score,2) AS avg_total_score FROM per_student ORDER BY avg_total_score DESC, student_no ASC LIMIT 1;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+多表查询先保持年度内关联，再映射到跨年业务键；不要把两库的本地自增ID直接连接。
+核实两库semester_id=1是否表示同一学期，必要时使用academic_year/semester_code映射。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+平均值应按选定口径的明细重算，不能直接平均两个年度的平均值；确认NULL和四舍五入。",,待审核,,,,,,,,,
+ambiguous-1715,P1,仅年度库不同,"1715,1765",查询课程学分为偶数的课程数量，并返回数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1715,"SELECT COUNT(*) AS even_credit_course_cnt FROM education_2024.course c WHERE MOD(c.credit,2)=0;",1765,"SELECT COUNT(*) AS even_credit_course_cnt FROM education_2025.course c WHERE MOD(c.credit,2)=0;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1716,P1,仅年度库不同,"1716,1766",查询院系编号为5的教师中电话非空的数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.teacher
+education_2025.teacher",1716,SELECT COUNT(*) AS teacher_phone_not_null_dept5_cnt FROM education_2024.teacher t WHERE t.department_id=5 AND t.phone IS NOT NULL AND t.phone<>'';,1766,SELECT COUNT(*) AS teacher_phone_not_null_dept5_cnt FROM education_2025.teacher t WHERE t.department_id=5 AND t.phone IS NOT NULL AND t.phone<>'';,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",未指定年份的教师查询同时访问education_2024.teacher和education_2025.teacher，以业务教师编号teacher_no去重。同编号出现两年时，整条记录以2025年为准；2024年仅补充2025年不存在的教师。问题要求电话不为空时，先选最新记录，再判断phone是否非NULL且不为空字符串；2025年电话为空时不能回退使用2024年的电话。不要用各年度自增teacher_id跨年去重。统计教师人数时最终使用COUNT(DISTINCT teacher_no)，避免同年重复编号被计为多人；合并两年后直接COUNT(*)仍可能重复计数。,待审核,,,,,,,,,
+ambiguous-1717,P1,仅年度库不同,"1717,1767",查询课程表里是否存在课程名以“数”开头的课程，若存在返回数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1717,SELECT COUNT(*) AS course_name_start_with_num_cnt FROM education_2024.course c WHERE c.course_name LIKE '数%';,1767,SELECT COUNT(*) AS course_name_start_with_num_cnt FROM education_2025.course c WHERE c.course_name LIKE '数%';,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1718,P1,仅年度库不同,"1718,1768",查询课程表里必修课程是否不足5门的情况，并返回必修课程数量。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1718,SELECT COUNT(*) AS compulsory_course_cnt FROM education_2024.course c WHERE c.course_type='必修';,1768,SELECT COUNT(*) AS compulsory_course_cnt FROM education_2025.course c WHERE c.course_type='必修';,"确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1719,P1,仅年度库不同,"1719,1769",查询课程表中学分最高的排名第一的课程，返回课程编号、课程名与学分。,除education_2024与education_2025数据库限定符外，候选SQL文本完全相同；问题未明确查询年度库。,"education_2024.course
+education_2025.course",1719,"SELECT c.course_id, c.course_name, c.credit FROM education_2024.course c ORDER BY c.credit DESC, c.course_id ASC LIMIT 1;",1769,"SELECT c.course_id, c.course_name, c.credit FROM education_2025.course c ORDER BY c.credit DESC, c.course_id ASC LIMIT 1;","确认年度范围：仅最新年度、指定年度、两年合并去重、还是分别统计。
+如合并，确认业务身份键、年度本地ID映射、重复/更新记录及缺失记录的含义。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。",,待审核,,,,,,,,,
+ambiguous-1891,P2,疑似SQL等价写法,"1891,1976,2037,2059",比较2024与2025课程表中学分为0的课程数量，返回两年数量。,两候选均分别返回两年credit=0课程数，只将结果列别名credit_zero_course_cnt改为credit_0_course_cnt；3条标注使用前者，1条使用后者。,"education_2024.course
+education_2025.course","1891,1976,2059","SELECT '2024' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_zero_course_cnt FROM education_2025.course WHERE credit=0;",2037,"SELECT '2024' AS year, COUNT(*) AS credit_0_course_cnt FROM education_2024.course WHERE credit=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_0_course_cnt FROM education_2025.course WHERE credit=0;","问题明确要求分别返回两年，不应合并成一个去重总量。
+确认结果比较是否关注列名和行顺序；未执行真实数据库，当前仅判断为疑似等价。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-1921,P2,疑似SQL等价写法,"1921,2030",比较2024与2025课程表中课程类型为必修且学分不低于4的课程数量差，即2025减2024，返回差值与两年数量。,差值表达式b.cnt_2025-a.cnt_2024有无外层括号不同，运算及结果列相同。,"education_2024.course
+education_2025.course",1921,"WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.course WHERE course_type='必修' AND credit>=4), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.course WHERE course_type='必修' AND credit>=4) SELECT (b.cnt_2025-a.cnt_2024) AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;",2030,"WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.course WHERE course_type='必修' AND credit>=4), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.course WHERE course_type='必修' AND credit>=4) SELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;","保持2025减2024及两年数量，不采用统一最新快照替代对比。
+确认真实执行结果后可作为等价写法处理。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-3803,P2,疑似SQL等价写法,"3803,3861",哪个发行商发行的游戏最多？,一条使用派生表包裹聚合，另一条直接聚合；均按发行商名称分组、COUNT(DISTINCT game_id)降序取1条。,"video_games.game_publisher
+video_games.publisher",3803,"SELECT T.publisher_name FROM ( SELECT T2.publisher_name, COUNT(DISTINCT T1.game_id) FROM video_games.game_publisher AS T1 INNER JOIN video_games.publisher AS T2 ON T1.publisher_id = T2.id GROUP BY T2.publisher_name ORDER BY COUNT(DISTINCT T1.game_id) DESC LIMIT 1 ) t",3861,SELECT T1.publisher_name FROM video_games.publisher AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.publisher_id GROUP BY T1.publisher_name ORDER BY COUNT(DISTINCT T2.game_id) DESC LIMIT 1,"两个查询看起来统计同一对象，尚未执行真实库证明等价。
+确认发行商同名是否合并，以及第一名并列时是否返回全部或按稳定键选一个。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-3851,P2,疑似SQL等价写法,"3851,3884",2001年发行了多少款游戏？,仅COUNT(T.id)与COUNT(id)的限定符不同，均统计2001年game_platform记录。,video_games.game_platform,3851,SELECT COUNT(T.id) FROM video_games.game_platform AS T WHERE T.release_year = 2001,3884,SELECT COUNT(id) FROM video_games.game_platform AS T WHERE T.release_year = 2001,"两条查询彼此看似等价，但游戏平台记录数未必等于去重游戏款数。
+知识123明确id是游戏平台记录标识；若要游戏款数，应确认是否沿game_publisher关联按game_id去重。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-4009,P0,业务定义或过滤范围不同,"4009,4095",有多少篇论文是预印本或未发表的？,候选A只计Year=0；候选B计Year=0 OR (ConferenceId=0 AND JournalId=0)，后者可额外包含Year非0但没有会议/期刊标识的论文。,authors.Paper,4009,SELECT COUNT(Id) FROM authors.Paper WHERE Year = 0,4095,SELECT COUNT(Id) FROM authors.Paper WHERE Year = 0 OR (ConferenceId = 0 AND JournalId = 0),"确认“预印本或未发表”按年份、发表载体缺失、OR还是AND判断。
+知识85/129/134分别提供不同描述，需确认其为等价信号还是须同时满足的条件。
+确认Year为NULL、载体ID为-1以及Year>0但载体均0的数据如何处理；当前无实际数据分布。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,
+ambiguous-5196,P2,疑似SQL等价写法,"5196,5237",出版书籍数量最多的出版社名称是什么？,同一INNER JOIN内按出版社名称分组；计数从COUNT(book.book_id)换为COUNT(publisher.publisher_id)。结合主键与内连接，计数看似相同。,"books.book
+books.publisher",5196,SELECT T2.publisher_name FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id GROUP BY T2.publisher_name ORDER BY COUNT(T1.book_id) DESC LIMIT 1,5237,SELECT T2.publisher_name FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id GROUP BY T2.publisher_name ORDER BY COUNT(T2.publisher_id) DESC LIMIT 1,"真实库中验证约束与结果后，再认定等价。
+确认出版社同名是否合并，以及出版数量最高并列时返回谁。
+若合并年度，确认在完整合并和去重后排序/取前N，以及并列时的稳定顺序。
+确认数量指实体去重人数/门数、明细记录数还是历史事件数。",,待审核,,,,,,,,,

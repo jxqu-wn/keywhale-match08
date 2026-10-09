@@ -1,0 +1,31 @@
+{
+  "year_policy_applied_groups": 49,
+  "annual_only_groups": 45,
+  "fully_resolved_groups": 55,
+  "remaining_groups": 0,
+  "remaining_raw_records": 0,
+  "model_fixture_passed": 49,
+  "model_fixture_total": 49,
+  "synthetic_execution_only": true,
+  "submission_unchanged": true,
+  "files": {
+    "剩余冲突明细.json": "9d0fab0ab4edc68a7542db99991cfa5ced316dd527144fe312a78aaf51cd44c4",
+    "剩余冲突人工审核.html": "0cf5a56c40f2964473d20cf87ccda3c6c289ae2b7e81e161a00fac6f08585bad",
+    "剩余冲突审核模板.csv": "ace11f922338229e586fc3c4b326fc685e8d7a7c866e0ec0b1dcd3fa32e58cf5",
+    "剩余冲突报告.md": "13baa4973fa8b0279168b27fe58ac73290f79e018d87de936eb5a3a3da872d0a",
+    "已修正冲突报告.md": "c752f151679e8edc146a9969b5c94bffa5bb9cba3ee514ce45a98ca8ecd9b485"
+  },
+  "unit_checks_passed": 26,
+  "unit_checks_total": 26,
+  "verification_run": "artifacts/runs/regression/education-ee34fe4ec1e9",
+  "submission_sha256": "210e0859613681fe36f23fcb1e5430145796f89891007c250565f1300bd8c7a6",
+  "routing_code_sha256": "bfbced1eb04f32d9a318c27d51b93759cac513af81fdb20a64a7897e18964b78",
+  "query_corrected_groups": 11,
+  "correction_execution_checks": 13,
+  "new_model_inference_verified": false,
+  "model_fixture_is_historical": true,
+  "correction_verification_run": "artifacts/runs/regression/conflict-corrections-20261009",
+  "exact_predict_routes_verified": 11,
+  "training_and_knowledge_unchanged": true,
+  "schema_adjudications_implemented": 2
+}

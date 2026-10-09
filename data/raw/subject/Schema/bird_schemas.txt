@@ -1,0 +1,2809 @@
+============================================================
+数据库: authors
+============================================================
+
+-- 表: Author
+CREATE TABLE "Author"
+(
+    Id          INTEGER
+        constraint Author_pk
+            primary key,
+    Name        TEXT,
+    Affiliation TEXT
+)
+
+-- 表: Conference
+CREATE TABLE "Conference"
+(
+    Id        INTEGER
+        constraint Conference_pk
+            primary key,
+    ShortName TEXT,
+    FullName  TEXT,
+    HomePage  TEXT
+)
+
+-- 表: Journal
+CREATE TABLE "Journal"
+(
+    Id        INTEGER
+        constraint Journal_pk
+            primary key,
+    ShortName TEXT,
+    FullName  TEXT,
+    HomePage  TEXT
+)
+
+-- 表: Paper
+CREATE TABLE Paper
+(
+    Id           INTEGER
+            primary key,
+    Title        TEXT,
+    Year         INTEGER,
+    ConferenceId INTEGER,
+    JournalId    INTEGER,
+    Keyword      TEXT,
+    foreign key (ConferenceId) references Conference(Id),
+    foreign key (JournalId) references Journal(Id)
+)
+
+-- 表: PaperAuthor
+CREATE TABLE PaperAuthor
+(
+    PaperId     INTEGER,
+    AuthorId    INTEGER,
+    Name        TEXT,
+    Affiliation TEXT,
+    foreign key (PaperId) references Paper(Id),
+    foreign key (AuthorId) references Author(Id)
+)
+
+
+============================================================
+数据库: beer_factory
+============================================================
+
+-- 表: customers
+CREATE TABLE customers
+(
+    CustomerID            INTEGER
+            primary key,
+    First                 TEXT,
+    Last                  TEXT,
+    StreetAddress         TEXT,
+    City                  TEXT,
+    State                 TEXT,
+    ZipCode               INTEGER,
+    Email                 TEXT,
+    PhoneNumber           TEXT,
+    FirstPurchaseDate     DATE,
+    SubscribedToEmailList TEXT,
+    Gender                TEXT
+)
+
+-- 表: geolocation
+CREATE TABLE geolocation
+(
+    LocationID INTEGER
+            primary key,
+    Latitude   REAL,
+    Longitude  REAL,
+    foreign key (LocationID) references location(LocationID)
+)
+
+-- 表: location
+CREATE TABLE location
+(
+    LocationID    INTEGER
+            primary key,
+    LocationName  TEXT,
+    StreetAddress TEXT,
+    City          TEXT,
+    State         TEXT,
+    ZipCode       INTEGER,
+    foreign key (LocationID) references geolocation(LocationID)
+)
+
+-- 表: rootbeerbrand
+CREATE TABLE rootbeerbrand
+(
+    BrandID             INTEGER
+            primary key,
+    BrandName           TEXT,
+    FirstBrewedYear     INTEGER,
+    BreweryName         TEXT,
+    City                TEXT,
+    State               TEXT,
+    Country             TEXT,
+    Description         TEXT,
+    CaneSugar           TEXT,
+    CornSyrup           TEXT,
+    Honey               TEXT,
+    ArtificialSweetener TEXT,
+    Caffeinated         TEXT,
+    Alcoholic           TEXT,
+    AvailableInCans     TEXT,
+    AvailableInBottles  TEXT,
+    AvailableInKegs     TEXT,
+    Website             TEXT,
+    FacebookPage        TEXT,
+    Twitter             TEXT,
+    WholesaleCost       REAL,
+    CurrentRetailPrice  REAL
+)
+
+-- 表: rootbeer
+CREATE TABLE rootbeer
+(
+    RootBeerID    INTEGER
+            primary key,
+    BrandID       INTEGER,
+    ContainerType TEXT,
+    LocationID    INTEGER,
+    PurchaseDate  DATE,
+    foreign key (LocationID) references geolocation(LocationID),
+    foreign key (LocationID) references location(LocationID),
+    foreign key (BrandID) references rootbeerbrand(BrandID)
+)
+
+-- 表: rootbeerreview
+CREATE TABLE rootbeerreview
+(
+    CustomerID INTEGER,
+    BrandID    INTEGER,
+    StarRating INTEGER,
+    ReviewDate DATE,
+    Review     TEXT,
+    primary key (CustomerID, BrandID),
+    foreign key (CustomerID) references customers(CustomerID),
+    foreign key (BrandID) references rootbeerbrand(BrandID)
+)
+
+-- 表: transaction
+CREATE TABLE "transaction"
+(
+    TransactionID    INTEGER
+            primary key,
+    CreditCardNumber INTEGER,
+    CustomerID       INTEGER,
+    TransactionDate  DATE,
+    CreditCardType   TEXT,
+    LocationID       INTEGER,
+    RootBeerID       INTEGER,
+    PurchasePrice    REAL,
+    foreign key (CustomerID) references customers(CustomerID),
+    foreign key (LocationID) references location(LocationID),
+    foreign key (RootBeerID) references rootbeer(RootBeerID)
+)
+
+
+============================================================
+数据库: bike_share_1
+============================================================
+
+-- 表: station
+CREATE TABLE "station"
+(
+    id                INTEGER not null
+        primary key,
+    name              TEXT,
+    lat               REAL,
+    long              REAL,
+    dock_count        INTEGER,
+    city              TEXT,
+    installation_date TEXT
+)
+
+-- 表: status
+CREATE TABLE "status"
+(
+    station_id      INTEGER,
+    bikes_available INTEGER,
+    docks_available INTEGER,
+    time            TEXT
+)
+
+-- 表: trip
+CREATE TABLE "trip"
+(
+    id                 INTEGER not null
+        primary key,
+    duration           INTEGER,
+    start_date         TEXT,
+    start_station_name TEXT,
+    start_station_id   INTEGER,
+    end_date           TEXT,
+    end_station_name   TEXT,
+    end_station_id     INTEGER,
+    bike_id            INTEGER,
+    subscription_type  TEXT,
+    zip_code           INTEGER
+)
+
+-- 表: weather
+CREATE TABLE "weather"
+(
+    date                           TEXT,
+    max_temperature_f              INTEGER,
+    mean_temperature_f             INTEGER,
+    min_temperature_f              INTEGER,
+    max_dew_point_f                INTEGER,
+    mean_dew_point_f               INTEGER,
+    min_dew_point_f                INTEGER,
+    max_humidity                   INTEGER,
+    mean_humidity                  INTEGER,
+    min_humidity                   INTEGER,
+    max_sea_level_pressure_inches  REAL,
+    mean_sea_level_pressure_inches REAL,
+    min_sea_level_pressure_inches  REAL,
+    max_visibility_miles           INTEGER,
+    mean_visibility_miles          INTEGER,
+    min_visibility_miles           INTEGER,
+    max_wind_Speed_mph             INTEGER,
+    mean_wind_speed_mph            INTEGER,
+    max_gust_speed_mph             INTEGER,
+    precipitation_inches           TEXT,
+    cloud_cover                    INTEGER,
+    events                         TEXT,
+    wind_dir_degrees               INTEGER,
+    zip_code                       TEXT
+)
+
+
+============================================================
+数据库: book_publishing_company
+============================================================
+
+-- 表: authors
+CREATE TABLE authors
+(
+    au_id    TEXT
+        primary key,
+    au_lname TEXT not null,
+    au_fname TEXT not null,
+    phone    TEXT    not null,
+    address  TEXT,
+    city     TEXT,
+    state    TEXT,
+    zip      TEXT,
+    contract TEXT     not null
+)
+
+-- 表: jobs
+CREATE TABLE jobs
+(
+    job_id   INTEGER
+        primary key,
+    job_desc TEXT not null,
+    min_lvl  INTEGER     not null,
+    max_lvl  INTEGER     not null
+)
+
+-- 表: publishers
+CREATE TABLE publishers
+(
+    pub_id   TEXT
+        primary key,
+    pub_name TEXT,
+    city     TEXT,
+    state    TEXT,
+    country  TEXT
+)
+
+-- 表: employee
+CREATE TABLE employee
+(
+    emp_id    TEXT
+        primary key,
+    fname     TEXT not null,
+    minit     TEXT,
+    lname     TEXT not null,
+    job_id    INTEGER     not null,
+    job_lvl   INTEGER,
+    pub_id    TEXT     not null,
+    hire_date DATETIME    not null,
+    foreign key (job_id) references jobs(job_id)
+            on update cascade on delete cascade,
+    foreign key (pub_id) references publishers(pub_id)
+            on update cascade on delete cascade
+)
+
+-- 表: pub_info
+CREATE TABLE pub_info
+(
+    pub_id  TEXT
+        primary key,
+    logo    BLOB,
+    pr_info TEXT,
+    foreign key (pub_id) references publishers(pub_id)
+            on update cascade on delete cascade
+)
+
+-- 表: stores
+CREATE TABLE stores
+(
+    stor_id     TEXT
+        primary key,
+    stor_name    TEXT,
+    stor_address TEXT,
+    city         TEXT,
+    state        TEXT,
+    zip          TEXT
+)
+
+-- 表: discounts
+CREATE TABLE discounts
+(
+    discounttype TEXT   not null,
+    stor_id      TEXT,
+    lowqty       INTEGER,
+    highqty      INTEGER,
+    discount     REAL not null,
+    foreign key (stor_id)  references stores(stor_id)
+            on update cascade on delete cascade
+)
+
+-- 表: titles
+CREATE TABLE titles
+(
+    title_id  TEXT
+        primary key,
+    title     TEXT not null,
+    type      TEXT    not null,
+    pub_id    TEXT,
+    price     REAL,
+    advance   REAL,
+    royalty   INTEGER,
+    ytd_sales INTEGER,
+    notes     TEXT,
+    pubdate   DATETIME    not null,
+    foreign key (pub_id) references publishers(pub_id)
+            on update cascade on delete cascade
+)
+
+-- 表: roysched
+CREATE TABLE roysched
+(
+    title_id TEXT not null,
+    lorange  INTEGER,
+    hirange  INTEGER,
+    royalty  INTEGER,
+    foreign key (title_id)  references titles(title_id)
+            on update cascade on delete cascade
+)
+
+-- 表: sales
+CREATE TABLE sales
+(
+    stor_id  TEXT     not null,
+    ord_num  TEXT  not null,
+    ord_date DATETIME    not null,
+    qty      INTEGER     not null,
+    payterms TEXT  not null,
+    title_id TEXT   not null,
+    primary key (stor_id, ord_num, title_id),
+    foreign key (stor_id)   references stores(stor_id)
+            on update cascade on delete cascade,
+    foreign key (title_id)  references titles(title_id)
+            on update cascade on delete cascade
+
+)
+
+-- 表: titleauthor
+CREATE TABLE titleauthor
+(
+    au_id      TEXT not null,
+    title_id   TEXT  not null,
+    au_ord     INTEGER,
+    royaltyper INTEGER,
+    primary key (au_id, title_id),
+    foreign key (au_id) references authors(au_id)
+            on update cascade on delete cascade,
+    foreign key (title_id)    references titles (title_id)
+            on update cascade on delete cascade
+)
+
+
+============================================================
+数据库: books
+============================================================
+
+-- 表: address_status
+CREATE TABLE address_status
+(
+    status_id      INTEGER
+            primary key,
+    address_status TEXT
+)
+
+-- 表: author
+CREATE TABLE author
+(
+    author_id   INTEGER
+            primary key,
+    author_name TEXT
+)
+
+-- 表: book_language
+CREATE TABLE book_language
+(
+    language_id   INTEGER
+            primary key,
+    language_code TEXT,
+    language_name TEXT
+)
+
+-- 表: country
+CREATE TABLE country
+(
+    country_id   INTEGER
+            primary key,
+    country_name TEXT
+)
+
+-- 表: address
+CREATE TABLE address
+(
+    address_id    INTEGER
+            primary key,
+    street_number TEXT,
+    street_name   TEXT,
+    city          TEXT,
+    country_id    INTEGER,
+    foreign key (country_id) references country(country_id)
+)
+
+-- 表: customer
+CREATE TABLE customer
+(
+    customer_id INTEGER
+            primary key,
+    first_name  TEXT,
+    last_name   TEXT,
+    email       TEXT
+)
+
+-- 表: customer_address
+CREATE TABLE customer_address
+(
+    customer_id INTEGER,
+    address_id  INTEGER,
+    status_id   INTEGER,
+    primary key (customer_id, address_id),
+    foreign key (address_id) references address(address_id),
+    foreign key (customer_id) references customer(customer_id)
+)
+
+-- 表: order_status
+CREATE TABLE order_status
+(
+    status_id    INTEGER
+            primary key,
+    status_value TEXT
+)
+
+-- 表: publisher
+CREATE TABLE publisher
+(
+    publisher_id   INTEGER
+            primary key,
+    publisher_name TEXT
+)
+
+-- 表: book
+CREATE TABLE book
+(
+    book_id          INTEGER
+            primary key,
+    title            TEXT,
+    isbn13           TEXT,
+    language_id      INTEGER,
+    num_pages        INTEGER,
+    publication_date DATE,
+    publisher_id     INTEGER,
+    foreign key (language_id) references book_language(language_id),
+    foreign key (publisher_id) references publisher(publisher_id)
+)
+
+-- 表: book_author
+CREATE TABLE book_author
+(
+    book_id   INTEGER,
+    author_id INTEGER,
+    primary key (book_id, author_id),
+    foreign key (author_id) references author(author_id),
+    foreign key (book_id) references book(book_id)
+)
+
+-- 表: shipping_method
+CREATE TABLE shipping_method
+(
+    method_id   INTEGER
+            primary key,
+    method_name TEXT,
+    cost        REAL
+)
+
+-- 表: cust_order
+CREATE TABLE "cust_order"
+(
+    order_id           INTEGER
+        primary key autoincrement,
+    order_date         DATETIME,
+    customer_id        INTEGER
+        references customer,
+    shipping_method_id INTEGER
+        references shipping_method,
+    dest_address_id    INTEGER
+        references address
+)
+
+-- 表: order_history
+CREATE TABLE "order_history"
+(
+    history_id  INTEGER
+        primary key autoincrement,
+    order_id    INTEGER
+        references cust_order,
+    status_id   INTEGER
+        references order_status,
+    status_date DATETIME
+)
+
+-- 表: order_line
+CREATE TABLE "order_line"
+(
+    line_id  INTEGER
+        primary key autoincrement,
+    order_id INTEGER
+        references cust_order,
+    book_id  INTEGER
+        references book,
+    price    REAL
+)
+
+
+============================================================
+数据库: citeseer
+============================================================
+
+-- 表: cites
+CREATE TABLE cites
+(
+    cited_paper_id  TEXT not null,
+    citing_paper_id TEXT not null,
+    primary key (cited_paper_id, citing_paper_id)
+)
+
+-- 表: paper
+CREATE TABLE paper
+(
+    paper_id    TEXT  not null
+        primary key,
+    class_label TEXT not null
+)
+
+-- 表: content
+CREATE TABLE content
+(
+    paper_id     TEXT not null,
+    word_cited_id TEXT not null,
+    primary key (paper_id, word_cited_id),
+    foreign key (paper_id) references paper(paper_id)
+)
+
+
+============================================================
+数据库: codebase_comments
+============================================================
+
+-- 表: Method
+CREATE TABLE "Method"
+(
+    Id            INTEGER not null
+        primary key autoincrement,
+    Name          TEXT,
+    FullComment   TEXT,
+    Summary       TEXT,
+    ApiCalls      TEXT,
+    CommentIsXml  INTEGER,
+    SampledAt     INTEGER,
+    SolutionId    INTEGER,
+    Lang          TEXT,
+    NameTokenized TEXT
+)
+
+-- 表: MethodParameter
+CREATE TABLE "MethodParameter"
+(
+    Id       INTEGER not null
+        primary key autoincrement,
+    MethodId TEXT,
+    Type     TEXT,
+    Name     TEXT
+)
+
+-- 表: Repo
+CREATE TABLE Repo
+(
+    Id            INTEGER not null
+        primary key autoincrement,
+    Url           TEXT,
+    Stars         INTEGER,
+    Forks         INTEGER,
+    Watchers      INTEGER,
+    ProcessedTime INTEGER
+)
+
+-- 表: Solution
+CREATE TABLE Solution
+(
+    Id            INTEGER not null
+        primary key autoincrement,
+    RepoId        INTEGER,
+    Path          TEXT,
+    ProcessedTime INTEGER,
+    WasCompiled   INTEGER
+)
+
+
+============================================================
+数据库: cookbook
+============================================================
+
+-- 表: Ingredient
+CREATE TABLE Ingredient
+(
+    ingredient_id INTEGER
+            primary key,
+    category      TEXT,
+    name          TEXT,
+    plural        TEXT
+)
+
+-- 表: Recipe
+CREATE TABLE Recipe
+(
+    recipe_id  INTEGER
+            primary key,
+    title      TEXT,
+    subtitle   TEXT,
+    servings   INTEGER,
+    yield_unit TEXT,
+    prep_min   INTEGER,
+    cook_min   INTEGER,
+    stnd_min   INTEGER,
+    source     TEXT,
+    intro      TEXT,
+    directions TEXT
+)
+
+-- 表: Nutrition
+CREATE TABLE Nutrition
+(
+    recipe_id     INTEGER
+            primary key,
+    protein       REAL,
+    carbo         REAL,
+    alcohol       REAL,
+    total_fat     REAL,
+    sat_fat       REAL,
+    cholestrl     REAL,
+    sodium        REAL,
+    iron          REAL,
+    vitamin_c     REAL,
+    vitamin_a     REAL,
+    fiber         REAL,
+    pcnt_cal_carb REAL,
+    pcnt_cal_fat  REAL,
+    pcnt_cal_prot REAL,
+    calories      REAL,
+    foreign key (recipe_id) references Recipe(recipe_id)
+)
+
+-- 表: Quantity
+CREATE TABLE Quantity
+(
+    quantity_id   INTEGER
+            primary key,
+    recipe_id     INTEGER,
+    ingredient_id INTEGER,
+    max_qty       REAL,
+    min_qty       REAL,
+    unit          TEXT,
+    preparation   TEXT,
+    optional      TEXT,
+    foreign key (recipe_id) references Recipe(recipe_id),
+    foreign key (ingredient_id) references Ingredient(ingredient_id),
+    foreign key (recipe_id) references Nutrition(recipe_id)
+)
+
+
+============================================================
+数据库: disney
+============================================================
+
+-- 表: characters
+CREATE TABLE characters
+(
+    movie_title  TEXT
+            primary key,
+    release_date TEXT,
+    hero         TEXT,
+    villian      TEXT,
+    song         TEXT,
+    foreign key (hero) references "voice-actors"(character)
+)
+
+-- 表: director
+CREATE TABLE director
+(
+    name     TEXT
+            primary key,
+    director TEXT,
+    foreign key (name) references characters(movie_title)
+)
+
+-- 表: movies_total_gross
+CREATE TABLE movies_total_gross
+(
+    movie_title              TEXT,
+    release_date             TEXT,
+    genre                    TEXT,
+    MPAA_rating              TEXT,
+    total_gross              TEXT,
+    inflation_adjusted_gross TEXT,
+    primary key (movie_title, release_date),
+    foreign key (movie_title) references characters(movie_title)
+)
+
+-- 表: revenue
+CREATE TABLE revenue
+(
+    Year                              INTEGER
+            primary key,
+    "Studio Entertainment[NI 1]"      REAL,
+    "Disney Consumer Products[NI 2]"  REAL,
+    "Disney Interactive[NI 3][Rev 1]" INTEGER,
+    "Walt Disney Parks and Resorts"   REAL,
+    "Disney Media Networks"           TEXT,
+    Total                             INTEGER
+)
+
+-- 表: voice-actors
+CREATE TABLE "voice-actors"
+(
+    character     TEXT
+            primary key,
+    "voice-actor" TEXT,
+    movie         TEXT,
+    foreign key (movie) references characters(movie_title)
+)
+
+
+============================================================
+数据库: genes
+============================================================
+
+-- 表: Classification
+CREATE TABLE Classification
+(
+    GeneID       TEXT   not null
+        primary key,
+    Localization TEXT not null
+)
+
+-- 表: Genes
+CREATE TABLE Genes
+(
+    GeneID       TEXT   not null,
+    Essential    TEXT not null,
+    Class        TEXT not null,
+    Complex      TEXT null,
+    Phenotype    TEXT not null,
+    Motif        TEXT not null,
+    Chromosome   INTEGER          not null,
+    Function     TEXT not null,
+    Localization TEXT not null,
+    foreign key (GeneID) references Classification (GeneID)
+            on update cascade on delete cascade
+)
+
+-- 表: Interactions
+CREATE TABLE Interactions
+(
+    GeneID1         TEXT     not null,
+    GeneID2         TEXT      not null,
+    Type            TEXT    not null,
+    Expression_Corr REAL not null,
+    primary key (GeneID1, GeneID2),
+    foreign key (GeneID1) references Classification (GeneID)
+            on update cascade on delete cascade,
+    foreign key (GeneID2) references Classification (GeneID)
+            on update cascade on delete cascade
+)
+
+
+============================================================
+数据库: hockey
+============================================================
+
+-- 表: AwardsMisc
+CREATE TABLE AwardsMisc
+(
+    name  TEXT not null
+        primary key,
+    ID    TEXT,
+    award TEXT,
+    year  INTEGER,
+    lgID  TEXT,
+    note  TEXT
+)
+
+-- 表: HOF
+CREATE TABLE HOF
+(
+    year     INTEGER,
+    hofID    TEXT not null
+        primary key,
+    name     TEXT,
+    category TEXT
+)
+
+-- 表: Teams
+CREATE TABLE Teams
+(
+    year       INTEGER          not null,
+    lgID       TEXT,
+    tmID       TEXT not null,
+    franchID   TEXT,
+    confID     TEXT,
+    divID      TEXT,
+    rank       INTEGER,
+    playoff    TEXT,
+    G          INTEGER,
+    W          INTEGER,
+    L          INTEGER,
+    T          INTEGER,
+    OTL        TEXT,
+    Pts        INTEGER,
+    SoW        TEXT,
+    SoL        TEXT,
+    GF         INTEGER,
+    GA         INTEGER,
+    name       TEXT,
+    PIM        TEXT,
+    BenchMinor TEXT,
+    PPG        TEXT,
+    PPC       TEXT,
+    SHA        TEXT,
+    PKG       TEXT,
+    PKC        TEXT,
+    SHF        TEXT,
+    primary key (year, tmID)
+)
+
+-- 表: Coaches
+CREATE TABLE Coaches
+(
+    coachID TEXT    not null,
+    year    INTEGER not null,
+    tmID    TEXT    not null,
+    lgID    TEXT,
+    stint   INTEGER not null,
+    notes   TEXT,
+    g       INTEGER,
+    w       INTEGER,
+    l       INTEGER,
+    t       INTEGER,
+    postg   TEXT,
+    postw   TEXT,
+    postl   TEXT,
+    postt   TEXT,
+    primary key (coachID, year, tmID, stint),
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade
+)
+
+-- 表: AwardsCoaches
+CREATE TABLE AwardsCoaches
+(
+    coachID TEXT,
+    award   TEXT,
+    year    INTEGER,
+    lgID    TEXT,
+    note    TEXT,
+    foreign key (coachID) references Coaches (coachID)
+)
+
+-- 表: Master
+CREATE TABLE Master
+(
+    playerID     TEXT,
+    coachID      TEXT,
+    hofID        TEXT,
+    firstName    TEXT,
+    lastName     TEXT not null,
+    nameNote     TEXT,
+    nameGiven    TEXT,
+    nameNick     TEXT,
+    height       TEXT,
+    weight       TEXT,
+    shootCatch   TEXT,
+    legendsID    TEXT,
+    ihdbID       TEXT,
+    hrefID       TEXT,
+    firstNHL     TEXT,
+    lastNHL      TEXT,
+    firstWHA     TEXT,
+    lastWHA     TEXT,
+    pos          TEXT,
+    birthYear    TEXT,
+    birthMon     TEXT,
+    birthDay     TEXT,
+    birthCountry TEXT,
+    birthState   TEXT,
+    birthCity    TEXT,
+    deathYear    TEXT,
+    deathMon     TEXT,
+    deathDay     TEXT,
+    deathCountry TEXT,
+    deathState   TEXT,
+    deathCity    TEXT,
+    foreign key (coachID) references Coaches (coachID)
+            on update cascade on delete cascade
+)
+
+-- 表: AwardsPlayers
+CREATE TABLE AwardsPlayers
+(
+    playerID TEXT    not null,
+    award    TEXT    not null,
+    year     INTEGER not null,
+    lgID     TEXT,
+    note     TEXT,
+    pos      TEXT,
+    primary key (playerID, award, year),
+    foreign key (playerID) references Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: CombinedShutouts
+CREATE TABLE CombinedShutouts
+(
+    year      INTEGER,
+    month     INTEGER,
+    date      INTEGER,
+    tmID      TEXT,
+    oppID     TEXT,
+    "R/P"     TEXT,
+    IDgoalie1 TEXT,
+    IDgoalie2 TEXT,
+    foreign key (IDgoalie1) references Master (playerID)
+            on update cascade on delete cascade,
+    foreign key (IDgoalie2) references  Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: Goalies
+CREATE TABLE Goalies
+(
+    playerID TEXT    not null,
+    year     INTEGER not null,
+    stint    INTEGER not null,
+    tmID     TEXT,
+    lgID     TEXT,
+    GP       TEXT,
+    Min      TEXT,
+    W        TEXT,
+    L        TEXT,
+    "T/OL"   TEXT,
+    ENG      TEXT,
+    SHO      TEXT,
+    GA       TEXT,
+    SA       TEXT,
+    PostGP   TEXT,
+    PostMin  TEXT,
+    PostW    TEXT,
+    PostL    TEXT,
+    PostT    TEXT,
+    PostENG  TEXT,
+    PostSHO  TEXT,
+    PostGA   TEXT,
+    PostSA   TEXT,
+    primary key (playerID, year, stint),
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade,
+    foreign key (playerID) references Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: GoaliesSC
+CREATE TABLE GoaliesSC
+(
+    playerID TEXT    not null,
+    year     INTEGER not null,
+    tmID     TEXT,
+    lgID     TEXT,
+    GP       INTEGER,
+    Min      INTEGER,
+    W        INTEGER,
+    L        INTEGER,
+    T        INTEGER,
+    SHO      INTEGER,
+    GA       INTEGER,
+    primary key (playerID, year),
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade,
+    foreign key (playerID) references Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: GoaliesShootout
+CREATE TABLE GoaliesShootout
+(
+    playerID TEXT,
+    year     INTEGER,
+    stint    INTEGER,
+    tmID     TEXT,
+    W        INTEGER,
+    L        INTEGER,
+    SA       INTEGER,
+    GA       INTEGER,
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade,
+    foreign key (playerID)  references Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: Scoring
+CREATE TABLE Scoring
+(
+    playerID  TEXT,
+    year      INTEGER,
+    stint     INTEGER,
+    tmID      TEXT,
+    lgID      TEXT,
+    pos       TEXT,
+    GP        INTEGER,
+    G         INTEGER,
+    A         INTEGER,
+    Pts       INTEGER,
+    PIM       INTEGER,
+    "+/-"     TEXT,
+    PPG       TEXT,
+    PPA       TEXT,
+    SHG       TEXT,
+    SHA       TEXT,
+    GWG       TEXT,
+    GTG       TEXT,
+    SOG       TEXT,
+    PostGP    TEXT,
+    PostG     TEXT,
+    PostA     TEXT,
+    PostPts   TEXT,
+    PostPIM   TEXT,
+    "Post+/-" TEXT,
+    PostPPG   TEXT,
+    PostPPA   TEXT,
+    PostSHG   TEXT,
+    PostSHA   TEXT,
+    PostGWG  TEXT,
+    PostSOG   TEXT,
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade,
+    foreign key (playerID) references Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: ScoringSC
+CREATE TABLE ScoringSC
+(
+    playerID TEXT,
+    year     INTEGER,
+    tmID     TEXT,
+    lgID     TEXT,
+    pos      TEXT,
+    GP       INTEGER,
+    G        INTEGER,
+    A        INTEGER,
+    Pts      INTEGER,
+    PIM      INTEGER,
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade,
+    foreign key (playerID) references Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: ScoringShootout
+CREATE TABLE ScoringShootout
+(
+    playerID TEXT,
+    year     INTEGER,
+    stint    INTEGER,
+    tmID     TEXT,
+    S        INTEGER,
+    G        INTEGER,
+    GDG      INTEGER,
+     foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade,
+    foreign key (playerID) references Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: ScoringSup
+CREATE TABLE ScoringSup
+(
+    playerID TEXT,
+    year     INTEGER,
+    PPA      TEXT,
+    SHA      TEXT,
+     foreign key (playerID) references Master (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: SeriesPost
+CREATE TABLE SeriesPost
+(
+    year        INTEGER,
+    round       TEXT,
+    series      TEXT,
+    tmIDWinner  TEXT,
+    lgIDWinner  TEXT,
+    tmIDLoser   TEXT,
+    lgIDLoser   TEXT,
+    W           INTEGER,
+    L           INTEGER,
+    T           INTEGER,
+    GoalsWinner INTEGER,
+    GoalsLoser  INTEGER,
+    note        TEXT,
+    foreign key (year, tmIDWinner) references Teams (year, tmID)
+        on update cascade on delete cascade,
+    foreign key (year, tmIDLoser) references Teams (year, tmID)
+        on update cascade on delete cascade
+)
+
+-- 表: TeamSplits
+CREATE TABLE TeamSplits
+(
+    year  INTEGER          not null,
+    lgID  TEXT,
+    tmID  TEXT not null,
+    hW    INTEGER,
+    hL    INTEGER,
+    hT    INTEGER,
+    hOTL  TEXT,
+    rW    INTEGER,
+    rL    INTEGER,
+    rT    INTEGER,
+    rOTL  TEXT,
+    SepW  TEXT,
+    SepL  TEXT,
+    SepT  TEXT,
+    SepOL TEXT,
+    OctW TEXT,
+    OctL  TEXT,
+    OctT  TEXT,
+    OctOL TEXT,
+    NovW  TEXT,
+    NovL  TEXT,
+    NovT  TEXT,
+    NovOL TEXT,
+    DecW  TEXT,
+    DecL  TEXT,
+    DecT  TEXT,
+    DecOL TEXT,
+    JanW  INTEGER,
+    JanL  INTEGER,
+    JanT  INTEGER,
+    JanOL TEXT,
+    FebW  INTEGER,
+    FebL  INTEGER,
+    FebT  INTEGER,
+    FebOL TEXT,
+    MarW  TEXT,
+    MarL  TEXT,
+    MarT  TEXT,
+    MarOL TEXT,
+    AprW  TEXT,
+    AprL  TEXT,
+    AprT  TEXT,
+    AprOL TEXT,
+    primary key (year, tmID),
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade
+)
+
+-- 表: TeamVsTeam
+CREATE TABLE TeamVsTeam
+(
+    year  INTEGER          not null,
+    lgID  TEXT,
+    tmID  TEXT not null,
+    oppID TEXT not null,
+    W     INTEGER,
+    L     INTEGER,
+    T     INTEGER,
+    OTL   TEXT,
+    primary key (year, tmID, oppID),
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade,
+    foreign key (oppID, year) references Teams (tmID, year)
+        on update cascade on delete cascade
+)
+
+-- 表: TeamsHalf
+CREATE TABLE TeamsHalf
+(
+    year INTEGER          not null,
+    lgID TEXT,
+    tmID TEXT not null,
+    half INTEGER          not null,
+    rank INTEGER,
+    G    INTEGER,
+    W    INTEGER,
+    L    INTEGER,
+    T    INTEGER,
+    GF   INTEGER,
+    GA   INTEGER,
+    primary key (year, tmID, half),
+    foreign key (tmID, year) references Teams (tmID, year)
+        on update cascade on delete cascade
+)
+
+-- 表: TeamsPost
+CREATE TABLE TeamsPost
+(
+    year       INTEGER          not null,
+    lgID       TEXT,
+    tmID       TEXT not null,
+    G          INTEGER,
+    W          INTEGER,
+    L          INTEGER,
+    T          INTEGER,
+    GF         INTEGER,
+    GA         INTEGER,
+    PIM        TEXT,
+    BenchMinor TEXT,
+    PPG        TEXT,
+    PPC        TEXT,
+    SHA        TEXT,
+    PKG        TEXT,
+    PKC        TEXT,
+    SHF        TEXT,
+    primary key (year, tmID),
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade
+)
+
+-- 表: TeamsSC
+CREATE TABLE TeamsSC
+(
+    year INTEGER          not null,
+    lgID TEXT,
+    tmID TEXT not null,
+    G    INTEGER,
+    W    INTEGER,
+    L    INTEGER,
+    T    INTEGER,
+    GF   INTEGER,
+    GA   INTEGER,
+    PIM  TEXT,
+    primary key (year, tmID),
+    foreign key (year, tmID) references Teams (year, tmID)
+        on update cascade on delete cascade
+)
+
+-- 表: abbrev
+CREATE TABLE abbrev
+(
+    Type     TEXT not null,
+    Code     TEXT not null,
+    Fullname TEXT,
+    primary key (Type, Code)
+)
+
+
+============================================================
+数据库: image_and_language
+============================================================
+
+-- 表: ATT_CLASSES
+CREATE TABLE ATT_CLASSES
+(
+    ATT_CLASS_ID INTEGER default 0 not null
+        primary key,
+    ATT_CLASS    TEXT      not null
+)
+
+-- 表: OBJ_CLASSES
+CREATE TABLE OBJ_CLASSES
+(
+    OBJ_CLASS_ID INTEGER default 0 not null
+        primary key,
+    OBJ_CLASS    TEXT      not null
+)
+
+-- 表: IMG_OBJ
+CREATE TABLE IMG_OBJ
+(
+    IMG_ID        INTEGER default 0 not null,
+    OBJ_SAMPLE_ID INTEGER    default 0 not null,
+    OBJ_CLASS_ID  INTEGER              null,
+    X             INTEGER              null,
+    Y             INTEGER             null,
+    W             INTEGER              null,
+    H             INTEGER              null,
+    primary key (IMG_ID, OBJ_SAMPLE_ID),
+    foreign key (OBJ_CLASS_ID) references OBJ_CLASSES (OBJ_CLASS_ID)
+)
+
+-- 表: IMG_OBJ_ATT
+CREATE TABLE IMG_OBJ_ATT
+(
+    IMG_ID        INTEGER default 0 not null,
+    ATT_CLASS_ID  INTEGER    default 0 not null,
+    OBJ_SAMPLE_ID INTEGER    default 0 not null,
+    primary key (IMG_ID, ATT_CLASS_ID, OBJ_SAMPLE_ID),
+    foreign key (ATT_CLASS_ID) references ATT_CLASSES (ATT_CLASS_ID),
+    foreign key (IMG_ID, OBJ_SAMPLE_ID) references IMG_OBJ (IMG_ID, OBJ_SAMPLE_ID)
+)
+
+-- 表: PRED_CLASSES
+CREATE TABLE PRED_CLASSES
+(
+    PRED_CLASS_ID INTEGER default 0 not null
+        primary key,
+    PRED_CLASS    TEXT     not null
+)
+
+-- 表: IMG_REL
+CREATE TABLE IMG_REL
+(
+    IMG_ID         INTEGER default 0 not null,
+    PRED_CLASS_ID  INTEGER    default 0 not null,
+    OBJ1_SAMPLE_ID INTEGER    default 0 not null,
+    OBJ2_SAMPLE_ID INTEGER   default 0 not null,
+    primary key (IMG_ID, PRED_CLASS_ID, OBJ1_SAMPLE_ID, OBJ2_SAMPLE_ID),
+    foreign key (PRED_CLASS_ID) references PRED_CLASSES (PRED_CLASS_ID),
+    foreign key (IMG_ID, OBJ1_SAMPLE_ID) references IMG_OBJ (IMG_ID, OBJ_SAMPLE_ID),
+    foreign key (IMG_ID, OBJ2_SAMPLE_ID) references IMG_OBJ (IMG_ID, OBJ_SAMPLE_ID)
+)
+
+
+============================================================
+数据库: language_corpus
+============================================================
+
+-- 表: langs
+CREATE TABLE langs(lid    INTEGER PRIMARY KEY AUTOINCREMENT,
+                            lang   TEXT UNIQUE,
+                            locale TEXT UNIQUE,
+                            pages  INTEGER DEFAULT 0,  -- total pages in this language
+                            words  INTEGER DEFAULT 0)
+
+-- 表: pages
+CREATE TABLE pages(pid INTEGER PRIMARY KEY AUTOINCREMENT,
+                            lid INTEGER REFERENCES langs(lid) ON UPDATE CASCADE ON DELETE CASCADE,
+                            page INTEGER DEFAULT NULL, -- wikipedia page id
+                            revision INTEGER DEFAULT NULL, -- wikipedia revision page id
+                            title TEXT,
+                            words INTEGER DEFAULT 0, -- number of different words in this page
+                            UNIQUE(lid,page,title))
+
+-- 表: words
+CREATE TABLE words(wid INTEGER PRIMARY KEY AUTOINCREMENT,
+                            word        TEXT UNIQUE,
+                            occurrences INTEGER DEFAULT 0)
+
+-- 表: langs_words
+CREATE TABLE langs_words(lid INTEGER REFERENCES langs(lid) ON UPDATE CASCADE ON DELETE CASCADE,
+                                        wid INTEGER REFERENCES words(wid) ON UPDATE CASCADE ON DELETE CASCADE,
+                                        occurrences INTEGER, -- repetitions of this word in this language
+                                        PRIMARY KEY(lid,wid))
+                                        WITHOUT ROWID
+
+-- 表: pages_words
+CREATE TABLE pages_words(pid INTEGER REFERENCES pages(pid) ON UPDATE CASCADE ON DELETE CASCADE,
+                                        wid INTEGER REFERENCES words(wid) ON UPDATE CASCADE ON DELETE CASCADE,
+                                        occurrences INTEGER DEFAULT 0, -- times this word appears into this page
+                                        PRIMARY KEY(pid,wid))
+                                        WITHOUT ROWID
+
+-- 表: biwords
+CREATE TABLE biwords(lid    INTEGER REFERENCES langs(lid) ON UPDATE CASCADE ON DELETE CASCADE,
+                                w1st   INTEGER REFERENCES words(wid) ON UPDATE CASCADE ON DELETE CASCADE,
+                                w2nd   INTEGER REFERENCES words(wid) ON UPDATE CASCADE ON DELETE CASCADE,
+                                occurrences INTEGER DEFAULT 0, -- times this pair appears in this language/page
+                                PRIMARY KEY(lid,w1st,w2nd))
+                                WITHOUT ROWID
+
+
+============================================================
+数据库: mental_health_survey
+============================================================
+
+-- 表: Question
+CREATE TABLE Question
+(
+    questiontext TEXT,
+    questionid   INTEGER
+        constraint Question_pk
+            primary key
+)
+
+-- 表: Survey
+CREATE TABLE Survey
+(
+    SurveyID    INTEGER
+        constraint Survey_pk
+            primary key,
+    Description TEXT
+)
+
+-- 表: Answer
+CREATE TABLE "Answer"
+(
+    AnswerText TEXT,
+    SurveyID   INTEGER
+        constraint Answer_Survey_SurveyID_fk
+            references Survey,
+    UserID     INTEGER,
+    QuestionID INTEGER
+        constraint Answer_Question_questionid_fk
+            references Question,
+    constraint Answer_pk
+        primary key (UserID, QuestionID)
+)
+
+
+============================================================
+数据库: movie_3
+============================================================
+
+-- 表: film_text
+CREATE TABLE film_text
+(
+    film_id     INTEGER     not null
+        primary key,
+    title       TEXT not null,
+    description TEXT         null
+)
+
+-- 表: actor
+CREATE TABLE "actor"
+(
+    actor_id    INTEGER
+        primary key autoincrement,
+    first_name  TEXT                               not null,
+    last_name   TEXT                               not null,
+    last_update DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: address
+CREATE TABLE "address"
+(
+    address_id  INTEGER
+        primary key autoincrement,
+    address     TEXT                               not null,
+    address2    TEXT,
+    district    TEXT                               not null,
+    city_id     INTEGER                            not null
+        references city
+            on update cascade,
+    postal_code TEXT,
+    phone       TEXT                               not null,
+    last_update DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: category
+CREATE TABLE "category"
+(
+    category_id INTEGER
+        primary key autoincrement,
+    name        TEXT                               not null,
+    last_update DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: city
+CREATE TABLE "city"
+(
+    city_id     INTEGER
+        primary key autoincrement,
+    city        TEXT                               not null,
+    country_id  INTEGER                            not null
+        references country
+            on update cascade,
+    last_update DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: country
+CREATE TABLE "country"
+(
+    country_id  INTEGER
+        primary key autoincrement,
+    country     TEXT                               not null,
+    last_update DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: customer
+CREATE TABLE "customer"
+(
+    customer_id INTEGER
+        primary key autoincrement,
+    store_id    INTEGER                            not null
+        references store
+            on update cascade,
+    first_name  TEXT                               not null,
+    last_name   TEXT                               not null,
+    email       TEXT,
+    address_id  INTEGER                            not null
+        references address
+            on update cascade,
+    active      INTEGER  default 1                 not null,
+    create_date DATETIME                           not null,
+    last_update DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: film
+CREATE TABLE "film"
+(
+    film_id              INTEGER
+        primary key autoincrement,
+    title                TEXT                               not null,
+    description          TEXT,
+    release_year         TEXT,
+    language_id          INTEGER                            not null
+        references language
+            on update cascade,
+    original_language_id INTEGER
+        references language
+            on update cascade,
+    rental_duration      INTEGER  default 3                 not null,
+    rental_rate          REAL     default 4.99              not null,
+    length               INTEGER,
+    replacement_cost     REAL     default 19.99             not null,
+    rating               TEXT     default 'G',
+    special_features     TEXT,
+    last_update          DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: film_actor
+CREATE TABLE "film_actor"
+(
+    actor_id    INTEGER                            not null
+        references actor
+            on update cascade,
+    film_id     INTEGER                            not null
+        references film
+            on update cascade,
+    last_update DATETIME default CURRENT_TIMESTAMP not null,
+    primary key (actor_id, film_id)
+)
+
+-- 表: film_category
+CREATE TABLE "film_category"
+(
+    film_id     INTEGER                            not null
+        references film
+            on update cascade,
+    category_id INTEGER                            not null
+        references category
+            on update cascade,
+    last_update DATETIME default CURRENT_TIMESTAMP not null,
+    primary key (film_id, category_id)
+)
+
+-- 表: inventory
+CREATE TABLE "inventory"
+(
+    inventory_id INTEGER
+        primary key autoincrement,
+    film_id      INTEGER                            not null
+        references film
+            on update cascade,
+    store_id     INTEGER                            not null
+        references store
+            on update cascade,
+    last_update  DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: language
+CREATE TABLE "language"
+(
+    language_id INTEGER
+        primary key autoincrement,
+    name        TEXT                               not null,
+    last_update DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: payment
+CREATE TABLE "payment"
+(
+    payment_id   INTEGER
+        primary key autoincrement,
+    customer_id  INTEGER                            not null
+        references customer
+            on update cascade,
+    staff_id     INTEGER                            not null
+        references staff
+            on update cascade,
+    rental_id    INTEGER
+                                                    references rental
+                                                        on update cascade on delete set null,
+    amount       REAL                               not null,
+    payment_date DATETIME                           not null,
+    last_update  DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: rental
+CREATE TABLE "rental"
+(
+    rental_id    INTEGER
+        primary key autoincrement,
+    rental_date  DATETIME                           not null,
+    inventory_id INTEGER                            not null
+        references inventory
+            on update cascade,
+    customer_id  INTEGER                            not null
+        references customer
+            on update cascade,
+    return_date  DATETIME,
+    staff_id     INTEGER                            not null
+        references staff
+            on update cascade,
+    last_update  DATETIME default CURRENT_TIMESTAMP not null,
+    unique (rental_date, inventory_id, customer_id)
+)
+
+-- 表: staff
+CREATE TABLE "staff"
+(
+    staff_id    INTEGER
+        primary key autoincrement,
+    first_name  TEXT                               not null,
+    last_name   TEXT                               not null,
+    address_id  INTEGER                            not null
+        references address
+            on update cascade,
+    picture     BLOB,
+    email       TEXT,
+    store_id    INTEGER                            not null
+        references store
+            on update cascade,
+    active      INTEGER  default 1                 not null,
+    username    TEXT                               not null,
+    password    TEXT,
+    last_update DATETIME default CURRENT_TIMESTAMP not null
+)
+
+-- 表: store
+CREATE TABLE "store"
+(
+    store_id         INTEGER
+        primary key autoincrement,
+    manager_staff_id INTEGER                            not null
+        unique
+        references staff
+            on update cascade,
+    address_id       INTEGER                            not null
+        references address
+            on update cascade,
+    last_update      DATETIME default CURRENT_TIMESTAMP not null
+)
+
+
+============================================================
+数据库: music_platform_2
+============================================================
+
+-- 表: runs
+CREATE TABLE runs (
+        run_at text not null,
+        max_rowid integer not null,
+        reviews_added integer not null
+    )
+
+-- 表: podcasts
+CREATE TABLE podcasts (
+        podcast_id text primary key,
+        itunes_id integer not null,
+        slug text not null,
+        itunes_url text not null,
+        title text not null
+    )
+
+-- 表: reviews
+CREATE TABLE "reviews"
+(
+    podcast_id TEXT    not null
+        constraint reviews_podcasts_podcast_id_fk
+            references podcasts,
+    title      TEXT    not null,
+    content    TEXT    not null,
+    rating     INTEGER not null,
+    author_id  TEXT    not null,
+    created_at TEXT    not null
+)
+
+-- 表: categories
+CREATE TABLE "categories"
+(
+    podcast_id TEXT not null
+        constraint categories_podcasts_podcast_id_fk
+            references podcasts,
+    category   TEXT not null,
+    constraint "PRIMARY"
+        primary key (podcast_id, category)
+)
+
+
+============================================================
+数据库: olympics
+============================================================
+
+-- 表: city
+CREATE TABLE city
+(
+    id        INTEGER not null
+            primary key,
+    city_name TEXT default NULL
+)
+
+-- 表: games
+CREATE TABLE games
+(
+    id         INTEGER not null
+            primary key,
+    games_year INTEGER          default NULL,
+    games_name TEXT default NULL,
+    season     TEXT default NULL
+)
+
+-- 表: games_city
+CREATE TABLE games_city
+(
+    games_id INTEGER default NULL,
+    city_id  INTEGER default NULL,
+    foreign key (city_id) references city(id),
+    foreign key (games_id) references games(id)
+)
+
+-- 表: medal
+CREATE TABLE medal
+(
+    id         INTEGER not null
+            primary key,
+    medal_name TEXT default NULL
+)
+
+-- 表: noc_region
+CREATE TABLE noc_region
+(
+    id          INTEGER not null
+            primary key,
+    noc         TEXT   default NULL,
+    region_name TEXT default NULL
+)
+
+-- 表: person
+CREATE TABLE person
+(
+    id        INTEGER not null
+        primary key,
+    full_name TEXT default NULL,
+    gender    TEXT  default NULL,
+    height    INTEGER          default NULL,
+    weight    INTEGER          default NULL
+)
+
+-- 表: games_competitor
+CREATE TABLE games_competitor
+(
+    id        INTEGER not null
+            primary key,
+    games_id  INTEGER default NULL,
+    person_id INTEGER default NULL,
+    age       INTEGER default NULL,
+    foreign key (games_id) references games(id),
+    foreign key (person_id) references person(id)
+)
+
+-- 表: person_region
+CREATE TABLE person_region
+(
+    person_id INTEGER default NULL,
+    region_id INTEGER default NULL,
+    foreign key (person_id) references person(id),
+    foreign key (region_id) references noc_region(id)
+)
+
+-- 表: sport
+CREATE TABLE sport
+(
+    id         INTEGER not null
+            primary key,
+    sport_name TEXT default NULL
+)
+
+-- 表: event
+CREATE TABLE event
+(
+    id         INTEGER not null
+            primary key,
+    sport_id   INTEGER          default NULL,
+    event_name TEXT default NULL,
+    foreign key (sport_id) references sport(id)
+)
+
+-- 表: competitor_event
+CREATE TABLE competitor_event
+(
+    event_id      INTEGER default NULL,
+    competitor_id INTEGER default NULL,
+    medal_id      INTEGER default NULL,
+    foreign key (competitor_id) references games_competitor(id),
+    foreign key (event_id) references event(id),
+    foreign key (medal_id) references medal(id)
+)
+
+
+============================================================
+数据库: professional_basketball
+============================================================
+
+-- 表: awards_players
+CREATE TABLE awards_players
+(
+    playerID TEXT not null,
+    award    TEXT not null,
+    year     INTEGER          not null,
+    lgID     TEXT null,
+    note     TEXT null,
+    pos      TEXT null,
+    primary key (playerID, year, award),
+    foreign key (playerID) references players (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: coaches
+CREATE TABLE coaches
+(
+    coachID     TEXT not null,
+    year        INTEGER          not null,
+    tmID        TEXT not null,
+    lgID        TEXT null,
+    stint       INTEGER          not null,
+    won         INTEGER          null,
+    lost        INTEGER          null,
+    post_wins   INTEGER          null,
+    post_losses INTEGER          null,
+    primary key (coachID, year, tmID, stint),
+    foreign key (tmID, year) references teams (tmID, year)
+            on update cascade on delete cascade
+)
+
+-- 表: draft
+CREATE TABLE draft
+(
+    id             INTEGER default 0 not null
+        primary key,
+    draftYear      INTEGER           null,
+    draftRound     INTEGER           null,
+    draftSelection INTEGER           null,
+    draftOverall   INTEGER          null,
+    tmID           TEXT  null,
+    firstName      TEXT  null,
+    lastName       TEXT  null,
+    suffixName     TEXT  null,
+    playerID       TEXT  null,
+    draftFrom      TEXT  null,
+    lgID           TEXT  null,
+    foreign key (tmID, draftYear) references teams (tmID, year)
+            on update cascade on delete cascade
+)
+
+-- 表: player_allstar
+CREATE TABLE player_allstar
+(
+    playerID        TEXT not null,
+    last_name       TEXT null,
+    first_name      TEXT null,
+    season_id       INTEGER          not null,
+    conference      TEXT null,
+    league_id       TEXT null,
+    games_played    INTEGER          null,
+    minutes         INTEGER          null,
+    points          INTEGER          null,
+    o_rebounds      INTEGER          null,
+    d_rebounds      INTEGER          null,
+    rebounds        INTEGER          null,
+    assists         INTEGER          null,
+    steals          INTEGER          null,
+    blocks          INTEGER          null,
+    turnovers       INTEGER          null,
+    personal_fouls  INTEGER          null,
+    fg_attempted    INTEGER          null,
+    fg_made         INTEGER          null,
+    ft_attempted    INTEGER          null,
+    ft_made         INTEGER          null,
+    three_attempted INTEGER          null,
+    three_made      INTEGER          null,
+    primary key (playerID, season_id),
+    foreign key (playerID) references players (playerID)
+            on update cascade on delete cascade
+)
+
+-- 表: players
+CREATE TABLE players
+(
+    playerID      TEXT not null
+        primary key,
+    useFirst      TEXT null,
+    firstName     TEXT null,
+    middleName    TEXT null,
+    lastName      TEXT null,
+    nameGiven     TEXT null,
+    fullGivenName TEXT null,
+    nameSuffix    TEXT null,
+    nameNick      TEXT null,
+    pos           TEXT null,
+    firstseason   INTEGER          null,
+    lastseason    INTEGER         null,
+    height        REAL        null,
+    weight        INTEGER         null,
+    college       TEXT null,
+    collegeOther  TEXT null,
+    birthDate     DATE         null,
+    birthCity     TEXT null,
+    birthState    TEXT null,
+    birthCountry  TEXT null,
+    highSchool    TEXT null,
+    hsCity        TEXT null,
+    hsState       TEXT null,
+    hsCountry     TEXT null,
+    deathDate     DATE         null,
+    race          TEXT null
+)
+
+-- 表: teams
+CREATE TABLE teams
+(
+    year        INTEGER          not null,
+    lgID        TEXT null,
+    tmID        TEXT not null,
+    franchID    TEXT null,
+    confID      TEXT null,
+    divID       TEXT null,
+    `rank`      INTEGER          null,
+    confRank    INTEGER          null,
+    playoff     TEXT null,
+    name        TEXT null,
+    o_fgm       INTEGER          null,
+--     o_fga       int          null,
+    o_ftm       INTEGER          null,
+--     o_fta       int          null,
+--     o_3pm       int          null,
+--     o_3pa       int          null,
+--     o_oreb      int          null,
+--     o_dreb      int          null,
+--     o_reb       int          null,
+--     o_asts      int          null,
+--     o_pf        int          null,
+--     o_stl       int          null,
+--     o_to        int          null,
+--     o_blk       int          null,
+     o_pts       INTEGER          null,
+--     d_fgm       int          null,
+--     d_fga       int          null,
+--     d_ftm       int          null,
+--     d_fta       int          null,
+--     d_3pm       int          null,
+--     d_3pa       int          null,
+--     d_oreb      int          null,
+--     d_dreb      int          null,
+--     d_reb       int          null,
+--     d_asts      int          null,
+--     d_pf        int          null,
+--     d_stl       int          null,
+--     d_to        int          null,
+--     d_blk       int          null,
+     d_pts       INTEGER          null,
+--     o_tmRebound int          null,
+--     d_tmRebound int          null,
+    homeWon     INTEGER          null,
+    homeLost    INTEGER          null,
+    awayWon     INTEGER          null,
+    awayLost    INTEGER          null,
+--     neutWon     int          null,
+--     neutLoss    int          null,
+--     confWon     int          null,
+--     confLoss    int          null,
+--     divWon      int          null,
+--     divLoss     int          null,
+--     pace        int          null,
+    won         INTEGER          null,
+    lost        INTEGER          null,
+    games       INTEGER          null,
+--     min         int          null,
+    arena       TEXT null,
+--     attendance  int          null,
+--     bbtmID      varchar(255) null,
+    primary key (year, tmID)
+)
+
+-- 表: awards_coaches
+CREATE TABLE "awards_coaches"
+(
+    id      INTEGER
+        primary key autoincrement,
+    year    INTEGER,
+    coachID TEXT,
+    award   TEXT,
+    lgID    TEXT,
+    note    TEXT,
+    foreign key (coachID, year) references coaches (coachID, year)
+        on update cascade on delete cascade
+)
+
+-- 表: players_teams
+CREATE TABLE "players_teams"
+(
+    id                 INTEGER
+        primary key autoincrement,
+    playerID           TEXT not null
+        references players
+            on update cascade on delete cascade,
+    year               INTEGER,
+    stint              INTEGER,
+    tmID               TEXT,
+    lgID               TEXT,
+    GP                 INTEGER,
+    GS                 INTEGER,
+    minutes            INTEGER,
+    points             INTEGER,
+    oRebounds          INTEGER,
+    dRebounds          INTEGER,
+    rebounds           INTEGER,
+    assists            INTEGER,
+    steals             INTEGER,
+    blocks             INTEGER,
+    turnovers          INTEGER,
+    PF                 INTEGER,
+    fgAttempted        INTEGER,
+    fgMade             INTEGER,
+    ftAttempted        INTEGER,
+    ftMade             INTEGER,
+    threeAttempted     INTEGER,
+    threeMade          INTEGER,
+    PostGP             INTEGER,
+    PostGS             INTEGER,
+    PostMinutes        INTEGER,
+    PostPoints         INTEGER,
+    PostoRebounds      INTEGER,
+    PostdRebounds      INTEGER,
+    PostRebounds       INTEGER,
+    PostAssists        INTEGER,
+    PostSteals         INTEGER,
+    PostBlocks         INTEGER,
+    PostTurnovers      INTEGER,
+    PostPF             INTEGER,
+    PostfgAttempted    INTEGER,
+    PostfgMade         INTEGER,
+    PostftAttempted    INTEGER,
+    PostftMade         INTEGER,
+    PostthreeAttempted INTEGER,
+    PostthreeMade      INTEGER,
+    note               TEXT,
+    foreign key (tmID, year) references teams (tmID, year)
+        on update cascade on delete cascade
+)
+
+-- 表: series_post
+CREATE TABLE "series_post"
+(
+    id         INTEGER
+        primary key autoincrement,
+    year       INTEGER,
+    round      TEXT,
+    series     TEXT,
+    tmIDWinner TEXT,
+    lgIDWinner TEXT,
+    tmIDLoser  TEXT,
+    lgIDLoser  TEXT,
+    W          INTEGER,
+    L          INTEGER,
+    foreign key (tmIDWinner, year) references teams (tmID, year)
+        on update cascade on delete cascade,
+    foreign key (tmIDLoser, year) references teams (tmID, year)
+        on update cascade on delete cascade
+)
+
+
+============================================================
+数据库: public_review_platform
+============================================================
+
+-- 表: Attributes
+CREATE TABLE Attributes
+(
+    attribute_id   INTEGER
+        constraint Attributes_pk
+            primary key,
+    attribute_name TEXT
+)
+
+-- 表: Categories
+CREATE TABLE Categories
+(
+    category_id   INTEGER
+        constraint Categories_pk
+            primary key,
+    category_name TEXT
+)
+
+-- 表: Compliments
+CREATE TABLE Compliments
+(
+    compliment_id   INTEGER
+        constraint Compliments_pk
+            primary key,
+    compliment_type TEXT
+)
+
+-- 表: Days
+CREATE TABLE Days
+(
+    day_id      INTEGER
+        constraint Days_pk
+            primary key,
+    day_of_week TEXT
+)
+
+-- 表: Years
+CREATE TABLE Years
+(
+    year_id     INTEGER
+        constraint Years_pk
+            primary key,
+    actual_year INTEGER
+)
+
+-- 表: Business_Attributes
+CREATE TABLE "Business_Attributes"
+(
+    attribute_id    INTEGER
+        constraint Business_Attributes_Attributes_attribute_id_fk
+            references Attributes,
+    business_id     INTEGER
+        constraint Business_Attributes_Business_business_id_fk
+            references Business,
+    attribute_value TEXT,
+    constraint Business_Attributes_pk
+        primary key (attribute_id, business_id)
+)
+
+-- 表: Business_Categories
+CREATE TABLE "Business_Categories"
+(
+    business_id INTEGER
+        constraint Business_Categories_Business_business_id_fk
+            references Business,
+    category_id INTEGER
+        constraint Business_Categories_Categories_category_id_fk
+            references Categories,
+    constraint Business_Categories_pk
+        primary key (business_id, category_id)
+)
+
+-- 表: Business_Hours
+CREATE TABLE "Business_Hours"
+(
+    business_id  INTEGER
+        constraint Business_Hours_Business_business_id_fk
+            references Business,
+    day_id       INTEGER
+        constraint Business_Hours_Days_day_id_fk
+            references Days,
+    opening_time TEXT,
+    closing_time TEXT,
+    constraint Business_Hours_pk
+        primary key (business_id, day_id)
+)
+
+-- 表: Checkins
+CREATE TABLE "Checkins"
+(
+    business_id   INTEGER
+        constraint Checkins_Business_business_id_fk
+            references Business,
+    day_id        INTEGER
+        constraint Checkins_Days_day_id_fk
+            references Days,
+    label_time_0  TEXT,
+    label_time_1  TEXT,
+    label_time_2  TEXT,
+    label_time_3  TEXT,
+    label_time_4  TEXT,
+    label_time_5  TEXT,
+    label_time_6  TEXT,
+    label_time_7  TEXT,
+    label_time_8  TEXT,
+    label_time_9  TEXT,
+    label_time_10 TEXT,
+    label_time_11 TEXT,
+    label_time_12 TEXT,
+    label_time_13 TEXT,
+    label_time_14 TEXT,
+    label_time_15 TEXT,
+    label_time_16 TEXT,
+    label_time_17 TEXT,
+    label_time_18 TEXT,
+    label_time_19 TEXT,
+    label_time_20 TEXT,
+    label_time_21 TEXT,
+    label_time_22 TEXT,
+    label_time_23 TEXT,
+    constraint Checkins_pk
+        primary key (business_id, day_id)
+)
+
+-- 表: Elite
+CREATE TABLE "Elite"
+(
+    user_id INTEGER
+        constraint Elite_Users_user_id_fk
+            references Users,
+    year_id INTEGER
+        constraint Elite_Years_year_id_fk
+            references Years,
+    constraint Elite_pk
+        primary key (user_id, year_id)
+)
+
+-- 表: Reviews
+CREATE TABLE "Reviews"
+(
+    business_id         INTEGER
+        constraint Reviews_Business_business_id_fk
+            references Business,
+    user_id             INTEGER
+        constraint Reviews_Users_user_id_fk
+            references Users,
+    review_stars        INTEGER,
+    review_votes_funny  TEXT,
+    review_votes_useful TEXT,
+    review_votes_cool   TEXT,
+    review_length       TEXT,
+    constraint Reviews_pk
+        primary key (business_id, user_id)
+)
+
+-- 表: Tips
+CREATE TABLE "Tips"
+(
+    business_id INTEGER
+        constraint Tips_Business_business_id_fk
+            references Business,
+    user_id     INTEGER
+        constraint Tips_Users_user_id_fk
+            references Users,
+    likes       INTEGER,
+    tip_length  TEXT,
+    constraint Tips_pk
+        primary key (business_id, user_id)
+)
+
+-- 表: Users_Compliments
+CREATE TABLE "Users_Compliments"
+(
+    compliment_id         INTEGER
+        constraint Users_Compliments_Compliments_compliment_id_fk
+            references Compliments,
+    user_id               INTEGER
+        constraint Users_Compliments_Users_user_id_fk
+            references Users,
+    number_of_compliments TEXT,
+    constraint Users_Compliments_pk
+        primary key (compliment_id, user_id)
+)
+
+-- 表: Business
+CREATE TABLE "Business"
+(
+    business_id  INTEGER
+        constraint Business_pk
+            primary key,
+    active       TEXT,
+    city         TEXT,
+    state        TEXT,
+    stars        REAL,
+    review_count TEXT
+)
+
+-- 表: Users
+CREATE TABLE "Users"
+(
+    user_id                 INTEGER
+        constraint Users_pk
+            primary key,
+    user_yelping_since_year INTEGER,
+    user_average_stars      TEXT,
+    user_votes_funny        TEXT,
+    user_votes_useful       TEXT,
+    user_votes_cool         TEXT,
+    user_review_count       TEXT,
+    user_fans               TEXT
+)
+
+
+============================================================
+数据库: shakespeare
+============================================================
+
+-- 表: chapters
+CREATE TABLE "chapters"
+(
+    id          INTEGER
+        primary key autoincrement,
+    Act         INTEGER not null,
+    Scene       INTEGER not null,
+    Description TEXT    not null,
+    work_id     INTEGER not null
+        references works
+)
+
+-- 表: characters
+CREATE TABLE "characters"
+(
+    id          INTEGER
+        primary key autoincrement,
+    CharName    TEXT not null,
+    Abbrev      TEXT not null,
+    Description TEXT not null
+)
+
+-- 表: paragraphs
+CREATE TABLE "paragraphs"
+(
+    id           INTEGER
+        primary key autoincrement,
+    ParagraphNum INTEGER           not null,
+    PlainText    TEXT              not null,
+    character_id INTEGER           not null
+        references characters,
+    chapter_id   INTEGER default 0 not null
+        references chapters
+)
+
+-- 表: works
+CREATE TABLE "works"
+(
+    id        INTEGER
+        primary key autoincrement,
+    Title     TEXT    not null,
+    LongTitle TEXT    not null,
+    Date      INTEGER not null,
+    GenreType TEXT    not null
+)
+
+
+============================================================
+数据库: simpson_episodes
+============================================================
+
+-- 表: Episode
+CREATE TABLE "Episode"
+(
+    episode_id       TEXT
+        constraint Episode_pk
+            primary key,
+    season           INTEGER,
+    episode          INTEGER,
+    number_in_series INTEGER,
+    title            TEXT,
+    summary          TEXT,
+    air_date         TEXT,
+    episode_image    TEXT,
+    rating           REAL,
+    votes            INTEGER
+)
+
+-- 表: Person
+CREATE TABLE Person
+(
+    name          TEXT
+        constraint Person_pk
+            primary key,
+    birthdate     TEXT,
+    birth_name    TEXT,
+    birth_place   TEXT,
+    birth_region  TEXT,
+    birth_country TEXT,
+    height_meters REAL,
+    nickname      TEXT
+)
+
+-- 表: Award
+CREATE TABLE Award
+(
+    award_id       INTEGER
+            primary key,
+    organization   TEXT,
+    year           INTEGER,
+    award_category TEXT,
+    award          TEXT,
+    person         TEXT,
+    role           TEXT,
+    episode_id     TEXT,
+    season         TEXT,
+    song           TEXT,
+    result         TEXT,
+    foreign key (person) references Person(name),
+    foreign key (episode_id) references Episode(episode_id)
+)
+
+-- 表: Character_Award
+CREATE TABLE Character_Award
+(
+    award_id  INTEGER,
+    character TEXT,
+    foreign key (award_id) references Award(award_id)
+)
+
+-- 表: Credit
+CREATE TABLE Credit
+(
+    episode_id TEXT,
+    category   TEXT,
+    person     TEXT,
+    role       TEXT,
+    credited   TEXT,
+    foreign key (episode_id) references Episode(episode_id),
+    foreign key (person) references Person(name)
+)
+
+-- 表: Keyword
+CREATE TABLE Keyword
+(
+    episode_id TEXT,
+    keyword    TEXT,
+    primary key (episode_id, keyword),
+    foreign key (episode_id) references Episode(episode_id)
+)
+
+-- 表: Vote
+CREATE TABLE Vote
+(
+    episode_id TEXT,
+    stars      INTEGER,
+    votes      INTEGER,
+    percent    REAL,
+    foreign key (episode_id) references Episode(episode_id)
+)
+
+
+============================================================
+数据库: soccer_2016
+============================================================
+
+-- 表: Batting_Style
+CREATE TABLE Batting_Style
+(
+    Batting_Id   INTEGER
+            primary key,
+    Batting_hand TEXT
+)
+
+-- 表: Bowling_Style
+CREATE TABLE Bowling_Style
+(
+    Bowling_Id    INTEGER
+            primary key,
+    Bowling_skill TEXT
+)
+
+-- 表: City
+CREATE TABLE City
+(
+    City_Id    INTEGER
+            primary key,
+    City_Name  TEXT,
+    Country_id INTEGER
+)
+
+-- 表: Country
+CREATE TABLE Country
+(
+    Country_Id   INTEGER
+            primary key,
+    Country_Name TEXT,
+    foreign key (Country_Id) references Country(Country_Id)
+)
+
+-- 表: Extra_Type
+CREATE TABLE Extra_Type
+(
+    Extra_Id   INTEGER
+            primary key,
+    Extra_Name TEXT
+)
+
+-- 表: Extra_Runs
+CREATE TABLE Extra_Runs
+(
+    Match_Id      INTEGER,
+    Over_Id       INTEGER,
+    Ball_Id       INTEGER,
+    Extra_Type_Id INTEGER,
+    Extra_Runs    INTEGER,
+    Innings_No    INTEGER,
+    primary key (Match_Id, Over_Id, Ball_Id, Innings_No),
+    foreign key (Extra_Type_Id) references Extra_Type(Extra_Id)
+)
+
+-- 表: Out_Type
+CREATE TABLE Out_Type
+(
+    Out_Id   INTEGER
+            primary key,
+    Out_Name TEXT
+)
+
+-- 表: Outcome
+CREATE TABLE Outcome
+(
+    Outcome_Id   INTEGER
+            primary key,
+    Outcome_Type TEXT
+)
+
+-- 表: Player
+CREATE TABLE Player
+(
+    Player_Id     INTEGER
+            primary key,
+    Player_Name   TEXT,
+    DOB           DATE,
+    Batting_hand  INTEGER,
+    Bowling_skill INTEGER,
+    Country_Name  INTEGER,
+    foreign key (Batting_hand) references Batting_Style(Batting_Id),
+    foreign key (Bowling_skill) references Bowling_Style(Bowling_Id),
+    foreign key (Country_Name) references Country(Country_Id)
+)
+
+-- 表: Rolee
+CREATE TABLE Rolee
+(
+    Role_Id   INTEGER
+            primary key,
+    Role_Desc TEXT
+)
+
+-- 表: Season
+CREATE TABLE Season
+(
+    Season_Id         INTEGER
+            primary key,
+    Man_of_the_Series INTEGER,
+    Orange_Cap        INTEGER,
+    Purple_Cap        INTEGER,
+    Season_Year       INTEGER
+)
+
+-- 表: Team
+CREATE TABLE Team
+(
+    Team_Id   INTEGER
+            primary key,
+    Team_Name TEXT
+)
+
+-- 表: Toss_Decision
+CREATE TABLE Toss_Decision
+(
+    Toss_Id   INTEGER
+            primary key,
+    Toss_Name TEXT
+)
+
+-- 表: Umpire
+CREATE TABLE Umpire
+(
+    Umpire_Id      INTEGER
+            primary key,
+    Umpire_Name    TEXT,
+    Umpire_Country INTEGER,
+    foreign key (Umpire_Country) references Country(Country_Id)
+)
+
+-- 表: Venue
+CREATE TABLE Venue
+(
+    Venue_Id   INTEGER
+            primary key,
+    Venue_Name TEXT,
+    City_Id    INTEGER,
+    foreign key (City_Id) references City(City_Id)
+)
+
+-- 表: Win_By
+CREATE TABLE Win_By
+(
+    Win_Id   INTEGER
+            primary key,
+    Win_Type TEXT
+)
+
+-- 表: Match
+CREATE TABLE Match
+(
+    Match_Id         INTEGER
+            primary key,
+    Team_1           INTEGER,
+    Team_2           INTEGER,
+    Match_Date       DATE,
+    Season_Id        INTEGER,
+    Venue_Id         INTEGER,
+    Toss_Winner      INTEGER,
+    Toss_Decide      INTEGER,
+    Win_Type         INTEGER,
+    Win_Margin       INTEGER,
+    Outcome_type     INTEGER,
+    Match_Winner     INTEGER,
+    Man_of_the_Match INTEGER,
+    foreign key (Team_1) references Team(Team_Id),
+    foreign key (Team_2) references Team(Team_Id),
+    foreign key (Season_Id) references Season(Season_Id),
+    foreign key (Venue_Id) references Venue(Venue_Id),
+    foreign key (Toss_Winner) references Team(Team_Id),
+    foreign key (Toss_Decide) references Toss_Decision(Toss_Id),
+    foreign key (Win_Type) references Win_By(Win_Id),
+    foreign key (Outcome_type) references Out_Type(Out_Id),
+    foreign key (Match_Winner) references Team(Team_Id),
+    foreign key (Man_of_the_Match) references Player(Player_Id)
+)
+
+-- 表: Ball_by_Ball
+CREATE TABLE Ball_by_Ball
+(
+    Match_Id                 INTEGER,
+    Over_Id                  INTEGER,
+    Ball_Id                  INTEGER,
+    Innings_No               INTEGER,
+    Team_Batting             INTEGER,
+    Team_Bowling             INTEGER,
+    Striker_Batting_Position INTEGER,
+    Striker                  INTEGER,
+    Non_Striker              INTEGER,
+    Bowler                   INTEGER,
+    primary key (Match_Id, Over_Id, Ball_Id, Innings_No),
+    foreign key (Match_Id) references Match(Match_Id)
+)
+
+-- 表: Batsman_Scored
+CREATE TABLE Batsman_Scored
+(
+    Match_Id    INTEGER,
+    Over_Id     INTEGER,
+    Ball_Id     INTEGER,
+    Runs_Scored INTEGER,
+    Innings_No  INTEGER,
+    primary key (Match_Id, Over_Id, Ball_Id, Innings_No),
+    foreign key (Match_Id) references Match(Match_Id)
+)
+
+-- 表: Player_Match
+CREATE TABLE Player_Match
+(
+    Match_Id  INTEGER,
+    Player_Id INTEGER,
+    Role_Id   INTEGER,
+    Team_Id   INTEGER,
+    primary key (Match_Id, Player_Id, Role_Id),
+    foreign key (Match_Id) references Match(Match_Id),
+    foreign key (Player_Id) references Player(Player_Id),
+    foreign key (Team_Id) references Team(Team_Id),
+    foreign key (Role_Id) references Rolee(Role_Id)
+)
+
+-- 表: Wicket_Taken
+CREATE TABLE Wicket_Taken
+(
+    Match_Id   INTEGER,
+    Over_Id    INTEGER,
+    Ball_Id    INTEGER,
+    Player_Out INTEGER,
+    Kind_Out   INTEGER,
+    Fielders   INTEGER,
+    Innings_No INTEGER,
+    primary key (Match_Id, Over_Id, Ball_Id, Innings_No),
+    foreign key (Match_Id) references Match(Match_Id),
+    foreign key (Player_Out) references Player(Player_Id),
+    foreign key (Kind_Out) references Out_Type(Out_Id),
+    foreign key (Fielders) references Player(Player_Id)
+)
+
+
+============================================================
+数据库: video_games
+============================================================
+
+-- 表: genre
+CREATE TABLE genre
+(
+    id         INTEGER not null
+            primary key,
+    genre_name TEXT default NULL
+)
+
+-- 表: game
+CREATE TABLE game
+(
+    id        INTEGER not null
+            primary key,
+    genre_id  INTEGER          default NULL,
+    game_name TEXT default NULL,
+    foreign key (genre_id) references genre(id)
+)
+
+-- 表: platform
+CREATE TABLE platform
+(
+    id            INTEGER not null
+            primary key,
+    platform_name TEXT default NULL
+)
+
+-- 表: publisher
+CREATE TABLE publisher
+(
+    id             INTEGER not null
+            primary key,
+    publisher_name TEXT default NULL
+)
+
+-- 表: game_publisher
+CREATE TABLE game_publisher
+(
+    id           INTEGER not null
+            primary key,
+    game_id      INTEGER default NULL,
+    publisher_id INTEGER default NULL,
+    foreign key (game_id) references game(id),
+    foreign key (publisher_id) references publisher(id)
+)
+
+-- 表: game_platform
+CREATE TABLE game_platform
+(
+    id                INTEGER not null
+            primary key,
+    game_publisher_id INTEGER default NULL,
+    platform_id       INTEGER default NULL,
+    release_year      INTEGER default NULL,
+    foreign key (game_publisher_id) references game_publisher(id),
+    foreign key (platform_id) references platform(id)
+)
+
+-- 表: region
+CREATE TABLE region
+(
+    id          INTEGER not null
+            primary key,
+    region_name TEXT default NULL
+)
+
+-- 表: region_sales
+CREATE TABLE region_sales
+(
+    region_id        INTEGER           default NULL,
+    game_platform_id INTEGER           default NULL,
+    num_sales        REAL default NULL,
+    foreign key (game_platform_id) references game_platform(id),
+    foreign key (region_id) references region(id)
+)
+

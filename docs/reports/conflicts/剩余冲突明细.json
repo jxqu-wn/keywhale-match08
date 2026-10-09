@@ -1,0 +1,1126 @@
+{
+  "generated_at": "2026-10-09T01:47:38.532131+00:00",
+  "input_sha256": {
+    "data/raw/subject/QA_train.json": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+    "data/processed/audit.json": "42adce733765f6ec95e42c167905acc710235f202d0e42d6673d654e1aacb68b",
+    "data/processed/catalog.json": "7d555134f4885213acce5a7745832044b894aa038737643e9e542e907e1c6470",
+    "data/processed/knowledge.json": "cc2ea825465db754c0649147d0c862995e17e59586059dbccb9629620f06d2a7",
+    "data/curated/business_rules.json": "924bd590c74d7e4b1143fcf2bd76825eea95b535d4c39fa3be93a7c303b2d27e",
+    "data/curated/education_conflict_resolutions.json": "261731a34a6173534658762fa24b8afb8371e2cff8257520695ba744c5496976",
+    "data/curated/question_corrections.json": "e38deb325eaddc2385127567bdc38e267c70602df7f933281cef081c7b564c07",
+    "data/curated/schema_adjudications.json": "15884b996c2267eca22782269889e61c8e641107d9d0db043ac06f141ca1a992"
+  },
+  "summary": {
+    "group_count": 0,
+    "record_count": 0,
+    "category_counts": {},
+    "source_counts": {},
+    "direct_table_count": 0,
+    "schema_with_dependencies_count": 28,
+    "existing_teacher_rule_group_count": 0
+  },
+  "review_fields": {
+    "status": "审核状态",
+    "handling": "处理方式",
+    "identity_key": "业务身份键",
+    "latest_policy": "新旧记录优先规则",
+    "history_policy": "历史记录保留规则",
+    "filter_order": "合并与筛选顺序",
+    "join_policy": "跨表关联方法",
+    "parameter_corrections": "问题参数与标注修正",
+    "result_policy": "结果粒度/并列/空值规则",
+    "notes": "补充说明"
+  },
+  "groups": [],
+  "schemas": [
+    {
+      "source": "SQLite",
+      "database": "authors",
+      "table": "Conference",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "INTEGER",
+          "definition": "Id        INTEGER"
+        },
+        {
+          "name": "ShortName",
+          "type": "TEXT",
+          "definition": "ShortName TEXT,"
+        },
+        {
+          "name": "FullName",
+          "type": "TEXT",
+          "definition": "FullName  TEXT,"
+        },
+        {
+          "name": "HomePage",
+          "type": "TEXT",
+          "definition": "HomePage  TEXT"
+        }
+      ],
+      "ddl": "CREATE TABLE \"Conference\"\r\n(\r\n    Id        INTEGER\r\n        constraint Conference_pk\r\n            primary key,\r\n    ShortName TEXT,\r\n    FullName  TEXT,\r\n    HomePage  TEXT\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "SQLite",
+      "database": "authors",
+      "table": "Journal",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "INTEGER",
+          "definition": "Id        INTEGER"
+        },
+        {
+          "name": "ShortName",
+          "type": "TEXT",
+          "definition": "ShortName TEXT,"
+        },
+        {
+          "name": "FullName",
+          "type": "TEXT",
+          "definition": "FullName  TEXT,"
+        },
+        {
+          "name": "HomePage",
+          "type": "TEXT",
+          "definition": "HomePage  TEXT"
+        }
+      ],
+      "ddl": "CREATE TABLE \"Journal\"\r\n(\r\n    Id        INTEGER\r\n        constraint Journal_pk\r\n            primary key,\r\n    ShortName TEXT,\r\n    FullName  TEXT,\r\n    HomePage  TEXT\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "SQLite",
+      "database": "authors",
+      "table": "Paper",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "INTEGER",
+          "definition": "Id           INTEGER"
+        },
+        {
+          "name": "Title",
+          "type": "TEXT",
+          "definition": "Title        TEXT,"
+        },
+        {
+          "name": "Year",
+          "type": "INTEGER",
+          "definition": "Year         INTEGER,"
+        },
+        {
+          "name": "ConferenceId",
+          "type": "INTEGER",
+          "definition": "ConferenceId INTEGER,"
+        },
+        {
+          "name": "JournalId",
+          "type": "INTEGER",
+          "definition": "JournalId    INTEGER,"
+        },
+        {
+          "name": "Keyword",
+          "type": "TEXT",
+          "definition": "Keyword      TEXT,"
+        }
+      ],
+      "ddl": "CREATE TABLE Paper\r\n(\r\n    Id           INTEGER\r\n            primary key,\r\n    Title        TEXT,\r\n    Year         INTEGER,\r\n    ConferenceId INTEGER,\r\n    JournalId    INTEGER,\r\n    Keyword      TEXT,\r\n    foreign key (ConferenceId) references Conference(Id),\r\n    foreign key (JournalId) references Journal(Id)\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": [
+        "foreign key (ConferenceId) references Conference(Id),\r",
+        "foreign key (JournalId) references Journal(Id)\r"
+      ]
+    },
+    {
+      "source": "SQLite",
+      "database": "books",
+      "table": "book_language",
+      "columns": [
+        {
+          "name": "language_id",
+          "type": "INTEGER",
+          "definition": "language_id   INTEGER"
+        },
+        {
+          "name": "language_code",
+          "type": "TEXT",
+          "definition": "language_code TEXT,"
+        },
+        {
+          "name": "language_name",
+          "type": "TEXT",
+          "definition": "language_name TEXT"
+        }
+      ],
+      "ddl": "CREATE TABLE book_language\r\n(\r\n    language_id   INTEGER\r\n            primary key,\r\n    language_code TEXT,\r\n    language_name TEXT\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "SQLite",
+      "database": "books",
+      "table": "publisher",
+      "columns": [
+        {
+          "name": "publisher_id",
+          "type": "INTEGER",
+          "definition": "publisher_id   INTEGER"
+        },
+        {
+          "name": "publisher_name",
+          "type": "TEXT",
+          "definition": "publisher_name TEXT"
+        }
+      ],
+      "ddl": "CREATE TABLE publisher\r\n(\r\n    publisher_id   INTEGER\r\n            primary key,\r\n    publisher_name TEXT\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "SQLite",
+      "database": "books",
+      "table": "book",
+      "columns": [
+        {
+          "name": "book_id",
+          "type": "INTEGER",
+          "definition": "book_id          INTEGER"
+        },
+        {
+          "name": "title",
+          "type": "TEXT",
+          "definition": "title            TEXT,"
+        },
+        {
+          "name": "isbn13",
+          "type": "TEXT",
+          "definition": "isbn13           TEXT,"
+        },
+        {
+          "name": "language_id",
+          "type": "INTEGER",
+          "definition": "language_id      INTEGER,"
+        },
+        {
+          "name": "num_pages",
+          "type": "INTEGER",
+          "definition": "num_pages        INTEGER,"
+        },
+        {
+          "name": "publication_date",
+          "type": "DATE",
+          "definition": "publication_date DATE,"
+        },
+        {
+          "name": "publisher_id",
+          "type": "INTEGER",
+          "definition": "publisher_id     INTEGER,"
+        }
+      ],
+      "ddl": "CREATE TABLE book\r\n(\r\n    book_id          INTEGER\r\n            primary key,\r\n    title            TEXT,\r\n    isbn13           TEXT,\r\n    language_id      INTEGER,\r\n    num_pages        INTEGER,\r\n    publication_date DATE,\r\n    publisher_id     INTEGER,\r\n    foreign key (language_id) references book_language(language_id),\r\n    foreign key (publisher_id) references publisher(publisher_id)\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": [
+        "foreign key (language_id) references book_language(language_id),\r",
+        "foreign key (publisher_id) references publisher(publisher_id)\r"
+      ]
+    },
+    {
+      "source": "SQLite",
+      "database": "video_games",
+      "table": "genre",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "definition": "id         INTEGER not null"
+        },
+        {
+          "name": "genre_name",
+          "type": "TEXT",
+          "definition": "genre_name TEXT default NULL"
+        }
+      ],
+      "ddl": "CREATE TABLE genre\r\n(\r\n    id         INTEGER not null\r\n            primary key,\r\n    genre_name TEXT default NULL\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "SQLite",
+      "database": "video_games",
+      "table": "game",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "definition": "id        INTEGER not null"
+        },
+        {
+          "name": "genre_id",
+          "type": "INTEGER",
+          "definition": "genre_id  INTEGER          default NULL,"
+        },
+        {
+          "name": "game_name",
+          "type": "TEXT",
+          "definition": "game_name TEXT default NULL,"
+        }
+      ],
+      "ddl": "CREATE TABLE game\r\n(\r\n    id        INTEGER not null\r\n            primary key,\r\n    genre_id  INTEGER          default NULL,\r\n    game_name TEXT default NULL,\r\n    foreign key (genre_id) references genre(id)\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": [
+        "foreign key (genre_id) references genre(id)\r"
+      ]
+    },
+    {
+      "source": "SQLite",
+      "database": "video_games",
+      "table": "platform",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "definition": "id            INTEGER not null"
+        },
+        {
+          "name": "platform_name",
+          "type": "TEXT",
+          "definition": "platform_name TEXT default NULL"
+        }
+      ],
+      "ddl": "CREATE TABLE platform\r\n(\r\n    id            INTEGER not null\r\n            primary key,\r\n    platform_name TEXT default NULL\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "SQLite",
+      "database": "video_games",
+      "table": "publisher",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "definition": "id             INTEGER not null"
+        },
+        {
+          "name": "publisher_name",
+          "type": "TEXT",
+          "definition": "publisher_name TEXT default NULL"
+        }
+      ],
+      "ddl": "CREATE TABLE publisher\r\n(\r\n    id             INTEGER not null\r\n            primary key,\r\n    publisher_name TEXT default NULL\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "SQLite",
+      "database": "video_games",
+      "table": "game_publisher",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "definition": "id           INTEGER not null"
+        },
+        {
+          "name": "game_id",
+          "type": "INTEGER",
+          "definition": "game_id      INTEGER default NULL,"
+        },
+        {
+          "name": "publisher_id",
+          "type": "INTEGER",
+          "definition": "publisher_id INTEGER default NULL,"
+        }
+      ],
+      "ddl": "CREATE TABLE game_publisher\r\n(\r\n    id           INTEGER not null\r\n            primary key,\r\n    game_id      INTEGER default NULL,\r\n    publisher_id INTEGER default NULL,\r\n    foreign key (game_id) references game(id),\r\n    foreign key (publisher_id) references publisher(id)\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": [
+        "foreign key (game_id) references game(id),\r",
+        "foreign key (publisher_id) references publisher(id)\r"
+      ]
+    },
+    {
+      "source": "SQLite",
+      "database": "video_games",
+      "table": "game_platform",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "definition": "id                INTEGER not null"
+        },
+        {
+          "name": "game_publisher_id",
+          "type": "INTEGER",
+          "definition": "game_publisher_id INTEGER default NULL,"
+        },
+        {
+          "name": "platform_id",
+          "type": "INTEGER",
+          "definition": "platform_id       INTEGER default NULL,"
+        },
+        {
+          "name": "release_year",
+          "type": "INTEGER",
+          "definition": "release_year      INTEGER default NULL,"
+        }
+      ],
+      "ddl": "CREATE TABLE game_platform\r\n(\r\n    id                INTEGER not null\r\n            primary key,\r\n    game_publisher_id INTEGER default NULL,\r\n    platform_id       INTEGER default NULL,\r\n    release_year      INTEGER default NULL,\r\n    foreign key (game_publisher_id) references game_publisher(id),\r\n    foreign key (platform_id) references platform(id)\r\n)",
+      "file": "bird_schemas.txt",
+      "foreign_keys": [
+        "foreign key (game_publisher_id) references game_publisher(id),\r",
+        "foreign key (platform_id) references platform(id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2024",
+      "table": "semester",
+      "columns": [
+        {
+          "name": "semester_id",
+          "type": "INT",
+          "definition": "semester_id       INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "academic_year",
+          "type": "INT",
+          "definition": "academic_year     INT NOT NULL,"
+        },
+        {
+          "name": "semester_code",
+          "type": "VARCHAR(20)",
+          "definition": "semester_code     VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "start_date_key",
+          "type": "INT",
+          "definition": "start_date_key    INT NOT NULL,"
+        },
+        {
+          "name": "end_date_key",
+          "type": "INT",
+          "definition": "end_date_key      INT NOT NULL"
+        }
+      ],
+      "ddl": "CREATE TABLE semester (\r\n    semester_id       INT AUTO_INCREMENT PRIMARY KEY,\r\n    academic_year     INT NOT NULL,\r\n    semester_code     VARCHAR(20) NOT NULL,\r\n    start_date_key    INT NOT NULL,\r\n    end_date_key      INT NOT NULL\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2024",
+      "table": "department",
+      "columns": [
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id     INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "department_code",
+          "type": "VARCHAR(20)",
+          "definition": "department_code   VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "department_name",
+          "type": "VARCHAR(100)",
+          "definition": "department_name   VARCHAR(100) NOT NULL"
+        }
+      ],
+      "ddl": "CREATE TABLE department (\r\n    department_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    department_code   VARCHAR(20) NOT NULL,\r\n    department_name   VARCHAR(100) NOT NULL\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2024",
+      "table": "teacher",
+      "columns": [
+        {
+          "name": "teacher_id",
+          "type": "INT",
+          "definition": "teacher_id        INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "teacher_no",
+          "type": "VARCHAR(20)",
+          "definition": "teacher_no        VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "teacher_name",
+          "type": "VARCHAR(100)",
+          "definition": "teacher_name      VARCHAR(100) NOT NULL,"
+        },
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id     INT NOT NULL,"
+        },
+        {
+          "name": "gender_code",
+          "type": "CHAR(1)",
+          "definition": "gender_code       CHAR(1),"
+        },
+        {
+          "name": "phone",
+          "type": "VARCHAR(20)",
+          "definition": "phone             VARCHAR(20),"
+        },
+        {
+          "name": "region_id",
+          "type": "INT",
+          "definition": "region_id         INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE teacher (\r\n    teacher_id        INT AUTO_INCREMENT PRIMARY KEY,\r\n    teacher_no        VARCHAR(20) NOT NULL,\r\n    teacher_name      VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    gender_code       CHAR(1),\r\n    phone             VARCHAR(20),\r\n    region_id         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (department_id) REFERENCES department(department_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2024",
+      "table": "class",
+      "columns": [
+        {
+          "name": "class_id",
+          "type": "INT",
+          "definition": "class_id          INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "class_code",
+          "type": "VARCHAR(20)",
+          "definition": "class_code        VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "class_name",
+          "type": "VARCHAR(100)",
+          "definition": "class_name        VARCHAR(100) NOT NULL,"
+        },
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id     INT NOT NULL,"
+        },
+        {
+          "name": "grade_year",
+          "type": "INT",
+          "definition": "grade_year        INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE class (\r\n    class_id          INT AUTO_INCREMENT PRIMARY KEY,\r\n    class_code        VARCHAR(20) NOT NULL,\r\n    class_name        VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    grade_year        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (department_id) REFERENCES department(department_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2024",
+      "table": "student",
+      "columns": [
+        {
+          "name": "student_id",
+          "type": "INT",
+          "definition": "student_id            INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "student_no",
+          "type": "VARCHAR(20)",
+          "definition": "student_no            VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "student_name",
+          "type": "VARCHAR(100)",
+          "definition": "student_name          VARCHAR(100) NOT NULL,"
+        },
+        {
+          "name": "gender_code",
+          "type": "CHAR(1)",
+          "definition": "gender_code           CHAR(1),"
+        },
+        {
+          "name": "academic_level_code",
+          "type": "VARCHAR(20)",
+          "definition": "academic_level_code   VARCHAR(20),"
+        },
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id         INT NOT NULL,"
+        },
+        {
+          "name": "class_id",
+          "type": "INT",
+          "definition": "class_id              INT NOT NULL,"
+        },
+        {
+          "name": "home_region_id",
+          "type": "INT",
+          "definition": "home_region_id        INT,"
+        },
+        {
+          "name": "student_status_code",
+          "type": "VARCHAR(20)",
+          "definition": "student_status_code   VARCHAR(20),"
+        },
+        {
+          "name": "admit_date_key",
+          "type": "INT",
+          "definition": "admit_date_key        INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE student (\r\n    student_id            INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_no            VARCHAR(20) NOT NULL,\r\n    student_name          VARCHAR(100) NOT NULL,\r\n    gender_code           CHAR(1),\r\n    academic_level_code   VARCHAR(20),\r\n    department_id         INT NOT NULL,\r\n    class_id              INT NOT NULL,\r\n    home_region_id        INT,\r\n    student_status_code   VARCHAR(20),\r\n    admit_date_key        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (class_id) REFERENCES class(class_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (department_id) REFERENCES department(department_id),\r",
+        "FOREIGN KEY (class_id) REFERENCES class(class_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2024",
+      "table": "course",
+      "columns": [
+        {
+          "name": "course_id",
+          "type": "INT",
+          "definition": "course_id         INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "course_code",
+          "type": "VARCHAR(20)",
+          "definition": "course_code       VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "course_name",
+          "type": "VARCHAR(200)",
+          "definition": "course_name       VARCHAR(200) NOT NULL,"
+        },
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id     INT NOT NULL,"
+        },
+        {
+          "name": "teacher_id",
+          "type": "INT",
+          "definition": "teacher_id        INT NOT NULL,"
+        },
+        {
+          "name": "credit",
+          "type": "DECIMAL(3,1)",
+          "definition": "credit            DECIMAL(3,1),"
+        },
+        {
+          "name": "course_type",
+          "type": "VARCHAR(20)",
+          "definition": "course_type       VARCHAR(20),"
+        },
+        {
+          "name": "max_score",
+          "type": "INT",
+          "definition": "max_score         INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE course (\r\n    course_id         INT AUTO_INCREMENT PRIMARY KEY,\r\n    course_code       VARCHAR(20) NOT NULL,\r\n    course_name       VARCHAR(200) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    teacher_id        INT NOT NULL,\r\n    credit            DECIMAL(3,1),\r\n    course_type       VARCHAR(20),\r\n    max_score         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (department_id) REFERENCES department(department_id),\r",
+        "FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2024",
+      "table": "enrollment",
+      "columns": [
+        {
+          "name": "enrollment_id",
+          "type": "INT",
+          "definition": "enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "student_id",
+          "type": "INT",
+          "definition": "student_id        INT NOT NULL,"
+        },
+        {
+          "name": "course_id",
+          "type": "INT",
+          "definition": "course_id         INT NOT NULL,"
+        },
+        {
+          "name": "semester_id",
+          "type": "INT",
+          "definition": "semester_id       INT NOT NULL,"
+        },
+        {
+          "name": "enroll_date_key",
+          "type": "INT",
+          "definition": "enroll_date_key   INT,"
+        },
+        {
+          "name": "take_mode",
+          "type": "VARCHAR(20)",
+          "definition": "take_mode         VARCHAR(20),"
+        },
+        {
+          "name": "is_withdraw",
+          "type": "TINYINT(1)",
+          "definition": "is_withdraw       TINYINT(1),"
+        }
+      ],
+      "ddl": "CREATE TABLE enrollment (\r\n    enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_id        INT NOT NULL,\r\n    course_id         INT NOT NULL,\r\n    semester_id       INT NOT NULL,\r\n    enroll_date_key   INT,\r\n    take_mode         VARCHAR(20),\r\n    is_withdraw       TINYINT(1),\r\n    FOREIGN KEY (student_id) REFERENCES student(student_id),\r\n    FOREIGN KEY (course_id) REFERENCES course(course_id),\r\n    FOREIGN KEY (semester_id) REFERENCES semester(semester_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (student_id) REFERENCES student(student_id),\r",
+        "FOREIGN KEY (course_id) REFERENCES course(course_id),\r",
+        "FOREIGN KEY (semester_id) REFERENCES semester(semester_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2024",
+      "table": "exam_score",
+      "columns": [
+        {
+          "name": "exam_score_id",
+          "type": "INT",
+          "definition": "exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "enrollment_id",
+          "type": "INT",
+          "definition": "enrollment_id     INT NOT NULL,"
+        },
+        {
+          "name": "exam_item",
+          "type": "VARCHAR(20)",
+          "definition": "exam_item         VARCHAR(20),"
+        },
+        {
+          "name": "score",
+          "type": "DECIMAL(5,2)",
+          "definition": "score             DECIMAL(5,2),"
+        },
+        {
+          "name": "score_date_key",
+          "type": "INT",
+          "definition": "score_date_key    INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE exam_score (\r\n    exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    enrollment_id     INT NOT NULL,\r\n    exam_item         VARCHAR(20),\r\n    score             DECIMAL(5,2),\r\n    score_date_key    INT,\r\n    FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2025",
+      "table": "semester",
+      "columns": [
+        {
+          "name": "semester_id",
+          "type": "INT",
+          "definition": "semester_id       INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "academic_year",
+          "type": "INT",
+          "definition": "academic_year     INT NOT NULL,"
+        },
+        {
+          "name": "semester_code",
+          "type": "VARCHAR(20)",
+          "definition": "semester_code     VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "start_date_key",
+          "type": "INT",
+          "definition": "start_date_key    INT NOT NULL,"
+        },
+        {
+          "name": "end_date_key",
+          "type": "INT",
+          "definition": "end_date_key      INT NOT NULL"
+        }
+      ],
+      "ddl": "CREATE TABLE semester (\r\n    semester_id       INT AUTO_INCREMENT PRIMARY KEY,\r\n    academic_year     INT NOT NULL,\r\n    semester_code     VARCHAR(20) NOT NULL,\r\n    start_date_key    INT NOT NULL,\r\n    end_date_key      INT NOT NULL\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2025",
+      "table": "department",
+      "columns": [
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id     INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "department_code",
+          "type": "VARCHAR(20)",
+          "definition": "department_code   VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "department_name",
+          "type": "VARCHAR(100)",
+          "definition": "department_name   VARCHAR(100) NOT NULL"
+        }
+      ],
+      "ddl": "CREATE TABLE department (\r\n    department_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    department_code   VARCHAR(20) NOT NULL,\r\n    department_name   VARCHAR(100) NOT NULL\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": []
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2025",
+      "table": "teacher",
+      "columns": [
+        {
+          "name": "teacher_id",
+          "type": "INT",
+          "definition": "teacher_id        INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "teacher_no",
+          "type": "VARCHAR(20)",
+          "definition": "teacher_no        VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "teacher_name",
+          "type": "VARCHAR(100)",
+          "definition": "teacher_name      VARCHAR(100) NOT NULL,"
+        },
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id     INT NOT NULL,"
+        },
+        {
+          "name": "gender_code",
+          "type": "CHAR(1)",
+          "definition": "gender_code       CHAR(1),"
+        },
+        {
+          "name": "phone",
+          "type": "VARCHAR(20)",
+          "definition": "phone             VARCHAR(20),"
+        },
+        {
+          "name": "region_id",
+          "type": "INT",
+          "definition": "region_id         INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE teacher (\r\n    teacher_id        INT AUTO_INCREMENT PRIMARY KEY,\r\n    teacher_no        VARCHAR(20) NOT NULL,\r\n    teacher_name      VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    gender_code       CHAR(1),\r\n    phone             VARCHAR(20),\r\n    region_id         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (department_id) REFERENCES department(department_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2025",
+      "table": "class",
+      "columns": [
+        {
+          "name": "class_id",
+          "type": "INT",
+          "definition": "class_id          INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "class_code",
+          "type": "VARCHAR(20)",
+          "definition": "class_code        VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "class_name",
+          "type": "VARCHAR(100)",
+          "definition": "class_name        VARCHAR(100) NOT NULL,"
+        },
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id     INT NOT NULL,"
+        },
+        {
+          "name": "grade_year",
+          "type": "INT",
+          "definition": "grade_year        INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE class (\r\n    class_id          INT AUTO_INCREMENT PRIMARY KEY,\r\n    class_code        VARCHAR(20) NOT NULL,\r\n    class_name        VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    grade_year        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (department_id) REFERENCES department(department_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2025",
+      "table": "student",
+      "columns": [
+        {
+          "name": "student_id",
+          "type": "INT",
+          "definition": "student_id            INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "student_no",
+          "type": "VARCHAR(20)",
+          "definition": "student_no            VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "student_name",
+          "type": "VARCHAR(100)",
+          "definition": "student_name          VARCHAR(100) NOT NULL,"
+        },
+        {
+          "name": "gender_code",
+          "type": "CHAR(1)",
+          "definition": "gender_code           CHAR(1),"
+        },
+        {
+          "name": "academic_level_code",
+          "type": "VARCHAR(20)",
+          "definition": "academic_level_code   VARCHAR(20),"
+        },
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id         INT NOT NULL,"
+        },
+        {
+          "name": "class_id",
+          "type": "INT",
+          "definition": "class_id              INT NOT NULL,"
+        },
+        {
+          "name": "home_region_id",
+          "type": "INT",
+          "definition": "home_region_id        INT,"
+        },
+        {
+          "name": "student_status_code",
+          "type": "VARCHAR(20)",
+          "definition": "student_status_code   VARCHAR(20),"
+        },
+        {
+          "name": "admit_date_key",
+          "type": "INT",
+          "definition": "admit_date_key        INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE student (\r\n    student_id            INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_no            VARCHAR(20) NOT NULL,\r\n    student_name          VARCHAR(100) NOT NULL,\r\n    gender_code           CHAR(1),\r\n    academic_level_code   VARCHAR(20),\r\n    department_id         INT NOT NULL,\r\n    class_id              INT NOT NULL,\r\n    home_region_id        INT,\r\n    student_status_code   VARCHAR(20),\r\n    admit_date_key        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (class_id) REFERENCES class(class_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (department_id) REFERENCES department(department_id),\r",
+        "FOREIGN KEY (class_id) REFERENCES class(class_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2025",
+      "table": "course",
+      "columns": [
+        {
+          "name": "course_id",
+          "type": "INT",
+          "definition": "course_id         INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "course_code",
+          "type": "VARCHAR(20)",
+          "definition": "course_code       VARCHAR(20) NOT NULL,"
+        },
+        {
+          "name": "course_name",
+          "type": "VARCHAR(200)",
+          "definition": "course_name       VARCHAR(200) NOT NULL,"
+        },
+        {
+          "name": "department_id",
+          "type": "INT",
+          "definition": "department_id     INT NOT NULL,"
+        },
+        {
+          "name": "teacher_id",
+          "type": "INT",
+          "definition": "teacher_id        INT NOT NULL,"
+        },
+        {
+          "name": "credit",
+          "type": "DECIMAL(3,1)",
+          "definition": "credit            DECIMAL(3,1),"
+        },
+        {
+          "name": "course_type",
+          "type": "VARCHAR(20)",
+          "definition": "course_type       VARCHAR(20),"
+        },
+        {
+          "name": "max_score",
+          "type": "INT",
+          "definition": "max_score         INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE course (\r\n    course_id         INT AUTO_INCREMENT PRIMARY KEY,\r\n    course_code       VARCHAR(20) NOT NULL,\r\n    course_name       VARCHAR(200) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    teacher_id        INT NOT NULL,\r\n    credit            DECIMAL(3,1),\r\n    course_type       VARCHAR(20),\r\n    max_score         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (department_id) REFERENCES department(department_id),\r",
+        "FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2025",
+      "table": "enrollment",
+      "columns": [
+        {
+          "name": "enrollment_id",
+          "type": "INT",
+          "definition": "enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "student_id",
+          "type": "INT",
+          "definition": "student_id        INT NOT NULL,"
+        },
+        {
+          "name": "course_id",
+          "type": "INT",
+          "definition": "course_id         INT NOT NULL,"
+        },
+        {
+          "name": "semester_id",
+          "type": "INT",
+          "definition": "semester_id       INT NOT NULL,"
+        },
+        {
+          "name": "enroll_date_key",
+          "type": "INT",
+          "definition": "enroll_date_key   INT,"
+        },
+        {
+          "name": "take_mode",
+          "type": "VARCHAR(20)",
+          "definition": "take_mode         VARCHAR(20),"
+        },
+        {
+          "name": "is_withdraw",
+          "type": "TINYINT(1)",
+          "definition": "is_withdraw       TINYINT(1),"
+        }
+      ],
+      "ddl": "CREATE TABLE enrollment (\r\n    enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_id        INT NOT NULL,\r\n    course_id         INT NOT NULL,\r\n    semester_id       INT NOT NULL,\r\n    enroll_date_key   INT,\r\n    take_mode         VARCHAR(20),\r\n    is_withdraw       TINYINT(1),\r\n    FOREIGN KEY (student_id) REFERENCES student(student_id),\r\n    FOREIGN KEY (course_id) REFERENCES course(course_id),\r\n    FOREIGN KEY (semester_id) REFERENCES semester(semester_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (student_id) REFERENCES student(student_id),\r",
+        "FOREIGN KEY (course_id) REFERENCES course(course_id),\r",
+        "FOREIGN KEY (semester_id) REFERENCES semester(semester_id)\r"
+      ]
+    },
+    {
+      "source": "MYSQL",
+      "database": "education_2025",
+      "table": "exam_score",
+      "columns": [
+        {
+          "name": "exam_score_id",
+          "type": "INT",
+          "definition": "exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,"
+        },
+        {
+          "name": "enrollment_id",
+          "type": "INT",
+          "definition": "enrollment_id     INT NOT NULL,"
+        },
+        {
+          "name": "exam_item",
+          "type": "VARCHAR(20)",
+          "definition": "exam_item         VARCHAR(20),"
+        },
+        {
+          "name": "score",
+          "type": "DECIMAL(5,2)",
+          "definition": "score             DECIMAL(5,2),"
+        },
+        {
+          "name": "score_date_key",
+          "type": "INT",
+          "definition": "score_date_key    INT,"
+        }
+      ],
+      "ddl": "CREATE TABLE exam_score (\r\n    exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    enrollment_id     INT NOT NULL,\r\n    exam_item         VARCHAR(20),\r\n    score             DECIMAL(5,2),\r\n    score_date_key    INT,\r\n    FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r\n)",
+      "file": "core_schema.txt",
+      "foreign_keys": [
+        "FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r"
+      ]
+    }
+  ],
+  "entity_profiles": [
+    {
+      "entity": "teacher",
+      "title": "教师",
+      "candidate_key": "teacher_no（业务身份候选；未声明UNIQUE）",
+      "notes": "用户已提供两年合并、2025整条记录优先的口径。确认编号跨年稳定，以及2025不存在时是否确为旧年补充而非已离职教师；电话空值不回退旧值。"
+    },
+    {
+      "entity": "student",
+      "title": "学生",
+      "candidate_key": "student_no（候选；未声明UNIQUE）",
+      "notes": "确认同一学号是否跨年对应同一人，以及毕业/离校学生是否应纳入默认查询。先选择身份记录再筛选学籍、性别、地区，还是查询历史状态？"
+    },
+    {
+      "entity": "course",
+      "title": "课程",
+      "candidate_key": "course_code（候选；未声明UNIQUE）",
+      "notes": "确认课程是稳定定义还是每年开课实例。学分、任课教师、max_score可能改变；历史成绩折算应使用对应年度课程属性。"
+    },
+    {
+      "entity": "class",
+      "title": "班级",
+      "candidate_key": "class_code（候选；未声明UNIQUE）",
+      "notes": "确认班级代码是否跨年复用。grade_year是入学年份条件，与年度库选择分别判断。"
+    },
+    {
+      "entity": "semester",
+      "title": "学期",
+      "candidate_key": "academic_year + semester_code（候选）",
+      "notes": "确认学期代码唯一范围、两年库是否重复保存同一学期，以及semester_id=1在两库是否指同一学期。不得仅按本地自增编号跨年去重。"
+    },
+    {
+      "entity": "enrollment",
+      "title": "选课记录",
+      "candidate_key": "业务学生身份 + 课程身份 + 学期身份；可能还需重修/选课批次",
+      "notes": "选课是历史事件，不等于学生快照。跨学期选课不能按学生编号合并为一条；确认重修、重复选课、退课与补录的保留和覆盖规则。"
+    },
+    {
+      "entity": "exam_score",
+      "title": "成绩分项",
+      "candidate_key": "业务选课身份 + exam_item；是否包含score_date_key需确认",
+      "notes": "确认补考、重考、补录是新增事件还是修订原分项。先映射年度内enrollment关联，再判断更新优先级，不用exam_score_id直接跨年连接。"
+    },
+    {
+      "entity": "department",
+      "title": "院系（关联维度）",
+      "candidate_key": "department_code（候选；未声明UNIQUE）",
+      "notes": "问题中的院系编号可能是年度本地ID。合并跨年数据前须确认ID一致性或按业务代码映射。"
+    }
+  ],
+  "review_intro": "原55组冲突均已有处理口径；原11组待审项已按用户授权修正，详见已修正冲突报告。",
+  "source_generated_at": "2026-10-08T16:33:35+08:00",
+  "classification_note": "当前没有待人工决定的冲突组。已修正SQL仅通过本地构造验证，尚无新模型或官方执行成绩。"
+}

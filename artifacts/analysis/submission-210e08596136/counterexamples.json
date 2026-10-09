@@ -1,0 +1,872 @@
+[
+  {
+    "question_id": 3512,
+    "query": "SELECT T1.coachID, T3.name FROM hockey.Coaches AS T1 INNER JOIN hockey.Teams AS T3 ON T1.tmID = T3.tmID AND T1.year = T3.year WHERE T1.year BETWEEN 1970 AND 1980 GROUP BY T1.coachID ORDER BY MAX(T1.year) - MIN(T1.year) DESC LIMIT 1",
+    "description": "同一教练1970/1980分别执教A/B，应列出两队，排序不影响该集合比较。",
+    "expected": [
+      [
+        "c1",
+        "A"
+      ],
+      [
+        "c1",
+        "B"
+      ]
+    ],
+    "tables": {
+      "hockey.Coaches": [
+        {
+          "coachID": "c1",
+          "year": 1970,
+          "tmID": "a",
+          "stint": 1
+        },
+        {
+          "coachID": "c1",
+          "year": 1980,
+          "tmID": "b",
+          "stint": 1
+        }
+      ],
+      "hockey.Teams": [
+        {
+          "year": 1970,
+          "tmID": "a",
+          "name": "A"
+        },
+        {
+          "year": 1980,
+          "tmID": "b",
+          "name": "B"
+        }
+      ]
+    },
+    "actual": [
+      [
+        "c1",
+        "A"
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 3576,
+    "query": "SELECT AVG(T1.weight * 1.0 / (T1.height / 100.0) / (T1.height / 100.0)) FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.player_allstar AS T2 ON T1.playerID = T2.playerID",
+    "description": "单球员weight=200磅，height=80英寸；按知识83计算200/(80*80)。",
+    "expected": [
+      [
+        0.03125
+      ]
+    ],
+    "tables": {
+      "professional_basketball.players": [
+        {
+          "playerID": "p1",
+          "weight": 200,
+          "height": 80
+        }
+      ],
+      "professional_basketball.player_allstar": [
+        {
+          "playerID": "p1",
+          "season_id": 1992
+        }
+      ]
+    },
+    "actual": [
+      [
+        312.5
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 3581,
+    "query": "SELECT T3.name FROM professional_basketball.awards_coaches AS T1 INNER JOIN professional_basketball.coaches AS T2 ON T1.coachID = T2.coachID INNER JOIN professional_basketball.teams AS T3 ON T2.tmID = T3.tmID AND T2.year = T3.year WHERE T1.year = 1992 AND T1.award = 'NBA Coach of the Year'",
+    "description": "教练1990执教A，1992执教B，并于1992获奖；当年球队仅B。",
+    "expected": [
+      [
+        "B"
+      ]
+    ],
+    "tables": {
+      "professional_basketball.awards_coaches": [
+        {
+          "id": 1,
+          "coachID": "c1",
+          "year": 1992,
+          "award": "NBA Coach of the Year"
+        }
+      ],
+      "professional_basketball.coaches": [
+        {
+          "coachID": "c1",
+          "year": 1990,
+          "tmID": "a",
+          "stint": 1
+        },
+        {
+          "coachID": "c1",
+          "year": 1992,
+          "tmID": "b",
+          "stint": 1
+        }
+      ],
+      "professional_basketball.teams": [
+        {
+          "year": 1990,
+          "tmID": "a",
+          "name": "A"
+        },
+        {
+          "year": 1992,
+          "tmID": "b",
+          "name": "B"
+        }
+      ]
+    },
+    "actual": [
+      [
+        "A"
+      ],
+      [
+        "B"
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 3590,
+    "query": "SELECT T1.birthState FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.player_allstar AS T2 ON T1.playerID = T2.playerID GROUP BY T1.birthState ORDER BY COUNT(T1.playerID) DESC LIMIT 1",
+    "description": "州A一人入选四届，州B两人各入选一届；人数最多为B。",
+    "expected": [
+      [
+        "B"
+      ]
+    ],
+    "tables": {
+      "professional_basketball.players": [
+        {
+          "playerID": "a",
+          "birthState": "A"
+        },
+        {
+          "playerID": "b",
+          "birthState": "B"
+        },
+        {
+          "playerID": "c",
+          "birthState": "B"
+        }
+      ],
+      "professional_basketball.player_allstar": [
+        {
+          "playerID": "a",
+          "season_id": 1990
+        },
+        {
+          "playerID": "a",
+          "season_id": 1991
+        },
+        {
+          "playerID": "a",
+          "season_id": 1992
+        },
+        {
+          "playerID": "a",
+          "season_id": 1993
+        },
+        {
+          "playerID": "b",
+          "season_id": 1992
+        },
+        {
+          "playerID": "c",
+          "season_id": 1992
+        }
+      ]
+    },
+    "actual": [
+      [
+        "A"
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 3674,
+    "query": "SELECT CAST(COUNT(T3.character_id) AS REAL) / COUNT(DISTINCT T1.id) FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id INNER JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id",
+    "description": "作品1一个角色重复10段，作品2两个角色各一段，平均角色数(1+2)/2。",
+    "expected": [
+      [
+        1.5
+      ]
+    ],
+    "tables": {
+      "shakespeare.works": [
+        {
+          "id": 1,
+          "Title": "1",
+          "LongTitle": "1",
+          "Date": 1600,
+          "GenreType": "Drama"
+        },
+        {
+          "id": 2,
+          "Title": "2",
+          "LongTitle": "2",
+          "Date": 1600,
+          "GenreType": "Drama"
+        }
+      ],
+      "shakespeare.chapters": [
+        {
+          "id": 1,
+          "Act": 1,
+          "Scene": 1,
+          "Description": "",
+          "work_id": 1
+        },
+        {
+          "id": 2,
+          "Act": 1,
+          "Scene": 1,
+          "Description": "",
+          "work_id": 2
+        }
+      ],
+      "shakespeare.characters": [
+        {
+          "id": 1,
+          "CharName": "1",
+          "Abbrev": "1",
+          "Description": ""
+        },
+        {
+          "id": 2,
+          "CharName": "2",
+          "Abbrev": "2",
+          "Description": ""
+        },
+        {
+          "id": 3,
+          "CharName": "3",
+          "Abbrev": "3",
+          "Description": ""
+        }
+      ],
+      "shakespeare.paragraphs": [
+        {
+          "id": 1,
+          "ParagraphNum": 1,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 2,
+          "ParagraphNum": 2,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 3,
+          "ParagraphNum": 3,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 4,
+          "ParagraphNum": 4,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 5,
+          "ParagraphNum": 5,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 6,
+          "ParagraphNum": 6,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 7,
+          "ParagraphNum": 7,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 8,
+          "ParagraphNum": 8,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 9,
+          "ParagraphNum": 9,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 10,
+          "ParagraphNum": 10,
+          "PlainText": "",
+          "character_id": 1,
+          "chapter_id": 1
+        },
+        {
+          "id": 11,
+          "ParagraphNum": 2,
+          "PlainText": "",
+          "character_id": 2,
+          "chapter_id": 2
+        },
+        {
+          "id": 12,
+          "ParagraphNum": 3,
+          "PlainText": "",
+          "character_id": 3,
+          "chapter_id": 2
+        }
+      ]
+    },
+    "actual": [
+      [
+        6.0
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 3902,
+    "query": "SELECT CAST(COUNT(CASE WHEN T1.publisher_name = 'Brash Entertainment' THEN T2.game_id ELSE NULL END) AS REAL) * 100 / COUNT(T2.game_id) FROM video_games.publisher AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.publisher_id",
+    "description": "三个游戏均有发行记录，游戏1有两个发行商；Brash发行其中一个，占1/3。",
+    "expected": [
+      [
+        33.333333333333336
+      ]
+    ],
+    "tables": {
+      "video_games.game": [
+        {
+          "id": 1,
+          "game_name": "1"
+        },
+        {
+          "id": 2,
+          "game_name": "2"
+        },
+        {
+          "id": 3,
+          "game_name": "3"
+        }
+      ],
+      "video_games.publisher": [
+        {
+          "id": 1,
+          "publisher_name": "Brash Entertainment"
+        },
+        {
+          "id": 2,
+          "publisher_name": "Other"
+        }
+      ],
+      "video_games.game_publisher": [
+        {
+          "id": 1,
+          "game_id": 1,
+          "publisher_id": 1
+        },
+        {
+          "id": 2,
+          "game_id": 1,
+          "publisher_id": 2
+        },
+        {
+          "id": 3,
+          "game_id": 2,
+          "publisher_id": 2
+        },
+        {
+          "id": 4,
+          "game_id": 3,
+          "publisher_id": 2
+        }
+      ]
+    },
+    "actual": [
+      [
+        25.0
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 3915,
+    "query": "SELECT T1.publisher_name FROM video_games.publisher AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.publisher_id GROUP BY T1.publisher_name ORDER BY COUNT(T2.game_id) DESC LIMIT 1",
+    "description": "发行商A同一游戏关联3条，B不同游戏2个；按不同游戏数应为B。",
+    "expected": [
+      [
+        "B"
+      ]
+    ],
+    "tables": {
+      "video_games.game": [
+        {
+          "id": 1,
+          "game_name": "1"
+        },
+        {
+          "id": 2,
+          "game_name": "2"
+        },
+        {
+          "id": 3,
+          "game_name": "3"
+        }
+      ],
+      "video_games.publisher": [
+        {
+          "id": 1,
+          "publisher_name": "A"
+        },
+        {
+          "id": 2,
+          "publisher_name": "B"
+        }
+      ],
+      "video_games.game_publisher": [
+        {
+          "id": 1,
+          "game_id": 1,
+          "publisher_id": 1
+        },
+        {
+          "id": 2,
+          "game_id": 1,
+          "publisher_id": 1
+        },
+        {
+          "id": 3,
+          "game_id": 1,
+          "publisher_id": 1
+        },
+        {
+          "id": 4,
+          "game_id": 2,
+          "publisher_id": 2
+        },
+        {
+          "id": 5,
+          "game_id": 3,
+          "publisher_id": 2
+        }
+      ]
+    },
+    "actual": [
+      [
+        "A"
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 3977,
+    "query": "SELECT CAST(COUNT(T1.Id) AS REAL) / COUNT(DISTINCT T1.Year) FROM authors.Paper AS T1 INNER JOIN authors.Journal AS T2 ON T1.JournalId = T2.Id WHERE T2.FullName = 'Molecular Brain' AND T1.Year BETWEEN 2008 AND 2011",
+    "description": "2008和2011各发表一篇，中间两年0篇；完整4年平均0.5。",
+    "expected": [
+      [
+        0.5
+      ]
+    ],
+    "tables": {
+      "authors.Journal": [
+        {
+          "Id": 1,
+          "FullName": "Molecular Brain"
+        }
+      ],
+      "authors.Paper": [
+        {
+          "Id": 1,
+          "Year": 2008,
+          "JournalId": 1
+        },
+        {
+          "Id": 2,
+          "Year": 2011,
+          "JournalId": 1
+        }
+      ]
+    },
+    "actual": [
+      [
+        1.0
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 4123,
+    "query": "SELECT CAST(SUM(CASE WHEN T2.category_name = 'Automotive' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T2.category_name) FROM public_review_platform.Business_Categories AS T1 INNER JOIN public_review_platform.Categories AS T2 ON T1.category_id = T2.category_id",
+    "description": "两家商家，其中一家汽车/餐饮两类，另一家餐饮一类；汽车商家比例1/2。",
+    "expected": [
+      [
+        50.0
+      ]
+    ],
+    "tables": {
+      "public_review_platform.Business": [
+        {
+          "business_id": 1
+        },
+        {
+          "business_id": 2
+        }
+      ],
+      "public_review_platform.Categories": [
+        {
+          "category_id": 1,
+          "category_name": "Automotive"
+        },
+        {
+          "category_id": 2,
+          "category_name": "Food"
+        }
+      ],
+      "public_review_platform.Business_Categories": [
+        {
+          "business_id": 1,
+          "category_id": 1
+        },
+        {
+          "business_id": 1,
+          "category_id": 2
+        },
+        {
+          "business_id": 2,
+          "category_id": 2
+        }
+      ]
+    },
+    "actual": [
+      [
+        33.333333333333336
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 4207,
+    "query": "SELECT T1.business_id FROM public_review_platform.Business_Hours AS T1 INNER JOIN public_review_platform.Days AS T2 ON T1.day_id = T2.day_id WHERE T2.day_of_week = 'Sunday' AND T1.closing_time - T1.opening_time > 12",
+    "description": "周日8AM到9PM营业13小时，应返回商家1。",
+    "expected": [
+      [
+        1
+      ]
+    ],
+    "tables": {
+      "public_review_platform.Business": [
+        {
+          "business_id": 1
+        }
+      ],
+      "public_review_platform.Days": [
+        {
+          "day_id": 1,
+          "day_of_week": "Sunday"
+        }
+      ],
+      "public_review_platform.Business_Hours": [
+        {
+          "business_id": 1,
+          "day_id": 1,
+          "opening_time": "8AM",
+          "closing_time": "9PM"
+        }
+      ]
+    },
+    "actual": [],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 4424,
+    "query": "SELECT COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Reviews AS T2 ON T1.business_id = T2.business_id WHERE T1.city = 'Phoenix' AND T1.active = 'true' AND T2.review_length = 'Long'",
+    "description": "一家Phoenix活跃商家有两个不同用户的长评论，应计1家。active按原查询小写以隔离去重问题。",
+    "expected": [
+      [
+        1
+      ]
+    ],
+    "tables": {
+      "public_review_platform.Business": [
+        {
+          "business_id": 1,
+          "city": "Phoenix",
+          "active": "true"
+        }
+      ],
+      "public_review_platform.Reviews": [
+        {
+          "business_id": 1,
+          "user_id": 1,
+          "review_length": "Long"
+        },
+        {
+          "business_id": 1,
+          "user_id": 2,
+          "review_length": "Long"
+        }
+      ]
+    },
+    "actual": [
+      [
+        2
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 4682,
+    "query": "SELECT AVG(CAST(AnswerText AS REAL)) FROM mental_health_survey.Answer INNER JOIN mental_health_survey.Question ON mental_health_survey.Answer.QuestionID = mental_health_survey.Question.questionid WHERE mental_health_survey.Question.questiontext = 'How old are you?' AND mental_health_survey.Answer.SurveyID = (SELECT SurveyID FROM mental_health_survey.Survey WHERE Description LIKE '%USA%')",
+    "description": "年龄和国家问题采用知识188/189；美国受访者20岁，加拿大受访者40岁；平均美国年龄20。",
+    "expected": [
+      [
+        20.0
+      ]
+    ],
+    "tables": {
+      "mental_health_survey.Question": [
+        {
+          "questionid": 1,
+          "questiontext": "What is your age?"
+        },
+        {
+          "questionid": 3,
+          "questiontext": "What country do you live in?"
+        }
+      ],
+      "mental_health_survey.Survey": [
+        {
+          "SurveyID": 2014,
+          "Description": "mental health survey for 2014"
+        }
+      ],
+      "mental_health_survey.Answer": [
+        {
+          "UserID": 1,
+          "SurveyID": 2014,
+          "QuestionID": 1,
+          "AnswerText": "20"
+        },
+        {
+          "UserID": 1,
+          "SurveyID": 2014,
+          "QuestionID": 3,
+          "AnswerText": "United States"
+        },
+        {
+          "UserID": 2,
+          "SurveyID": 2014,
+          "QuestionID": 1,
+          "AnswerText": "40"
+        },
+        {
+          "UserID": 2,
+          "SurveyID": 2014,
+          "QuestionID": 3,
+          "AnswerText": "Canada"
+        }
+      ]
+    },
+    "actual": [
+      [
+        null
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 5921,
+    "query": "SELECT COUNT(T1.id) FROM bike_share_1.trip AS T1 INNER JOIN bike_share_1.station AS T2 ON T1.start_station_id = T2.id WHERE T1.start_date LIKE '8/%/2013' AND T2.city = 'San Jose'",
+    "description": "San Jose一条行程，文本日期8/29/2013 12:00:00，应计1。",
+    "expected": [
+      [
+        1
+      ]
+    ],
+    "tables": {
+      "bike_share_1.station": [
+        {
+          "id": 1,
+          "city": "San Jose"
+        }
+      ],
+      "bike_share_1.trip": [
+        {
+          "id": 1,
+          "start_station_id": 1,
+          "start_date": "8/29/2013 12:00:00"
+        }
+      ]
+    },
+    "actual": [
+      [
+        0
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 4324,
+    "query": "SELECT user_id FROM public_review_platform.Elite WHERE year_id = 2012",
+    "description": "条件性反例：Years代理键7对应2012，用户1引用7。此数据分布并非已知真实值。",
+    "expected": [
+      [
+        1
+      ]
+    ],
+    "tables": {
+      "public_review_platform.Years": [
+        {
+          "year_id": 7,
+          "actual_year": 2012
+        }
+      ],
+      "public_review_platform.Elite": [
+        {
+          "user_id": 1,
+          "year_id": 7
+        }
+      ]
+    },
+    "actual": [],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 5028,
+    "query": "SELECT CAST(COUNT(T1.RootBeerID) AS REAL) / (SELECT COUNT(DISTINCT T2.TransactionDate) FROM beer_factory.`transaction` AS T2 INNER JOIN beer_factory.rootbeer AS T3 ON T2.RootBeerID = T3.RootBeerID INNER JOIN beer_factory.rootbeerbrand AS T4 ON T3.BrandID = T4.BrandID WHERE T4.Caffeinated = 'TRUE') FROM beer_factory.`transaction` AS T1 INNER JOIN beer_factory.rootbeer AS T2 ON T1.RootBeerID = T2.RootBeerID INNER JOIN beer_factory.rootbeerbrand AS T3 ON T2.BrandID = T3.BrandID WHERE T3.Caffeinated = 'TRUE'",
+    "description": "条件性反例：同一交易日含咖啡因饮料一瓶一罐，按严格Bottle容器数每日1瓶。",
+    "expected": [
+      [
+        1.0
+      ]
+    ],
+    "tables": {
+      "beer_factory.rootbeerbrand": [
+        {
+          "BrandID": 1,
+          "Caffeinated": "TRUE"
+        }
+      ],
+      "beer_factory.rootbeer": [
+        {
+          "RootBeerID": 1,
+          "BrandID": 1,
+          "ContainerType": "Bottle"
+        },
+        {
+          "RootBeerID": 2,
+          "BrandID": 1,
+          "ContainerType": "Can"
+        }
+      ],
+      "beer_factory.transaction": [
+        {
+          "TransactionID": 1,
+          "RootBeerID": 1,
+          "TransactionDate": "2014-08-01"
+        },
+        {
+          "TransactionID": 2,
+          "RootBeerID": 2,
+          "TransactionDate": "2014-08-01"
+        }
+      ]
+    },
+    "actual": [
+      [
+        2.0
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  },
+  {
+    "question_id": 5311,
+    "query": "SELECT DISTINCT T2.city FROM books.country AS T1 INNER JOIN books.address AS T2 ON T1.country_id = T2.country_id WHERE T1.country_name = 'Costa Rica'",
+    "description": "条件性反例：Costa Rica两地址，只有San Jose关联客户；客户城市集合仅San Jose。",
+    "expected": [
+      [
+        "San Jose"
+      ]
+    ],
+    "tables": {
+      "books.country": [
+        {
+          "country_id": 1,
+          "country_name": "Costa Rica"
+        }
+      ],
+      "books.address": [
+        {
+          "address_id": 1,
+          "city": "San Jose",
+          "country_id": 1
+        },
+        {
+          "address_id": 2,
+          "city": "Liberia",
+          "country_id": 1
+        }
+      ],
+      "books.customer": [
+        {
+          "customer_id": 1
+        }
+      ],
+      "books.customer_address": [
+        {
+          "customer_id": 1,
+          "address_id": 1
+        }
+      ]
+    },
+    "actual": [
+      [
+        "San Jose"
+      ],
+      [
+        "Liberia"
+      ]
+    ],
+    "demonstrates_difference": true,
+    "synthetic_data_only": true
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "protected_file_count": 1298,
+  "protected_hashes_unchanged": true,
+  "curl_request_paths_checked": 19,
+  "submission_count": 400,
+  "submission_sha256": "210e0859613681fe36f23fcb1e5430145796f89891007c250565f1300bd8c7a6",
+  "split_and_catalog_hashes_unchanged": true,
+  "unittest_count": 11,
+  "regression_passed": true
+}

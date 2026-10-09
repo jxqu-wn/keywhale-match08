@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>冲突数据人工审核</title>
+<style>
+:root{color-scheme:light;--ink:#183044;--muted:#526677;--line:#d7e1e8;--blue:#155f94;--bg:#f2f6f9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+main{max-width:1250px;margin:auto;padding:26px 22px 70px}h1{font-size:28px;margin:0 0 6px}h2{font-size:19px;margin:22px 0 10px}h3{font-size:16px;margin:14px 0 6px}p{margin:8px 0}.muted{color:var(--muted)}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.stat{background:white;border:1px solid var(--line);border-radius:10px;padding:10px 18px;min-width:135px}.stat strong{display:block;font-size:25px}
+.toolbar,.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}.filters{padding:14px;background:white;border:1px solid var(--line);border-radius:10px}.filters label{display:flex;flex-direction:column;gap:4px;font-size:13px}.filters .search{flex:1;min-width:220px}
+button,.button{font:inherit;cursor:pointer;border:1px solid #9bb5c9;background:white;color:var(--blue);border-radius:7px;padding:8px 13px}button.primary{background:var(--blue);color:white}.button input{display:none}
+input,select,textarea{font:inherit;color:var(--ink);border:1px solid #b9cbd8;background:white;border-radius:6px;padding:7px 9px;width:100%}textarea{min-height:70px;resize:vertical}input:focus,select:focus,textarea:focus{outline:2px solid #7caecd;outline-offset:1px}
+.card{background:white;border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}.card>summary{cursor:pointer;padding:15px 18px;list-style:none;display:flex;gap:12px;align-items:flex-start}.card>summary::-webkit-details-marker{display:none}.card[open]>summary{border-bottom:1px solid var(--line)}.summary-text{flex:1}.summary-text strong{display:block}.summary-text small{color:var(--muted)}.chevron{font-size:19px;color:var(--blue)}.card[open] .chevron{transform:rotate(90deg)}.content{padding:4px 20px 20px}
+.badge{display:inline-block;white-space:nowrap;border-radius:5px;padding:1px 7px;font-size:12px;border:1px solid var(--line);background:#eef4f7}.p0{color:#9c2d24;background:#fff0ec;border-color:#f2ccc5}.p1{color:#8b5c08;background:#fff8e8;border-color:#ecdfb6}.p2{color:#246943;background:#edf8f0;border-color:#c8e6d0}.confirmed{color:#246943;background:#edf8f0}
+.notice{border-left:4px solid #8ca7ba;background:#f6f9fb;padding:11px 14px}.rules{border-left:4px solid #b99547;background:#fff9ed;padding:11px 14px}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.variant{border:1px solid var(--line);border-radius:8px;padding:12px;min-width:0}.variant h3{margin-top:0}pre{font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f6f8;padding:12px;border-radius:6px;margin:8px 0}code{font-size:.92em}
+.schema{border:1px solid var(--line);border-radius:6px;margin:6px 0;padding:8px 11px}.schema summary{cursor:pointer}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid label{display:flex;flex-direction:column;gap:4px;font-size:14px}.full{grid-column:1/-1}table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13px}th,td{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{background:#f3f6f8}.live{min-height:24px;color:var(--blue)}ul{margin:8px 0;padding-left:23px}
+@media(max-width:750px){main{padding:18px 12px}.two,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.card>summary{padding:12px;gap:6px}.content{padding:4px 12px 15px}.stats{gap:7px}.stat{min-width:100px;padding:8px 12px}h1{font-size:24px}}
+</style>
+</head>
+<body><main>
+<h1>冲突数据人工审核</h1>
+<p class="muted" id="review-intro">完整候选、表结构和专家知识集中展示。填写决定后可导出审核文件；填写内容不会自动修改业务规则或提交结果。</p>
+<div class="stats" id="stats"></div>
+<div class="notice" id="classification-note">P0：问题与标注不一致或业务定义不同；P1：年度范围待确认；P2：SQL疑似等价。分类来自本地分析，未执行真实数据库。教师已有用户口径，其余实体的合并逻辑需要逐项确认。</div>
+<div class="toolbar">
+<button id="export-json" class="primary">导出审核 JSON</button>
+<button id="export-csv">导出填写结果 CSV</button>
+<label class="button">导入审核 JSON<input id="import-json" type="file" accept=".json,application/json"></label>
+<button id="expand">展开筛选结果</button><button id="collapse">收起全部</button>
+</div>
+<p class="muted">填写内容会尽可能保存在当前浏览器。请导出文件保存正式审核结果；重新打开文件或更换浏览器时可导入继续填写。</p>
+<p id="live" class="live" role="status" aria-live="polite"></p>
+<details class="card"><summary><span class="chevron">›</span><strong>按实体确认共同规则</strong></summary><div class="content" id="profiles"></div></details>
+<div class="filters">
+<label class="search">搜索问题、题号、库表或备注<input id="search" type="search" placeholder="例如：教师、1674、exam_score"></label>
+<label>类别<select id="category"><option value="">全部类别</option></select></label>
+<label>优先级<select id="priority"><option value="">全部</option><option>P0</option><option>P1</option><option>P2</option></select></label>
+<label>审核状态<select id="status"><option value="">全部状态</option><option>待审核</option><option>已确认</option><option>需补充信息</option></select></label>
+</div>
+<p class="muted" id="visible-count"></p>
+<div id="groups"></div>
+<noscript><p>交互审核需要启用浏览器 JavaScript。可阅读同目录的冲突数据报告.md，或填写人工审核模板.csv。</p></noscript>
+</main>
+<script id="report-data" type="application/json">__REPORT_JSON__</script>
+<script>
+'use strict';
+const report=JSON.parse(document.getElementById('report-data').textContent);
+if(report.review_intro)document.getElementById('review-intro').textContent=report.review_intro;
+if(report.classification_note)document.getElementById('classification-note').textContent=report.classification_note;
+const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const schemaMap=new Map(report.schemas.map(t=>[`${t.database}.${t.table}`,t]));
+const fields=Object.entries(report.review_fields);
+const storageKey='conflict-review-v1-'+JSON.stringify(report.input_sha256);
+const reviews=Object.fromEntries(report.groups.map(g=>[g.group_id,{...g.review}]));
+function cleanReview(review){
+ const result={};for(const [key] of fields) result[key]=String(review?.[key]??'');
+ if(!['待审核','已确认','需补充信息'].includes(result.status)) result.status='待审核';return result;
+}
+try{const saved=JSON.parse(localStorage.getItem(storageKey)||'null');if(saved)for(const g of report.groups)if(saved[g.group_id])reviews[g.group_id]=cleanReview(saved[g.group_id]);}catch{}
+const live=message=>{document.getElementById('live').textContent=message;};
+function save(){try{localStorage.setItem(storageKey,JSON.stringify(reviews));}catch{live('浏览器无法保存填写内容，请导出审核文件。');}}
+function updateStats(){
+ const confirmed=report.groups.filter(g=>reviews[g.group_id].status==='已确认').length;
+ const values=[['冲突组',report.summary.group_count],['原始标注',report.summary.record_count],['优先审核 P0',report.groups.filter(g=>g.priority==='P0').length],['已确认',confirmed]];
+ document.getElementById('stats').innerHTML=values.map(([label,count])=>`<div class="stat"><strong>${count}</strong>${escapeHtml(label)}</div>`).join('');
+}
+document.getElementById('profiles').innerHTML='<table><thead><tr><th>实体</th><th>身份候选，需验证</th><th>需确认的业务逻辑</th></tr></thead><tbody>'+report.entity_profiles.map(p=>`<tr><td>${escapeHtml(p.title)}</td><td>${escapeHtml(p.candidate_key)}</td><td>${escapeHtml(p.notes)}</td></tr>`).join('')+'</tbody></table>';
+const categorySelect=document.getElementById('category');
+for(const [key,label] of new Map(report.groups.map(g=>[g.category,g.category_label]))){const option=document.createElement('option');option.value=key;option.textContent=label;categorySelect.appendChild(option);}
+function visibleGroups(){
+ const term=document.getElementById('search').value.trim().toLowerCase();
+ return report.groups.filter(g=>{
+  const category=categorySelect.value,priority=document.getElementById('priority').value,status=document.getElementById('status').value;
+  const text=JSON.stringify([g.question,g.question_ids,g.tables,reviews[g.group_id]]).toLowerCase();
+  return (!term||text.includes(term))&&(!category||g.category===category)&&(!priority||g.priority===priority)&&(!status||reviews[g.group_id].status===status);
+ });
+}
+function queryStrings(annotation){return 'query' in annotation?[annotation.query]:[annotation.query1,annotation.query2];}
+function selectField(key,label,value,options){return `<label>${escapeHtml(label)}<select data-field="${key}">${options.map(o=>`<option value="${escapeHtml(o)}"${o===value?' selected':''}>${escapeHtml(o||'请选择')}</option>`).join('')}</select></label>`;}
+function textField(key,label,value){return `<label class="${key==='notes'?'full':''}">${escapeHtml(label)}<textarea data-field="${key}" rows="2">${escapeHtml(value)}</textarea></label>`;}
+function renderGroup(g){
+ const number=report.groups.indexOf(g)+1,review=reviews[g.group_id];
+ const variants=g.variants.map(v=>`<section class="variant"><h3>候选 ${v.label}</h3><p class="muted">原始题号：${v.question_ids.join(', ')}<br>库表：${v.tables.map(escapeHtml).join('、')}</p>${queryStrings(v.annotation).map(q=>`<pre>${escapeHtml(q)}</pre>`).join('')}</section>`).join('');
+ const schemas=g.schema_refs.map(name=>{const t=schemaMap.get(name);return `<details class="schema"><summary>${escapeHtml(name)} · ${escapeHtml(t.source)} · ${g.tables.includes(name)?'查询直接引用':'外键关联依赖'}</summary><p class="muted">来源：${escapeHtml(t.file)}</p><pre>${escapeHtml(t.ddl)}</pre></details>`;}).join('');
+ const knowledge=g.knowledge.length?`<h3>相关专家知识（原文）</h3><ul>${g.knowledge.map(k=>`<li>知识 ${k.knowledge_id}：${escapeHtml(k.knowledge_text)}</li>`).join('')}</ul>`:'';
+ const rule=g.existing_user_rules.length?`<div class="rules"><strong>已有用户口径</strong>${g.existing_user_rules.map(r=>`<p>${escapeHtml(r.instruction)}</p>`).join('')}<p class="muted">该口径来源于用户补充；跨年身份键仍需业务数据确认。</p></div>`:'';
+ const handlingOptions=['','合并去重，2025优先','仅查询2025','仅查询2024','按问题明确年份','分别统计两年','保留历史事件，修订按身份覆盖','修正问题与标注不一致','等价标注统一','重定义过滤口径','自定义（见备注）'];
+ if(review.handling&&!handlingOptions.includes(review.handling))handlingOptions.push(review.handling);
+ const form=selectField('status','审核状态',review.status,['待审核','已确认','需补充信息'])+selectField('handling','处理方式',review.handling,handlingOptions)+fields.filter(([key])=>!['status','handling'].includes(key)).map(([key,label])=>textField(key,label,review[key])).join('');
+ return `<details class="card group" data-group="${g.group_id}"><summary><span class="chevron">›</span><span class="badge ${g.priority.toLowerCase()}">${g.priority}</span><span class="summary-text"><strong>G${String(number).padStart(2,'0')} · ${escapeHtml(g.question)}</strong><small>${escapeHtml(g.category_label)} · 题号 ${g.question_ids.join(', ')}</small></span><span class="badge review-status ${review.status==='已确认'?'confirmed':''}">${escapeHtml(review.status)}</span></summary><div class="content"><h3>差异分析</h3><p>${escapeHtml(g.difference)}</p>${rule}<div class="two">${variants}</div><h3>人工需确认</h3><ul>${g.review_questions.map(q=>`<li>${escapeHtml(q)}</li>`).join('')}</ul>${knowledge}<details class="schema"><summary>查看库表字段、完整 DDL 和外键</summary>${schemas}</details><h3>填写人工决定</h3><div class="form-grid">${form}</div></div></details>`;
+}
+function render(){
+ const visible=visibleGroups();document.getElementById('visible-count').textContent=`当前显示 ${visible.length} / ${report.groups.length} 组`;
+ document.getElementById('groups').innerHTML=visible.map(renderGroup).join('')||'<p>当前筛选没有结果。</p>';
+ updateStats();
+}
+for(const id of ['search','category','priority','status'])document.getElementById(id).addEventListener(id==='search'?'input':'change',render);
+document.getElementById('groups').addEventListener('input',event=>{
+ const field=event.target.dataset.field;if(!field)return;
+ const card=event.target.closest('[data-group]');reviews[card.dataset.group][field]=event.target.value;save();updateStats();
+ const badge=card.querySelector('.review-status');badge.textContent=reviews[card.dataset.group].status;badge.classList.toggle('confirmed',reviews[card.dataset.group].status==='已确认');
+});
+function download(name,text,type){
+ const url=URL.createObjectURL(new Blob([text],{type}));const link=document.createElement('a');link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ live('已导出 '+name+'，包含全部'+report.groups.length+'组的当前填写内容。');
+}
+document.getElementById('export-json').addEventListener('click',()=>{
+ const output={...report,manual_review_exported_at:new Date().toISOString(),groups:report.groups.map(g=>({...g,review:{...reviews[g.group_id]}}))};
+ download('冲突人工审核结果.json',JSON.stringify(output,null,2)+'\n','application/json;charset=utf-8');
+});
+function csvCell(value){let text=String(value??'');if(/^[=+\-@]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';}
+document.getElementById('export-csv').addEventListener('click',()=>{
+ const rows=[['组编号','原始题号','问题','类别','差异分析',...fields.map(([,label])=>label)]];
+ for(const g of report.groups)rows.push([g.group_id,g.question_ids.join(','),g.question,g.category_label,g.difference,...fields.map(([key])=>reviews[g.group_id][key])]);
+ download('冲突人工审核结果.csv','\uFEFF'+rows.map(row=>row.map(csvCell).join(',')).join('\r\n')+'\r\n','text/csv;charset=utf-8');
+});
+document.getElementById('import-json').addEventListener('change',async event=>{
+ const file=event.target.files[0];if(!file)return;
+ try{
+  const incoming=JSON.parse(await file.text());
+  if(!incoming.input_sha256||Object.keys(incoming.input_sha256).length!==Object.keys(report.input_sha256).length||Object.entries(report.input_sha256).some(([key,value])=>incoming.input_sha256[key]!==value))throw new Error('输入数据指纹不同，请导入同一批报告导出的审核文件');
+  if(!Array.isArray(incoming.groups)||incoming.groups.length!==report.groups.length)throw new Error('审核组数不完整');
+  const ids=new Set(incoming.groups.map(g=>g.group_id));if(ids.size!==report.groups.length||report.groups.some(g=>!ids.has(g.group_id)))throw new Error('审核组编号不匹配');
+  for(const g of incoming.groups)reviews[g.group_id]=cleanReview(g.review);save();render();live('已导入 '+file.name+' 的审核内容。');
+ }catch(error){live('导入失败：'+error.message);}finally{event.target.value='';}
+});
+document.getElementById('expand').addEventListener('click',()=>document.querySelectorAll('.group').forEach(d=>d.open=true));
+document.getElementById('collapse').addEventListener('click',()=>document.querySelectorAll('.group').forEach(d=>d.open=false));
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+{
+  "version": 1,
+  "source": "用户授权按审计建议修正；所有示例取自原QA_train，不添加测试或验证答案。",
+  "example_patches": [
+    {
+      "question_id": 4298,
+      "question": "Yelp宠物类商家占所有商家的百分比是多少？",
+      "original_prediction_sha256": "4284217187a374d6007ad683b35bd9496a7cd522eadfbaf0d76ee06a7d328bf2",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT 100.0*COUNT(DISTINCT bc.business_id)/NULLIF((SELECT COUNT(*) FROM public_review_platform.Business),0) AS percentage FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON c.category_id=bc.category_id WHERE c.category_name='Pets'"
+      },
+      "reason": "所有商家是Business实体；类别关系不是分母。"
+    },
+    {
+      "question_id": 4148,
+      "question": "Yelp上Phoenix市有多少商家？Phoenix市商家占所有城市的百分比是多少？",
+      "original_prediction_sha256": "3109dc8a75b4a8895ef4ff90bebd739331130b15b98e8b0d0a9cc6ecaf015582",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT SUM(CASE WHEN city='Phoenix' THEN 1 ELSE 0 END) AS num,100.0*SUM(CASE WHEN city='Phoenix' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0) AS percentage FROM public_review_platform.Business"
+      },
+      "reason": "城市商家计数与占比不需要关联类别表，避免重复及遗漏无类别商家。"
+    },
+    {
+      "question_id": 4159,
+      "question": "Yelp上Chandler市房地产行业且评分为5星的商家占Chandler市所有商家的百分比是多少？",
+      "original_prediction_sha256": "988632202ed574b478c74a5951e47ee69eea020ff87d3c877c582cf9fdde1264",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT 100.0*COUNT(DISTINCT b.business_id)/NULLIF((SELECT COUNT(*) FROM public_review_platform.Business WHERE city='Chandler'),0) AS percentage FROM public_review_platform.Business b WHERE b.city='Chandler' AND b.stars=5 AND EXISTS (SELECT 1 FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON c.category_id=bc.category_id WHERE bc.business_id=b.business_id AND c.category_name='Real Estate')"
+      },
+      "reason": "题目分母是Chandler所有商家，而非房地产商家。仅用于训练示例覆盖；不改验证金标。"
+    },
+    {
+      "question_id": 4309,
+      "question": "计算Yelp上具备接受信用卡属性的商家占所有商家的百分比。",
+      "original_prediction_sha256": "c8fc6c98202d77ee0f29f6758df7b09cbd65ba1de9ec0c1236d573be76bc43a2",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT 100.0*COUNT(*)/NULLIF((SELECT COUNT(*) FROM public_review_platform.Business),0) AS percentage FROM public_review_platform.Business b WHERE EXISTS (SELECT 1 FROM public_review_platform.Business_Attributes ba JOIN public_review_platform.Attributes a ON a.attribute_id=ba.attribute_id WHERE ba.business_id=b.business_id AND a.attribute_name='Accepts Credit Cards' AND LOWER(ba.attribute_value)='true')"
+      },
+      "reason": "接受信用卡需属性值为true；分母含全部商家，避免按属性行计数。"
+    },
+    {
+      "question_id": 4332,
+      "question": "基于凤凰城的Yelp商家，计算有趣投票数低的商家百分比。",
+      "original_prediction_sha256": "2e2470f632c7596424cf789e5604be92c59d8e10bc3a4b7a552c4753523f70dc",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT 100.0*COUNT(*)/NULLIF((SELECT COUNT(*) FROM public_review_platform.Business WHERE city='Phoenix'),0) AS percentage FROM public_review_platform.Business b WHERE b.city='Phoenix' AND EXISTS (SELECT 1 FROM public_review_platform.Reviews r WHERE r.business_id=b.business_id AND r.review_votes_funny='Low')"
+      },
+      "reason": "具有低有趣投票评论的商家按存在性去重；每商家可有多评论。"
+    },
+    {
+      "question_id": 3579,
+      "question": "东部联盟全明星球员的平均身高是多少？",
+      "original_prediction_sha256": "332dcf8760a691dcc1c2fcac7e7ec81194e78c155c4c6a42d76be22ff7bc4d3a",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT AVG(p.height) FROM professional_basketball.players p WHERE EXISTS (SELECT 1 FROM professional_basketball.player_allstar a WHERE a.playerID=p.playerID AND a.conference='East')"
+      },
+      "reason": "去重球员而非AVG(DISTINCT height)；同身高不同球员均应计入。"
+    },
+    {
+      "question_id": 3596,
+      "question": "2010年获得NBA年度最佳教练奖的教练执教的是哪支球队？",
+      "original_prediction_sha256": "a325deac63523afde408cb6143f22cc555952e6dad2ef89f39fa12abf09f6d14",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT DISTINCT c.tmID FROM professional_basketball.coaches c JOIN professional_basketball.awards_coaches a ON a.coachID=c.coachID AND a.year=c.year WHERE a.year=2010 AND a.award='NBA Coach of the Year'"
+      },
+      "reason": "获奖当年球队，补上年份关联，不包含职业生涯其他年份球队。"
+    },
+    {
+      "question_id": 3518,
+      "question": "1977年NBA年度最佳教练奖得主在1976年执教的球队属于哪个赛区？",
+      "original_prediction_sha256": "310d5ee287082f190ac545ffed23b1496710b3fcb29c2c5a629acb069ac6ad06",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT DISTINCT t.divID FROM professional_basketball.awards_coaches a JOIN professional_basketball.coaches c ON a.coachID=c.coachID JOIN professional_basketball.teams t ON c.tmID=t.tmID AND c.year=t.year WHERE a.year=1977 AND a.award='NBA Coach of the Year' AND c.year=1976"
+      },
+      "reason": "题目明确获奖年1977与执教年1976不同，球队表须与实际执教年份匹配。"
+    },
+    {
+      "question_id": 3772,
+      "question": "哪个发行商发行的游戏数量最多？",
+      "original_prediction_sha256": "4c5a771f61a0a125c944d2c65faee9226920edf0e10d845f0f825e326ad98975",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON gp.publisher_id=p.id GROUP BY p.id,p.publisher_name ORDER BY COUNT(DISTINCT gp.game_id) DESC,p.id ASC LIMIT 1"
+      },
+      "reason": "按发行商主键统计不同游戏，不统计发行商ID或发行关系条数；并列按ID稳定取一。"
+    },
+    {
+      "question_id": 3875,
+      "question": "哪个发行商发行的动作类游戏最多？",
+      "original_prediction_sha256": "52d77ebb534d104e694b5ca857a3de46e7ded6661876ce6cb5eff0b2816eedf2",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON gp.publisher_id=p.id JOIN video_games.game g ON g.id=gp.game_id JOIN video_games.genre ge ON ge.id=g.genre_id WHERE ge.genre_name='Action' GROUP BY p.id,p.publisher_name ORDER BY COUNT(DISTINCT g.id) DESC,p.id ASC LIMIT 1"
+      },
+      "reason": "按发行商主键区分同名主体，并按不同游戏数排名。"
+    },
+    {
+      "question_id": 3896,
+      "question": "哪个发行商发行的益智类游戏最多？",
+      "original_prediction_sha256": "6d2da96a297cb59cafc123c8477eb1ac6b59d22dc6bbd6218580de2b2468895d",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON gp.publisher_id=p.id JOIN video_games.game g ON g.id=gp.game_id JOIN video_games.genre ge ON ge.id=g.genre_id WHERE ge.genre_name='Puzzle' GROUP BY p.id,p.publisher_name ORDER BY COUNT(DISTINCT g.id) DESC,p.id ASC LIMIT 1"
+      },
+      "reason": "按发行商主键区分同名主体，并按不同游戏数排名。"
+    },
+    {
+      "question_id": 5293,
+      "question": "购书客户中，位于美国的客户所在的城市有哪些？",
+      "original_prediction_sha256": "c034342e8af566806303072a47499cb1f19fbdca4eac37cb0e65454894f20c54",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT DISTINCT a.city FROM books.customer c JOIN books.customer_address ca ON ca.customer_id=c.customer_id JOIN books.address a ON a.address_id=ca.address_id JOIN books.country co ON co.country_id=a.country_id WHERE co.country_name='United States of America'"
+      },
+      "reason": "限定客户实际关联地址；不把地址维表全部城市当成客户城市，不额外推断当前地址或已下单。"
+    },
+    {
+      "question_id": 4401,
+      "question": "列出任意5个2006年成为Yelp精英用户的用户ID。",
+      "original_prediction_sha256": "e5824dbefb4a903e5a3da19a88e60cad6ff417af3888528c42db00821f797d73",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT e.user_id FROM public_review_platform.Elite e JOIN public_review_platform.Years y ON y.year_id=e.year_id WHERE y.actual_year=2006 ORDER BY e.user_id LIMIT 5"
+      },
+      "reason": "year_id是Years外键；按actual_year筛选，即使代理键恰等于年份也保持兼容。"
+    },
+    {
+      "question_id": 4205,
+      "question": "有多少用户在加入Yelp的同一年就成为精英用户？",
+      "original_prediction_sha256": "468d35f57fb54aa26a834c574250b9578fdd00fe9c53aa17308a0134254c9d46",
+      "replacement": {
+        "db": "SQLite",
+        "query": "SELECT COUNT(DISTINCT u.user_id) FROM public_review_platform.Users u JOIN public_review_platform.Elite e ON e.user_id=u.user_id JOIN public_review_platform.Years y ON y.year_id=e.year_id WHERE u.user_yelping_since_year=y.actual_year"
+      },
+      "reason": "比较加入实际年份与精英实际年份，按用户去重。"
+    },
+    {
+      "question_id": 4375,
+      "question": "拥有极多粉丝的Yelp用户平均需要多少年才能成为精英用户？",
+      "original_prediction_sha256": "f70d8280a9ac60c99d981c0d4c1e16cb71bc6cd3a12dba927b0911f2475cbd05",
+      "replacement": {
+        "db": "SQLite",
+        "query": "WITH first_elite AS (SELECT e.user_id,MIN(y.actual_year) AS first_year FROM public_review_platform.Elite e JOIN public_review_platform.Years y ON y.year_id=e.year_id GROUP BY e.user_id) SELECT AVG(f.first_year-u.user_yelping_since_year) FROM public_review_platform.Users u JOIN first_elite f ON f.user_id=u.user_id WHERE u.user_fans='Uber'"
+      },
+      "reason": "首次成为精英的实际年份减加入年份，再按用户平均，不按每次精英记录重复加权。"
+    },
+    {
+      "question_id": 4134,
+      "question": "Yelp商家编号5734周六营业多少小时？",
+      "original_prediction_sha256": "0166ae9d281b22feda3b790bc887d8059d196b0de1c2ea6de56e3c61add1e59c",
+      "replacement": {
+        "db": "SQLite",
+        "query": "WITH parsed_hours AS (SELECT business_id,day_id,CASE WHEN opening_time IS NULL OR LOWER(TRIM(opening_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(opening_time)) LIKE '%am' OR LOWER(TRIM(opening_time)) LIKE '%pm' THEN CAST(opening_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(opening_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(opening_time AS INTEGER) END)*60 + CASE WHEN INSTR(opening_time,':')>0 THEN CAST(SUBSTR(opening_time,INSTR(opening_time,':')+1,2) AS INTEGER) ELSE 0 END END AS opening_minutes,CASE WHEN closing_time IS NULL OR LOWER(TRIM(closing_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(closing_time)) LIKE '%am' OR LOWER(TRIM(closing_time)) LIKE '%pm' THEN CAST(closing_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(closing_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(closing_time AS INTEGER) END)*60 + CASE WHEN INSTR(closing_time,':')>0 THEN CAST(SUBSTR(closing_time,INSTR(closing_time,':')+1,2) AS INTEGER) ELSE 0 END END AS closing_minutes FROM public_review_platform.Business_Hours),\nnormalized_hours AS (SELECT business_id,day_id,CASE WHEN opening_minutes IS NULL OR closing_minutes IS NULL THEN NULL WHEN opening_minutes=closing_minutes THEN 24.0 WHEN closing_minutes>opening_minutes THEN (closing_minutes-opening_minutes)/60.0 ELSE (closing_minutes-opening_minutes+1440)/60.0 END AS hours FROM parsed_hours)\nSELECT h.hours AS hour FROM normalized_hours h JOIN public_review_platform.Days d ON d.day_id=h.day_id WHERE d.day_of_week='Saturday' AND h.business_id=5734"
+      },
+      "reason": "按知识159解析12小时制文本，支持分钟及跨午夜，同值按知识163视为24小时；平均仅对已提供的有效营业日记录。"
+    },
+    {
+      "question_id": 4169,
+      "question": "Yelp商家编号53周五的营业时长是多少？",
+      "original_prediction_sha256": "1a05f3dea8bb63b91d2d25722ea64afc4eac3885319198ac34d86cab5f4b0a5d",
+      "replacement": {
+        "db": "SQLite",
+        "query": "WITH parsed_hours AS (SELECT business_id,day_id,CASE WHEN opening_time IS NULL OR LOWER(TRIM(opening_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(opening_time)) LIKE '%am' OR LOWER(TRIM(opening_time)) LIKE '%pm' THEN CAST(opening_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(opening_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(opening_time AS INTEGER) END)*60 + CASE WHEN INSTR(opening_time,':')>0 THEN CAST(SUBSTR(opening_time,INSTR(opening_time,':')+1,2) AS INTEGER) ELSE 0 END END AS opening_minutes,CASE WHEN closing_time IS NULL OR LOWER(TRIM(closing_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(closing_time)) LIKE '%am' OR LOWER(TRIM(closing_time)) LIKE '%pm' THEN CAST(closing_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(closing_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(closing_time AS INTEGER) END)*60 + CASE WHEN INSTR(closing_time,':')>0 THEN CAST(SUBSTR(closing_time,INSTR(closing_time,':')+1,2) AS INTEGER) ELSE 0 END END AS closing_minutes FROM public_review_platform.Business_Hours),\nnormalized_hours AS (SELECT business_id,day_id,CASE WHEN opening_minutes IS NULL OR closing_minutes IS NULL THEN NULL WHEN opening_minutes=closing_minutes THEN 24.0 WHEN closing_minutes>opening_minutes THEN (closing_minutes-opening_minutes)/60.0 ELSE (closing_minutes-opening_minutes+1440)/60.0 END AS hours FROM parsed_hours)\nSELECT h.hours AS opening_hours FROM normalized_hours h JOIN public_review_platform.Days d ON d.day_id=h.day_id WHERE d.day_of_week='Friday' AND h.business_id=53"
+      },
+      "reason": "按知识159解析12小时制文本，支持分钟及跨午夜，同值按知识163视为24小时；平均仅对已提供的有效营业日记录。"
+    },
+    {
+      "question_id": 4175,
+      "question": "Yelp上Scottsdale市商家编号12在第三天营业多长时间？",
+      "original_prediction_sha256": "00500326edfb834448a6cf0b3d1a145de674954f420248773baf526fcab14855",
+      "replacement": {
+        "db": "SQLite",
+        "query": "WITH parsed_hours AS (SELECT business_id,day_id,CASE WHEN opening_time IS NULL OR LOWER(TRIM(opening_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(opening_time)) LIKE '%am' OR LOWER(TRIM(opening_time)) LIKE '%pm' THEN CAST(opening_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(opening_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(opening_time AS INTEGER) END)*60 + CASE WHEN INSTR(opening_time,':')>0 THEN CAST(SUBSTR(opening_time,INSTR(opening_time,':')+1,2) AS INTEGER) ELSE 0 END END AS opening_minutes,CASE WHEN closing_time IS NULL OR LOWER(TRIM(closing_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(closing_time)) LIKE '%am' OR LOWER(TRIM(closing_time)) LIKE '%pm' THEN CAST(closing_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(closing_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(closing_time AS INTEGER) END)*60 + CASE WHEN INSTR(closing_time,':')>0 THEN CAST(SUBSTR(closing_time,INSTR(closing_time,':')+1,2) AS INTEGER) ELSE 0 END END AS closing_minutes FROM public_review_platform.Business_Hours),\nnormalized_hours AS (SELECT business_id,day_id,CASE WHEN opening_minutes IS NULL OR closing_minutes IS NULL THEN NULL WHEN opening_minutes=closing_minutes THEN 24.0 WHEN closing_minutes>opening_minutes THEN (closing_minutes-opening_minutes)/60.0 ELSE (closing_minutes-opening_minutes+1440)/60.0 END AS hours FROM parsed_hours)\nSELECT h.hours AS hour FROM normalized_hours h JOIN public_review_platform.Business b ON b.business_id=h.business_id WHERE b.business_id=12 AND b.city='Scottsdale' AND h.day_id=3"
+      },
+      "reason": "按知识159解析12小时制文本，支持分钟及跨午夜，同值按知识163视为24小时；平均仅对已提供的有效营业日记录。"
+    },
+    {
+      "question_id": 4366,
+      "question": "Yelp上哪个商家ID的营业时间最短？",
+      "original_prediction_sha256": "09cc224a3d49158fcf8981c4099f4b33894e2e54c37d83a5503427d3a7014df1",
+      "replacement": {
+        "db": "SQLite",
+        "query": "WITH parsed_hours AS (SELECT business_id,day_id,CASE WHEN opening_time IS NULL OR LOWER(TRIM(opening_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(opening_time)) LIKE '%am' OR LOWER(TRIM(opening_time)) LIKE '%pm' THEN CAST(opening_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(opening_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(opening_time AS INTEGER) END)*60 + CASE WHEN INSTR(opening_time,':')>0 THEN CAST(SUBSTR(opening_time,INSTR(opening_time,':')+1,2) AS INTEGER) ELSE 0 END END AS opening_minutes,CASE WHEN closing_time IS NULL OR LOWER(TRIM(closing_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(closing_time)) LIKE '%am' OR LOWER(TRIM(closing_time)) LIKE '%pm' THEN CAST(closing_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(closing_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(closing_time AS INTEGER) END)*60 + CASE WHEN INSTR(closing_time,':')>0 THEN CAST(SUBSTR(closing_time,INSTR(closing_time,':')+1,2) AS INTEGER) ELSE 0 END END AS closing_minutes FROM public_review_platform.Business_Hours),\nnormalized_hours AS (SELECT business_id,day_id,CASE WHEN opening_minutes IS NULL OR closing_minutes IS NULL THEN NULL WHEN opening_minutes=closing_minutes THEN 24.0 WHEN closing_minutes>opening_minutes THEN (closing_minutes-opening_minutes)/60.0 ELSE (closing_minutes-opening_minutes+1440)/60.0 END AS hours FROM parsed_hours)\nSELECT business_id FROM normalized_hours WHERE hours IS NOT NULL ORDER BY hours,business_id,day_id LIMIT 1"
+      },
+      "reason": "按知识159解析12小时制文本，支持分钟及跨午夜，同值按知识163视为24小时；平均仅对已提供的有效营业日记录。"
+    },
+    {
+      "question_id": 4416,
+      "question": "亚利桑那州El Mirage市的Yelp商家平均每天营业多长时间？",
+      "original_prediction_sha256": "27299ed3528c8781bf34b43dcdbeb01380361349a0ee476a02032e261d3db1d6",
+      "replacement": {
+        "db": "SQLite",
+        "query": "WITH parsed_hours AS (SELECT business_id,day_id,CASE WHEN opening_time IS NULL OR LOWER(TRIM(opening_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(opening_time)) LIKE '%am' OR LOWER(TRIM(opening_time)) LIKE '%pm' THEN CAST(opening_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(opening_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(opening_time AS INTEGER) END)*60 + CASE WHEN INSTR(opening_time,':')>0 THEN CAST(SUBSTR(opening_time,INSTR(opening_time,':')+1,2) AS INTEGER) ELSE 0 END END AS opening_minutes,CASE WHEN closing_time IS NULL OR LOWER(TRIM(closing_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(closing_time)) LIKE '%am' OR LOWER(TRIM(closing_time)) LIKE '%pm' THEN CAST(closing_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(closing_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(closing_time AS INTEGER) END)*60 + CASE WHEN INSTR(closing_time,':')>0 THEN CAST(SUBSTR(closing_time,INSTR(closing_time,':')+1,2) AS INTEGER) ELSE 0 END END AS closing_minutes FROM public_review_platform.Business_Hours),\nnormalized_hours AS (SELECT business_id,day_id,CASE WHEN opening_minutes IS NULL OR closing_minutes IS NULL THEN NULL WHEN opening_minutes=closing_minutes THEN 24.0 WHEN closing_minutes>opening_minutes THEN (closing_minutes-opening_minutes)/60.0 ELSE (closing_minutes-opening_minutes+1440)/60.0 END AS hours FROM parsed_hours)\nSELECT AVG(h.hours) FROM normalized_hours h JOIN public_review_platform.Business b ON b.business_id=h.business_id WHERE b.city='El Mirage' AND b.state='AZ'"
+      },
+      "reason": "按知识159解析12小时制文本，支持分钟及跨午夜，同值按知识163视为24小时；平均仅对已提供的有效营业日记录。"
+    },
+    {
+      "question_id": 2640,
+      "question": "查询最新位置与MMSI为414000001的船舶最新位置距离10公里以内，且船舶类型为货船的其他船舶。",
+      "original_prediction_sha256": "b5937c56cea89d9876c1a839610647c4163225a1b6afb15f0be58f0b2b664bc8",
+      "replacement": {
+        "db": "POSTGRESQL",
+        "query": "WITH target AS (SELECT geom FROM vessel_ais_data WHERE mmsi=414000001 ORDER BY timestamp DESC LIMIT 1), latest AS (SELECT DISTINCT ON (mmsi) * FROM vessel_ais_data ORDER BY mmsi,timestamp DESC) SELECT v.* FROM latest v CROSS JOIN target t WHERE v.mmsi!=414000001 AND v.vessel_type=70 AND ST_DWithin(v.geom::geography,t.geom::geography,10000)"
+      },
+      "reason": "先按每船取真正最新记录，再判断距离；不得用范围内旧位置代替最新位置。"
+    }
+  ],
+  "knowledge_patches": [
+    {
+      "knowledge_id": 150,
+      "knowledge_text": "在数据库public_review_platform的Business_Hours和Days中，opening_time、closing_time是12小时制文本（如8AM、9PM），不能直接相减。先解析为分钟数；相等按24小时，结束早于开始按跨午夜补1440分钟，最后除60得小时。NULL/空/None为未知，不当作全天。day_id关联Days。",
+      "original_text": "在数据库public_review_platform的表Business_Hours和Days中，opening_time表示营业开始时间，closing_time表示营业结束时间，day_of_week表示星期几，day_id与Days表关联。营业时长 = closing_time - opening_time。",
+      "reason": "依据原Schema/相关知识消除表示、单位或字段歧义；保留竞赛明确公式。"
+    },
+    {
+      "knowledge_id": 1355,
+      "knowledge_text": "public_review_platform.Business_Hours.closing_time为营业结束时间文本；不能直接closing_time-opening_time。按照知识159解析AM/PM及分钟，处理跨午夜，相等按知识163为24小时。",
+      "original_text": "在数据库public_review_platform的表Business_Hours中，字段closing_time，数据类型为文本（text），表示商家的营业结束时间，取值为常识证据：该商家营业多长时间：closing_time - opening_time。",
+      "reason": "依据原Schema/相关知识消除表示、单位或字段歧义；保留竞赛明确公式。"
+    },
+    {
+      "knowledge_id": 153,
+      "knowledge_text": "public_review_platform.Elite.year_id是Years.year_id外键；实际精英年份取Years.actual_year。user_id关联Users。按实际年份过滤须JOIN Years，不假设代理键等于年份。",
+      "original_text": "在数据库public_review_platform的表Elite中，year_id表示精英用户年份，user_id关联Users表。用户可能在同一年成为精英用户。",
+      "reason": "依据原Schema/相关知识消除表示、单位或字段歧义；保留竞赛明确公式。"
+    },
+    {
+      "knowledge_id": 158,
+      "knowledge_text": "public_review_platform.Elite和Users通过user_id关联。user_average_stars=5/1表示最高/最低平均评分。Elite.year_id是年份代理键，实际精英年份须关联Years.actual_year。",
+      "original_text": "在数据库public_review_platform的表Elite和Users中，user_average_stars=5表示最佳精英用户（平均评分最高），user_average_stars=1表示最差精英用户（平均评分最低），year_id表示精英年份。",
+      "reason": "依据原Schema/相关知识消除表示、单位或字段歧义；保留竞赛明确公式。"
+    },
+    {
+      "knowledge_id": 83,
+      "knowledge_text": "在数据库professional_basketball的表中，BMI计算公式为 weight / (height * height)，其中height单位为英寸，weight单位为磅。这是本赛题明确给出的计算口径，不改成公斤/厘米公式；统计全明星球员平均BMI时先按playerID去重，再按球员计算平均，排除height为空或0。",
+      "original_text": "在数据库professional_basketball的表中，BMI计算公式为 weight / (height * height)，其中height单位为英寸，weight单位为磅。",
+      "reason": "依据原Schema/相关知识消除表示、单位或字段歧义；保留竞赛明确公式。"
+    },
+    {
+      "knowledge_id": 1624,
+      "knowledge_text": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。这是赛题知识约定，使用total_assets，不自行减去total_liabilities；PB依赖本BPS公式，应同时参考知识1625。",
+      "original_text": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。",
+      "reason": "依据原Schema/相关知识消除表示、单位或字段歧义；保留竞赛明确公式。"
+    },
+    {
+      "knowledge_id": 1757,
+      "knowledge_text": "漳州港招银港区航道。招银港区航道自厦门湾南侧（24°25.0′N,118°05.0′E）至招银码头（24°28.0′N,118°02.0′E），全长约6海里，航道宽度180米，水深-12米。航道两侧设有浮灯，航道内设有2处转向点。该水域船舶交通密集，船舶应遵守《厦门水域船舶定线制》，向厦门VTS中心报告。坐标确定换算：24°25.0′N=24.4166666667，24°28.0′N=24.4666666667；118°05.0′E=118.0833333333，118°02.0′E=118.0333333333。矩形包络是近似范围，不等于宽180米的真实航道。",
+      "original_text": "漳州港招银港区航道。招银港区航道自厦门湾南侧（24°25.0′N,118°05.0′E）至招银码头（24°28.0′N,118°02.0′E），全长约6海里，航道宽度180米，水深-12米。航道两侧设有浮灯，航道内设有2处转向点。该水域船舶交通密集，船舶应遵守《厦门水域船舶定线制》，向厦门VTS中心报告。",
+      "reason": "依据原Schema/相关知识消除表示、单位或字段歧义；保留竞赛明确公式。"
+    }
+  ],
+  "excluded_examples": [
+    {
+      "question_id": 4249,
+      "reason": "题目要求评分比例，原SQL只有平均评论评分；平均对象粒度不明确，暂不作为答案示例。"
+    },
+    {
+      "question_id": 4380,
+      "reason": "把review_count的等级字段/用户ID当数值平均，且时长文本直接相减；缺少精确评论数，不能构造可靠示例。"
+    }
+  ],
+  "knowledge_scopes": [
+    {
+      "range": [
+        1572,
+        1579
+      ],
+      "databases": [
+        "education_2024",
+        "education_2025"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1580,
+        1603
+      ],
+      "databases": [
+        "energy"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1604,
+        1664
+      ],
+      "databases": [
+        "finance_tax"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1665,
+        1712
+      ],
+      "databases": [],
+      "sources": [
+        "Elasticsearch"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1713,
+        1760
+      ],
+      "databases": [
+        "public"
+      ],
+      "sources": [
+        "POSTGRESQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1761,
+        1761
+      ],
+      "databases": [
+        "common"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1762,
+        1762
+      ],
+      "databases": [
+        "transportation"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1763,
+        1764
+      ],
+      "databases": [
+        "common"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1765,
+        1765
+      ],
+      "databases": [
+        "transportation"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1766,
+        1766
+      ],
+      "databases": [],
+      "sources": [
+        "MYSQL",
+        "SQLite",
+        "POSTGRESQL",
+        "Elasticsearch"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1767,
+        1767
+      ],
+      "databases": [],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1768,
+        1773
+      ],
+      "databases": [
+        "transportation"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1774,
+        1774
+      ],
+      "databases": [],
+      "sources": [
+        "MYSQL",
+        "SQLite",
+        "POSTGRESQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1775,
+        1776
+      ],
+      "databases": [
+        "transportation"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1777,
+        1777
+      ],
+      "databases": [
+        "transportation",
+        "public"
+      ],
+      "sources": [
+        "MYSQL",
+        "POSTGRESQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1778,
+        1780
+      ],
+      "databases": [
+        "common"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1781,
+        1789
+      ],
+      "databases": [
+        "transportation"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1790,
+        1790
+      ],
+      "databases": [
+        "transportation",
+        "public"
+      ],
+      "sources": [
+        "MYSQL",
+        "POSTGRESQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1791,
+        1792
+      ],
+      "databases": [
+        "transportation"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    },
+    {
+      "range": [
+        1793,
+        1800
+      ],
+      "databases": [
+        "common"
+      ],
+      "sources": [
+        "MYSQL"
+      ],
+      "reason": "依据原知识连续段落的字段与业务内容声明来源，补充无库名前缀的知识。"
+    }
+  ]
+}

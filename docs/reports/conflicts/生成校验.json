@@ -1,0 +1,42 @@
+{
+  "summary": {
+    "group_count": 55,
+    "record_count": 113,
+    "category_counts": {
+      "annual_database": 45,
+      "question_mismatch": 4,
+      "likely_equivalent": 5,
+      "business_definition": 1
+    },
+    "source_counts": {
+      "MYSQL": 105,
+      "SQLite": 8
+    },
+    "direct_table_count": 20,
+    "schema_with_dependencies_count": 28,
+    "existing_teacher_rule_group_count": 5
+  },
+  "original_records_match": true,
+  "unique_ids": 113,
+  "candidate_count": 110,
+  "real_database_execution": false,
+  "automatic_business_rule_changes": false,
+  "files": {
+    "人工审核模板.csv": {
+      "bytes": 68725,
+      "sha256": "67a22b506db09dbb9da48ea329f329c92ed1ef296d8113d8566c9341e5f0a76f"
+    },
+    "冲突人工审核.html": {
+      "bytes": 220128,
+      "sha256": "e96f24719e458c6d2171b2f037f7a8fb2e54555373cf4a23cbaef3ad7c1d9be1"
+    },
+    "冲突数据报告.md": {
+      "bytes": 165936,
+      "sha256": "df40c32c8f2978e666b0ce78921218c4927de8871d8ac61cf55003fd6197f21f"
+    },
+    "冲突明细.json": {
+      "bytes": 268661,
+      "sha256": "1c5303bce172ea34d197fa048ee891f5ebbe7329fb6a324a37034faef04636e8"
+    }
+  }
+}
