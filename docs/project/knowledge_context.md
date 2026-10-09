@@ -17,12 +17,12 @@ flowchart TD
 
 | 环节 | 代码位置 | 行为 |
 |---|---|---|
-| 路径 | [`paths.py`](../../src/text2query/paths.py) | `RAW` 指向 `data/raw/subject`，`OUT` 指向 `data/processed` |
-| 处理 | [`pipeline.prepare`](../../src/text2query/pipeline.py) | 读取原始知识，应用修订，写入处理后的知识 |
-| 修订 | [`curation.apply_knowledge`](../../src/text2query/curation.py) | 按ID替换文本，按ID范围附加 `declared_scope` |
-| 初始化 | [`model_pipeline.Context`](../../src/text2query/model_pipeline.py) | 读取处理知识，再应用当前修订，建立 `self.kr` |
-| 筛选 | [`retrieval_context.select_knowledge`](../../src/text2query/retrieval_context.py) | 必需知识补齐、关键词排序、领域过滤和坐标常量计算 |
-| 注入 | [`model_pipeline.main`](../../src/text2query/model_pipeline.py)、[`react_pipeline.run_question`](../../src/text2query/react_pipeline.py) | 分别在初始上下文和后续工具观察中传递知识 |
+| 路径 | [`paths.py`](../../src/text2query/shared/paths.py) | `RAW` 指向 `data/raw/subject`，`OUT` 指向 `data/processed` |
+| 处理 | [`pipeline.prepare`](../../src/text2query/shared/data.py) | 读取原始知识，应用修订，写入处理后的知识 |
+| 修订 | [`curation.apply_knowledge`](../../src/text2query/shared/curation.py) | 按ID替换文本，按ID范围附加 `declared_scope` |
+| 初始化 | [`context.Context`](../../src/text2query/shared/context.py) | 读取处理知识，再应用当前修订，建立 `self.kr` |
+| 筛选 | [`retrieval_context.select_knowledge`](../../src/text2query/shared/retrieval_context.py) | 必需知识补齐、关键词排序、领域过滤和坐标常量计算 |
+| 注入 | [`model_pipeline.main`](../../src/text2query/non_react/pipeline.py)、[`react_pipeline.run_question`](../../src/text2query/react/pipeline.py) | 分别在初始上下文和后续工具观察中传递知识 |
 
 人工修订来自 [`data/curated/rag_curation.json`](../../data/curated/rag_curation.json)。`knowledge_patches` 当前修订7条知识，`knowledge_scopes` 为指定ID段声明数据库与数据源。再次应用修订便于运行时使用当前配置；同一ID的修订文本会覆盖处理文件中的文本。
 
@@ -72,6 +72,16 @@ self.kr = Retriever([item['knowledge_text'] for item in self.knowledge])
 
 相关性依赖关键词与规则，召回的每条知识不一定直接用于最终查询。范围识别较弱、同义表达缺少共同关键词或新增业务没有必需规则时，都可能影响召回。
 
+### 4. 字典表的上位词触发
+
+[`retrieval_context.DICT_TABLE_TRIGGERS`](../../src/text2query/shared/retrieval_context.py) 为 `common` 字典表维护“上位词→表”的映射（如 车辆→`vehicle_type_dict`、船舶→`vessel_type_dict`、驾照→`license_type_dict`、行政区划→`administrative_division`）。它解决两类问题：
+
+- **Schema 选择**：`Context.build()` 通过 `dict_tables_for()` 把命中的字典表直接钉入 `schema`，不再依赖“只要出现 `common.*` 就展开整个 common 库”。命中表标记为 `pinned`，不受路由范围过滤。
+- **字典内容注入**：`triggered_dictionary()` 把行数不超过 `TRIGGERED_DICTIONARY_MAX_ROWS`（40）的命中字典表整表回传，使“车辆数量”这类只含上位词、不含具体值（客车/货车）的问题也能看到编码映射；`dictionary_matches()` 继续负责具体字面量命中。行数多的表（如 312 行的 `administrative_division`）只走字面量匹配，避免噪声。
+- **工具排序**：[`QueryTools.get_schema()`](../../src/text2query/react/tools.py) 对命中上位词或表名的表加权，使 `get_schema({"query":"车辆类型"})` 优先返回 `common.vehicle_type_dict`，而不是同后缀的其他字典表。
+
+同时 `schema_catalog()` 保留 `)` 之后的表级选项（`ENGINE=... COMMENT='车辆类型字典'`），列表解析仍只用括号内的平衡体，避免表级注释被截断而无法被关键词检索。
+
 ## 普通RAG的注入位置
 
 `Context.build()` 将筛选结果放在顶层 `knowledge` 字段，与Schema、字典、示例和业务规则一起返回。普通 `model` 入口序列化整个问题上下文：
@@ -92,7 +102,7 @@ messages = [
 
 ## ReAct的注入位置
 
-[`react_pipeline.initial_prompt()`](../../src/text2query/react_pipeline.py) 将问题、要求、业务规则、路由、教育合并信息、字段裁定、候选表和工具说明放入初始消息。虽然内部已构建完整 `ctx`，初始消息不直接传入 `ctx['knowledge']` 数组。
+[`react_pipeline.initial_prompt()`](../../src/text2query/react/pipeline.py) 将问题、要求、业务规则、路由、教育合并信息、字段裁定、候选表和工具说明放入初始消息。虽然内部已构建完整 `ctx`，初始消息不直接传入 `ctx['knowledge']` 数组。
 
 模型输出动作，例如：
 
@@ -100,7 +110,7 @@ messages = [
 {"action":"search_knowledge","args":{"query":"市净率 每股净资产","limit":10}}
 ```
 
-[`QueryTools.search_knowledge()`](../../src/text2query/react_tools.py) 使用“原问题 + 补充检索词”，在原问题确定的路由范围内调用相同的 `select_knowledge()`。结果还包含匹配字典、字段裁定和查询辅助CTE。`limit` 默认10，允许1到12，但底层选择器通常最多返回10条；必需知识即使超过调用者指定的 `limit` 也会保留。
+[`QueryTools.search_knowledge()`](../../src/text2query/react/tools.py) 使用“原问题 + 补充检索词”，在原问题确定的路由范围内调用相同的 `select_knowledge()`。结果还包含匹配字典、字段裁定和查询辅助CTE。`limit` 默认10，允许1到12，但底层选择器通常最多返回10条；必需知识即使超过调用者指定的 `limit` 也会保留。
 
 程序追加模型动作和观察结果：
 
@@ -128,9 +138,9 @@ messages += [
 ```sh
 PYTHONPATH=src python3 -B - <<'PY'
 import json
-from text2query.model_pipeline import Context
-from text2query.paths import RAW
-from text2query.pipeline import load
+from text2query.shared.context import Context
+from text2query.shared.paths import RAW
+from text2query.shared.data import load
 
 row = next(row for row in load(RAW / 'QA_test.json') if row['question_id'] == 442)
 ctx = Context(False).build(row['question'])

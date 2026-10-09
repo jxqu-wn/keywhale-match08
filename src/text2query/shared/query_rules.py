@@ -1,6 +1,8 @@
 """Conservative question-derived checks; no validation-answer lookup."""
+import json
 import re
-from .pipeline import references, normalize
+from decimal import Decimal, InvalidOperation
+from .data import references, normalize
 from .education import education_query_mode, merge_errors
 
 
@@ -45,7 +47,50 @@ def requirements(question):
         rules.append({'rule':'entity_grain','instruction':'明确实体主键：商家business_id、球员playerID、游戏game_id、角色(character_id,work_id)。一对多关联不得重复计实体，属性值相同的不同实体不能被AVG(DISTINCT 属性)合并。'})
     if re.search(r'平均每年|每年.*平均',question) and re.search(r'\d{4}.*\d{4}',question):
         rules.append({'rule':'complete_period','instruction':'完整年份区间的平均包含零记录年份；按包含首尾的年数计算，不以出现数据的年份数代替。'})
+    if re.search(r'日均门诊量|日门诊量',question):
+        rules.append({'rule':'outpatient_units', 'instruction':'原始ES mapping只有annual_outpatient，未声明daily_outpatient。日均不能直接改成年量同值比较或返回。换算天数须有明确业务依据；确认后可换算年度阈值，或显式定义运行时日均字段并用fields返回。'})
     return rules
+
+
+def outpatient_unit_errors(question, dsl):
+    """Reject direct reuse of an explicit daily bound on the physical annual field.
+
+    This deliberately does not choose a divisor or certify a derived formula.
+    """
+    bounds = set()
+    for match in re.finditer(r'日(?:均)?门诊量\s*(?:大于等于|小于等于|不低于|不超过|大于|小于|超过|高于|低于|至少|至多|[><]=?|[≥≤])\s*([\d,]+(?:\.\d+)?)\s*(万|千)?',question):
+        try:
+            bound = Decimal(match.group(1).replace(',', '')) * {'万':10000, '千':1000, None:1}[match.group(2)]
+            if bound > 0:
+                bounds.add(bound)
+        except InvalidOperation:
+            continue
+    errors = []
+    runtime = dsl.get('runtime_mappings', {})
+    runtime = runtime if isinstance(runtime, dict) else {}
+
+    def visit(value):
+        if isinstance(value, list):
+            for item in value:
+                visit(item)
+        elif isinstance(value, dict):
+            annual = value.get('range', {}).get('annual_outpatient') if isinstance(value.get('range'), dict) else None
+            if isinstance(annual, dict):
+                for operator in ('gt', 'gte', 'lt', 'lte'):
+                    try:
+                        same_bound = Decimal(str(annual.get(operator))) in bounds
+                    except InvalidOperation:
+                        same_bound = False
+                    if same_bound and 'annual_outpatient' not in runtime:
+                        errors.append('日均门诊阈值直接用于annual_outpatient：年/日单位混用；需明确换算天数后转换阈值或定义运行时日均字段')
+            for item in value.values():
+                visit(item)
+
+    visit(dsl.get('query'))
+    visit(dsl.get('post_filter'))
+    visit(dsl.get('aggs'))
+    visit(dsl.get('aggregations'))
+    return list(dict.fromkeys(errors))
 
 
 def semantic_errors(question, prediction, business_rules=()):
@@ -79,6 +124,14 @@ def semantic_errors(question, prediction, business_rules=()):
     pairs = [(prediction.get('db'),prediction.get('query',''))] if 'query' in prediction else [(prediction.get('db1'),prediction.get('query1','')),(prediction.get('db2'),prediction.get('query2',''))]
     for db, query in pairs:
         if not isinstance(query,str):
+            continue
+        if db == 'Elasticsearch':
+            try:
+                dsl = json.loads(query)
+                if isinstance(dsl, dict):
+                    errors.extend(outpatient_unit_errors(question, dsl))
+            except ValueError:
+                pass  # JSON errors are already reported by structural validation.
             continue
         text = mask_sql(query)
         refs = {ref.lower() for ref in references(text)}

@@ -15,8 +15,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'src'))
-from text2query.pipeline import references
-from text2query.validation import sqlite_connection
+from text2query.shared.data import references
+from text2query.shared.validation import sqlite_connection
 
 
 def load(path):

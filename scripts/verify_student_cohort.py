@@ -5,11 +5,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.model_pipeline import Context, SYSTEM, parse_output, validate
-from text2query.pipeline import load, save
-from text2query.paths import RUNS
-from text2query.education import expand_prediction, model_query_errors
-from text2query.education_fixture import fixture, student_cohort_rows, mysql_fixture_sql
+from text2query.shared.context import Context
+from text2query.shared.prompts import SYSTEM
+from text2query.shared.generation import parse_output, validate
+from text2query.shared.data import load, save
+from text2query.shared.paths import RUNS
+from text2query.shared.education import expand_prediction, model_query_errors
+from text2query.shared.education_fixture import fixture, student_cohort_rows, mysql_fixture_sql
 
 QUESTION = '查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。'
 QUERY = '''SELECT s.student_no,s.student_name FROM edu_student s

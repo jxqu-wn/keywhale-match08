@@ -3,7 +3,7 @@
   "unique_ids": 400,
   "coverage": "complete",
   "encoding": "UTF-8",
-  "sha256": "0b900e961d074013fda5112064576b67be1616cbc588af4794bd31f7f451050c",
+  "sha256": "fcbe1975ef27ec0242fa856f68951c1f93931f4c4d4952490487e2718fda92bf",
   "source_counts": {
     "MYSQL": 101,
     "Elasticsearch": 50,
@@ -13,83 +13,6 @@
     "SQLite": 199
   },
   "execution_validated": false,
-  "model_run": "artifacts/runs/prediction/deepseek-flash-20261009/predict-bc8c191e7fd6",
-  "manual_query_edits": false,
-  "model": "deepseek-flash",
-  "provider": "deepseek",
-  "base_url": "https://api.deepseek.com",
-  "thinking": "disabled",
-  "previous_submission": "outputs/submission/archive/result-20261009-qwen-cfcc4791c075.json",
-  "same_first_request_messages_count": 400,
-  "automated_test_count": 56,
-  "api_request_count": 410,
-  "automatic_transforms": {
-    "education_view_cte_expansion": 4
-  },
-  "sqlite_comparison_report": "docs/reports/DeepSeek_Flash_SQLite对比.md",
-  "sqlite_comparison_summary": {
-    "total_questions": 400,
-    "sqlite_comparison_count": 200,
-    "exactly_equal": 91,
-    "text_different": 109,
-    "same_ignoring_whitespace_and_case": 95,
-    "changed_database_type_ids": [
-      5254
-    ],
-    "changed_database_domain_ids": [
-      5254
-    ],
-    "changed_column_count_ids": [
-      3279,
-      3318,
-      3348,
-      3582,
-      3590,
-      4180,
-      4592,
-      5029,
-      5254,
-      5545,
-      5973
-    ],
-    "previous_sqlite_compiled": 200,
-    "current_sqlite_compiled": 199,
-    "current_sqlite_count": 199,
-    "same_first_request_messages_count": 400,
-    "api_response_count": 410,
-    "usage": {
-      "prompt_tokens": 3853325,
-      "completion_tokens": 30119,
-      "total_tokens": 3883444,
-      "prompt_cache_hit_tokens": 590336,
-      "prompt_cache_miss_tokens": 3262989
-    },
-    "synthetic_case_count": 20,
-    "paired_fixture_regression_ids": [
-      4682,
-      5099,
-      5206,
-      5215,
-      5411,
-      6103,
-      5011,
-      5028,
-      4661,
-      5576
-    ],
-    "paired_fixture_improvement_ids": [
-      5686,
-      5855,
-      5893
-    ],
-    "synthetic_scope": "有目的构造的反例，不能据此计算完整测试集准确率或平台分数。",
-    "official_previous_sqlite": {
-      "correct": 137,
-      "total": 200,
-      "score": 381.5,
-      "max_score": 569.5
-    },
-    "official_current_accuracy": null
-  },
-  "submission_accuracy": null
+  "model_run": "/home/jxqu/Share/Match/artifacts/runs/prediction/deepseek-flash-react-20261009/react-predict-bb3435ff0550",
+  "manual_query_edits": false
 }

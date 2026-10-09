@@ -2,9 +2,10 @@ import sys
 import unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.model_pipeline import parse_output, validate, Context
-from text2query.pipeline import schema_catalog
-from text2query.query_rules import applicable_business_rules
+from text2query.shared.generation import parse_output, validate
+from text2query.shared.context import Context
+from text2query.shared.data import schema_catalog
+from text2query.shared.query_rules import applicable_business_rules
 
 class ModelTests(unittest.TestCase):
     def test_parse_wrappers(self):

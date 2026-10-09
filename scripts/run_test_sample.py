@@ -8,8 +8,8 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
-from text2query.paths import ROOT, SERVICE
-from text2query.curl_batch import build
+from text2query.shared.paths import ROOT, SERVICE
+from text2query.shared.curl_batch import build
 
 DEFAULT_IDS = [442, 1737, 1825, 2140, 2399, 2570, 2646, 2938, 3033,
                3576, 3674, 3915, 4123, 4207, 4424, 4682, 4976, 5029, 5686, 5921]

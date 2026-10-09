@@ -11,12 +11,14 @@ from pathlib import Path
 from datetime import datetime, timezone
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.pipeline import load, save
-from text2query.paths import ROOT, OUT, CURATED, RUNS
-from text2query.model_pipeline import Context, SYSTEM, parse_output, validate
-from text2query.education import expand_prediction, model_query_errors, education_query_mode, query_contract
-from text2query.education_fixture import fixture, mysql_fixture_sql
-from text2query.query_rules import applicable_business_rules
+from text2query.shared.data import load, save
+from text2query.shared.paths import ROOT, OUT, CURATED, RUNS
+from text2query.shared.context import Context
+from text2query.shared.prompts import SYSTEM
+from text2query.shared.generation import parse_output, validate
+from text2query.shared.education import expand_prediction, model_query_errors, education_query_mode, query_contract
+from text2query.shared.education_fixture import fixture, mysql_fixture_sql
+from text2query.shared.query_rules import applicable_business_rules
 
 REPORTS = ROOT/'docs/reports/conflicts'
 
@@ -55,7 +57,7 @@ def prepare(directory=None):
               'retrieval_data_sha256':hashlib.sha256(json.dumps([ctx.examples,ctx.catalog,ctx.knowledge,ctx.dictionaries,ctx.ambiguous,ctx.resolutions],sort_keys=True).encode()).hexdigest(),
               'catalog_sha256':hashlib.sha256((OUT/'catalog.json').read_bytes()).hexdigest(),
               'code_sha256':hashlib.sha256(b''.join((ROOT/name).read_bytes() for name in
-                               ['src/text2query/education.py','src/text2query/education_fixture.py','scripts/resolve_education_conflicts.py'])).hexdigest()}
+                               ['src/text2query/shared/education.py','src/text2query/shared/education_fixture.py','scripts/resolve_education_conflicts.py'])).hexdigest()}
     fingerprint = hashlib.sha256(json.dumps(config,sort_keys=True).encode()).hexdigest()[:12]
     directory = directory or RUNS/'regression'/('education-'+fingerprint)
     save('config.json',config,directory)
@@ -157,7 +159,7 @@ def process(directory):
     failed = [r for r in records if not r['fixture_passed'] and r.get('pending_attempt') is None]
     summary = {'total':len(records),'passed':len(passed),'pending':len(pending),'failed':len(failed),
                'shared_label_scope_review_ids':[1700,1750],
-               'verification_code_sha256':hashlib.sha256(b''.join((ROOT/name).read_bytes() for name in ['scripts/resolve_education_conflicts.py','src/text2query/education.py','src/text2query/education_fixture.py'])).hexdigest(),
+               'verification_code_sha256':hashlib.sha256(b''.join((ROOT/name).read_bytes() for name in ['scripts/resolve_education_conflicts.py','src/text2query/shared/education.py','src/text2query/shared/education_fixture.py'])).hexdigest(),
                'annual_conflicts_passed':sum(r['kind']=='annual_conflict' for r in passed),
                'synthetic_execution_only':True,'fixture_expected_values_sent_to_model':False,
                'automatic_expansion':'generic education CTE definitions; model SQL logic is preserved',

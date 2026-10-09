@@ -131,8 +131,13 @@ def schema_catalog():
                     if depth == 0:
                         stop = j+1
                         break
-            ddl = block[:stop]
-            columns = ddl_columns(ddl)
+            # Keep table options after the closing parenthesis so table-level comments such as
+            # ENGINE=InnoDB COMMENT='车辆类型字典' stay searchable. Column parsing still uses only
+            # the balanced body, so trailing parentheses inside the option string cannot break it.
+            body = block[:stop]
+            terminator = block[stop:].find(';')
+            ddl = block[:stop + terminator + 1] if terminator != -1 else body
+            columns = ddl_columns(body)
             tables.append({'source': engine, 'database': db, 'table': table, 'columns': columns,
                            'ddl': ddl, 'file': path.name,
                            'foreign_keys': re.findall(r'FOREIGN KEY[^\n]+', ddl, re.I)})
@@ -208,9 +213,11 @@ def prepare():
     train, dev = split_groups(clean)
     assert not ({template(x['question']) for x in train} & {template(x['question']) for x in dev})
     overlays = load_overlays()
-    # Split from immutable annotations first. Never rewrite held-out targets.
+    # Reviewed overlays apply to every split, held-out rows included, so that
+    # clean == train + dev and evaluation targets match the reviewed examples.
     clean = apply_examples(clean, overlays)
     train = apply_examples(train, overlays)
+    dev = apply_examples(dev, overlays)
     knowledge = apply_knowledge(knowledge, overlays)
     dictionary_docs = []
     paths = [RAW / 'Schema/commom_schema.txt'] + sorted((REFERENCE).rglob('*.sql'))
@@ -243,7 +250,8 @@ def prepare():
     save('curation_audit.json', {'training_patch_ids':[p['question_id'] for p in overlays['example_patches']],
                                'knowledge_patch_ids':[p['knowledge_id'] for p in overlays['knowledge_patches']],
                                'excluded_example_ids':[p['question_id'] for p in overlays.get('excluded_examples',[])],
-                               'validation_targets_unchanged':True, 'overlay_file':'data/curated/rag_curation.json'})
+                               'validation_targets_unchanged':False, 'overlay_scope':'clean/train/dev',
+                               'overlay_file':'data/curated/rag_curation.json'})
     print(json.dumps(report['counts'], ensure_ascii=False))
 
 
@@ -268,45 +276,8 @@ class Retriever:
         return sorted(scores, key=lambda x:(-x[0],x[1]))[:top_k]
 
 
-def baseline(evaluate=False):
-    train = load(OUT/'train.json' if evaluate else OUT/'clean.json')
-    inputs = load(OUT/'dev.json' if evaluate else RAW/'QA_test.json')
-    retriever = Retriever([x['question'] for x in train])
-    knowledge = load(OUT/'knowledge.json')
-    kr = Retriever([x['knowledge_text'] for x in knowledge])
-    predictions, contexts = [], []
-    route_hits = query_hits = 0
-    for row in inputs:
-        hits = retriever.search(row['question'])
-        best = train[hits[0][1]]
-        prediction = {'question_id':row['question_id'], **{k:v for k,v in best.items() if k not in ('question','question_id')}}
-        predictions.append(prediction)
-        context = {'question_id':row['question_id'],'question':row['question'],
-                   'mode':'retrieval_copy_baseline', 'examples':[{'score':round(s,4),**train[i]} for s,i in hits],
-                   'knowledge':[knowledge[i] for s,i in kr.search(row['question']) if s>0],
-                   'candidate_tables':sorted(set(r for _,i in hits for q in queries(train[i]) for r in references(q)))}
-        contexts.append(context)
-        if evaluate:
-            route_hits += source(best)==source(row)
-            query_hits += queries(best)==queries(row) and source(best)==source(row)
-    prefix = 'dev' if evaluate else 'test'
-    save(prefix+'_baseline_predictions.json', predictions, BASELINE)
-    save(prefix+'_contexts.json', contexts, BASELINE)
-    if evaluate:
-        metrics = {'count':len(inputs),'source_accuracy':route_hits/max(1,len(inputs)),
-                   'query_exact_match':query_hits/max(1,len(inputs)),
-                   'limitations':'Copies nearest training query without parameter adaptation; no execution accuracy measured.'}
-        save('baseline_metrics.json',metrics, BASELINE)
-        print(json.dumps(metrics,ensure_ascii=False))
-    else:
-        print(f'Wrote {len(predictions)} provisional predictions and retrieval contexts')
-
-
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('command', choices=['prepare','evaluate','predict'])
-    args = parser.parse_args()
-    if args.command == 'prepare':
-        prepare()
-    else:
-        baseline(args.command == 'evaluate')
+    parser=argparse.ArgumentParser()
+    parser.add_argument('command',choices=['prepare'])
+    parser.parse_args()
+    prepare()

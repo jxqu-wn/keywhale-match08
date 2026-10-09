@@ -4,7 +4,7 @@ import json
 
 SECTIONS = {'aggs', 'aggregations', 'sort', '_source', 'size', 'from',
             'track_total_hits', 'post_filter', 'script_fields', 'stored_fields',
-            'docvalue_fields', 'fields'}
+            'docvalue_fields', 'fields', 'runtime_mappings'}
 
 
 def normalize_es(raw):

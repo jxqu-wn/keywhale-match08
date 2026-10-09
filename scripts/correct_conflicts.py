@@ -7,10 +7,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.paths import ROOT, OUT, CURATED, RUNS
-from text2query.pipeline import load, save, ambiguous_examples
-from text2query.model_pipeline import Context, corrected_prediction
-from text2query.education_fixture import fixture, student_cohort_rows, mysql_fixture_sql
+from text2query.shared.paths import ROOT, OUT, CURATED, RUNS
+from text2query.shared.data import load, save, ambiguous_examples
+from text2query.shared.context import Context, corrected_prediction
+from text2query.shared.education_fixture import fixture, student_cohort_rows, mysql_fixture_sql
 
 REPORTS = ROOT/'docs/reports/conflicts'
 RUN = RUNS/'regression/conflict-corrections-20261009'
@@ -214,7 +214,7 @@ def verify(corrections):
               'failures':[r for r in records if not r['passed']],
               'correction_data_sha256':hashlib.sha256((CURATED/'question_corrections.json').read_bytes()).hexdigest(),
               'implementation_sha256':hashlib.sha256(b''.join((ROOT/name).read_bytes() for name in
-                  ['scripts/correct_conflicts.py','src/text2query/model_pipeline.py','src/text2query/education.py','src/text2query/education_fixture.py'])).hexdigest()}
+                  ['scripts/correct_conflicts.py','src/text2query/non_react/pipeline.py','src/text2query/shared/education.py','src/text2query/shared/education_fixture.py'])).hexdigest()}
     save('verification.json',result,RUN)
     if result['passed_checks']!=result['execution_checks']:
         raise ValueError(json.dumps(result,ensure_ascii=False))
@@ -274,7 +274,7 @@ def publish(corrections,verification):
                      'new_model_inference_verified':False,'model_fixture_is_historical':True,
                      'correction_verification_run':str(RUN.relative_to(ROOT)),
                      'routing_code_sha256':hashlib.sha256(b''.join((ROOT/name).read_bytes() for name in
-                        ['src/text2query/query_rules.py','src/text2query/model_pipeline.py'])).hexdigest()})
+                        ['src/text2query/shared/query_rules.py','src/text2query/non_react/pipeline.py'])).hexdigest()})
     manifest['files'] = {name:hashlib.sha256((REPORTS/name).read_bytes()).hexdigest() for name in
                         ['剩余冲突明细.json','剩余冲突人工审核.html','剩余冲突审核模板.csv','剩余冲突报告.md','已修正冲突报告.md']}
     save('年度处理校验.json',manifest,REPORTS)

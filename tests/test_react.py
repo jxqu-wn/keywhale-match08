@@ -6,12 +6,12 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
-from text2query.dsl_normalization import normalize_es, normalize_prediction
-from text2query.model_pipeline import Context
-from text2query.paths import RAW
-from text2query.pipeline import load
-from text2query.react_pipeline import run_question, summarize
-from text2query.react_tools import QueryTools, pg_references
+from text2query.shared.dsl_normalization import normalize_es, normalize_prediction
+from text2query.shared.context import Context
+from text2query.shared.paths import RAW
+from text2query.shared.data import load
+from text2query.react.pipeline import run_question, summarize
+from text2query.react.tools import QueryTools, pg_references
 
 
 class ReactTests(unittest.TestCase):
@@ -22,6 +22,18 @@ class ReactTests(unittest.TestCase):
 
     def tools(self, qid):
         return QueryTools(self.context, self.context.build(self.rows[qid]['question']))
+
+    def test_deepseek_offline_request_uses_provider_payload(self):
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            row = self.rows[4682]
+            record = run_question(row, self.context, directory, 'deepseek-flash',
+                                  'https://api.deepseek.com', offline=True, provider='deepseek')
+            payload = load(directory / '4682.request.0.json')
+            self.assertEqual(payload['thinking'], {'type': 'disabled'})
+            self.assertNotIn('chat_template_kwargs', payload)
+            self.assertEqual(record['provider'], 'deepseek')
+            self.assertEqual(record['errors'], ['pending_request'])
 
     def test_normalization_preserves_conditions_and_rejects_conflicts(self):
         raw = {'db': 'Elasticsearch', 'query': {'query': {'bool': {'filter': [{'range': {'rating': {'gte': 4.6}}}]},

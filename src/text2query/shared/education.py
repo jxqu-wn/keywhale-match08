@@ -1,6 +1,6 @@
 """Year-aware education views, expanded mechanically into model-generated SQL."""
 import re
-from .pipeline import references, normalize
+from .data import references, normalize
 
 ENTITY_INFO = {
     'department':('院系',['department_code']),

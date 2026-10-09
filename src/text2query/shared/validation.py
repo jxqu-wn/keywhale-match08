@@ -7,7 +7,7 @@ not the entire server DSL or business semantics.
 import fnmatch
 import re
 import sqlite3
-from .pipeline import references
+from .data import references
 
 
 def sqlite_connection(catalog, sql):
@@ -59,10 +59,33 @@ def es_structure_errors(dsl, catalog):
     fields = set(mapping)
     for name, spec in mapping.items():
         fields.update(name+'.'+suffix for suffix in spec.get('fields',{}))
+    mapped_fields = fields.copy()
+    runtime = dsl.get('runtime_mappings', {})
+    if not isinstance(runtime, dict):
+        errors.append('runtime_mappings必须为对象')
+        runtime = {}
+    runtime_types = {'boolean', 'composite', 'date', 'double', 'geo_point', 'ip',
+                     'keyword', 'long', 'lookup'}
+    for name, spec in runtime.items():
+        if not isinstance(spec, dict) or spec.get('type') not in runtime_types:
+            errors.append('runtime_mappings.'+name+': 无效运行时字段定义或type')
+        else:
+            fields.add(name)
 
-    def field(name, path):
-        if fields and isinstance(name,str) and name not in fields and not any(fnmatch.fnmatchcase(known,name) for known in fields):
-            errors.append(path+': mapping中不存在字段'+name)
+    def field(name, path, available=None):
+        available = fields if available is None else available
+        if (tables or runtime) and isinstance(name,str) and name not in available and not any(fnmatch.fnmatchcase(known,name) for known in available):
+            errors.append(path+': mapping中不存在字段'+name+'（也未在当前可用字段中声明）')
+
+    # Focused dependency checks only; this does not compile or execute Painless.
+    for name, spec in runtime.items():
+        if not isinstance(spec, dict):
+            continue
+        script = spec.get('script')
+        code = script.get('source') if isinstance(script, dict) else script
+        if isinstance(code, str):
+            for dependency in re.findall(r"\bdoc\s*\[\s*['\"]([^'\"]+)['\"]\s*\]", code):
+                field(dependency, 'runtime_mappings.'+name+'.script')
 
     def clause(value, path):
         if isinstance(value,list):
@@ -140,11 +163,20 @@ def es_structure_errors(dsl, catalog):
         if key in dsl:
             aggregations(dsl[key],key)
     selection = dsl.get('_source')
+    if isinstance(selection,dict):
+        selection = selection.get('includes', selection.get('include', []))
     if isinstance(selection,str):
         selection = [selection]
     if isinstance(selection,list):
         for name in selection:
-            field(name,'_source')
+            # Runtime values are returned by fields, not materialized in _source.
+            field(name,'_source',mapped_fields)
+    requested = dsl.get('fields', [])
+    if isinstance(requested, list):
+        for item in requested:
+            field(item.get('field') if isinstance(item, dict) else item, 'fields')
+    else:
+        errors.append('fields必须为数组')
     if 'size' in dsl and (type(dsl['size']) is not int or dsl['size']<0):
         errors.append('size必须为非负整数')
     return list(dict.fromkeys(errors))

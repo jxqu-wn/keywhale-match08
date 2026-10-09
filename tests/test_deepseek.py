@@ -5,8 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from text2query.curl_batch import build
-from text2query.model_pipeline import completion_payload
+from text2query.shared.curl_batch import build
+from text2query.shared.generation import completion_payload
 
 
 class DeepSeekIntegrationTests(unittest.TestCase):

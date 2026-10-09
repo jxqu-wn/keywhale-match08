@@ -3,7 +3,7 @@ import argparse
 import collections
 import json
 from pathlib import Path
-from .pipeline import load, source, queries
+from .data import load, source, queries
 
 
 def official_score(outcomes):

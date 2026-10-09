@@ -2,8 +2,8 @@
 import argparse
 import json
 from pathlib import Path
-from .pipeline import OUT, load
-from .model_pipeline import parse_output, validate
+from .data import OUT, load
+from .generation import parse_output, validate
 
 
 def run(directory):

@@ -9,9 +9,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.pipeline import load, normalize, queries, references, source
-from text2query.paths import ROOT, OUT, RAW, CURATED
-from text2query.query_rules import applicable_business_rules
+from text2query.shared.data import load, normalize, queries, references, source
+from text2query.shared.paths import ROOT, OUT, RAW, CURATED
+from text2query.shared.query_rules import applicable_business_rules
 
 DEST = ROOT/'docs/reports/conflicts'
 CATEGORIES = {

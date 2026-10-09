@@ -2,9 +2,9 @@ import sys
 import unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.score_sample import official_score
-from text2query.model_pipeline import stratified_sample
-from text2query.pipeline import source
+from text2query.shared.score_sample import official_score
+from text2query.shared.generation import stratified_sample
+from text2query.shared.data import source
 
 class ScoreTests(unittest.TestCase):
     def test_weighted_execution(self):

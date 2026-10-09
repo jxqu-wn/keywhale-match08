@@ -1,6 +1,6 @@
 # 多源查询指令生成
 
-面向 MySQL、PostgreSQL、Elasticsearch 和 SQLite 的检索增强查询生成项目。使用 Python 标准库，不需要安装额外依赖。默认模型服务为 `http://192.168.15.119:28081/v1`，默认模型 ID 为 `contest-qwen`；普通生成入口也支持配置其他供应方。
+面向 MySQL、PostgreSQL、Elasticsearch 和 SQLite 的检索增强查询生成项目。使用 Python 标准库，不需要安装额外依赖。默认模型服务为 `http://192.168.15.119:28081/v1`，默认模型 ID 为 `contest-qwen`；普通生成与ReAct入口均支持配置其他供应方。
 
 文档入口：[文档索引](docs/README.md)、[项目结构与调用链](docs/project/structure.md)、[知识检索与上下文注入](docs/project/knowledge_context.md)、[开发与版本管理](docs/project/development.md)。
 
@@ -21,7 +21,9 @@ PYTHONPATH=src python3 -B -m unittest discover -s tests -v
 
 | 目录 | 内容 |
 |---|---|
-| `src/text2query/` | 数据准备、检索、模型调用、查询规则、评测与导出代码 |
+| `src/text2query/non_react/` | 普通RAG生成与检索复制基线 |
+| `src/text2query/react/` | ReAct生成与动作工具 |
+| `src/text2query/shared/` | 共通数据、上下文、模型接口、校验、评测与导出工具 |
 | `scripts/run.py` | 统一命令入口 |
 | `tests/` | 自动检查 |
 | `data/raw/` | 原始训练/测试/知识/Schema、原始压缩包和公开赛题元数据 |
@@ -38,7 +40,7 @@ PYTHONPATH=src python3 -B -m unittest discover -s tests -v
 
 Git 跟踪代码、文档、输入及处理数据、已交付结果和6份回归快照；其余模型运行、基线上下文和日志由 `.gitignore` 排除，继续保留在本地。历史报告中的完整运行目录需要另行保存或重新生成，详见[版本管理边界](docs/project/development.md#版本管理边界)。
 
-已生成的 [400 条提交结果](outputs/submission/result.json)、[平台得分记录](docs/reports/得分结果.md)、[错误修复报告](docs/reports/fixes_report.md) 和 [运行记录索引](artifacts/README.md) 可直接查看。当前提交来自DeepSeek Flash普通RAG流程，生成来源与验证范围见[提交说明](outputs/submission/README.md)和[SQLite对比报告](docs/reports/DeepSeek_Flash_SQLite对比.md)；此前Qwen结果保存在 `outputs/submission/archive/`。
+已生成的 [400 条提交结果](outputs/submission/result.json)、[平台得分记录](docs/reports/得分结果.md)、[错误修复报告](docs/reports/fixes_report.md) 和 [运行记录索引](artifacts/README.md) 可直接查看。当前提交来自DeepSeek Flash ReAct流程，生成来源与验证范围见[提交说明](outputs/submission/README.md)和[与初轮Qwen的对比报告](docs/reports/DeepSeek_Flash_ReAct与初轮Qwen对比.md)；此前Qwen及普通DeepSeek结果保存在 `outputs/submission/archive/`。
 
 [上一轮提交结果分析](docs/reports/上一轮提交结果分析.md)记录5条结构问题、语义与知识口径问题及条件性风险，并保存400条检查清单和16组构造反例。运行 `python scripts/analyze_last_submission.py` 可复现该历史提交的审计；编译通过率和构造反例均不等于比赛执行准确率。
 
@@ -66,7 +68,7 @@ python -m unittest discover -s tests -v
 
 模型生成入口会打印实际运行目录。数据、代码和问题集合变化会产生新的运行指纹；后续操作使用该目录，不要照搬历史运行的指纹。
 
-普通 `model` 入口还支持 `--base-url`、`--model`、`--provider vllm|deepseek` 和离线模式的 `--models-file`；认证通过环境变量 `MODEL_API_KEY` 读取。`react` 当前保留独立的请求构建逻辑，没有 `--provider` 参数。参数及离线流程见[开发说明](docs/project/development.md#模型服务与离线运行)。
+普通 `model` 和 `react` 入口支持 `--base-url`、`--model`、`--provider vllm|deepseek`；普通入口另有离线模式的 `--models-file`。两种流程共用供应方请求构建，DeepSeek关闭思考模式。在线认证通过环境变量 `MODEL_API_KEY` 读取；curl批量调用可指定私有认证头文件。参数及离线流程见[开发说明](docs/project/development.md#模型服务与离线运行)。
 
 ## 使用 curl 批量调用
 
@@ -109,9 +111,9 @@ python scripts/run.py react predict --offline --ids 2399,2646,2990,4682,5029,523
 
 循环直到 `pending_count=0`；检查 `unresolved_count`。每题最多10个模型动作，可用 `--max-steps` 调整到24以内。程序保留逐步动作、工具观察、请求和响应，支持中断续跑；成功结果单独保存，未完成或检查失败的查询不会进入 predictions.json。完整400题全部完成后才可用 `export` 导出提交。
 
-`check_query` 自动规范化 ES 错放的根级段，冲突值直接拒绝；教育逻辑视图自动展开为完整 SQL。模型必须先查看所用物理表及知识，并通过检查后才能结束。该检查能减少人工处理结构错误的需求；官方准确率及人工修复比例的变化仍需配对评测。最新已交付的 result.json 来自普通 RAG 流程，ReAct 实验保存在独立运行目录。
+`check_query` 自动规范化 ES 错放的根级段，冲突值直接拒绝；教育逻辑视图自动展开为完整 SQL。模型必须先查看所用物理表及知识，并通过检查后才能结束。最新已交付的400条 `result.json` 来自DeepSeek Flash ReAct，共消费1870次模型响应；两题经自动闭合外层JSON后由模型完成提交，没有手工修改查询。与最初Qwen相比有结构和统计口径改善，也有领域与字段含义退化，详见[完整对比](docs/reports/DeepSeek_Flash_ReAct与初轮Qwen对比.md)；官方分数尚未取得。
 
-定向实测覆盖8题（教育合并、ES医院、PG最新位置、船长跨源、心理调查、根汁啤酒、作者出版及冰球），43次模型调用全部完成，无手工查询编辑；54项自动测试通过。8题的本地检查通过率为100%，不是官方执行准确率。逐步记录位于 `artifacts/runs/regression/react-smoke-20261009/react-predict-ef8e9f74c6e3/`。
+此前定向实测覆盖8题（教育合并、ES医院、PG最新位置、船长跨源、心理调查、根汁啤酒、作者出版及冰球），43次模型调用全部完成，无手工查询编辑；当时54项自动测试通过。8题的本地检查通过率为100%，不是官方执行准确率。逐步记录位于 `artifacts/runs/regression/react-smoke-20261009/react-predict-ef8e9f74c6e3/`。
 
 ## 评测和提交
 

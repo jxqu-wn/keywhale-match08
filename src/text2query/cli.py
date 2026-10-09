@@ -4,15 +4,15 @@ import runpy
 import sys
 
 COMMANDS = {
-    'prepare': ('pipeline', ['prepare']),
-    'baseline': ('pipeline', []),
-    'model': ('model_pipeline', []),
-    'react': ('react_pipeline', []),
-    'curl-batch': ('curl_batch', []),
-    'recover-es': ('recover_es', []),
-    'score': ('score_sample', []),
-    'export': ('export_submission', []),
-    'verify-fixes': ('verify_fixes', []),
+    'prepare': ('shared.data', ['prepare']),
+    'baseline': ('non_react.baseline', []),
+    'model': ('non_react.pipeline', []),
+    'react': ('react.pipeline', []),
+    'curl-batch': ('shared.curl_batch', []),
+    'recover-es': ('shared.recover_es', []),
+    'score': ('shared.score_sample', []),
+    'export': ('shared.export_submission', []),
+    'verify-fixes': ('shared.verify_fixes', []),
 }
 
 

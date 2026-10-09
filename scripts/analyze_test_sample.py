@@ -11,10 +11,11 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
-from text2query.paths import ROOT
-from text2query.model_pipeline import parse_output, validate
-from text2query.education import expand_prediction, model_query_errors
-from text2query.validation import sqlite_connection
+from text2query.shared.paths import ROOT
+from text2query.shared.fingerprints import implementation_hash
+from text2query.shared.generation import parse_output, validate
+from text2query.shared.education import expand_prediction, model_query_errors
+from text2query.shared.validation import sqlite_connection
 
 # These are review findings, not hidden test gold labels or production overrides.
 REVIEWS = {
@@ -121,8 +122,7 @@ def main():
     catalog = json.loads((ROOT / 'data/processed/catalog.json').read_text())
     assert {row['question_id'] for row in sample} == set(REVIEWS)
     config = json.loads((directory / 'config.json').read_text())
-    current_hash = hashlib.sha256(b''.join(p.read_bytes() for p in sorted(
-        (ROOT / 'src/text2query').glob('*.py')))).hexdigest()
+    current_hash = implementation_hash()
     assert current_hash == config['implementation_hash'], 'Production code changed after inference'
     records, outputs = [], []
     for item in sample:

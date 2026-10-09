@@ -17,8 +17,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from text2query.model_pipeline import validate
-from text2query.pipeline import queries, read_text, references, source
+from text2query.shared.generation import validate
+from text2query.shared.data import queries, read_text, references, source
 
 PINNED_SHA256 = '210e0859613681fe36f23fcb1e5430145796f89891007c250565f1300bd8c7a6'
 RUN = ROOT / 'artifacts/runs/prediction/predict-ee19c0abd953'

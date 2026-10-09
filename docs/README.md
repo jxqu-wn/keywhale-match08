@@ -22,7 +22,8 @@
 ## 业务口径与验证记录
 
 - [RAG与校验改进](reports/RAG与校验改进报告.md)：训练示例、知识与领域约束的修订依据。
-- [DeepSeek Flash与Qwen的SQLite对比](reports/DeepSeek_Flash_SQLite对比.md)：相同首轮上下文下的生成差异、构造反例及当前提交来源。
+- [DeepSeek Flash ReAct与初轮Qwen对比](reports/DeepSeek_Flash_ReAct与初轮Qwen对比.md)：当前400条提交、构造执行对比、改善与退化及评测范围。
+- [DeepSeek Flash与Qwen的SQLite对比](reports/DeepSeek_Flash_SQLite对比.md)：普通RAG轮次在相同首轮上下文下的生成差异、构造反例及该轮提交来源。
 - [教育年度合并](reports/education_year_merge.md)、[教师跨年处理](reports/teacher_rag.md)：跨年度业务身份与逻辑视图。
 - [数据一致性](reports/data_consistency.md)：类型编码、行政区划字段及数据源差异。
 - [已修正冲突](reports/conflicts/已修正冲突报告.md)：11组明确修正的结论与查询。

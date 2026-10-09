@@ -10,8 +10,8 @@ import subprocess
 import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.paths import ROOT
-from text2query.curl_batch import build
+from text2query.shared.paths import ROOT
+from text2query.shared.curl_batch import build
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--baseline',type=Path,default=ROOT/'artifacts/runs/evaluation/evaluate-a1a6239d66af')

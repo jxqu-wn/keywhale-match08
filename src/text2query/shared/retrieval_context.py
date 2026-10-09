@@ -1,6 +1,6 @@
 """Question-derived domain routing and scoped, dependency-complete knowledge."""
 import re
-from .pipeline import queries, references, source
+from .data import queries, references, source
 
 PROFILES = [
     (r'Yelp|精英用户|商家.*营业|商家.*评论|有趣投票|营业时间', ['public_review_platform']),
@@ -17,6 +17,90 @@ PROFILES = [
     (r'市净率|每股净资产|股票|所得税|民营企业|国企|税额', ['finance_tax','common']),
     (r'院系|学期|选课|教师|学籍|在读学生|课程|班级|学号', ['education_2024','education_2025','common']),
 ]
+
+# 上位词 → 字典表映射。表名/注释里的关键词直接决定问题应看到哪张字典表，
+# 补上“车辆”“船舶”这类不会作为具体值出现在问题里的上位词。
+DICT_TABLE_TRIGGERS = {
+    'vehicle_type_dict': r'车辆|车牌|载重|核定载|客车|货车|危化品车|牵引车|挂车|车型|车辆类型',
+    'vessel_type_dict': r'船舶|船型|油轮|货船|客船|集装箱船|散货船|渔船|拖轮|AIS|MMSI|船舶类型',
+    'employee_type_dict': r'人员类型|船员|船长|大副|轮机长|水手|船员职务|员工类型',
+    'license_type_dict': r'驾照|驾驶证|准驾|驾驶资格',
+    'dict_gender': r'性别',
+    'dict_academic_level': r'学历层次|学历',
+    'dict_student_status': r'学籍状态|学生状态|在读|休学|退学|保留学籍',
+    'dict_course_type': r'课程类型|课程性质',
+    'dict_exam_item': r'考试项目|考试类型|平时|期中|期末',
+    'dict_take_mode': r'选课方式|修读方式',
+    'dict_semester_type': r'学期类型',
+    'dict_grade_level': r'年级|学级',
+    'dict_registration_type': r'登记注册类型|注册类型',
+    'dict_size_category': r'企业规模|规模划型|大中小微|大型企业|小型企业',
+    'dict_stock_type': r'股票分类|股票类型|板块',
+    'dict_industry': r'行业分类|所属行业|行业代码',
+    'energy_type_dict': r'能源类型|能源种类',
+    'voltage_level_dict': r'电压等级|电压',
+    'energy_position_dict': r'岗位|职位',
+    'station_type_dict': r'场站类型|站点类型|场站',
+    'cert_type_dict': r'证书类型|资质类型',
+    'product_category': r'商品分类|商品类目|品类',
+    'customer_level_dict': r'会员等级|用户等级|客户等级',
+    'customer_status_dict': r'用户状态|客户状态',
+    'product_status_dict': r'商品状态',
+    'order_status_dict': r'订单状态',
+    'payment_method_dict': r'支付方式|付款方式',
+    'payment_status_dict': r'支付状态',
+    'refund_reason_dict': r'退款原因|退款理由',
+    'order_channel_dict': r'下单渠道|订单渠道',
+    'platform_dict': r'销售平台',
+    'administrative_division': r'行政区划|省份|省各|地市|城市|区县|地区|注册地|收货地|家庭地区',
+}
+
+# 行数较少的字典表可直接按上位词整表回传；行数多的表（如行政区划）只靠字面量命中，避免噪声。
+TRIGGERED_DICTIONARY_MAX_ROWS = 40
+
+
+def dict_tables_for(question, catalog):
+    """Return catalog entries whose dictionary trigger matches the question."""
+    if not question:
+        return []
+    wanted = {name for name, pattern in DICT_TABLE_TRIGGERS.items() if re.search(pattern, question, re.I)}
+    if not wanted:
+        return []
+    return [t for t in catalog if t['table'] in wanted]
+
+
+def triggered_dictionary(question, documents, scope, catalog):
+    """Return whole small dictionary tables reached by a hypernym, with the same scope filter."""
+    tables = {t['table'].lower() for t in dict_tables_for(question, catalog)}
+    if not tables:
+        return []
+    grouped = {}
+    for doc in documents:
+        if doc['table'].lower() not in tables:
+            continue
+        declared_source = doc.get('source', 'MYSQL')
+        if scope['sources'] and declared_source not in scope['sources']:
+            continue
+        if doc.get('database') and scope['databases'] and doc['database'] not in scope['databases'] and doc['database'] != 'common':
+            continue
+        values = re.split(r'\bVALUES\b', doc['text'], maxsplit=1, flags=re.I)
+        if len(values) != 2:
+            continue
+        rows = re.findall(r"\((?:[^'()]|'(?:''|[^'])*')*\)", values[1])
+        entry = grouped.setdefault(doc['table'].lower(),
+                                   {'id': 'trigger:' + doc['table'].lower(),
+                                    'header': values[0].strip() + ' VALUES',
+                                    'source': declared_source, 'database': doc.get('database'),
+                                    'rows': [], 'reason': '上位词触发字典表检索',
+                                    'instruction': '仅对声明的数据源/字典引用表解释；不能把MySQL枚举套到PG AIS。'})
+        entry['rows'].extend(rows)
+    result = []
+    for entry in grouped.values():
+        if len(entry['rows']) > TRIGGERED_DICTIONARY_MAX_ROWS:
+            continue
+        entry['rows'] = entry['rows'][:TRIGGERED_DICTIONARY_MAX_ROWS]
+        result.append(entry)
+    return result
 
 
 def infer_scope(question, examples, catalog):

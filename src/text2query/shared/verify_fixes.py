@@ -4,8 +4,8 @@ import json
 import re
 import sqlite3
 from pathlib import Path
-from .pipeline import ROOT, OUT, load
-from .model_pipeline import validate
+from .data import ROOT, OUT, load
+from .generation import validate
 
 
 def fixture():

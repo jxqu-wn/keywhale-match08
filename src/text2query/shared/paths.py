@@ -1,7 +1,7 @@
 """Project paths shared by all preparation, inference and export commands."""
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 RAW = ROOT / 'data/raw/subject'
 REFERENCE = ROOT / 'data/reference'
 CURATED = ROOT / 'data/curated'

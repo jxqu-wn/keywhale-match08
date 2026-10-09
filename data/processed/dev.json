@@ -2709,7 +2709,9 @@
     "question_id": 2640,
     "question": "查询最新位置与MMSI为414000001的船舶最新位置距离10公里以内，且船舶类型为货船的其他船舶。",
     "db": "POSTGRESQL",
-    "query": "WITH target AS (SELECT geom FROM vessel_ais_data WHERE mmsi = 414000001 ORDER BY timestamp DESC LIMIT 1) SELECT DISTINCT ON (v.mmsi) v.* FROM vessel_ais_data v, target t WHERE v.mmsi != 414000001 AND v.vessel_type = 70 AND ST_DWithin(v.geom::geography, t.geom::geography, 10000) ORDER BY v.mmsi, v.timestamp DESC"
+    "query": "WITH target AS (SELECT geom FROM vessel_ais_data WHERE mmsi=414000001 ORDER BY timestamp DESC LIMIT 1), latest AS (SELECT DISTINCT ON (mmsi) * FROM vessel_ais_data ORDER BY mmsi,timestamp DESC) SELECT v.* FROM latest v CROSS JOIN target t WHERE v.mmsi!=414000001 AND v.vessel_type=70 AND ST_DWithin(v.geom::geography,t.geom::geography,10000)",
+    "annotation_origin": "reviewed_training_overlay",
+    "curation_reason": "先按每船取真正最新记录，再判断距离；不得用范围内旧位置代替最新位置。"
   },
   {
     "question_id": 2647,
@@ -4185,7 +4187,9 @@
     "question_id": 3875,
     "question": "哪个发行商发行的动作类游戏最多？",
     "db": "SQLite",
-    "query": "SELECT T4.publisher_name FROM video_games.genre AS T1 INNER JOIN video_games.game AS T2 ON T1.id = T2.genre_id INNER JOIN video_games.game_publisher AS T3 ON T2.id = T3.game_id INNER JOIN video_games.publisher AS T4 ON T3.publisher_id = T4.id WHERE T1.genre_name = 'Action' GROUP BY T4.publisher_name ORDER BY COUNT(DISTINCT T2.id) DESC LIMIT 1"
+    "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON gp.publisher_id=p.id JOIN video_games.game g ON g.id=gp.game_id JOIN video_games.genre ge ON ge.id=g.genre_id WHERE ge.genre_name='Action' GROUP BY p.id,p.publisher_name ORDER BY COUNT(DISTINCT g.id) DESC,p.id ASC LIMIT 1",
+    "annotation_origin": "reviewed_training_overlay",
+    "curation_reason": "按发行商主键区分同名主体，并按不同游戏数排名。"
   },
   {
     "question_id": 3881,
@@ -4497,7 +4501,9 @@
     "question_id": 4159,
     "question": "Yelp上Chandler市房地产行业且评分为5星的商家占Chandler市所有商家的百分比是多少？",
     "db": "SQLite",
-    "query": "SELECT CAST(SUM(CASE WHEN T1.stars = 5 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.business_id) AS percentage FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T3 ON T1.business_id = T3.business_id INNER JOIN public_review_platform.Categories AS T4 ON T3.category_id = T4.category_id WHERE T1.city LIKE 'Chandler' AND T4.category_name LIKE 'Real Estate'"
+    "query": "SELECT 100.0*COUNT(DISTINCT b.business_id)/NULLIF((SELECT COUNT(*) FROM public_review_platform.Business WHERE city='Chandler'),0) AS percentage FROM public_review_platform.Business b WHERE b.city='Chandler' AND b.stars=5 AND EXISTS (SELECT 1 FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON c.category_id=bc.category_id WHERE bc.business_id=b.business_id AND c.category_name='Real Estate')",
+    "annotation_origin": "reviewed_training_overlay",
+    "curation_reason": "题目分母是Chandler所有商家，而非房地产商家。仅用于训练示例覆盖；不改验证金标。"
   },
   {
     "question_id": 4162,
@@ -4731,7 +4737,9 @@
     "question_id": 4332,
     "question": "基于凤凰城的Yelp商家，计算有趣投票数低的商家百分比。",
     "db": "SQLite",
-    "query": "SELECT CAST(SUM(CASE WHEN T2.review_votes_funny = 'Low' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Reviews AS T2 ON T1.business_id = T2.business_id WHERE T1.city = 'Phoenix'"
+    "query": "SELECT 100.0*COUNT(*)/NULLIF((SELECT COUNT(*) FROM public_review_platform.Business WHERE city='Phoenix'),0) AS percentage FROM public_review_platform.Business b WHERE b.city='Phoenix' AND EXISTS (SELECT 1 FROM public_review_platform.Reviews r WHERE r.business_id=b.business_id AND r.review_votes_funny='Low')",
+    "annotation_origin": "reviewed_training_overlay",
+    "curation_reason": "具有低有趣投票评论的商家按存在性去重；每商家可有多评论。"
   },
   {
     "question_id": 4334,
@@ -4821,7 +4829,9 @@
     "question_id": 4416,
     "question": "亚利桑那州El Mirage市的Yelp商家平均每天营业多长时间？",
     "db": "SQLite",
-    "query": "SELECT SUM(T2.closing_time - T2.opening_time) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Hours AS T2 ON T1.business_id = T2.business_id WHERE T1.city = 'El Mirage' AND T1.state = 'AZ'"
+    "query": "WITH parsed_hours AS (SELECT business_id,day_id,CASE WHEN opening_time IS NULL OR LOWER(TRIM(opening_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(opening_time)) LIKE '%am' OR LOWER(TRIM(opening_time)) LIKE '%pm' THEN CAST(opening_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(opening_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(opening_time AS INTEGER) END)*60 + CASE WHEN INSTR(opening_time,':')>0 THEN CAST(SUBSTR(opening_time,INSTR(opening_time,':')+1,2) AS INTEGER) ELSE 0 END END AS opening_minutes,CASE WHEN closing_time IS NULL OR LOWER(TRIM(closing_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(closing_time)) LIKE '%am' OR LOWER(TRIM(closing_time)) LIKE '%pm' THEN CAST(closing_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(closing_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(closing_time AS INTEGER) END)*60 + CASE WHEN INSTR(closing_time,':')>0 THEN CAST(SUBSTR(closing_time,INSTR(closing_time,':')+1,2) AS INTEGER) ELSE 0 END END AS closing_minutes FROM public_review_platform.Business_Hours),\nnormalized_hours AS (SELECT business_id,day_id,CASE WHEN opening_minutes IS NULL OR closing_minutes IS NULL THEN NULL WHEN opening_minutes=closing_minutes THEN 24.0 WHEN closing_minutes>opening_minutes THEN (closing_minutes-opening_minutes)/60.0 ELSE (closing_minutes-opening_minutes+1440)/60.0 END AS hours FROM parsed_hours)\nSELECT AVG(h.hours) FROM normalized_hours h JOIN public_review_platform.Business b ON b.business_id=h.business_id WHERE b.city='El Mirage' AND b.state='AZ'",
+    "annotation_origin": "reviewed_training_overlay",
+    "curation_reason": "按知识159解析12小时制文本，支持分钟及跨午夜，同值按知识163视为24小时；平均仅对已提供的有效营业日记录。"
   },
   {
     "question_id": 4422,
@@ -5859,7 +5869,9 @@
     "question_id": 5293,
     "question": "购书客户中，位于美国的客户所在的城市有哪些？",
     "db": "SQLite",
-    "query": "SELECT DISTINCT T2.city FROM books.country AS T1 INNER JOIN books.address AS T2 ON T1.country_id = T2.country_id WHERE T1.country_name = 'United States of America'"
+    "query": "SELECT DISTINCT a.city FROM books.customer c JOIN books.customer_address ca ON ca.customer_id=c.customer_id JOIN books.address a ON a.address_id=ca.address_id JOIN books.country co ON co.country_id=a.country_id WHERE co.country_name='United States of America'",
+    "annotation_origin": "reviewed_training_overlay",
+    "curation_reason": "限定客户实际关联地址；不把地址维表全部城市当成客户城市，不额外推断当前地址或已下单。"
   },
   {
     "question_id": 5296,

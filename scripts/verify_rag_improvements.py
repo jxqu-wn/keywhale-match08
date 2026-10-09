@@ -4,10 +4,11 @@ import json
 import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.model_pipeline import Context, validate
-from text2query.curation import load_overlays, hours_cte
-from text2query.paths import ROOT, RAW
-from text2query.validation import sqlite_connection
+from text2query.shared.context import Context
+from text2query.shared.generation import validate
+from text2query.shared.curation import load_overlays, hours_cte
+from text2query.shared.paths import ROOT, RAW
+from text2query.shared.validation import sqlite_connection
 
 directory = ROOT/'artifacts/runs/regression/rag-improvements-20261009'
 baseline = json.loads((directory/'baseline.json').read_text())

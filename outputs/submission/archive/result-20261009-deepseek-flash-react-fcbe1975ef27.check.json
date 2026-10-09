@@ -1,0 +1,18 @@
+{
+  "count": 400,
+  "unique_ids": 400,
+  "coverage": "complete",
+  "encoding": "UTF-8",
+  "sha256": "fcbe1975ef27ec0242fa856f68951c1f93931f4c4d4952490487e2718fda92bf",
+  "source_counts": {
+    "MYSQL": 101,
+    "Elasticsearch": 50,
+    "POSTGRESQL": 38,
+    "MYSQL->POSTGRESQL": 9,
+    "POSTGRESQL->MYSQL": 3,
+    "SQLite": 199
+  },
+  "execution_validated": false,
+  "model_run": "/home/jxqu/Share/Match/artifacts/runs/prediction/deepseek-flash-react-20261009/react-predict-bb3435ff0550",
+  "manual_query_edits": false
+}

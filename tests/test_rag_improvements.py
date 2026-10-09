@@ -6,14 +6,16 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.curation import load_overlays, hours_cte
-from text2query.education import education_query_mode
-from text2query.model_pipeline import Context, validate
-from text2query.model_pipeline import write_offline_request, repair_feedback
-from text2query.curl_batch import build
-from text2query.paths import ROOT, RAW
-from text2query.pipeline import schema_catalog, ddl_columns, references
-from text2query.validation import sqlite_connection
+from text2query.shared.curation import load_overlays, hours_cte
+from text2query.shared.education import education_query_mode
+from text2query.shared.context import Context
+from text2query.shared.generation import validate
+from text2query.shared.generation import write_offline_request
+from text2query.shared.prompts import repair_feedback
+from text2query.shared.curl_batch import build
+from text2query.shared.paths import ROOT, RAW
+from text2query.shared.data import schema_catalog, ddl_columns, references
+from text2query.shared.validation import sqlite_connection
 
 
 class ImprovementTests(unittest.TestCase):

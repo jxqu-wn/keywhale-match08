@@ -6,10 +6,12 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.model_pipeline import Context, SYSTEM, parse_output, validate
-from text2query.pipeline import load, save
-from text2query.paths import RUNS
-from text2query.education import expand_prediction, model_query_errors
+from text2query.shared.context import Context
+from text2query.shared.prompts import SYSTEM
+from text2query.shared.generation import parse_output, validate
+from text2query.shared.data import load, save
+from text2query.shared.paths import RUNS
+from text2query.shared.education import expand_prediction, model_query_errors
 
 CASES = [
     {'question_id':'teacher-default','question':'统计教师中电话不为空的数量，并返回数量。','expected_count':2},

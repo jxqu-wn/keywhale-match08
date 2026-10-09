@@ -8384,7 +8384,7 @@
         "definition": "latitude DECIMAL(10, 6) COMMENT '纬度'"
       }
     ],
-    "ddl": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n)",
+    "ddl": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8409,7 +8409,7 @@
         "definition": "category VARCHAR(20) COMMENT '大类'"
       }
     ],
-    "ddl": "CREATE TABLE vehicle_type_dict (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（客车/货车/危化品车等）',\r\n    category VARCHAR(20) COMMENT '大类'\r\n)",
+    "ddl": "CREATE TABLE vehicle_type_dict (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（客车/货车/危化品车等）',\r\n    category VARCHAR(20) COMMENT '大类'\r\n) ENGINE=InnoDB COMMENT='车辆类型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8434,7 +8434,7 @@
         "definition": "category VARCHAR(20) COMMENT '大类'"
       }
     ],
-    "ddl": "CREATE TABLE vessel_type_dict (\r\n    type_code SMALLINT PRIMARY KEY COMMENT 'AIS船舶类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(20) COMMENT '大类'\r\n)",
+    "ddl": "CREATE TABLE vessel_type_dict (\r\n    type_code SMALLINT PRIMARY KEY COMMENT 'AIS船舶类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(20) COMMENT '大类'\r\n) ENGINE=InnoDB COMMENT='船舶类型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8454,7 +8454,7 @@
         "definition": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称（船长/大副/轮机长/水手等）'"
       }
     ],
-    "ddl": "CREATE TABLE employee_type_dict (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '人员类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（船长/大副/轮机长/水手等）'\r\n)",
+    "ddl": "CREATE TABLE employee_type_dict (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '人员类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（船长/大副/轮机长/水手等）'\r\n) ENGINE=InnoDB COMMENT='人员类型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8474,7 +8474,7 @@
         "definition": "license_name VARCHAR(50) NOT NULL COMMENT '驾照名称'"
       }
     ],
-    "ddl": "CREATE TABLE license_type_dict (\r\n    license_code VARCHAR(5) PRIMARY KEY COMMENT '驾照代码',\r\n    license_name VARCHAR(50) NOT NULL COMMENT '驾照名称'\r\n)",
+    "ddl": "CREATE TABLE license_type_dict (\r\n    license_code VARCHAR(5) PRIMARY KEY COMMENT '驾照代码',\r\n    license_name VARCHAR(50) NOT NULL COMMENT '驾照名称'\r\n) ENGINE=InnoDB COMMENT='驾照类型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8499,7 +8499,7 @@
         "definition": "description VARCHAR(200) COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE dict_registration_type (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '注册类型代码',\r\n    type_name VARCHAR(100) NOT NULL COMMENT '注册类型名称',\r\n    description VARCHAR(200) COMMENT '说明'\r\n)",
+    "ddl": "CREATE TABLE dict_registration_type (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '注册类型代码',\r\n    type_name VARCHAR(100) NOT NULL COMMENT '注册类型名称',\r\n    description VARCHAR(200) COMMENT '说明'\r\n) COMMENT='企业登记注册类型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8519,7 +8519,7 @@
         "definition": "size_name VARCHAR(20) NOT NULL COMMENT '规模名称'"
       }
     ],
-    "ddl": "CREATE TABLE dict_size_category (\r\n    size_code VARCHAR(10) PRIMARY KEY COMMENT '规模代码',\r\n    size_name VARCHAR(20) NOT NULL COMMENT '规模名称'\r\n)",
+    "ddl": "CREATE TABLE dict_size_category (\r\n    size_code VARCHAR(10) PRIMARY KEY COMMENT '规模代码',\r\n    size_name VARCHAR(20) NOT NULL COMMENT '规模名称'\r\n) COMMENT='企业规模划型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8544,7 +8544,7 @@
         "definition": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称'"
       }
     ],
-    "ddl": "CREATE TABLE dict_stock_type (\r\n    type_category VARCHAR(30) COMMENT '分类维度',\r\n    type_code VARCHAR(20) COMMENT '类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    PRIMARY KEY (type_category, type_code)\r\n)",
+    "ddl": "CREATE TABLE dict_stock_type (\r\n    type_category VARCHAR(30) COMMENT '分类维度',\r\n    type_code VARCHAR(20) COMMENT '类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    PRIMARY KEY (type_category, type_code)\r\n) COMMENT='股票分类字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8564,7 +8564,7 @@
         "definition": "industry_name VARCHAR(100) NOT NULL COMMENT '行业名称'"
       }
     ],
-    "ddl": "CREATE TABLE dict_industry (\r\n    industry_code VARCHAR(20) PRIMARY KEY COMMENT '行业代码（国标）',\r\n    industry_name VARCHAR(100) NOT NULL COMMENT '行业名称'\r\n)",
+    "ddl": "CREATE TABLE dict_industry (\r\n    industry_code VARCHAR(20) PRIMARY KEY COMMENT '行业代码（国标）',\r\n    industry_name VARCHAR(100) NOT NULL COMMENT '行业名称'\r\n) COMMENT='行业分类字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8594,7 +8594,7 @@
         "definition": "is_renewable TINYINT(1) DEFAULT 0 COMMENT '是否可再生'"
       }
     ],
-    "ddl": "CREATE TABLE energy_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码',\r\n    type_name VARCHAR(30) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(20) COMMENT '大类',\r\n    is_renewable TINYINT(1) DEFAULT 0 COMMENT '是否可再生'\r\n)",
+    "ddl": "CREATE TABLE energy_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码',\r\n    type_name VARCHAR(30) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(20) COMMENT '大类',\r\n    is_renewable TINYINT(1) DEFAULT 0 COMMENT '是否可再生'\r\n) ENGINE=InnoDB COMMENT='能源类型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8624,7 +8624,7 @@
         "definition": "category VARCHAR(20) COMMENT '类别'"
       }
     ],
-    "ddl": "CREATE TABLE voltage_level_dict (\r\n    level_code VARCHAR(10) PRIMARY KEY COMMENT '电压等级代码',\r\n    level_name VARCHAR(20) NOT NULL COMMENT '等级名称',\r\n    level_value INT COMMENT '电压值(kV)',\r\n    category VARCHAR(20) COMMENT '类别'\r\n)",
+    "ddl": "CREATE TABLE voltage_level_dict (\r\n    level_code VARCHAR(10) PRIMARY KEY COMMENT '电压等级代码',\r\n    level_name VARCHAR(20) NOT NULL COMMENT '等级名称',\r\n    level_value INT COMMENT '电压值(kV)',\r\n    category VARCHAR(20) COMMENT '类别'\r\n) ENGINE=InnoDB COMMENT='电压等级字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8649,7 +8649,7 @@
         "definition": "category VARCHAR(30) COMMENT '类别'"
       }
     ],
-    "ddl": "CREATE TABLE energy_position_dict (\r\n    position_code VARCHAR(20) PRIMARY KEY COMMENT '岗位代码',\r\n    position_name VARCHAR(50) NOT NULL COMMENT '岗位名称',\r\n    category VARCHAR(30) COMMENT '类别'\r\n)",
+    "ddl": "CREATE TABLE energy_position_dict (\r\n    position_code VARCHAR(20) PRIMARY KEY COMMENT '岗位代码',\r\n    position_name VARCHAR(50) NOT NULL COMMENT '岗位名称',\r\n    category VARCHAR(30) COMMENT '类别'\r\n) ENGINE=InnoDB COMMENT='能源行业岗位字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8674,7 +8674,7 @@
         "definition": "category VARCHAR(30) COMMENT '大类'"
       }
     ],
-    "ddl": "CREATE TABLE station_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '场站类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(30) COMMENT '大类'\r\n)",
+    "ddl": "CREATE TABLE station_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '场站类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(30) COMMENT '大类'\r\n) ENGINE=InnoDB COMMENT='场站类型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8704,7 +8704,7 @@
         "definition": "valid_years TINYINT COMMENT '有效期(年)'"
       }
     ],
-    "ddl": "CREATE TABLE cert_type_dict (\r\n    cert_type_code VARCHAR(20) PRIMARY KEY COMMENT '资质类型代码',\r\n    cert_type_name VARCHAR(50) NOT NULL COMMENT '资质类型名称',\r\n    category VARCHAR(20) COMMENT '类别',\r\n    valid_years TINYINT COMMENT '有效期(年)'\r\n)",
+    "ddl": "CREATE TABLE cert_type_dict (\r\n    cert_type_code VARCHAR(20) PRIMARY KEY COMMENT '资质类型代码',\r\n    cert_type_name VARCHAR(50) NOT NULL COMMENT '资质类型名称',\r\n    category VARCHAR(20) COMMENT '类别',\r\n    valid_years TINYINT COMMENT '有效期(年)'\r\n) ENGINE=InnoDB COMMENT='资质类型字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8739,7 +8739,7 @@
         "definition": "sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号'"
       }
     ],
-    "ddl": "CREATE TABLE product_category (\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID',\r\n  category_name VARCHAR(100) NOT NULL COMMENT '商品分类名称',\r\n  parent_category_id BIGINT DEFAULT NULL COMMENT '父级商品分类ID',\r\n  category_level TINYINT NOT NULL COMMENT '分类层级',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (category_id),\r\n  KEY idx_category_parent (parent_category_id),\r\n  KEY idx_category_level (category_level)\r\n)",
+    "ddl": "CREATE TABLE product_category (\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID',\r\n  category_name VARCHAR(100) NOT NULL COMMENT '商品分类名称',\r\n  parent_category_id BIGINT DEFAULT NULL COMMENT '父级商品分类ID',\r\n  category_level TINYINT NOT NULL COMMENT '分类层级',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (category_id),\r\n  KEY idx_category_parent (parent_category_id),\r\n  KEY idx_category_level (category_level)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品分类表';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8774,7 +8774,7 @@
         "definition": "sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号'"
       }
     ],
-    "ddl": "CREATE TABLE customer_level_dict (\r\n  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码',\r\n  level_name VARCHAR(64) NOT NULL COMMENT '用户等级名称',\r\n  min_growth_value INT NOT NULL DEFAULT 0 COMMENT '最低成长值',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (level_code)\r\n)",
+    "ddl": "CREATE TABLE customer_level_dict (\r\n  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码',\r\n  level_name VARCHAR(64) NOT NULL COMMENT '用户等级名称',\r\n  min_growth_value INT NOT NULL DEFAULT 0 COMMENT '最低成长值',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (level_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户等级字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8799,7 +8799,7 @@
         "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE customer_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '用户状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n)",
+    "ddl": "CREATE TABLE customer_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '用户状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户状态字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8824,7 +8824,7 @@
         "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE product_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '商品状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n)",
+    "ddl": "CREATE TABLE product_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '商品状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品状态字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8849,7 +8849,7 @@
         "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE order_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '订单状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n)",
+    "ddl": "CREATE TABLE order_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '订单状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单状态字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8874,7 +8874,7 @@
         "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE payment_method_dict (\r\n  method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码',\r\n  method_name VARCHAR(64) NOT NULL COMMENT '支付方式名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (method_code)\r\n)",
+    "ddl": "CREATE TABLE payment_method_dict (\r\n  method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码',\r\n  method_name VARCHAR(64) NOT NULL COMMENT '支付方式名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (method_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付方式字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8899,7 +8899,7 @@
         "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE payment_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '支付状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n)",
+    "ddl": "CREATE TABLE payment_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '支付状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付状态字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8924,7 +8924,7 @@
         "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE refund_reason_dict (\r\n  reason_code VARCHAR(32) NOT NULL COMMENT '退款原因编码',\r\n  reason_name VARCHAR(64) NOT NULL COMMENT '退款原因名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (reason_code)\r\n)",
+    "ddl": "CREATE TABLE refund_reason_dict (\r\n  reason_code VARCHAR(32) NOT NULL COMMENT '退款原因编码',\r\n  reason_name VARCHAR(64) NOT NULL COMMENT '退款原因名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (reason_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='退款原因字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8949,7 +8949,7 @@
         "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE order_channel_dict (\r\n  channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码',\r\n  channel_name VARCHAR(64) NOT NULL COMMENT '下单渠道名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (channel_code)\r\n)",
+    "ddl": "CREATE TABLE order_channel_dict (\r\n  channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码',\r\n  channel_name VARCHAR(64) NOT NULL COMMENT '下单渠道名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (channel_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='下单渠道字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8974,7 +8974,7 @@
         "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
       }
     ],
-    "ddl": "CREATE TABLE platform_dict (\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码',\r\n  platform_name VARCHAR(64) NOT NULL COMMENT '销售平台名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (platform_code)\r\n)",
+    "ddl": "CREATE TABLE platform_dict (\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码',\r\n  platform_name VARCHAR(64) NOT NULL COMMENT '销售平台名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (platform_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='销售平台字典';",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -8994,7 +8994,7 @@
         "definition": "gender_name VARCHAR(10) NOT NULL COMMENT '性别名称'"
       }
     ],
-    "ddl": "CREATE TABLE dict_gender (\r\n    gender_code CHAR(1) PRIMARY KEY COMMENT '性别代码(M/F)',\r\n    gender_name VARCHAR(10) NOT NULL COMMENT '性别名称'\r\n)",
+    "ddl": "CREATE TABLE dict_gender (\r\n    gender_code CHAR(1) PRIMARY KEY COMMENT '性别代码(M/F)',\r\n    gender_name VARCHAR(10) NOT NULL COMMENT '性别名称'\r\n);",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -9014,7 +9014,7 @@
         "definition": "level_name VARCHAR(50) NOT NULL COMMENT '学历名称'"
       }
     ],
-    "ddl": "CREATE TABLE dict_academic_level (\r\n    level_code VARCHAR(20) PRIMARY KEY COMMENT '学历代码(UNDERGRAD/MASTER等)',\r\n    level_name VARCHAR(50) NOT NULL COMMENT '学历名称'\r\n)",
+    "ddl": "CREATE TABLE dict_academic_level (\r\n    level_code VARCHAR(20) PRIMARY KEY COMMENT '学历代码(UNDERGRAD/MASTER等)',\r\n    level_name VARCHAR(50) NOT NULL COMMENT '学历名称'\r\n);",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -9034,7 +9034,7 @@
         "definition": "status_name VARCHAR(50) NOT NULL COMMENT '状态名称'"
       }
     ],
-    "ddl": "CREATE TABLE dict_student_status (\r\n    status_code VARCHAR(20) PRIMARY KEY COMMENT '状态代码(ACTIVE/INACTIVE/GRADUATED等)',\r\n    status_name VARCHAR(50) NOT NULL COMMENT '状态名称'\r\n)",
+    "ddl": "CREATE TABLE dict_student_status (\r\n    status_code VARCHAR(20) PRIMARY KEY COMMENT '状态代码(ACTIVE/INACTIVE/GRADUATED等)',\r\n    status_name VARCHAR(50) NOT NULL COMMENT '状态名称'\r\n);",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -9054,7 +9054,7 @@
         "definition": "type_name VARCHAR(50) NOT NULL COMMENT '课程类型名称'"
       }
     ],
-    "ddl": "CREATE TABLE dict_course_type (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '课程类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '课程类型名称'\r\n)",
+    "ddl": "CREATE TABLE dict_course_type (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '课程类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '课程类型名称'\r\n);",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -9079,7 +9079,7 @@
         "definition": "default_weight DECIMAL(5,2) COMMENT '默认权重（如平时成绩占30%）'"
       }
     ],
-    "ddl": "CREATE TABLE dict_exam_item (\r\n    item_code VARCHAR(20) PRIMARY KEY COMMENT '考试项目代码',\r\n    item_name VARCHAR(50) NOT NULL COMMENT '考试项目名称',\r\n    default_weight DECIMAL(5,2) COMMENT '默认权重（如平时成绩占30%）'\r\n)",
+    "ddl": "CREATE TABLE dict_exam_item (\r\n    item_code VARCHAR(20) PRIMARY KEY COMMENT '考试项目代码',\r\n    item_name VARCHAR(50) NOT NULL COMMENT '考试项目名称',\r\n    default_weight DECIMAL(5,2) COMMENT '默认权重（如平时成绩占30%）'\r\n);",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -9099,7 +9099,7 @@
         "definition": "mode_name VARCHAR(50) NOT NULL COMMENT '选课方式名称'"
       }
     ],
-    "ddl": "CREATE TABLE dict_take_mode (\r\n    mode_code VARCHAR(20) PRIMARY KEY COMMENT '选课方式代码',\r\n    mode_name VARCHAR(50) NOT NULL COMMENT '选课方式名称'\r\n)",
+    "ddl": "CREATE TABLE dict_take_mode (\r\n    mode_code VARCHAR(20) PRIMARY KEY COMMENT '选课方式代码',\r\n    mode_name VARCHAR(50) NOT NULL COMMENT '选课方式名称'\r\n);",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -9129,7 +9129,7 @@
         "definition": "is_current TINYINT(1) COMMENT '是否为当前学期'"
       }
     ],
-    "ddl": "CREATE TABLE dict_semester_type (\r\n    semester_code VARCHAR(20) PRIMARY KEY COMMENT '学期代码（如2024-FALL）',\r\n    semester_name VARCHAR(50) NOT NULL COMMENT '学期名称',\r\n    season VARCHAR(10) COMMENT '季节(SPRING/FALL/SUMMER)',\r\n    is_current TINYINT(1) COMMENT '是否为当前学期'\r\n)",
+    "ddl": "CREATE TABLE dict_semester_type (\r\n    semester_code VARCHAR(20) PRIMARY KEY COMMENT '学期代码（如2024-FALL）',\r\n    semester_name VARCHAR(50) NOT NULL COMMENT '学期名称',\r\n    season VARCHAR(10) COMMENT '季节(SPRING/FALL/SUMMER)',\r\n    is_current TINYINT(1) COMMENT '是否为当前学期'\r\n);",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -9159,7 +9159,7 @@
         "definition": "grade_point DECIMAL(3,2) COMMENT '绩点'"
       }
     ],
-    "ddl": "CREATE TABLE dict_grade_level (\r\n    grade_level CHAR(2) PRIMARY KEY COMMENT '等级(A/B/C/D/F)',\r\n    min_score INT COMMENT '最低分数',\r\n    max_score INT COMMENT '最高分数',\r\n    grade_point DECIMAL(3,2) COMMENT '绩点'\r\n)",
+    "ddl": "CREATE TABLE dict_grade_level (\r\n    grade_level CHAR(2) PRIMARY KEY COMMENT '等级(A/B/C/D/F)',\r\n    min_score INT COMMENT '最低分数',\r\n    max_score INT COMMENT '最高分数',\r\n    grade_point DECIMAL(3,2) COMMENT '绩点'\r\n);",
     "file": "commom_schema.txt",
     "foreign_keys": []
   },
@@ -9214,7 +9214,7 @@
         "definition": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"
       }
     ],
-    "ddl": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n)",
+    "ddl": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r"
@@ -9286,7 +9286,7 @@
         "definition": "company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID'"
       }
     ],
-    "ddl": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n)",
+    "ddl": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r",
@@ -9370,7 +9370,7 @@
         "definition": "company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID'"
       }
     ],
-    "ddl": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n)",
+    "ddl": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r",
@@ -9430,7 +9430,7 @@
         "definition": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"
       }
     ],
-    "ddl": "CREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n)",
+    "ddl": "CREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='船舶公司信息表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r"
@@ -9482,7 +9482,7 @@
         "definition": "status ENUM('在职','离职','退休') DEFAULT '在职' COMMENT '状态'"
       }
     ],
-    "ddl": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    employee_type_code VARCHAR(20) NOT NULL COMMENT '人员类型代码（船长/大副等）',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    status ENUM('在职','离职','退休') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (employee_type_code) REFERENCES common.employee_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id)\r\n)",
+    "ddl": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    employee_type_code VARCHAR(20) NOT NULL COMMENT '人员类型代码（船长/大副等）',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    status ENUM('在职','离职','退休') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (employee_type_code) REFERENCES common.employee_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id)\r\n) ENGINE=InnoDB COMMENT='船舶公司员工表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (employee_type_code) REFERENCES common.employee_type_dict(type_code),\r",
@@ -9535,7 +9535,7 @@
         "definition": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
       }
     ],
-    "ddl": "CREATE TABLE vessel (\r\n    mmsi INT UNSIGNED NOT NULL COMMENT '船舶MMSI，9位唯一标识',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',\r\n    vessel_type SMALLINT COMMENT '船舶类型代码（参照AIS标准）',\r\n    max_load DECIMAL(10,2) COMMENT '最大荷载量（吨）',\r\n    max_speed DECIMAL(4,1) COMMENT '最大航速（节）',\r\n    endurance VARCHAR(32) COMMENT '自持力（天/海里）',\r\n    captain_name VARCHAR(32) COMMENT '船长姓名',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    UNIQUE KEY uk_mmsi (mmsi),\r\n    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id) ON DELETE RESTRICT ON UPDATE CASCADE,\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vessel_type) REFERENCES common.vessel_type_dict(type_code)\r\n)",
+    "ddl": "CREATE TABLE vessel (\r\n    mmsi INT UNSIGNED NOT NULL COMMENT '船舶MMSI，9位唯一标识',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',\r\n    vessel_type SMALLINT COMMENT '船舶类型代码（参照AIS标准）',\r\n    max_load DECIMAL(10,2) COMMENT '最大荷载量（吨）',\r\n    max_speed DECIMAL(4,1) COMMENT '最大航速（节）',\r\n    endurance VARCHAR(32) COMMENT '自持力（天/海里）',\r\n    captain_name VARCHAR(32) COMMENT '船长姓名',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    UNIQUE KEY uk_mmsi (mmsi),\r\n    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id) ON DELETE RESTRICT ON UPDATE CASCADE,\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vessel_type) REFERENCES common.vessel_type_dict(type_code)\r\n) ENGINE=InnoDB COMMENT='船舶基础信息表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (company_id) REFERENCES shipping_company(company_id) ON DELETE RESTRICT ON UPDATE CASCADE,\r",
@@ -9604,7 +9604,7 @@
         "definition": "is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业'"
       }
     ],
-    "ddl": "CREATE TABLE companies (\r\n    company_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '公司唯一ID',\r\n    company_name VARCHAR(200) NOT NULL UNIQUE COMMENT '公司法定全称',\r\n    stock_code VARCHAR(20) UNIQUE COMMENT '股票代码（若上市）',\r\n    established_year YEAR COMMENT '注册/成立年份',\r\n    registered_capital DECIMAL(18,2) COMMENT '注册资本（万元）',\r\n    industry_code VARCHAR(20) COMMENT '所属行业代码',\r\n    registration_type_code VARCHAR(20) COMMENT '登记注册类型代码',\r\n    is_private BOOLEAN COMMENT '是否民营企业',\r\n    size_category_code VARCHAR(10) COMMENT '规模划型代码',\r\n    is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业',\r\n    is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业',\r\n\r\n    FOREIGN KEY (industry_code) REFERENCES common.dict_industry(industry_code),\r\n    FOREIGN KEY (registration_type_code) REFERENCES common.dict_registration_type(type_code),\r\n    FOREIGN KEY (size_category_code) REFERENCES common.dict_size_category(size_code)\r\n)",
+    "ddl": "CREATE TABLE companies (\r\n    company_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '公司唯一ID',\r\n    company_name VARCHAR(200) NOT NULL UNIQUE COMMENT '公司法定全称',\r\n    stock_code VARCHAR(20) UNIQUE COMMENT '股票代码（若上市）',\r\n    established_year YEAR COMMENT '注册/成立年份',\r\n    registered_capital DECIMAL(18,2) COMMENT '注册资本（万元）',\r\n    industry_code VARCHAR(20) COMMENT '所属行业代码',\r\n    registration_type_code VARCHAR(20) COMMENT '登记注册类型代码',\r\n    is_private BOOLEAN COMMENT '是否民营企业',\r\n    size_category_code VARCHAR(10) COMMENT '规模划型代码',\r\n    is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业',\r\n    is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业',\r\n\r\n    FOREIGN KEY (industry_code) REFERENCES common.dict_industry(industry_code),\r\n    FOREIGN KEY (registration_type_code) REFERENCES common.dict_registration_type(type_code),\r\n    FOREIGN KEY (size_category_code) REFERENCES common.dict_size_category(size_code)\r\n) COMMENT='公司基础信息主表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (industry_code) REFERENCES common.dict_industry(industry_code),\r",
@@ -9678,7 +9678,7 @@
         "definition": "current_price DECIMAL(10,2) COMMENT '最新股票价格（元）'"
       }
     ],
-    "ddl": "CREATE TABLE stocks (\r\n    stock_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    stock_code VARCHAR(20) NOT NULL UNIQUE COMMENT '股票代码',\r\n    stock_name VARCHAR(50) NOT NULL COMMENT '股票简称',\r\n    stock_full_name VARCHAR(200) COMMENT '公司全称（冗余）',\r\n    share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT '股东权利类型（引用字典）',\r\n    register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT '记名方式',\r\n    par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT '面额类型',\r\n    market_class VARCHAR(5) COMMENT '上市地点分类（A/B/H/N等）',\r\n    listing_date DATE COMMENT '上市时间',\r\n    total_shares BIGINT NOT NULL COMMENT '股本（股）',\r\n    current_price DECIMAL(10,2) COMMENT '最新股票价格（元）',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id)\r\n)",
+    "ddl": "CREATE TABLE stocks (\r\n    stock_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    stock_code VARCHAR(20) NOT NULL UNIQUE COMMENT '股票代码',\r\n    stock_name VARCHAR(50) NOT NULL COMMENT '股票简称',\r\n    stock_full_name VARCHAR(200) COMMENT '公司全称（冗余）',\r\n    share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT '股东权利类型（引用字典）',\r\n    register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT '记名方式',\r\n    par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT '面额类型',\r\n    market_class VARCHAR(5) COMMENT '上市地点分类（A/B/H/N等）',\r\n    listing_date DATE COMMENT '上市时间',\r\n    total_shares BIGINT NOT NULL COMMENT '股本（股）',\r\n    current_price DECIMAL(10,2) COMMENT '最新股票价格（元）',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id)\r\n) COMMENT='股票基本信息表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (company_id) REFERENCES companies(company_id)\r"
@@ -9735,7 +9735,7 @@
         "definition": "low_price DECIMAL(10,2) NOT NULL COMMENT '最低价'"
       }
     ],
-    "ddl": "CREATE TABLE stock_daily_trades (\r\n    trade_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    stock_id BIGINT NOT NULL COMMENT '关联股票ID',\r\n    trade_date DATE NOT NULL COMMENT '交易日期',\r\n    volume BIGINT NOT NULL COMMENT '成交量（股）',\r\n    avg_trade_size INT COMMENT '每笔成交股数',\r\n    open_price DECIMAL(10,2) NOT NULL COMMENT '开盘价',\r\n    close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价',\r\n    high_price DECIMAL(10,2) NOT NULL COMMENT '最高价',\r\n    low_price DECIMAL(10,2) NOT NULL COMMENT '最低价',\r\n\r\n    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),\r\n    UNIQUE KEY uk_stock_date (stock_id, trade_date)\r\n)",
+    "ddl": "CREATE TABLE stock_daily_trades (\r\n    trade_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    stock_id BIGINT NOT NULL COMMENT '关联股票ID',\r\n    trade_date DATE NOT NULL COMMENT '交易日期',\r\n    volume BIGINT NOT NULL COMMENT '成交量（股）',\r\n    avg_trade_size INT COMMENT '每笔成交股数',\r\n    open_price DECIMAL(10,2) NOT NULL COMMENT '开盘价',\r\n    close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价',\r\n    high_price DECIMAL(10,2) NOT NULL COMMENT '最高价',\r\n    low_price DECIMAL(10,2) NOT NULL COMMENT '最低价',\r\n\r\n    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),\r\n    UNIQUE KEY uk_stock_date (stock_id, trade_date)\r\n) COMMENT='股票每日成交汇总信息';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),\r"
@@ -9782,7 +9782,7 @@
         "definition": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"
       }
     ],
-    "ddl": "CREATE TABLE company_financials (\r\n    financial_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    report_date DATE NOT NULL COMMENT '报表日期',\r\n    dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）',\r\n    dividend_stock INT DEFAULT 0 COMMENT '每股股息（分/股）',\r\n    total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）',\r\n    total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_report (company_id, report_date)\r\n)",
+    "ddl": "CREATE TABLE company_financials (\r\n    financial_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    report_date DATE NOT NULL COMMENT '报表日期',\r\n    dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）',\r\n    dividend_stock INT DEFAULT 0 COMMENT '每股股息（分/股）',\r\n    total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）',\r\n    total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_report (company_id, report_date)\r\n) COMMENT='公司定期财务摘要信息';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (company_id) REFERENCES companies(company_id),\r"
@@ -9849,7 +9849,7 @@
         "definition": "is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业'"
       }
     ],
-    "ddl": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n)",
+    "ddl": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (company_id) REFERENCES companies(company_id),\r"
@@ -9906,7 +9906,7 @@
         "definition": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"
       }
     ],
-    "ddl": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n)",
+    "ddl": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r"
@@ -9953,7 +9953,7 @@
         "definition": "issue_authority VARCHAR(100) COMMENT '发证机关'"
       }
     ],
-    "ddl": "CREATE TABLE company_certification (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '企业编号',\r\n    cert_type VARCHAR(50) NOT NULL COMMENT '资质类型',\r\n    cert_no VARCHAR(50) COMMENT '证书编号',\r\n    issue_date DATE COMMENT '发证日期',\r\n    expire_date DATE COMMENT '到期日期',\r\n    issue_authority VARCHAR(100) COMMENT '发证机关',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id)\r\n)",
+    "ddl": "CREATE TABLE company_certification (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '企业编号',\r\n    cert_type VARCHAR(50) NOT NULL COMMENT '资质类型',\r\n    cert_no VARCHAR(50) COMMENT '证书编号',\r\n    issue_date DATE COMMENT '发证日期',\r\n    expire_date DATE COMMENT '到期日期',\r\n    issue_authority VARCHAR(100) COMMENT '发证机关',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id)\r\n) ENGINE=InnoDB COMMENT='企业资质表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (company_id) REFERENCES energy_company(company_id)\r"
@@ -10015,7 +10015,7 @@
         "definition": "status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态'"
       }
     ],
-    "ddl": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n)",
+    "ddl": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r",
@@ -10060,7 +10060,7 @@
         "definition": "annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)'"
       }
     ],
-    "ddl": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n)",
+    "ddl": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n) ENGINE=InnoDB COMMENT='供电区域表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r",
@@ -10128,7 +10128,7 @@
         "definition": "status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态'"
       }
     ],
-    "ddl": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_id VARCHAR(20) COMMENT '所属场站编号',\r\n    position_code VARCHAR(20) NOT NULL COMMENT '岗位代码',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    education VARCHAR(20) COMMENT '学历',\r\n    status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_id) REFERENCES energy_station(station_id),\r\n    FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)\r\n)",
+    "ddl": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_id VARCHAR(20) COMMENT '所属场站编号',\r\n    position_code VARCHAR(20) NOT NULL COMMENT '岗位代码',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    education VARCHAR(20) COMMENT '学历',\r\n    status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_id) REFERENCES energy_station(station_id),\r\n    FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)\r\n) ENGINE=InnoDB COMMENT='能源企业员工表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r",
@@ -10167,7 +10167,7 @@
         "definition": "end_date_key      INT NOT NULL"
       }
     ],
-    "ddl": "CREATE TABLE semester (\r\n    semester_id       INT AUTO_INCREMENT PRIMARY KEY,\r\n    academic_year     INT NOT NULL,\r\n    semester_code     VARCHAR(20) NOT NULL,\r\n    start_date_key    INT NOT NULL,\r\n    end_date_key      INT NOT NULL\r\n)",
+    "ddl": "CREATE TABLE semester (\r\n    semester_id       INT AUTO_INCREMENT PRIMARY KEY,\r\n    academic_year     INT NOT NULL,\r\n    semester_code     VARCHAR(20) NOT NULL,\r\n    start_date_key    INT NOT NULL,\r\n    end_date_key      INT NOT NULL\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": []
   },
@@ -10192,7 +10192,7 @@
         "definition": "department_name   VARCHAR(100) NOT NULL"
       }
     ],
-    "ddl": "CREATE TABLE department (\r\n    department_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    department_code   VARCHAR(20) NOT NULL,\r\n    department_name   VARCHAR(100) NOT NULL\r\n)",
+    "ddl": "CREATE TABLE department (\r\n    department_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    department_code   VARCHAR(20) NOT NULL,\r\n    department_name   VARCHAR(100) NOT NULL\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": []
   },
@@ -10237,7 +10237,7 @@
         "definition": "region_id         INT"
       }
     ],
-    "ddl": "CREATE TABLE teacher (\r\n    teacher_id        INT AUTO_INCREMENT PRIMARY KEY,\r\n    teacher_no        VARCHAR(20) NOT NULL,\r\n    teacher_name      VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    gender_code       CHAR(1),\r\n    phone             VARCHAR(20),\r\n    region_id         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n)",
+    "ddl": "CREATE TABLE teacher (\r\n    teacher_id        INT AUTO_INCREMENT PRIMARY KEY,\r\n    teacher_no        VARCHAR(20) NOT NULL,\r\n    teacher_name      VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    gender_code       CHAR(1),\r\n    phone             VARCHAR(20),\r\n    region_id         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (department_id) REFERENCES department(department_id)\r"
@@ -10274,7 +10274,7 @@
         "definition": "grade_year        INT"
       }
     ],
-    "ddl": "CREATE TABLE class (\r\n    class_id          INT AUTO_INCREMENT PRIMARY KEY,\r\n    class_code        VARCHAR(20) NOT NULL,\r\n    class_name        VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    grade_year        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n)",
+    "ddl": "CREATE TABLE class (\r\n    class_id          INT AUTO_INCREMENT PRIMARY KEY,\r\n    class_code        VARCHAR(20) NOT NULL,\r\n    class_name        VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    grade_year        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (department_id) REFERENCES department(department_id)\r"
@@ -10336,7 +10336,7 @@
         "definition": "admit_date_key        INT"
       }
     ],
-    "ddl": "CREATE TABLE student (\r\n    student_id            INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_no            VARCHAR(20) NOT NULL,\r\n    student_name          VARCHAR(100) NOT NULL,\r\n    gender_code           CHAR(1),\r\n    academic_level_code   VARCHAR(20),\r\n    department_id         INT NOT NULL,\r\n    class_id              INT NOT NULL,\r\n    home_region_id        INT,\r\n    student_status_code   VARCHAR(20),\r\n    admit_date_key        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (class_id) REFERENCES class(class_id)\r\n)",
+    "ddl": "CREATE TABLE student (\r\n    student_id            INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_no            VARCHAR(20) NOT NULL,\r\n    student_name          VARCHAR(100) NOT NULL,\r\n    gender_code           CHAR(1),\r\n    academic_level_code   VARCHAR(20),\r\n    department_id         INT NOT NULL,\r\n    class_id              INT NOT NULL,\r\n    home_region_id        INT,\r\n    student_status_code   VARCHAR(20),\r\n    admit_date_key        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (class_id) REFERENCES class(class_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (department_id) REFERENCES department(department_id),\r",
@@ -10389,7 +10389,7 @@
         "definition": "max_score         INT"
       }
     ],
-    "ddl": "CREATE TABLE course (\r\n    course_id         INT AUTO_INCREMENT PRIMARY KEY,\r\n    course_code       VARCHAR(20) NOT NULL,\r\n    course_name       VARCHAR(200) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    teacher_id        INT NOT NULL,\r\n    credit            DECIMAL(3,1),\r\n    course_type       VARCHAR(20),\r\n    max_score         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)\r\n)",
+    "ddl": "CREATE TABLE course (\r\n    course_id         INT AUTO_INCREMENT PRIMARY KEY,\r\n    course_code       VARCHAR(20) NOT NULL,\r\n    course_name       VARCHAR(200) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    teacher_id        INT NOT NULL,\r\n    credit            DECIMAL(3,1),\r\n    course_type       VARCHAR(20),\r\n    max_score         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (department_id) REFERENCES department(department_id),\r",
@@ -10437,7 +10437,7 @@
         "definition": "is_withdraw       TINYINT(1)"
       }
     ],
-    "ddl": "CREATE TABLE enrollment (\r\n    enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_id        INT NOT NULL,\r\n    course_id         INT NOT NULL,\r\n    semester_id       INT NOT NULL,\r\n    enroll_date_key   INT,\r\n    take_mode         VARCHAR(20),\r\n    is_withdraw       TINYINT(1),\r\n    FOREIGN KEY (student_id) REFERENCES student(student_id),\r\n    FOREIGN KEY (course_id) REFERENCES course(course_id),\r\n    FOREIGN KEY (semester_id) REFERENCES semester(semester_id)\r\n)",
+    "ddl": "CREATE TABLE enrollment (\r\n    enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_id        INT NOT NULL,\r\n    course_id         INT NOT NULL,\r\n    semester_id       INT NOT NULL,\r\n    enroll_date_key   INT,\r\n    take_mode         VARCHAR(20),\r\n    is_withdraw       TINYINT(1),\r\n    FOREIGN KEY (student_id) REFERENCES student(student_id),\r\n    FOREIGN KEY (course_id) REFERENCES course(course_id),\r\n    FOREIGN KEY (semester_id) REFERENCES semester(semester_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (student_id) REFERENCES student(student_id),\r",
@@ -10476,7 +10476,7 @@
         "definition": "score_date_key    INT"
       }
     ],
-    "ddl": "CREATE TABLE exam_score (\r\n    exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    enrollment_id     INT NOT NULL,\r\n    exam_item         VARCHAR(20),\r\n    score             DECIMAL(5,2),\r\n    score_date_key    INT,\r\n    FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r\n)",
+    "ddl": "CREATE TABLE exam_score (\r\n    exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    enrollment_id     INT NOT NULL,\r\n    exam_item         VARCHAR(20),\r\n    score             DECIMAL(5,2),\r\n    score_date_key    INT,\r\n    FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r"
@@ -10513,7 +10513,7 @@
         "definition": "end_date_key      INT NOT NULL"
       }
     ],
-    "ddl": "CREATE TABLE semester (\r\n    semester_id       INT AUTO_INCREMENT PRIMARY KEY,\r\n    academic_year     INT NOT NULL,\r\n    semester_code     VARCHAR(20) NOT NULL,\r\n    start_date_key    INT NOT NULL,\r\n    end_date_key      INT NOT NULL\r\n)",
+    "ddl": "CREATE TABLE semester (\r\n    semester_id       INT AUTO_INCREMENT PRIMARY KEY,\r\n    academic_year     INT NOT NULL,\r\n    semester_code     VARCHAR(20) NOT NULL,\r\n    start_date_key    INT NOT NULL,\r\n    end_date_key      INT NOT NULL\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": []
   },
@@ -10538,7 +10538,7 @@
         "definition": "department_name   VARCHAR(100) NOT NULL"
       }
     ],
-    "ddl": "CREATE TABLE department (\r\n    department_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    department_code   VARCHAR(20) NOT NULL,\r\n    department_name   VARCHAR(100) NOT NULL\r\n)",
+    "ddl": "CREATE TABLE department (\r\n    department_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    department_code   VARCHAR(20) NOT NULL,\r\n    department_name   VARCHAR(100) NOT NULL\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": []
   },
@@ -10583,7 +10583,7 @@
         "definition": "region_id         INT"
       }
     ],
-    "ddl": "CREATE TABLE teacher (\r\n    teacher_id        INT AUTO_INCREMENT PRIMARY KEY,\r\n    teacher_no        VARCHAR(20) NOT NULL,\r\n    teacher_name      VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    gender_code       CHAR(1),\r\n    phone             VARCHAR(20),\r\n    region_id         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n)",
+    "ddl": "CREATE TABLE teacher (\r\n    teacher_id        INT AUTO_INCREMENT PRIMARY KEY,\r\n    teacher_no        VARCHAR(20) NOT NULL,\r\n    teacher_name      VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    gender_code       CHAR(1),\r\n    phone             VARCHAR(20),\r\n    region_id         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (department_id) REFERENCES department(department_id)\r"
@@ -10620,7 +10620,7 @@
         "definition": "grade_year        INT"
       }
     ],
-    "ddl": "CREATE TABLE class (\r\n    class_id          INT AUTO_INCREMENT PRIMARY KEY,\r\n    class_code        VARCHAR(20) NOT NULL,\r\n    class_name        VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    grade_year        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n)",
+    "ddl": "CREATE TABLE class (\r\n    class_id          INT AUTO_INCREMENT PRIMARY KEY,\r\n    class_code        VARCHAR(20) NOT NULL,\r\n    class_name        VARCHAR(100) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    grade_year        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (department_id) REFERENCES department(department_id)\r"
@@ -10682,7 +10682,7 @@
         "definition": "admit_date_key        INT"
       }
     ],
-    "ddl": "CREATE TABLE student (\r\n    student_id            INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_no            VARCHAR(20) NOT NULL,\r\n    student_name          VARCHAR(100) NOT NULL,\r\n    gender_code           CHAR(1),\r\n    academic_level_code   VARCHAR(20),\r\n    department_id         INT NOT NULL,\r\n    class_id              INT NOT NULL,\r\n    home_region_id        INT,\r\n    student_status_code   VARCHAR(20),\r\n    admit_date_key        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (class_id) REFERENCES class(class_id)\r\n)",
+    "ddl": "CREATE TABLE student (\r\n    student_id            INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_no            VARCHAR(20) NOT NULL,\r\n    student_name          VARCHAR(100) NOT NULL,\r\n    gender_code           CHAR(1),\r\n    academic_level_code   VARCHAR(20),\r\n    department_id         INT NOT NULL,\r\n    class_id              INT NOT NULL,\r\n    home_region_id        INT,\r\n    student_status_code   VARCHAR(20),\r\n    admit_date_key        INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (class_id) REFERENCES class(class_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (department_id) REFERENCES department(department_id),\r",
@@ -10735,7 +10735,7 @@
         "definition": "max_score         INT"
       }
     ],
-    "ddl": "CREATE TABLE course (\r\n    course_id         INT AUTO_INCREMENT PRIMARY KEY,\r\n    course_code       VARCHAR(20) NOT NULL,\r\n    course_name       VARCHAR(200) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    teacher_id        INT NOT NULL,\r\n    credit            DECIMAL(3,1),\r\n    course_type       VARCHAR(20),\r\n    max_score         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)\r\n)",
+    "ddl": "CREATE TABLE course (\r\n    course_id         INT AUTO_INCREMENT PRIMARY KEY,\r\n    course_code       VARCHAR(20) NOT NULL,\r\n    course_name       VARCHAR(200) NOT NULL,\r\n    department_id     INT NOT NULL,\r\n    teacher_id        INT NOT NULL,\r\n    credit            DECIMAL(3,1),\r\n    course_type       VARCHAR(20),\r\n    max_score         INT,\r\n    FOREIGN KEY (department_id) REFERENCES department(department_id),\r\n    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (department_id) REFERENCES department(department_id),\r",
@@ -10783,7 +10783,7 @@
         "definition": "is_withdraw       TINYINT(1)"
       }
     ],
-    "ddl": "CREATE TABLE enrollment (\r\n    enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_id        INT NOT NULL,\r\n    course_id         INT NOT NULL,\r\n    semester_id       INT NOT NULL,\r\n    enroll_date_key   INT,\r\n    take_mode         VARCHAR(20),\r\n    is_withdraw       TINYINT(1),\r\n    FOREIGN KEY (student_id) REFERENCES student(student_id),\r\n    FOREIGN KEY (course_id) REFERENCES course(course_id),\r\n    FOREIGN KEY (semester_id) REFERENCES semester(semester_id)\r\n)",
+    "ddl": "CREATE TABLE enrollment (\r\n    enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    student_id        INT NOT NULL,\r\n    course_id         INT NOT NULL,\r\n    semester_id       INT NOT NULL,\r\n    enroll_date_key   INT,\r\n    take_mode         VARCHAR(20),\r\n    is_withdraw       TINYINT(1),\r\n    FOREIGN KEY (student_id) REFERENCES student(student_id),\r\n    FOREIGN KEY (course_id) REFERENCES course(course_id),\r\n    FOREIGN KEY (semester_id) REFERENCES semester(semester_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (student_id) REFERENCES student(student_id),\r",
@@ -10822,7 +10822,7 @@
         "definition": "score_date_key    INT"
       }
     ],
-    "ddl": "CREATE TABLE exam_score (\r\n    exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    enrollment_id     INT NOT NULL,\r\n    exam_item         VARCHAR(20),\r\n    score             DECIMAL(5,2),\r\n    score_date_key    INT,\r\n    FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r\n)",
+    "ddl": "CREATE TABLE exam_score (\r\n    exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,\r\n    enrollment_id     INT NOT NULL,\r\n    exam_item         VARCHAR(20),\r\n    score             DECIMAL(5,2),\r\n    score_date_key    INT,\r\n    FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (enrollment_id) REFERENCES enrollment(enrollment_id)\r"
@@ -10894,7 +10894,7 @@
         "definition": "growth_value INT NOT NULL DEFAULT 0 COMMENT '成长值'"
       }
     ],
-    "ddl": "CREATE TABLE customer (\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID',\r\n  customer_name VARCHAR(100) NOT NULL COMMENT '用户姓名',\r\n  gender ENUM('M', 'F', 'U') NOT NULL DEFAULT 'U' COMMENT '性别：M男，F女，U未知',\r\n  phone VARCHAR(32) DEFAULT NULL COMMENT '手机号',\r\n  email VARCHAR(128) DEFAULT NULL COMMENT '邮箱',\r\n  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码，关联common.customer_level_dict.level_code',\r\n  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码，关联common.customer_status_dict.status_code',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '省级行政区划编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '城市行政区划编码，关联common.administrative_division.division_code',\r\n  register_time DATETIME NOT NULL COMMENT '注册时间',\r\n  last_login_time DATETIME DEFAULT NULL COMMENT '最近登录时间',\r\n  growth_value INT NOT NULL DEFAULT 0 COMMENT '成长值',\r\n  PRIMARY KEY (customer_id),\r\n  UNIQUE KEY uk_customer_phone (phone),\r\n  KEY idx_customer_level (level_code),\r\n  KEY idx_customer_status (status_code),\r\n  KEY idx_customer_region (province_code, city_code),\r\n  KEY idx_customer_register_time (register_time)\r\n)",
+    "ddl": "CREATE TABLE customer (\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID',\r\n  customer_name VARCHAR(100) NOT NULL COMMENT '用户姓名',\r\n  gender ENUM('M', 'F', 'U') NOT NULL DEFAULT 'U' COMMENT '性别：M男，F女，U未知',\r\n  phone VARCHAR(32) DEFAULT NULL COMMENT '手机号',\r\n  email VARCHAR(128) DEFAULT NULL COMMENT '邮箱',\r\n  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码，关联common.customer_level_dict.level_code',\r\n  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码，关联common.customer_status_dict.status_code',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '省级行政区划编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '城市行政区划编码，关联common.administrative_division.division_code',\r\n  register_time DATETIME NOT NULL COMMENT '注册时间',\r\n  last_login_time DATETIME DEFAULT NULL COMMENT '最近登录时间',\r\n  growth_value INT NOT NULL DEFAULT 0 COMMENT '成长值',\r\n  PRIMARY KEY (customer_id),\r\n  UNIQUE KEY uk_customer_phone (phone),\r\n  KEY idx_customer_level (level_code),\r\n  KEY idx_customer_status (status_code),\r\n  KEY idx_customer_region (province_code, city_code),\r\n  KEY idx_customer_register_time (register_time)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';",
     "file": "core_schema.txt",
     "foreign_keys": []
   },
@@ -10944,7 +10944,7 @@
         "definition": "listed_time DATETIME NOT NULL COMMENT '上架时间'"
       }
     ],
-    "ddl": "CREATE TABLE product (\r\n  product_id BIGINT NOT NULL COMMENT '商品ID',\r\n  product_name VARCHAR(200) NOT NULL COMMENT '商品名称',\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID，关联common.product_category.category_id',\r\n  brand_name VARCHAR(100) NOT NULL COMMENT '品牌名称',\r\n  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码，关联common.product_status_dict.status_code',\r\n  sale_price DECIMAL(12,2) NOT NULL COMMENT '销售单价',\r\n  cost_price DECIMAL(12,2) NOT NULL COMMENT '成本单价',\r\n  listed_time DATETIME NOT NULL COMMENT '上架时间',\r\n  PRIMARY KEY (product_id),\r\n  KEY idx_product_category (category_id),\r\n  KEY idx_product_status (status_code),\r\n  KEY idx_product_brand (brand_name),\r\n  KEY idx_product_price (sale_price)\r\n)",
+    "ddl": "CREATE TABLE product (\r\n  product_id BIGINT NOT NULL COMMENT '商品ID',\r\n  product_name VARCHAR(200) NOT NULL COMMENT '商品名称',\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID，关联common.product_category.category_id',\r\n  brand_name VARCHAR(100) NOT NULL COMMENT '品牌名称',\r\n  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码，关联common.product_status_dict.status_code',\r\n  sale_price DECIMAL(12,2) NOT NULL COMMENT '销售单价',\r\n  cost_price DECIMAL(12,2) NOT NULL COMMENT '成本单价',\r\n  listed_time DATETIME NOT NULL COMMENT '上架时间',\r\n  PRIMARY KEY (product_id),\r\n  KEY idx_product_category (category_id),\r\n  KEY idx_product_status (status_code),\r\n  KEY idx_product_brand (brand_name),\r\n  KEY idx_product_price (sale_price)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表';",
     "file": "core_schema.txt",
     "foreign_keys": []
   },
@@ -11004,7 +11004,7 @@
         "definition": "updated_time DATETIME NOT NULL COMMENT '库存更新时间'"
       }
     ],
-    "ddl": "CREATE TABLE inventory (\r\n  inventory_id BIGINT NOT NULL COMMENT '库存ID',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  warehouse_code VARCHAR(32) NOT NULL COMMENT '仓库编码',\r\n  warehouse_name VARCHAR(100) NOT NULL COMMENT '仓库名称',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '仓库所在省份编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '仓库所在城市编码，关联common.administrative_division.division_code',\r\n  stock_quantity INT NOT NULL DEFAULT 0 COMMENT '当前库存数量',\r\n  locked_quantity INT NOT NULL DEFAULT 0 COMMENT '锁定库存数量',\r\n  safety_stock INT NOT NULL DEFAULT 0 COMMENT '安全库存数量',\r\n  updated_time DATETIME NOT NULL COMMENT '库存更新时间',\r\n  PRIMARY KEY (inventory_id),\r\n  UNIQUE KEY uk_inventory_product_warehouse (product_id, warehouse_code),\r\n  KEY idx_inventory_product (product_id),\r\n  KEY idx_inventory_region (province_code, city_code),\r\n  CONSTRAINT fk_inventory_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n)",
+    "ddl": "CREATE TABLE inventory (\r\n  inventory_id BIGINT NOT NULL COMMENT '库存ID',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  warehouse_code VARCHAR(32) NOT NULL COMMENT '仓库编码',\r\n  warehouse_name VARCHAR(100) NOT NULL COMMENT '仓库名称',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '仓库所在省份编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '仓库所在城市编码，关联common.administrative_division.division_code',\r\n  stock_quantity INT NOT NULL DEFAULT 0 COMMENT '当前库存数量',\r\n  locked_quantity INT NOT NULL DEFAULT 0 COMMENT '锁定库存数量',\r\n  safety_stock INT NOT NULL DEFAULT 0 COMMENT '安全库存数量',\r\n  updated_time DATETIME NOT NULL COMMENT '库存更新时间',\r\n  PRIMARY KEY (inventory_id),\r\n  UNIQUE KEY uk_inventory_product_warehouse (product_id, warehouse_code),\r\n  KEY idx_inventory_product (product_id),\r\n  KEY idx_inventory_region (province_code, city_code),\r\n  CONSTRAINT fk_inventory_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='库存表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (product_id) REFERENCES product(product_id)\r"
@@ -11091,7 +11091,7 @@
         "definition": "receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code'"
       }
     ],
-    "ddl": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n)",
+    "ddl": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r"
@@ -11158,7 +11158,7 @@
         "definition": "refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code'"
       }
     ],
-    "ddl": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n)",
+    "ddl": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (order_id) REFERENCES orders(order_id),\r",
@@ -11216,7 +11216,7 @@
         "definition": "created_time DATETIME NOT NULL COMMENT '支付记录创建时间'"
       }
     ],
-    "ddl": "CREATE TABLE payment (\r\n  payment_id BIGINT NOT NULL COMMENT '支付ID',\r\n  payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code',\r\n  payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code',\r\n  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间',\r\n  created_time DATETIME NOT NULL COMMENT '支付记录创建时间',\r\n  PRIMARY KEY (payment_id),\r\n  UNIQUE KEY uk_payment_no (payment_no),\r\n  UNIQUE KEY uk_payment_order (order_id),\r\n  KEY idx_payment_method (payment_method_code),\r\n  KEY idx_payment_status (payment_status_code),\r\n  KEY idx_payment_paid_time (paid_time),\r\n  CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)\r\n)",
+    "ddl": "CREATE TABLE payment (\r\n  payment_id BIGINT NOT NULL COMMENT '支付ID',\r\n  payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code',\r\n  payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code',\r\n  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间',\r\n  created_time DATETIME NOT NULL COMMENT '支付记录创建时间',\r\n  PRIMARY KEY (payment_id),\r\n  UNIQUE KEY uk_payment_no (payment_no),\r\n  UNIQUE KEY uk_payment_order (order_id),\r\n  KEY idx_payment_method (payment_method_code),\r\n  KEY idx_payment_status (payment_status_code),\r\n  KEY idx_payment_paid_time (paid_time),\r\n  CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付表';",
     "file": "core_schema.txt",
     "foreign_keys": [
       "FOREIGN KEY (order_id) REFERENCES orders(order_id)\r"
@@ -11318,7 +11318,7 @@
         "definition": "geom public.geometry(Point,4326) NOT NULL"
       }
     ],
-    "ddl": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n)",
+    "ddl": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);",
     "file": "core_schema.txt",
     "foreign_keys": []
   },

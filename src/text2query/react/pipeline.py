@@ -5,10 +5,13 @@ import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from .model_pipeline import Context, SYSTEM, api, parse_output, stratified_sample, write_offline_request
-from .paths import ROOT, OUT, RAW, RUNS
-from .pipeline import load, queries, source
-from .react_tools import QueryTools, TOOLS
+from ..shared.context import Context
+from ..shared.prompts import SYSTEM
+from ..shared.generation import api, parse_output, stratified_sample, write_offline_request, completion_payload
+from ..shared.paths import ROOT, OUT, RAW, RUNS
+from ..shared.data import load, queries, source
+from .tools import QueryTools, TOOLS
+from ..shared.fingerprints import implementation_hash
 
 REACT_SYSTEM = SYSTEM + '''
 本流程采用ReAct工具循环。上文的查询JSON是prediction的格式；每轮最外层只输出以下动作JSON，不输出思维过程：
@@ -34,7 +37,7 @@ def initial_prompt(ctx):
     return pinned
 
 
-def run_question(row, context, directory, model, base_url, max_steps=10, offline=False, call=None):
+def run_question(row, context, directory, model, base_url, max_steps=10, offline=False, call=None, provider='vllm'):
     path = directory / f"{row['question_id']}.json"
     if path.exists():
         cached = load(path)
@@ -45,12 +48,11 @@ def run_question(row, context, directory, model, base_url, max_steps=10, offline
     messages = [{'role': 'system', 'content': REACT_SYSTEM},
                 {'role': 'user', 'content': json.dumps(initial_prompt(ctx), ensure_ascii=False)}]
     record = {'question_id': row['question_id'], 'question': row['question'], 'context': ctx,
-              'strategy': 'react', 'trace': [], 'attempts': [], 'prediction': None,
+              'strategy': 'react', 'provider': provider, 'trace': [], 'attempts': [], 'prediction': None,
               'errors': [], 'manual_query_edits': False}
     started = time.monotonic()
     for step in range(max_steps):
-        payload = {'model': model, 'messages': messages, 'temperature': 0, 'max_tokens': 4096,
-                   'response_format': {'type': 'json_object'}, 'chat_template_kwargs': {'enable_thinking': False}}
+        payload = completion_payload(model, messages, provider)
         request_path = directory / f"{row['question_id']}.request.{step}.json"
         response_path = directory / f"{row['question_id']}.response.{step}.json"
         write_offline_request(request_path, response_path, payload)
@@ -120,6 +122,7 @@ def main():
     parser.add_argument('command', choices=['predict', 'evaluate'])
     parser.add_argument('--base-url', default='http://192.168.15.119:28081/v1')
     parser.add_argument('--model', default='contest-qwen')
+    parser.add_argument('--provider', choices=['vllm', 'deepseek'], default='vllm')
     parser.add_argument('--ids', help='逗号分隔的问题ID')
     parser.add_argument('--sample', type=int, default=0)
     parser.add_argument('--seed', type=int, default=42)
@@ -143,12 +146,13 @@ def main():
     if args.sample:
         rows = stratified_sample(rows, args.sample, args.seed)
     config = {'strategy': 'react', 'command': args.command, 'model': args.model, 'base_url': args.base_url,
+              'provider': args.provider,
               'sample_ids': [r['question_id'] for r in rows], 'seed': args.seed, 'max_steps': args.max_steps,
               'sample_hash': hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest(),
               'data_hash': hashlib.sha256(json.dumps([context.examples, context.catalog, context.knowledge,
                  context.dictionaries, context.ambiguous, context.business_rules, context.resolutions,
                  context.corrections, context.schema_adjudications, context.curation], sort_keys=True).encode()).hexdigest(),
-              'implementation_hash': hashlib.sha256(b''.join(p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py')))).hexdigest(),
+              'implementation_hash': implementation_hash(),
               'system': REACT_SYSTEM}
     fingerprint = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()[:12]
     parent = args.output or RUNS / ('evaluation' if args.command == 'evaluate' else 'prediction')
@@ -158,7 +162,8 @@ def main():
     (directory / 'sample.json').write_text(json.dumps(rows, ensure_ascii=False, indent=2) + '\n')
 
     def process(row):
-        result = run_question(row, context, directory, args.model, args.base_url, args.max_steps, args.offline)
+        result = run_question(row, context, directory, args.model, args.base_url, args.max_steps, args.offline,
+                              provider=args.provider)
         print(f"{row['question_id']}: {'OK' if not result.get('errors') else result['errors']}", flush=True)
         return result
 

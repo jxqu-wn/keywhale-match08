@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.model_pipeline import Context, corrected_prediction
+from text2query.shared.context import Context, corrected_prediction
 
 
 class CorrectionTests(unittest.TestCase):
@@ -31,7 +31,8 @@ class CorrectionTests(unittest.TestCase):
             corrected_prediction(ctx,self.context.catalog)
 
     def test_schema_adjudications_reference_real_tables_and_follow_domain(self):
-        known = {f"{t.get('database')}.{t['table']}" for t in self.context.catalog}
+        known = {f"{t['database']}.{t['table']}" if t.get('database') else t['table']
+                 for t in self.context.catalog}
         for rule in self.context.schema_adjudications:
             self.assertTrue(set(rule['tables'])<=known)
         ais = self.context.build('查询所有油轮的AIS记录')

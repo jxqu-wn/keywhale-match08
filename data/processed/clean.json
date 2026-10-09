@@ -13611,7 +13611,9 @@
     "question_id": 2640,
     "question": "查询最新位置与MMSI为414000001的船舶最新位置距离10公里以内，且船舶类型为货船的其他船舶。",
     "db": "POSTGRESQL",
-    "query": "WITH target AS (SELECT geom FROM vessel_ais_data WHERE mmsi = 414000001 ORDER BY timestamp DESC LIMIT 1) SELECT DISTINCT ON (v.mmsi) v.* FROM vessel_ais_data v, target t WHERE v.mmsi != 414000001 AND v.vessel_type = 70 AND ST_DWithin(v.geom::geography, t.geom::geography, 10000) ORDER BY v.mmsi, v.timestamp DESC"
+    "query": "WITH target AS (SELECT geom FROM vessel_ais_data WHERE mmsi=414000001 ORDER BY timestamp DESC LIMIT 1), latest AS (SELECT DISTINCT ON (mmsi) * FROM vessel_ais_data ORDER BY mmsi,timestamp DESC) SELECT v.* FROM latest v CROSS JOIN target t WHERE v.mmsi!=414000001 AND v.vessel_type=70 AND ST_DWithin(v.geom::geography,t.geom::geography,10000)",
+    "annotation_origin": "reviewed_training_overlay",
+    "curation_reason": "先按每船取真正最新记录，再判断距离；不得用范围内旧位置代替最新位置。"
   },
   {
     "question_id": 2641,

@@ -20,5 +20,15 @@
     ],
     "trigger_pattern": "行政|区划|省份|城市|收货|家庭地区",
     "instruction": "common.administrative_division的行政区划代码字段是id CHAR(6)，没有division_code。电商Schema注释中common.administrative_division.division_code是过时引用，关联省、市或收货区划代码时使用common.administrative_division.id，保留业务表自身province_code/city_code/receiver_province_code等真实列名。区划代码按字符串比较，保留前导零；不臆造division_code。"
+  },
+  {
+    "rule_id": "es_daily_outpatient_missing_formula",
+    "status": "pending_business_formula",
+    "source": "原始core_schema.txt医疗ES mapping及knowledge.json核对；训练中9条答案引用mapping未声明的daily_outpatient，知识未定义换算天数",
+    "tables": [
+      "medical_institutions"
+    ],
+    "trigger_pattern": "日均门诊量|日门诊量|daily_outpatient",
+    "instruction": "原始医疗ES mapping提供annual_outpatient，没有daily_outpatient。原始训练答案引用daily_outpatient不能作为真实字段证据。当前资料未确认日均换算天数，不猜定365天，不将日均阈值同值套到年门诊量。口径确认后，可定义请求级runtime_mappings计算daily_outpatient并用于查询、排序和聚合，用fields返回该值，不能用_source读取运行时字段；只有返回计算值时也可用script_fields。若所有医院共用固定正数换算天数，仅排序可直接用annual_outpatient，阈值必须同步换算。ES版本及脚本功能还需在真实环境验证。"
   }
 ]

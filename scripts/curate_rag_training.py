@@ -3,8 +3,8 @@ import json
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
-from text2query.curation import prediction_hash, hours_cte
-from text2query.paths import RAW, CURATED
+from text2query.shared.curation import prediction_hash, hours_cte
+from text2query.shared.paths import RAW, CURATED
 
 rows = {row['question_id']: row for row in json.loads((RAW/'QA_train.json').read_text())}
 knowledge = {row['knowledge_id']: row for row in json.loads((RAW/'knowledge.json').read_text())}

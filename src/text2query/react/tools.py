@@ -1,12 +1,13 @@
 """Read-only evidence and query-checking tools for model-directed ReAct actions."""
 import json
 import re
-from .dsl_normalization import normalize_prediction
-from .education import expand_prediction, model_query_errors
-from .model_pipeline import parse_output, prompt_example, validate
-from .pipeline import references
-from .query_rules import mask_sql
-from .retrieval_context import compatible_example, dictionary_matches, select_knowledge
+from ..shared.dsl_normalization import normalize_prediction
+from ..shared.education import expand_prediction, model_query_errors
+from ..shared.generation import parse_output, validate
+from ..shared.context import prompt_example
+from ..shared.data import references
+from ..shared.query_rules import mask_sql
+from ..shared.retrieval_context import compatible_example, dictionary_matches, dict_tables_for, select_knowledge, triggered_dictionary
 
 TOOLS = {
     'get_schema': {'purpose': '查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。',
@@ -96,6 +97,15 @@ class QueryTools:
                       f"{t.get('database')}.{t['table']}".lower() in names]
         else:
             ranked = [self.context.catalog[i] for score, i in self.sr.search(query, len(self.context.catalog)) if score > 0]
+            # A hypernym (车辆/船舶/驾照...) or an explicit table-name mention outranks generic BM25 hits.
+            triggers = {(t['source'], t.get('database'), t['table']) for t in dict_tables_for(query, self.context.catalog)}
+            ql = query.lower()
+            def evidence(table):
+                key = (table['source'], table.get('database'), table['table'])
+                name = table['table'].lower()
+                return (0 if key in triggers else 1,
+                        0 if (name in ql or f"{table.get('database')}.{name}".lower() in ql) else 1)
+            ranked.sort(key=evidence)
             # Keep exact original-question domain evidence before generic matches.
             preferred = [t for t in ranked if t in self.ctx['schema']]
             tables = [t for t in preferred + [t for t in ranked if t not in preferred] if t in candidates][:limit]
@@ -116,8 +126,12 @@ class QueryTools:
         mandatory = [x for x in items if x['retrieval_reason'] == '字段/公式依赖，必须同时提供']
         others = [x for x in items if x not in mandatory]
         self.knowledge_searched = True
+        dictionary = dictionary_matches(query, self.context.dictionaries, self.scope)
+        for item in triggered_dictionary(query, self.context.dictionaries, self.scope, self.context.catalog):
+            if not any(doc['id'] == item['id'] for doc in dictionary):
+                dictionary.append(item)
         return {'ok': True, 'knowledge': mandatory + others[:max(0, limit - len(mandatory))],
-                'dictionary': dictionary_matches(query, self.context.dictionaries, self.scope),
+                'dictionary': dictionary,
                 'schema_adjudications': self.ctx['schema_adjudications'],
                 'query_helpers': self.ctx['query_helpers']}
 

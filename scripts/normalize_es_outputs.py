@@ -6,9 +6,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
-from text2query.model_pipeline import parse_output, validate
-from text2query.paths import ROOT
-from text2query.dsl_normalization import normalize_es as normalize
+from text2query.shared.generation import parse_output, validate
+from text2query.shared.paths import ROOT
+from text2query.shared.dsl_normalization import normalize_es as normalize
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)

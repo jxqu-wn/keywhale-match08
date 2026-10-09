@@ -3,11 +3,12 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from text2query.pipeline import load
-from text2query.paths import OUT, CURATED
-from text2query.education import education_query_mode, view_definitions, expand_prediction, model_query_errors, entity_columns
-from text2query.education_fixture import fixture, student_cohort_rows
-from text2query.model_pipeline import Context, validate
+from text2query.shared.data import load
+from text2query.shared.paths import OUT, CURATED
+from text2query.shared.education import education_query_mode, view_definitions, expand_prediction, model_query_errors, entity_columns
+from text2query.shared.education_fixture import fixture, student_cohort_rows
+from text2query.shared.context import Context
+from text2query.shared.generation import validate
 
 
 class EducationTests(unittest.TestCase):
@@ -62,7 +63,7 @@ class EducationTests(unittest.TestCase):
             db.close()
 
     def test_scope_guard_does_not_apply_education_rules_to_other_sources(self):
-        from text2query.query_rules import applicable_business_rules
+        from text2query.shared.query_rules import applicable_business_rules
         self.assertEqual(applicable_business_rules('查询所有学生',load(CURATED/'business_rules.json'),['college.student']),[])
         ctx = Context(True).build('加泰罗尼亚语中出现次数最多的单词是哪个？')
         self.assertEqual(ctx['business_rules'],[])

@@ -2,7 +2,7 @@
   {
     "question_id": 4,
     "db": "MYSQL",
-    "query": "SELECT t.type_name, SUM(v.load_capacity) AS total_load FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code GROUP BY t.type_name;"
+    "query": "SELECT vtd.type_name AS 车型, SUM(v.load_capacity) AS 总载重量 FROM transportation.vehicle v JOIN common.vehicle_type_dict vtd ON v.vehicle_type_code = vtd.type_code GROUP BY vtd.type_name"
   },
   {
     "question_id": 13,
@@ -12,47 +12,47 @@
   {
     "question_id": 14,
     "db": "MYSQL",
-    "query": "SELECT LEFT(v.area_id,4) AS city_code, ad.city_name, COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.administrative_division ad ON ad.id = CONCAT(LEFT(v.area_id,4),'00') WHERE LEFT(v.area_id,2) = '32' GROUP BY LEFT(v.area_id,4), ad.city_name ORDER BY city_code;"
+    "query": "SELECT ad.city_name AS city, COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id WHERE ad.province_name = '江苏省' GROUP BY ad.city_name ORDER BY vehicle_count DESC"
   },
   {
     "question_id": 16,
     "db": "MYSQL",
-    "query": "SELECT business_type, COUNT(*) AS company_count FROM energy.energy_company GROUP BY business_type;"
+    "query": "SELECT business_type, COUNT(*) AS company_count FROM energy.energy_company GROUP BY business_type ORDER BY company_count DESC"
   },
   {
     "question_id": 17,
     "db": "MYSQL",
-    "query": "SELECT business_type, COUNT(*) AS company_count FROM transportation.shipping_company GROUP BY business_type ORDER BY company_count DESC;"
+    "query": "SELECT business_type, COUNT(*) AS company_count FROM transportation.shipping_company GROUP BY business_type ORDER BY company_count DESC"
   },
   {
     "question_id": 45,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) FROM transportation.vessel WHERE max_load > 50000;"
+    "query": "SELECT COUNT(*) FROM transportation.vessel WHERE max_load > 50000"
   },
   {
     "question_id": 48,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) AS a2_count FROM transportation.driver WHERE license_type = 'A2'"
+    "query": "SELECT COUNT(*) AS a2_driver_count FROM transportation.driver WHERE license_type = 'A2'"
   },
   {
     "question_id": 53,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '21%';"
+    "query": "SELECT COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.administrative_division a ON v.area_id = a.id WHERE a.province_name = '辽宁省'"
   },
   {
     "question_id": 58,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '36%';"
+    "query": "SELECT COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.administrative_division a ON v.area_id = a.id WHERE a.province_name = '江西省'"
   },
   {
     "question_id": 72,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '63%';"
+    "query": "SELECT COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id WHERE ad.province_name = '青海省'"
   },
   {
     "question_id": 80,
     "db": "MYSQL",
-    "query": "SELECT mmsi, max_load FROM transportation.vessel WHERE max_load < 5000;"
+    "query": "SELECT mmsi, company_id, vessel_type, max_load, max_speed, endurance, captain_name, area_id FROM transportation.vessel WHERE max_load < 5000"
   },
   {
     "question_id": 82,
@@ -62,22 +62,22 @@
   {
     "question_id": 102,
     "db": "MYSQL",
-    "query": "SELECT vehicle_id, plate_number, load_capacity FROM transportation.vehicle WHERE load_capacity IS NULL;"
+    "query": "SELECT vehicle_id, plate_number, brand, model, load_capacity FROM transportation.vehicle WHERE load_capacity IS NULL"
   },
   {
     "question_id": 111,
     "db": "MYSQL",
-    "query": "SELECT plate_number FROM transportation.vehicle WHERE model = 'X5';"
+    "query": "SELECT vehicle_id, plate_number, brand, model, manufacture_year, register_date FROM transportation.vehicle WHERE model = 'X5'"
   },
   {
     "question_id": 112,
     "db": "MYSQL",
-    "query": "SELECT driver_id, name, birth_date FROM transportation.driver WHERE birth_date > '1990-12-31';"
+    "query": "SELECT driver_id, name, gender, birth_date, license_type, issue_date, valid_years, phone, address, area_id, status, company_id FROM transportation.driver WHERE birth_date >= '1991-01-01'"
   },
   {
     "question_id": 113,
     "db": "MYSQL",
-    "query": "SELECT name FROM transportation.employee WHERE gender = '女';"
+    "query": "SELECT e.employee_id, e.name, e.gender, e.company_id FROM transportation.employee e WHERE e.gender = '女'"
   },
   {
     "question_id": 115,
@@ -87,7 +87,7 @@
   {
     "question_id": 120,
     "db": "MYSQL",
-    "query": "SELECT plate_number, brand FROM transportation.vehicle;"
+    "query": "SELECT plate_number, brand FROM transportation.vehicle"
   },
   {
     "question_id": 126,
@@ -97,32 +97,32 @@
   {
     "question_id": 141,
     "db": "MYSQL",
-    "query": "SELECT c.company_name, COUNT(v.vehicle_id) AS vehicle_count FROM transportation.vehicle_company c LEFT JOIN transportation.vehicle v ON c.company_id = v.company_id GROUP BY c.company_id, c.company_name;"
+    "query": "SELECT vc.company_name, COUNT(v.vehicle_id) AS vehicle_count FROM transportation.vehicle_company vc LEFT JOIN transportation.vehicle v ON vc.company_id = v.company_id GROUP BY vc.company_id, vc.company_name"
   },
   {
     "question_id": 143,
     "db": "MYSQL",
-    "query": "SELECT c.company_name, SUM(v.load_capacity) AS total_load FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id GROUP BY c.company_id, c.company_name;"
+    "query": "SELECT vc.company_id, vc.company_name, SUM(v.load_capacity) AS total_load_capacity FROM transportation.vehicle_company vc LEFT JOIN transportation.vehicle v ON vc.company_id = v.company_id GROUP BY vc.company_id, vc.company_name"
   },
   {
     "question_id": 173,
     "db": "MYSQL",
-    "query": "SELECT sc.company_name, AVG(v.max_speed) AS avg_max_speed FROM transportation.shipping_company sc JOIN transportation.vessel v ON sc.company_id = v.company_id GROUP BY sc.company_id, sc.company_name;"
+    "query": "SELECT sc.company_id, sc.company_name, AVG(v.max_speed) AS avg_max_speed FROM transportation.shipping_company sc JOIN transportation.vessel v ON sc.company_id = v.company_id GROUP BY sc.company_id, sc.company_name"
   },
   {
     "question_id": 175,
     "db": "MYSQL",
-    "query": "SELECT ad.province_name AS province, vtd.type_name AS vehicle_type, COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.vehicle_type_dict vtd ON v.vehicle_type_code = vtd.type_code JOIN common.administrative_division ad ON ad.id = v.area_id AND ad.level = 1 GROUP BY ad.province_name, vtd.type_name ORDER BY ad.province_name, vtd.type_name;"
+    "query": "SELECT ad.province_name AS province, vtd.type_name AS vehicle_type, COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id JOIN common.vehicle_type_dict vtd ON v.vehicle_type_code = vtd.type_code GROUP BY ad.province_name, vtd.type_name ORDER BY ad.province_name, vtd.type_name"
   },
   {
     "question_id": 195,
     "db": "MYSQL",
-    "query": "SELECT v.brand AS brand, LEFT(v.area_id,2) AS province_code, COUNT(*) AS vehicle_count FROM transportation.vehicle v GROUP BY v.brand, LEFT(v.area_id,2) ORDER BY v.brand, province_code;"
+    "query": "SELECT v.brand AS 品牌, ad.province_name AS 省份, COUNT(*) AS 车辆数量 FROM transportation.vehicle v JOIN common.administrative_division ad ON ad.id = v.area_id AND ad.level = 1 GROUP BY v.brand, ad.province_name ORDER BY v.brand, 车辆数量 DESC"
   },
   {
     "question_id": 215,
     "db": "MYSQL",
-    "query": "SELECT AVG(v.load_capacity) FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code WHERE v.area_id LIKE '3201%' AND t.type_name = '货车';"
+    "query": "SELECT AVG(v.load_capacity) AS avg_load_capacity FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code JOIN common.administrative_division d ON v.area_id = d.id WHERE t.type_name = '货车' AND d.city_name = '南京市'"
   },
   {
     "question_id": 217,
@@ -132,87 +132,87 @@
   {
     "question_id": 230,
     "db": "MYSQL",
-    "query": "SELECT v.mmsi FROM transportation.vessel v WHERE v.vessel_type = 35"
+    "query": "SELECT mmsi FROM transportation.vessel WHERE vessel_type = 35"
   },
   {
     "question_id": 259,
     "db": "MYSQL",
-    "query": "SELECT * FROM transportation.vehicle WHERE LEFT(area_id,2) IN ('31','32','33','34');"
+    "query": "SELECT v.vehicle_id, v.plate_number, v.owner_id, v.vehicle_type_code, v.brand, v.model, v.manufacture_year, v.load_capacity, v.seat_count, v.color, v.register_date, v.area_id, v.insurance_expire, v.company_id FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id WHERE ad.province_name IN ('上海市','江苏省','浙江省','安徽省')"
   },
   {
     "question_id": 280,
     "db": "MYSQL",
-    "query": "SELECT vehicle_id, plate_number, brand, load_capacity FROM transportation.vehicle WHERE brand = '福田' AND load_capacity > 10;"
+    "query": "SELECT vehicle_id, plate_number, brand, load_capacity FROM transportation.vehicle WHERE brand = '福田' AND load_capacity > 10"
   },
   {
     "question_id": 288,
     "db": "MYSQL",
-    "query": "SELECT t.type_name, COUNT(CASE WHEN v.load_capacity <= 5 THEN 1 END) AS light_count, COUNT(CASE WHEN v.load_capacity > 5 AND v.load_capacity <= 15 THEN 1 END) AS medium_count, COUNT(CASE WHEN v.load_capacity > 15 THEN 1 END) AS heavy_count FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code GROUP BY t.type_name;"
+    "query": "SELECT t.type_name, COUNT(CASE WHEN v.load_capacity <= 5 THEN 1 END) AS light, COUNT(CASE WHEN v.load_capacity > 5 AND v.load_capacity <= 15 THEN 1 END) AS medium, COUNT(CASE WHEN v.load_capacity > 15 THEN 1 END) AS heavy FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code GROUP BY t.type_name;"
   },
   {
     "question_id": 312,
     "db": "MYSQL",
-    "query": "SELECT stock_name, listing_date FROM finance_tax.stocks WHERE listing_date < '2015-01-01';"
+    "query": "SELECT stock_name, listing_date FROM finance_tax.stocks WHERE listing_date < '2015-01-01'"
   },
   {
     "question_id": 321,
     "db": "MYSQL",
-    "query": "SELECT COUNT(DISTINCT r.company_id) AS company_count FROM finance_tax.corporate_income_tax_returns r WHERE r.tax_year = 2025;"
+    "query": "SELECT COUNT(DISTINCT company_id) AS company_count FROM finance_tax.corporate_income_tax_returns WHERE tax_year = 2025"
   },
   {
     "question_id": 325,
     "db": "MYSQL",
-    "query": "SELECT t.open_price, t.close_price FROM finance_tax.stocks s JOIN finance_tax.stock_daily_trades t ON s.stock_id = t.stock_id WHERE s.stock_code = '000001' AND t.trade_date = '2025-12-31';"
+    "query": "SELECT t.open_price, t.close_price FROM finance_tax.stock_daily_trades t JOIN finance_tax.stocks s ON t.stock_id = s.stock_id WHERE s.stock_code = '000001' AND t.trade_date = '2025-12-31'"
   },
   {
     "question_id": 332,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) AS company_count FROM finance_tax.corporate_income_tax_returns WHERE is_restricted_industry = FALSE;"
+    "query": "SELECT COUNT(DISTINCT c.company_id) AS company_count FROM finance_tax.companies c JOIN finance_tax.corporate_income_tax_returns r ON c.company_id = r.company_id WHERE r.is_restricted_industry = FALSE"
   },
   {
     "question_id": 368,
     "db": "MYSQL",
-    "query": "SELECT stock_code, stock_name, current_price * total_shares AS total_market_value FROM finance_tax.stocks WHERE market_class = 'A';"
+    "query": "SELECT s.stock_code, s.stock_name, s.current_price * s.total_shares AS total_market_value FROM finance_tax.stocks s WHERE s.market_class = 'A'"
   },
   {
     "question_id": 376,
     "db": "MYSQL",
-    "query": "SELECT c.company_name, r.revenue FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE r.tax_year = 2025 ORDER BY r.revenue DESC;"
+    "query": "SELECT c.company_id, c.company_name, t.revenue AS total_revenue FROM finance_tax.corporate_income_tax_returns t JOIN finance_tax.companies c ON c.company_id = t.company_id WHERE t.tax_year = 2025 ORDER BY t.revenue DESC"
   },
   {
     "question_id": 389,
     "db": "MYSQL",
-    "query": "SELECT c.company_name, r25.revenue AS revenue_2025, r24.revenue AS revenue_2024, (r25.revenue - r24.revenue) AS revenue_diff FROM finance_tax.corporate_income_tax_returns r25 JOIN finance_tax.companies c ON r25.company_id = c.company_id LEFT JOIN finance_tax.corporate_income_tax_returns r24 ON r25.company_id = r24.company_id AND r24.tax_year = 2024 WHERE r25.tax_year = 2025;"
+    "query": "SELECT c.company_id, c.company_name, cur.revenue AS revenue_2025, prev.revenue AS revenue_2024, cur.revenue - prev.revenue AS revenue_diff FROM finance_tax.companies c JOIN finance_tax.corporate_income_tax_returns cur ON c.company_id = cur.company_id AND cur.tax_year = 2025 LEFT JOIN finance_tax.corporate_income_tax_returns prev ON c.company_id = prev.company_id AND prev.tax_year = 2024"
   },
   {
     "question_id": 392,
     "db": "MYSQL",
-    "query": "SELECT c.company_name, r.revenue FROM finance_tax.companies c JOIN common.dict_registration_type rt ON c.registration_type_code = rt.type_code JOIN finance_tax.corporate_income_tax_returns r ON c.company_id = r.company_id WHERE rt.type_name = '港澳台商投资企业' ORDER BY r.revenue DESC LIMIT 1;"
+    "query": "SELECT c.company_name, t.revenue FROM finance_tax.companies c JOIN finance_tax.corporate_income_tax_returns t ON c.company_id = t.company_id WHERE c.registration_type_code = '117' ORDER BY t.revenue DESC LIMIT 1"
   },
   {
     "question_id": 397,
     "db": "MYSQL",
-    "query": "SELECT i.industry_name, COUNT(*) AS private_company_count FROM finance_tax.companies c JOIN common.dict_industry i ON c.industry_code = i.industry_code WHERE c.is_private = TRUE GROUP BY i.industry_name ORDER BY private_company_count DESC;"
+    "query": "SELECT i.industry_name, COUNT(*) AS private_company_count FROM finance_tax.companies c JOIN common.dict_industry i ON c.industry_code = i.industry_code WHERE c.is_private = TRUE GROUP BY i.industry_name"
   },
   {
     "question_id": 418,
     "db": "MYSQL",
-    "query": "SELECT (f.total_assets * 10000) / s.total_shares AS bps FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE s.stock_name = '贵州茅台' AND f.report_date = '2025-03-31';"
+    "query": "SELECT (cf.total_assets * 10000) / s.total_shares AS bps FROM finance_tax.companies c JOIN finance_tax.stocks s ON s.company_id = c.company_id JOIN finance_tax.company_financials cf ON cf.company_id = c.company_id WHERE c.company_name = '贵州茅台' AND cf.report_date = '2025-03-31'"
   },
   {
     "question_id": 438,
     "db": "MYSQL",
-    "query": "SELECT s.stock_name, (MAX(t.high_price) - MIN(t.low_price)) / AVG(t.close_price) AS volatility_ratio FROM finance_tax.stocks s JOIN finance_tax.stock_daily_trades t ON s.stock_id = t.stock_id WHERE t.trade_date BETWEEN '2025-01-01' AND '2025-12-31' GROUP BY s.stock_id, s.stock_name ORDER BY volatility_ratio DESC;"
+    "query": "SELECT s.stock_code, s.stock_name, (MAX(t.high_price) - MIN(t.low_price)) / AVG(t.close_price) AS volatility_ratio FROM finance_tax.stocks s JOIN finance_tax.stock_daily_trades t ON s.stock_id = t.stock_id WHERE t.trade_date >= '2025-01-01' AND t.trade_date < '2026-01-01' GROUP BY s.stock_id, s.stock_code, s.stock_name"
   },
   {
     "question_id": 442,
     "db": "MYSQL",
-    "query": "SELECT s.stock_name, (s.current_price / ((f.total_assets * 10000) / s.total_shares)) AS pb FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = (SELECT MAX(report_date) FROM finance_tax.company_financials) ORDER BY pb DESC LIMIT 5;"
+    "query": "SELECT s.stock_code, s.stock_name, s.current_price, (s.current_price / ((cf.total_assets * 10000) / s.total_shares)) AS pb FROM finance_tax.stocks s JOIN finance_tax.company_financials cf ON s.company_id = cf.company_id WHERE cf.total_assets > 0 AND s.total_shares > 0 ORDER BY pb DESC LIMIT 5"
   },
   {
     "question_id": 455,
     "db": "MYSQL",
-    "query": "SELECT AVG(r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) AS avg_taxable_income FROM finance_tax.corporate_income_tax_returns r WHERE r.tax_year = 2025;"
+    "query": "SELECT AVG(revenue - non_taxable_income - deductions - prior_year_losses) AS avg_taxable_income FROM finance_tax.corporate_income_tax_returns WHERE tax_year = 2025"
   },
   {
     "question_id": 461,
@@ -222,17 +222,17 @@
   {
     "question_id": 487,
     "db": "MYSQL",
-    "query": "SELECT ((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END / NULLIF(r.revenue,0)) * 100 AS effective_tax_rate FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE c.company_name = '中国中车' AND r.tax_year = 2025;"
+    "query": "SELECT ((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END / r.revenue) * 100 AS effective_tax_rate FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE c.company_name = '中国中车' AND r.tax_year = 2025;"
   },
   {
     "question_id": 507,
     "db": "MYSQL",
-    "query": "SELECT (SELECT (f.dividend_stock / 100.0) / s.current_price * 100 FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE s.stock_name = '中国石化' AND f.report_date = '2025-12-31') - (SELECT AVG((f2.dividend_stock / 100.0) / s2.current_price * 100) FROM finance_tax.stocks s2 JOIN finance_tax.companies c2 ON s2.company_id = c2.company_id JOIN finance_tax.company_financials f2 ON s2.company_id = f2.company_id WHERE c2.industry_code = (SELECT c.industry_code FROM finance_tax.stocks s JOIN finance_tax.companies c ON s.company_id = c.company_id WHERE s.stock_name = '中国石化') AND f2.report_date = '2025-12-31') AS diff_pct;"
+    "query": "SELECT (f.dividend_stock / 100.0) / s.current_price * 100 - 6.375 AS diff_pct FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE s.stock_name = '中国石化' AND f.report_date = '2025-12-31';"
   },
   {
     "question_id": 513,
     "db": "MYSQL",
-    "query": "SELECT c.company_name, r.non_taxable_income, r.revenue FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE r.non_taxable_income > r.revenue * 0.5"
+    "query": "SELECT c.company_id, c.company_name, r.tax_year, r.revenue, r.non_taxable_income FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON c.company_id = r.company_id WHERE r.revenue > 0 AND r.non_taxable_income > r.revenue * 0.5"
   },
   {
     "question_id": 517,
@@ -242,7 +242,7 @@
   {
     "question_id": 537,
     "db": "MYSQL",
-    "query": "SELECT s.stock_code, s.stock_name, STDDEV((t.close_price - t.open_price) / t.open_price) * SQRT(250) AS annualized_volatility FROM finance_tax.stocks s JOIN finance_tax.stock_daily_trades t ON s.stock_id = t.stock_id WHERE t.trade_date >= '2025-01-01' AND t.trade_date < '2026-01-01' GROUP BY s.stock_id, s.stock_code, s.stock_name;"
+    "query": "SELECT s.stock_code, s.stock_name, STDDEV((t.close_price - t.open_price) / t.open_price) * SQRT(250) AS annualized_volatility FROM finance_tax.stocks s JOIN finance_tax.stock_daily_trades t ON s.stock_id = t.stock_id WHERE YEAR(t.trade_date) = 2025 GROUP BY s.stock_id, s.stock_code, s.stock_name"
   },
   {
     "question_id": 550,
@@ -252,37 +252,37 @@
   {
     "question_id": 574,
     "db": "MYSQL",
-    "query": "SELECT company_name FROM energy.energy_company WHERE staff_count < 100;"
+    "query": "SELECT company_name FROM energy.energy_company WHERE staff_count < 100"
   },
   {
     "question_id": 586,
     "db": "MYSQL",
-    "query": "SELECT station_name FROM energy.energy_station WHERE area_id LIKE '5401%';"
+    "query": "SELECT es.station_name FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '拉萨市' AND es.station_type_code IN ('PP','WP','SP','HP','NP')"
   },
   {
     "question_id": 591,
     "db": "MYSQL",
-    "query": "SELECT station_name FROM energy.energy_station WHERE grid_connect_date > '2020-12-31';"
+    "query": "SELECT station_name FROM energy.energy_station WHERE grid_connect_date > '2020-12-31'"
   },
   {
     "question_id": 602,
     "db": "MYSQL",
-    "query": "SELECT es.station_name FROM energy.energy_station es WHERE es.installed_capacity > (SELECT AVG(es2.installed_capacity) FROM energy.energy_station es2 WHERE es2.company_id = es.company_id)"
+    "query": "SELECT s.station_name FROM energy.energy_station s JOIN (SELECT company_id, AVG(installed_capacity) AS avg_cap FROM energy.energy_station GROUP BY company_id) c ON s.company_id = c.company_id WHERE s.installed_capacity > c.avg_cap"
   },
   {
     "question_id": 634,
     "db": "MYSQL",
-    "query": "SELECT e.education, COUNT(*) AS employee_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.energy_position_dict ep ON e.position_code = ep.position_code WHERE ec.area_id LIKE '54%' AND ep.category = '管理' GROUP BY e.education;"
+    "query": "SELECT e.education, COUNT(*) AS employee_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.energy_position_dict ep ON e.position_code = ep.position_code WHERE ec.area_id LIKE '54%' AND ep.category = '管理' GROUP BY e.education ORDER BY employee_count DESC;"
   },
   {
     "question_id": 649,
     "db": "MYSQL",
-    "query": "SELECT et.type_name, COUNT(es.station_id) AS count FROM energy.energy_station es JOIN common.energy_type_dict et ON es.energy_type_code = et.type_code WHERE es.area_id = '632801' GROUP BY et.type_name;"
+    "query": "SELECT et.type_name AS energy_type, COUNT(*) AS station_count FROM energy.energy_station es JOIN common.energy_type_dict et ON es.energy_type_code = et.type_code WHERE es.area_id = '632801' GROUP BY et.type_name"
   },
   {
     "question_id": 658,
     "db": "MYSQL",
-    "query": "SELECT ec.company_name, COUNT(cc.id) AS cert_count FROM energy.energy_company ec LEFT JOIN energy.company_certification cc ON ec.company_id = cc.company_id AND cc.cert_type = '承装修试许可证' GROUP BY ec.company_id, ec.company_name;"
+    "query": "SELECT ec.company_name, COUNT(cc.id) AS cert_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE cc.cert_type = '承装修试许可证' GROUP BY ec.company_id, ec.company_name;"
   },
   {
     "question_id": 667,
@@ -292,12 +292,12 @@
   {
     "question_id": 670,
     "db": "MYSQL",
-    "query": "SELECT ep.position_name, COUNT(e.employee_id) AS employee_count FROM energy.employee e JOIN common.energy_position_dict ep ON e.position_code = ep.position_code GROUP BY ep.position_name ORDER BY employee_count DESC"
+    "query": "SELECT p.position_name, COUNT(e.employee_id) AS employee_count FROM energy.employee e JOIN common.energy_position_dict p ON e.position_code = p.position_code GROUP BY p.position_name ORDER BY employee_count DESC"
   },
   {
     "question_id": 687,
     "db": "MYSQL",
-    "query": "SELECT LEFT(es.area_id,2) AS province_code, ad.province_name, COUNT(*) AS solar_station_count FROM energy.energy_station es JOIN common.administrative_division ad ON LEFT(es.area_id,2) = LEFT(ad.id,2) AND ad.level = 1 WHERE es.station_type_code = 'SP' AND LEFT(es.area_id,2) IN ('11','12','13','14','15','21','22','23','61','62','63','64','65') GROUP BY LEFT(es.area_id,2), ad.province_name ORDER BY province_code;"
+    "query": "SELECT ad.province_name AS 省份, COUNT(*) AS 光伏电站数量 FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE es.station_type_code = 'SP' AND ad.province_name IN ('黑龙江省','吉林省','辽宁省','北京市','天津市','河北省','山西省','内蒙古自治区','陕西省','甘肃省','青海省','宁夏回族自治区','新疆维吾尔自治区') GROUP BY ad.province_name ORDER BY 光伏电站数量 DESC"
   },
   {
     "question_id": 693,
@@ -337,17 +337,17 @@
   {
     "question_id": 783,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) AS diploma_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE ec.area_id LIKE '21%' AND e.education = '大专';"
+    "query": "SELECT COUNT(*) AS diploma_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE LEFT(ec.area_id,2) = '21' AND e.education = '大专';"
   },
   {
     "question_id": 846,
     "db": "MYSQL",
-    "query": "SELECT SUM(installed_capacity) AS total_capacity FROM energy.energy_station WHERE area_id = '632801' AND energy_type_code = 'SOLAR';"
+    "query": "SELECT SUM(es.installed_capacity) AS total_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.name = '格尔木市' AND es.station_type_code = 'SP'"
   },
   {
     "question_id": 867,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) AS hydro_count FROM energy.energy_station WHERE area_id LIKE '2202%' AND energy_type_code = 'HYDRO';"
+    "query": "SELECT COUNT(*) AS hydro_station_count FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '吉林市' AND es.station_type_code = 'HP'"
   },
   {
     "question_id": 876,
@@ -357,17 +357,17 @@
   {
     "question_id": 889,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) AS wind_count FROM energy.energy_station WHERE area_id LIKE '6205%' AND station_type_code = 'WP';"
+    "query": "SELECT COUNT(*) AS wind_farm_count FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '天水市' AND es.station_type_code = 'WP'"
   },
   {
     "question_id": 894,
     "db": "MYSQL",
-    "query": "SELECT SUM(annual_generation) AS wind_generation FROM energy.energy_station WHERE area_id LIKE '1504%' AND station_type_code = 'WP';"
+    "query": "SELECT SUM(es.annual_generation) AS total_annual_generation FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id JOIN common.station_type_dict std ON es.station_type_code = std.type_code WHERE ad.city_name = '赤峰市' AND std.type_name = '风电场'"
   },
   {
     "question_id": 911,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) AS gas_station_count FROM energy.energy_station WHERE area_id LIKE '5107%' AND energy_type_code = 'GAS';"
+    "query": "SELECT COUNT(*) AS gas_station_count FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '绵阳市' AND es.energy_type_code = 'GAS'"
   },
   {
     "question_id": 946,
@@ -377,122 +377,122 @@
   {
     "question_id": 978,
     "db": "MYSQL",
-    "query": "SELECT SUM(annual_generation) AS solar_generation FROM energy.energy_station WHERE area_id LIKE '6405%' AND energy_type_code = 'SOLAR';"
+    "query": "SELECT SUM(es.annual_generation) AS total_annual_generation FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '中卫市' AND es.station_type_code = 'SP'"
   },
   {
     "question_id": 988,
     "db": "MYSQL",
-    "query": "SELECT COUNT(DISTINCT es.company_id) AS company_count FROM energy.energy_station es WHERE es.area_id LIKE '3702%' AND es.station_type_code = 'WP';"
+    "query": "SELECT COUNT(DISTINCT es.company_id) AS company_count FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '青岛市' AND es.station_type_code = 'WP';"
   },
   {
     "question_id": 992,
     "db": "MYSQL",
-    "query": "SELECT es.station_name, es.installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.province_name = '湖北省' AND es.energy_type_code = 'HYDRO';"
+    "query": "SELECT es.station_name, es.installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.province_name = '湖北省' AND es.energy_type_code = 'HYDRO'"
   },
   {
     "question_id": 994,
     "db": "MYSQL",
-    "query": "SELECT station_name, installed_capacity FROM energy.energy_station WHERE area_id LIKE '6405%' AND station_type_code = 'WP';"
+    "query": "SELECT es.station_name, es.installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '中卫市' AND es.energy_type_code = 'WIND'"
   },
   {
     "question_id": 1004,
     "db": "MYSQL",
-    "query": "SELECT station_name FROM energy.energy_station WHERE installed_capacity < 100 AND station_type_code IN ('PP','WP','SP','HP','NP');"
+    "query": "SELECT station_name FROM energy.energy_station WHERE installed_capacity < 100;"
   },
   {
     "question_id": 1124,
     "db": "MYSQL",
-    "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'TMALL';"
+    "query": "SELECT ROUND(SUM(o.total_amount), 2) AS gmv FROM ecommerce.orders o WHERE o.platform_code = 'TMALL'"
   },
   {
     "question_id": 1218,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) AS payment_count FROM ecommerce.payment WHERE payment_status_code = 'REFUNDED';"
+    "query": "SELECT COUNT(*) AS refunded_payment_count FROM ecommerce.payment WHERE payment_status_code = 'REFUNDED'"
   },
   {
     "question_id": 1226,
     "db": "MYSQL",
-    "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE level_code = 'GOLD' ORDER BY customer_id;"
+    "query": "SELECT c.customer_id, c.customer_name, c.level_code FROM ecommerce.customer c WHERE c.level_code = 'GOLD'"
   },
   {
     "question_id": 1275,
     "db": "MYSQL",
-    "query": "SELECT order_id, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC, order_id ASC LIMIT 20;"
+    "query": "SELECT order_id, order_no, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC LIMIT 20"
   },
   {
     "question_id": 1301,
     "db": "MYSQL",
-    "query": "SELECT c.customer_id, c.customer_name, ROUND(SUM(o.payable_amount), 2) AS total_payable FROM ecommerce.customer c JOIN ecommerce.orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.customer_name ORDER BY total_payable DESC, c.customer_id ASC LIMIT 5;"
+    "query": "SELECT c.customer_id, c.customer_name, ROUND(SUM(o.payable_amount), 2) AS total_amount FROM ecommerce.customer c JOIN ecommerce.orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.customer_name ORDER BY total_amount DESC LIMIT 5"
   },
   {
     "question_id": 1327,
     "db": "MYSQL",
-    "query": "SELECT c.customer_id, c.customer_name, ROUND(SUM(o.payable_amount), 2) AS total_payable FROM ecommerce.customer c JOIN ecommerce.orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.customer_name ORDER BY total_payable DESC, c.customer_id ASC LIMIT 20;"
+    "query": "SELECT c.customer_id, c.customer_name, ROUND(SUM(o.payable_amount), 2) AS total_amount FROM ecommerce.customer c JOIN ecommerce.orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.customer_name ORDER BY total_amount DESC LIMIT 20"
   },
   {
     "question_id": 1383,
     "db": "MYSQL",
-    "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'APP';"
+    "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'APP'"
   },
   {
     "question_id": 1439,
     "db": "MYSQL",
-    "query": "SELECT DATE_FORMAT(order_time, '%Y-%m') AS month, ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders GROUP BY DATE_FORMAT(order_time, '%Y-%m') ORDER BY month;"
+    "query": "SELECT DATE_FORMAT(order_time, '%Y-%m') AS month, ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders GROUP BY DATE_FORMAT(order_time, '%Y-%m') ORDER BY month"
   },
   {
     "question_id": 1524,
     "db": "MYSQL",
-    "query": "SELECT p.product_id, p.product_name, SUM(oi.quantity) AS sales_quantity FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id GROUP BY p.product_id, p.product_name ORDER BY sales_quantity DESC, p.product_id ASC LIMIT 20;"
+    "query": "SELECT p.product_id, p.product_name, SUM(oi.quantity) AS sales_quantity FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id GROUP BY p.product_id, p.product_name ORDER BY sales_quantity DESC LIMIT 20"
   },
   {
     "question_id": 1597,
     "db": "MYSQL",
-    "query": "SELECT product_id, warehouse_code, stock_quantity FROM ecommerce.inventory WHERE stock_quantity < 10 ORDER BY product_id, warehouse_code;"
+    "query": "SELECT inventory_id, product_id, warehouse_code, warehouse_name, stock_quantity, locked_quantity, safety_stock, updated_time FROM ecommerce.inventory WHERE stock_quantity < 10"
   },
   {
     "question_id": 1636,
     "db": "MYSQL",
-    "query": "WITH _edu_semester_rows AS (\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2025 AS _source_year FROM education_2025.semester r \nUNION ALL\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2024 AS _source_year FROM education_2024.semester r \n),\n_edu_semester_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.academic_year, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)), COALESCE(NULLIF(r.semester_code, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)) ORDER BY r._source_year DESC, r.semester_id DESC) AS _merge_rank FROM _edu_semester_rows r),\nedu_semester AS (SELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, r._source_year FROM _edu_semester_ranked r  WHERE r._merge_rank=1)\nSELECT sem.semester_code, sem.start_date_key, sem.end_date_key FROM edu_semester sem ORDER BY sem.academic_year ASC, sem.semester_code ASC LIMIT 10"
+    "query": "WITH _edu_semester_rows AS (\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2025 AS _source_year FROM education_2025.semester r \nUNION ALL\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2024 AS _source_year FROM education_2024.semester r \n),\n_edu_semester_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.academic_year, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)), COALESCE(NULLIF(r.semester_code, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)) ORDER BY r._source_year DESC, r.semester_id DESC) AS _merge_rank FROM _edu_semester_rows r),\nedu_semester AS (SELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, r._source_year FROM _edu_semester_ranked r  WHERE r._merge_rank=1)\nSELECT semester_code, start_date_key, end_date_key FROM edu_semester ORDER BY academic_year ASC LIMIT 10"
   },
   {
     "question_id": 1648,
     "db": "MYSQL",
-    "query": "WITH _edu_department_rows AS (\nSELECT r.department_id, r.department_code, r.department_name, 2025 AS _source_year FROM education_2025.department r \nUNION ALL\nSELECT r.department_id, r.department_code, r.department_name, 2024 AS _source_year FROM education_2024.department r \n),\n_edu_department_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.department_code, ''), CONCAT('__unmapped:',r._source_year,':',r.department_id)) ORDER BY r._source_year DESC, r.department_id DESC) AS _merge_rank FROM _edu_department_rows r),\nedu_department AS (SELECT r.department_id, r.department_code, r.department_name, r._source_year FROM _edu_department_ranked r  WHERE r._merge_rank=1),\n_edu_teacher_rows AS (\nSELECT r.teacher_id, r.teacher_no, r.teacher_name, r.department_id, r.gender_code, r.phone, r.region_id, 2025 AS _source_year, p_department.department_code AS _department_code FROM education_2025.teacher r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id\nUNION ALL\nSELECT r.teacher_id, r.teacher_no, r.teacher_name, r.department_id, r.gender_code, r.phone, r.region_id, 2024 AS _source_year, p_department.department_code AS _department_code FROM education_2024.teacher r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id\n),\n_edu_teacher_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.teacher_no, ''), CONCAT('__unmapped:',r._source_year,':',r.teacher_id)) ORDER BY r._source_year DESC, r.teacher_id DESC) AS _merge_rank FROM _edu_teacher_rows r),\nedu_teacher AS (SELECT r.teacher_id, r.teacher_no, r.teacher_name, COALESCE(m_department.department_id,r.department_id) AS department_id, r.gender_code, r.phone, r.region_id, r._source_year, r._department_code FROM _edu_teacher_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code WHERE r._merge_rank=1),\n_edu_course_rows AS (\nSELECT r.course_id, r.course_code, r.course_name, r.department_id, r.teacher_id, r.credit, r.course_type, r.max_score, 2025 AS _source_year, p_department.department_code AS _department_code, p_teacher.teacher_no AS _teacher_no FROM education_2025.course r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2025.teacher p_teacher ON p_teacher.teacher_id=r.teacher_id\nUNION ALL\nSELECT r.course_id, r.course_code, r.course_name, r.department_id, r.teacher_id, r.credit, r.course_type, r.max_score, 2024 AS _source_year, p_department.department_code AS _department_code, p_teacher.teacher_no AS _teacher_no FROM education_2024.course r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2024.teacher p_teacher ON p_teacher.teacher_id=r.teacher_id\n),\n_edu_course_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.course_code, ''), CONCAT('__unmapped:',r._source_year,':',r.course_id)) ORDER BY r._source_year DESC, r.course_id DESC) AS _merge_rank FROM _edu_course_rows r),\nedu_course AS (SELECT r.course_id, r.course_code, r.course_name, COALESCE(m_department.department_id,r.department_id) AS department_id, COALESCE(m_teacher.teacher_id,r.teacher_id) AS teacher_id, r.credit, r.course_type, r.max_score, r._source_year, r._department_code, r._teacher_no FROM _edu_course_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code LEFT JOIN edu_teacher m_teacher ON m_teacher.teacher_no=r._teacher_no WHERE r._merge_rank=1)\nSELECT course_id, course_name FROM edu_course WHERE course_type='选修' ORDER BY course_name ASC LIMIT 30"
+    "query": "WITH _edu_department_rows AS (\nSELECT r.department_id, r.department_code, r.department_name, 2025 AS _source_year FROM education_2025.department r \nUNION ALL\nSELECT r.department_id, r.department_code, r.department_name, 2024 AS _source_year FROM education_2024.department r \n),\n_edu_department_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.department_code, ''), CONCAT('__unmapped:',r._source_year,':',r.department_id)) ORDER BY r._source_year DESC, r.department_id DESC) AS _merge_rank FROM _edu_department_rows r),\nedu_department AS (SELECT r.department_id, r.department_code, r.department_name, r._source_year FROM _edu_department_ranked r  WHERE r._merge_rank=1),\n_edu_teacher_rows AS (\nSELECT r.teacher_id, r.teacher_no, r.teacher_name, r.department_id, r.gender_code, r.phone, r.region_id, 2025 AS _source_year, p_department.department_code AS _department_code FROM education_2025.teacher r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id\nUNION ALL\nSELECT r.teacher_id, r.teacher_no, r.teacher_name, r.department_id, r.gender_code, r.phone, r.region_id, 2024 AS _source_year, p_department.department_code AS _department_code FROM education_2024.teacher r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id\n),\n_edu_teacher_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.teacher_no, ''), CONCAT('__unmapped:',r._source_year,':',r.teacher_id)) ORDER BY r._source_year DESC, r.teacher_id DESC) AS _merge_rank FROM _edu_teacher_rows r),\nedu_teacher AS (SELECT r.teacher_id, r.teacher_no, r.teacher_name, COALESCE(m_department.department_id,r.department_id) AS department_id, r.gender_code, r.phone, r.region_id, r._source_year, r._department_code FROM _edu_teacher_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code WHERE r._merge_rank=1),\n_edu_course_rows AS (\nSELECT r.course_id, r.course_code, r.course_name, r.department_id, r.teacher_id, r.credit, r.course_type, r.max_score, 2025 AS _source_year, p_department.department_code AS _department_code, p_teacher.teacher_no AS _teacher_no FROM education_2025.course r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2025.teacher p_teacher ON p_teacher.teacher_id=r.teacher_id\nUNION ALL\nSELECT r.course_id, r.course_code, r.course_name, r.department_id, r.teacher_id, r.credit, r.course_type, r.max_score, 2024 AS _source_year, p_department.department_code AS _department_code, p_teacher.teacher_no AS _teacher_no FROM education_2024.course r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2024.teacher p_teacher ON p_teacher.teacher_id=r.teacher_id\n),\n_edu_course_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.course_code, ''), CONCAT('__unmapped:',r._source_year,':',r.course_id)) ORDER BY r._source_year DESC, r.course_id DESC) AS _merge_rank FROM _edu_course_rows r),\nedu_course AS (SELECT r.course_id, r.course_code, r.course_name, COALESCE(m_department.department_id,r.department_id) AS department_id, COALESCE(m_teacher.teacher_id,r.teacher_id) AS teacher_id, r.credit, r.course_type, r.max_score, r._source_year, r._department_code, r._teacher_no FROM _edu_course_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code LEFT JOIN edu_teacher m_teacher ON m_teacher.teacher_no=r._teacher_no WHERE r._merge_rank=1)\nSELECT course_id, course_name FROM edu_course WHERE course_type = '选修' ORDER BY course_name ASC LIMIT 30"
   },
   {
     "question_id": 1737,
     "db": "MYSQL",
-    "query": "WITH _edu_semester_rows AS (\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2025 AS _source_year FROM education_2025.semester r \nUNION ALL\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2024 AS _source_year FROM education_2024.semester r \n),\n_edu_semester_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.academic_year, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)), COALESCE(NULLIF(r.semester_code, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)) ORDER BY r._source_year DESC, r.semester_id DESC) AS _merge_rank FROM _edu_semester_rows r),\nedu_semester AS (SELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, r._source_year FROM _edu_semester_ranked r  WHERE r._merge_rank=1)\nSELECT sem.semester_code, sem.start_date_key, sem.end_date_key FROM edu_semester sem WHERE sem.start_date_key >= 20240101 ORDER BY sem.start_date_key ASC LIMIT 10"
+    "query": "WITH _edu_semester_rows AS (\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2025 AS _source_year FROM education_2025.semester r \nUNION ALL\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2024 AS _source_year FROM education_2024.semester r \n),\n_edu_semester_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.academic_year, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)), COALESCE(NULLIF(r.semester_code, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)) ORDER BY r._source_year DESC, r.semester_id DESC) AS _merge_rank FROM _edu_semester_rows r),\nedu_semester AS (SELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, r._source_year FROM _edu_semester_ranked r  WHERE r._merge_rank=1)\nSELECT semester_code, start_date_key, end_date_key FROM edu_semester WHERE start_date_key >= 20240101 ORDER BY start_date_key ASC LIMIT 10"
   },
   {
     "question_id": 1781,
     "db": "MYSQL",
-    "query": "WITH _edu_department_rows AS (\nSELECT r.department_id, r.department_code, r.department_name, 2025 AS _source_year FROM education_2025.department r \nUNION ALL\nSELECT r.department_id, r.department_code, r.department_name, 2024 AS _source_year FROM education_2024.department r \n),\n_edu_department_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.department_code, ''), CONCAT('__unmapped:',r._source_year,':',r.department_id)) ORDER BY r._source_year DESC, r.department_id DESC) AS _merge_rank FROM _edu_department_rows r),\nedu_department AS (SELECT r.department_id, r.department_code, r.department_name, r._source_year FROM _edu_department_ranked r  WHERE r._merge_rank=1),\n_edu_semester_rows AS (\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2025 AS _source_year FROM education_2025.semester r \nUNION ALL\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2024 AS _source_year FROM education_2024.semester r \n),\n_edu_semester_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.academic_year, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)), COALESCE(NULLIF(r.semester_code, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)) ORDER BY r._source_year DESC, r.semester_id DESC) AS _merge_rank FROM _edu_semester_rows r),\nedu_semester AS (SELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, r._source_year FROM _edu_semester_ranked r  WHERE r._merge_rank=1),\n_edu_teacher_rows AS (\nSELECT r.teacher_id, r.teacher_no, r.teacher_name, r.department_id, r.gender_code, r.phone, r.region_id, 2025 AS _source_year, p_department.department_code AS _department_code FROM education_2025.teacher r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id\nUNION ALL\nSELECT r.teacher_id, r.teacher_no, r.teacher_name, r.department_id, r.gender_code, r.phone, r.region_id, 2024 AS _source_year, p_department.department_code AS _department_code FROM education_2024.teacher r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id\n),\n_edu_teacher_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.teacher_no, ''), CONCAT('__unmapped:',r._source_year,':',r.teacher_id)) ORDER BY r._source_year DESC, r.teacher_id DESC) AS _merge_rank FROM _edu_teacher_rows r),\nedu_teacher AS (SELECT r.teacher_id, r.teacher_no, r.teacher_name, COALESCE(m_department.department_id,r.department_id) AS department_id, r.gender_code, r.phone, r.region_id, r._source_year, r._department_code FROM _edu_teacher_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code WHERE r._merge_rank=1),\n_edu_class_rows AS (\nSELECT r.class_id, r.class_code, r.class_name, r.department_id, r.grade_year, 2025 AS _source_year, p_department.department_code AS _department_code FROM education_2025.class r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id\nUNION ALL\nSELECT r.class_id, r.class_code, r.class_name, r.department_id, r.grade_year, 2024 AS _source_year, p_department.department_code AS _department_code FROM education_2024.class r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id\n),\n_edu_class_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.class_code, ''), CONCAT('__unmapped:',r._source_year,':',r.class_id)) ORDER BY r._source_year DESC, r.class_id DESC) AS _merge_rank FROM _edu_class_rows r),\nedu_class AS (SELECT r.class_id, r.class_code, r.class_name, COALESCE(m_department.department_id,r.department_id) AS department_id, r.grade_year, r._source_year, r._department_code FROM _edu_class_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code WHERE r._merge_rank=1),\n_edu_student_rows AS (\nSELECT r.student_id, r.student_no, r.student_name, r.gender_code, r.academic_level_code, r.department_id, r.class_id, r.home_region_id, r.student_status_code, r.admit_date_key, 2025 AS _source_year, p_department.department_code AS _department_code, p_class.class_code AS _class_code FROM education_2025.student r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2025.class p_class ON p_class.class_id=r.class_id\nUNION ALL\nSELECT r.student_id, r.student_no, r.student_name, r.gender_code, r.academic_level_code, r.department_id, r.class_id, r.home_region_id, r.student_status_code, r.admit_date_key, 2024 AS _source_year, p_department.department_code AS _department_code, p_class.class_code AS _class_code FROM education_2024.student r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2024.class p_class ON p_class.class_id=r.class_id\n),\n_edu_student_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.student_no, ''), CONCAT('__unmapped:',r._source_year,':',r.student_id)) ORDER BY r._source_year DESC, r.student_id DESC) AS _merge_rank FROM _edu_student_rows r),\nedu_student AS (SELECT r.student_id, r.student_no, r.student_name, r.gender_code, r.academic_level_code, COALESCE(m_department.department_id,r.department_id) AS department_id, COALESCE(m_class.class_id,r.class_id) AS class_id, r.home_region_id, r.student_status_code, r.admit_date_key, r._source_year, r._department_code, r._class_code FROM _edu_student_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code LEFT JOIN edu_class m_class ON m_class.class_code=r._class_code WHERE r._merge_rank=1),\n_edu_course_rows AS (\nSELECT r.course_id, r.course_code, r.course_name, r.department_id, r.teacher_id, r.credit, r.course_type, r.max_score, 2025 AS _source_year, p_department.department_code AS _department_code, p_teacher.teacher_no AS _teacher_no FROM education_2025.course r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2025.teacher p_teacher ON p_teacher.teacher_id=r.teacher_id\nUNION ALL\nSELECT r.course_id, r.course_code, r.course_name, r.department_id, r.teacher_id, r.credit, r.course_type, r.max_score, 2024 AS _source_year, p_department.department_code AS _department_code, p_teacher.teacher_no AS _teacher_no FROM education_2024.course r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2024.teacher p_teacher ON p_teacher.teacher_id=r.teacher_id\n),\n_edu_course_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.course_code, ''), CONCAT('__unmapped:',r._source_year,':',r.course_id)) ORDER BY r._source_year DESC, r.course_id DESC) AS _merge_rank FROM _edu_course_rows r),\nedu_course AS (SELECT r.course_id, r.course_code, r.course_name, COALESCE(m_department.department_id,r.department_id) AS department_id, COALESCE(m_teacher.teacher_id,r.teacher_id) AS teacher_id, r.credit, r.course_type, r.max_score, r._source_year, r._department_code, r._teacher_no FROM _edu_course_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code LEFT JOIN edu_teacher m_teacher ON m_teacher.teacher_no=r._teacher_no WHERE r._merge_rank=1),\n_edu_enrollment_rows AS (\nSELECT r.enrollment_id, r.student_id, r.course_id, r.semester_id, r.enroll_date_key, r.take_mode, r.is_withdraw, 2025 AS _source_year, p_student.student_no AS student_no, p_course.course_code AS course_code, p_semester.semester_code AS semester_code, p_semester.academic_year AS academic_year FROM education_2025.enrollment r LEFT JOIN education_2025.student p_student ON p_student.student_id=r.student_id LEFT JOIN education_2025.course p_course ON p_course.course_id=r.course_id LEFT JOIN education_2025.semester p_semester ON p_semester.semester_id=r.semester_id\nUNION ALL\nSELECT r.enrollment_id, r.student_id, r.course_id, r.semester_id, r.enroll_date_key, r.take_mode, r.is_withdraw, 2024 AS _source_year, p_student.student_no AS student_no, p_course.course_code AS course_code, p_semester.semester_code AS semester_code, p_semester.academic_year AS academic_year FROM education_2024.enrollment r LEFT JOIN education_2024.student p_student ON p_student.student_id=r.student_id LEFT JOIN education_2024.course p_course ON p_course.course_id=r.course_id LEFT JOIN education_2024.semester p_semester ON p_semester.semester_id=r.semester_id\n),\n_edu_enrollment_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.student_no, ''), CONCAT('__unmapped:',r._source_year,':',r.enrollment_id)), COALESCE(NULLIF(r.course_code, ''), CONCAT('__unmapped:',r._source_year,':',r.enrollment_id)), COALESCE(NULLIF(r.academic_year, ''), CONCAT('__unmapped:',r._source_year,':',r.enrollment_id)), COALESCE(NULLIF(r.semester_code, ''), CONCAT('__unmapped:',r._source_year,':',r.enrollment_id)) ORDER BY r._source_year DESC, r.enrollment_id DESC) AS _merge_rank FROM _edu_enrollment_rows r),\nedu_enrollment AS (SELECT r.enrollment_id, COALESCE(m_student.student_id,r.student_id) AS student_id, COALESCE(m_course.course_id,r.course_id) AS course_id, COALESCE(m_semester.semester_id,r.semester_id) AS semester_id, r.enroll_date_key, r.take_mode, r.is_withdraw, r._source_year, r.student_no, r.course_code, r.academic_year, r.semester_code FROM _edu_enrollment_ranked r LEFT JOIN edu_student m_student ON m_student.student_no=r.student_no LEFT JOIN edu_course m_course ON m_course.course_code=r.course_code LEFT JOIN edu_semester m_semester ON m_semester.semester_code=r.semester_code AND m_semester.academic_year=r.academic_year WHERE r._merge_rank=1)\nSELECT c.course_id, c.course_name, COUNT(DISTINCT t.teacher_no) AS teacher_cnt FROM edu_course c JOIN edu_teacher t ON t.teacher_no = c._teacher_no JOIN edu_enrollment e ON e.course_code = c.course_code WHERE e.semester_id = 1 GROUP BY c.course_code, c.course_id, c.course_name ORDER BY teacher_cnt DESC, c.course_id ASC LIMIT 10"
+    "query": "WITH _edu_department_rows AS (\nSELECT r.department_id, r.department_code, r.department_name, 2025 AS _source_year FROM education_2025.department r \nUNION ALL\nSELECT r.department_id, r.department_code, r.department_name, 2024 AS _source_year FROM education_2024.department r \n),\n_edu_department_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.department_code, ''), CONCAT('__unmapped:',r._source_year,':',r.department_id)) ORDER BY r._source_year DESC, r.department_id DESC) AS _merge_rank FROM _edu_department_rows r),\nedu_department AS (SELECT r.department_id, r.department_code, r.department_name, r._source_year FROM _edu_department_ranked r  WHERE r._merge_rank=1),\n_edu_semester_rows AS (\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2025 AS _source_year FROM education_2025.semester r \nUNION ALL\nSELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, 2024 AS _source_year FROM education_2024.semester r \n),\n_edu_semester_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.academic_year, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)), COALESCE(NULLIF(r.semester_code, ''), CONCAT('__unmapped:',r._source_year,':',r.semester_id)) ORDER BY r._source_year DESC, r.semester_id DESC) AS _merge_rank FROM _edu_semester_rows r),\nedu_semester AS (SELECT r.semester_id, r.academic_year, r.semester_code, r.start_date_key, r.end_date_key, r._source_year FROM _edu_semester_ranked r  WHERE r._merge_rank=1),\n_edu_teacher_rows AS (\nSELECT r.teacher_id, r.teacher_no, r.teacher_name, r.department_id, r.gender_code, r.phone, r.region_id, 2025 AS _source_year, p_department.department_code AS _department_code FROM education_2025.teacher r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id\nUNION ALL\nSELECT r.teacher_id, r.teacher_no, r.teacher_name, r.department_id, r.gender_code, r.phone, r.region_id, 2024 AS _source_year, p_department.department_code AS _department_code FROM education_2024.teacher r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id\n),\n_edu_teacher_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.teacher_no, ''), CONCAT('__unmapped:',r._source_year,':',r.teacher_id)) ORDER BY r._source_year DESC, r.teacher_id DESC) AS _merge_rank FROM _edu_teacher_rows r),\nedu_teacher AS (SELECT r.teacher_id, r.teacher_no, r.teacher_name, COALESCE(m_department.department_id,r.department_id) AS department_id, r.gender_code, r.phone, r.region_id, r._source_year, r._department_code FROM _edu_teacher_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code WHERE r._merge_rank=1),\n_edu_class_rows AS (\nSELECT r.class_id, r.class_code, r.class_name, r.department_id, r.grade_year, 2025 AS _source_year, p_department.department_code AS _department_code FROM education_2025.class r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id\nUNION ALL\nSELECT r.class_id, r.class_code, r.class_name, r.department_id, r.grade_year, 2024 AS _source_year, p_department.department_code AS _department_code FROM education_2024.class r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id\n),\n_edu_class_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.class_code, ''), CONCAT('__unmapped:',r._source_year,':',r.class_id)) ORDER BY r._source_year DESC, r.class_id DESC) AS _merge_rank FROM _edu_class_rows r),\nedu_class AS (SELECT r.class_id, r.class_code, r.class_name, COALESCE(m_department.department_id,r.department_id) AS department_id, r.grade_year, r._source_year, r._department_code FROM _edu_class_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code WHERE r._merge_rank=1),\n_edu_student_rows AS (\nSELECT r.student_id, r.student_no, r.student_name, r.gender_code, r.academic_level_code, r.department_id, r.class_id, r.home_region_id, r.student_status_code, r.admit_date_key, 2025 AS _source_year, p_department.department_code AS _department_code, p_class.class_code AS _class_code FROM education_2025.student r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2025.class p_class ON p_class.class_id=r.class_id\nUNION ALL\nSELECT r.student_id, r.student_no, r.student_name, r.gender_code, r.academic_level_code, r.department_id, r.class_id, r.home_region_id, r.student_status_code, r.admit_date_key, 2024 AS _source_year, p_department.department_code AS _department_code, p_class.class_code AS _class_code FROM education_2024.student r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2024.class p_class ON p_class.class_id=r.class_id\n),\n_edu_student_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.student_no, ''), CONCAT('__unmapped:',r._source_year,':',r.student_id)) ORDER BY r._source_year DESC, r.student_id DESC) AS _merge_rank FROM _edu_student_rows r),\nedu_student AS (SELECT r.student_id, r.student_no, r.student_name, r.gender_code, r.academic_level_code, COALESCE(m_department.department_id,r.department_id) AS department_id, COALESCE(m_class.class_id,r.class_id) AS class_id, r.home_region_id, r.student_status_code, r.admit_date_key, r._source_year, r._department_code, r._class_code FROM _edu_student_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code LEFT JOIN edu_class m_class ON m_class.class_code=r._class_code WHERE r._merge_rank=1),\n_edu_course_rows AS (\nSELECT r.course_id, r.course_code, r.course_name, r.department_id, r.teacher_id, r.credit, r.course_type, r.max_score, 2025 AS _source_year, p_department.department_code AS _department_code, p_teacher.teacher_no AS _teacher_no FROM education_2025.course r LEFT JOIN education_2025.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2025.teacher p_teacher ON p_teacher.teacher_id=r.teacher_id\nUNION ALL\nSELECT r.course_id, r.course_code, r.course_name, r.department_id, r.teacher_id, r.credit, r.course_type, r.max_score, 2024 AS _source_year, p_department.department_code AS _department_code, p_teacher.teacher_no AS _teacher_no FROM education_2024.course r LEFT JOIN education_2024.department p_department ON p_department.department_id=r.department_id LEFT JOIN education_2024.teacher p_teacher ON p_teacher.teacher_id=r.teacher_id\n),\n_edu_course_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.course_code, ''), CONCAT('__unmapped:',r._source_year,':',r.course_id)) ORDER BY r._source_year DESC, r.course_id DESC) AS _merge_rank FROM _edu_course_rows r),\nedu_course AS (SELECT r.course_id, r.course_code, r.course_name, COALESCE(m_department.department_id,r.department_id) AS department_id, COALESCE(m_teacher.teacher_id,r.teacher_id) AS teacher_id, r.credit, r.course_type, r.max_score, r._source_year, r._department_code, r._teacher_no FROM _edu_course_ranked r LEFT JOIN edu_department m_department ON m_department.department_code=r._department_code LEFT JOIN edu_teacher m_teacher ON m_teacher.teacher_no=r._teacher_no WHERE r._merge_rank=1),\n_edu_enrollment_rows AS (\nSELECT r.enrollment_id, r.student_id, r.course_id, r.semester_id, r.enroll_date_key, r.take_mode, r.is_withdraw, 2025 AS _source_year, p_student.student_no AS student_no, p_course.course_code AS course_code, p_semester.semester_code AS semester_code, p_semester.academic_year AS academic_year FROM education_2025.enrollment r LEFT JOIN education_2025.student p_student ON p_student.student_id=r.student_id LEFT JOIN education_2025.course p_course ON p_course.course_id=r.course_id LEFT JOIN education_2025.semester p_semester ON p_semester.semester_id=r.semester_id\nUNION ALL\nSELECT r.enrollment_id, r.student_id, r.course_id, r.semester_id, r.enroll_date_key, r.take_mode, r.is_withdraw, 2024 AS _source_year, p_student.student_no AS student_no, p_course.course_code AS course_code, p_semester.semester_code AS semester_code, p_semester.academic_year AS academic_year FROM education_2024.enrollment r LEFT JOIN education_2024.student p_student ON p_student.student_id=r.student_id LEFT JOIN education_2024.course p_course ON p_course.course_id=r.course_id LEFT JOIN education_2024.semester p_semester ON p_semester.semester_id=r.semester_id\n),\n_edu_enrollment_ranked AS (SELECT r.*, ROW_NUMBER() OVER (PARTITION BY COALESCE(NULLIF(r.student_no, ''), CONCAT('__unmapped:',r._source_year,':',r.enrollment_id)), COALESCE(NULLIF(r.course_code, ''), CONCAT('__unmapped:',r._source_year,':',r.enrollment_id)), COALESCE(NULLIF(r.academic_year, ''), CONCAT('__unmapped:',r._source_year,':',r.enrollment_id)), COALESCE(NULLIF(r.semester_code, ''), CONCAT('__unmapped:',r._source_year,':',r.enrollment_id)) ORDER BY r._source_year DESC, r.enrollment_id DESC) AS _merge_rank FROM _edu_enrollment_rows r),\nedu_enrollment AS (SELECT r.enrollment_id, COALESCE(m_student.student_id,r.student_id) AS student_id, COALESCE(m_course.course_id,r.course_id) AS course_id, COALESCE(m_semester.semester_id,r.semester_id) AS semester_id, r.enroll_date_key, r.take_mode, r.is_withdraw, r._source_year, r.student_no, r.course_code, r.academic_year, r.semester_code FROM _edu_enrollment_ranked r LEFT JOIN edu_student m_student ON m_student.student_no=r.student_no LEFT JOIN edu_course m_course ON m_course.course_code=r.course_code LEFT JOIN edu_semester m_semester ON m_semester.semester_code=r.semester_code AND m_semester.academic_year=r.academic_year WHERE r._merge_rank=1)\nSELECT c.course_id, c.course_name, COUNT(DISTINCT t.teacher_no) AS teacher_cnt FROM edu_course c JOIN edu_enrollment e ON e.course_code = c.course_code JOIN edu_teacher t ON t.teacher_no = c._teacher_no WHERE e.semester_id = 1 GROUP BY c.course_id, c.course_code, c.course_name ORDER BY teacher_cnt DESC, c.course_id ASC LIMIT 10"
   },
   {
     "question_id": 1825,
     "db": "MYSQL",
-    "query": "WITH c2024 AS (SELECT department_id, COUNT(*) AS course_cnt_2024 FROM education_2024.course GROUP BY department_id), c2025 AS (SELECT department_id, COUNT(*) AS course_cnt_2025 FROM education_2025.course GROUP BY department_id) SELECT COALESCE(c2024.department_id, c2025.department_id) AS department_id, COALESCE(c2024.course_cnt_2024, 0) AS course_cnt_2024, COALESCE(c2025.course_cnt_2025, 0) AS course_cnt_2025 FROM c2024 LEFT JOIN c2025 ON c2025.department_id = c2024.department_id UNION SELECT COALESCE(c2024.department_id, c2025.department_id) AS department_id, COALESCE(c2024.course_cnt_2024, 0) AS course_cnt_2024, COALESCE(c2025.course_cnt_2025, 0) AS course_cnt_2025 FROM c2024 RIGHT JOIN c2025 ON c2025.department_id = c2024.department_id WHERE c2024.department_id IS NULL ORDER BY (course_cnt_2024 + course_cnt_2025) DESC, department_id ASC LIMIT 15;"
+    "query": "WITH c2024 AS (SELECT department_id, COUNT(*) AS course_cnt_2024 FROM education_2024.course GROUP BY department_id), c2025 AS (SELECT department_id, COUNT(*) AS course_cnt_2025 FROM education_2025.course GROUP BY department_id) SELECT COALESCE(c2024.department_id, c2025.department_id) AS department_id, COALESCE(c2024.course_cnt_2024, 0) AS course_cnt_2024, COALESCE(c2025.course_cnt_2025, 0) AS course_cnt_2025 FROM c2024 LEFT JOIN c2025 ON c2024.department_id = c2025.department_id UNION SELECT COALESCE(c2024.department_id, c2025.department_id) AS department_id, COALESCE(c2024.course_cnt_2024, 0) AS course_cnt_2024, COALESCE(c2025.course_cnt_2025, 0) AS course_cnt_2025 FROM c2024 RIGHT JOIN c2025 ON c2024.department_id = c2025.department_id WHERE c2024.department_id IS NULL ORDER BY course_cnt_2024 + course_cnt_2025 DESC, department_id ASC LIMIT 15"
   },
   {
     "question_id": 2013,
     "db": "MYSQL",
-    "query": "SELECT '2024' AS year, ROUND(SUM(CASE WHEN phone IS NOT NULL AND phone<>'' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0)*100,2) AS phone_non_empty_rate_pct FROM education_2024.teacher UNION ALL SELECT '2025' AS year, ROUND(SUM(CASE WHEN phone IS NOT NULL AND phone<>'' THEN 1 ELSE 0 END)/NULLIF(COUNT(*),0)*100,2) AS phone_non_empty_rate_pct FROM education_2025.teacher;"
+    "query": "SELECT '2024' AS year, ROUND(SUM(CASE WHEN phone IS NOT NULL AND phone <> '' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS phone_pct FROM education_2024.teacher UNION ALL SELECT '2025' AS year, ROUND(SUM(CASE WHEN phone IS NOT NULL AND phone <> '' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS phone_pct FROM education_2025.teacher"
   },
   {
     "question_id": 2017,
     "db": "MYSQL",
-    "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.student WHERE student_status_code='ACTIVE' AND gender_code='F'), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.student WHERE student_status_code='ACTIVE' AND gender_code='F') SELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+    "query": "SELECT (SELECT COUNT(*) FROM education_2025.student WHERE gender_code='F' AND student_status_code='ACTIVE') - (SELECT COUNT(*) FROM education_2024.student WHERE gender_code='F' AND student_status_code='ACTIVE') AS diff, (SELECT COUNT(*) FROM education_2024.student WHERE gender_code='F' AND student_status_code='ACTIVE') AS cnt_2024, (SELECT COUNT(*) FROM education_2025.student WHERE gender_code='F' AND student_status_code='ACTIVE') AS cnt_2025"
   },
   {
     "question_id": 2032,
     "db": "MYSQL",
-    "query": "SELECT '2024' AS year, COUNT(*) AS start_date_key_empty_or_zero_cnt FROM education_2024.semester WHERE start_date_key IS NULL OR start_date_key=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS start_date_key_empty_or_zero_cnt FROM education_2025.semester WHERE start_date_key IS NULL OR start_date_key=0;"
+    "query": "SELECT '2024' AS year, COUNT(*) AS cnt FROM education_2024.semester WHERE start_date_key = 0 OR start_date_key IS NULL OR start_date_key = '' UNION ALL SELECT '2025' AS year, COUNT(*) AS cnt FROM education_2025.semester WHERE start_date_key = 0 OR start_date_key IS NULL OR start_date_key = ''"
   },
   {
     "question_id": 2040,
     "db": "MYSQL",
-    "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.student WHERE student_status_code='ACTIVE'), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.student WHERE student_status_code='ACTIVE') SELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+    "query": "SELECT (SELECT COUNT(*) FROM education_2025.student WHERE student_status_code = 'ACTIVE') - (SELECT COUNT(*) FROM education_2024.student WHERE student_status_code = 'ACTIVE') AS diff, (SELECT COUNT(*) FROM education_2024.student WHERE student_status_code = 'ACTIVE') AS cnt_2024, (SELECT COUNT(*) FROM education_2025.student WHERE student_status_code = 'ACTIVE') AS cnt_2025"
   },
   {
     "question_id": 2051,
@@ -502,12 +502,12 @@
   {
     "question_id": 2075,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"10km\",\"location\":{\"lat\":30.66,\"lon\":104.063}}},\"_source\":[\"name\",\"emergency_24h\"]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"10km\",\"location\":{\"lat\":30.66,\"lon\":104.063}}}]}},\"_source\":[\"name\",\"emergency_24h\"]}"
   },
   {
     "question_id": 2094,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":{\"term\":{\"has_icu\":true}},\"filter\":{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":30.247,\"lon\":120.148}}}}},\"aggs\":{\"avg_doctors\":{\"avg\":{\"field\":\"doctor_count\"}}}}"
+    "query": "{\"size\":0,\"aggs\":{\"avg_doctors\":{\"avg\":{\"field\":\"doctor_count\"}}},\"query\":{\"bool\":{\"must\":[{\"term\":{\"has_icu\":true}}],\"filter\":[{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":30.247,\"lon\":120.148}}}]}}}"
   },
   {
     "question_id": 2102,
@@ -522,22 +522,22 @@
   {
     "question_id": 2116,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":30.543,\"lon\":114.297}}},\"must\":{\"range\":{\"doctor_count\":{\"gt\":500}}}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":30.543,\"lon\":114.297}}},{\"range\":{\"doctor_count\":{\"gt\":500}}}]}},\"size\":0,\"track_total_hits\":true}"
   },
   {
     "question_id": 2126,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"must\":{\"range\":{\"doctor_count\":{\"gt\":1000}}},\"filter\":{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":30.543,\"lon\":114.297}}}}},\"_source\":[\"name\"]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":30.543,\"lon\":114.297}}},{\"range\":{\"doctor_count\":{\"gt\":1000}}}]}},\"_source\":[\"name\"],\"size\":100}"
   },
   {
     "question_id": 2128,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"4km\",\"location\":{\"lat\":31.2235,\"lon\":121.4447}}},{\"range\":{\"annual_outpatient\":{\"gt\":10000}}}]}},\"_source\":[\"name\",\"address\",\"annual_outpatient\",\"location\"]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"4km\",\"location\":{\"lat\":31.2235,\"lon\":121.4447}}},{\"range\":{\"annual_outpatient\":{\"gt\":3650000}}}]}},\"_source\":[\"name\",\"address\",\"annual_outpatient\"],\"size\":100}"
   },
   {
     "question_id": 2140,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"must\":{\"term\":{\"emergency_24h\":true}},\"filter\":{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":31.2389,\"lon\":121.4885}}},\"must_not\":{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":31.2389,\"lon\":121.4885}}}}}}"
+    "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"emergency_24h\":true}},{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":31.2389,\"lon\":121.4885}}}],\"must_not\":[{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":31.2389,\"lon\":121.4885}}}]}},\"_source\":[\"name\",\"address\",\"location\",\"emergency_24h\"],\"size\":100}"
   },
   {
     "question_id": 2141,
@@ -547,17 +547,17 @@
   {
     "question_id": 2143,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"must\":{\"term\":{\"has_icu\":true}},\"filter\":{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}},\"must_not\":{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"has_icu\":true}},{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}},{\"bool\":{\"must_not\":{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}}}}]}},\"_source\":[\"name\",\"city\",\"district\",\"address\",\"location\",\"has_icu\"],\"size\":100}"
   },
   {
     "question_id": 2148,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"must\":{\"term\":{\"has_icu\":true}},\"filter\":{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":31.23,\"lon\":121.45}}}}},\"_source\":[\"name\"]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":31.24,\"lon\":121.44},\"bottom_right\":{\"lat\":31.22,\"lon\":121.46}}}},{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":31.23,\"lon\":121.45}}},{\"bool\":{\"must_not\":{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":31.23,\"lon\":121.45}}}}},{\"term\":{\"has_icu\":true}}]}},\"_source\":[\"name\"]}"
   },
   {
     "question_id": 2151,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"filter\":{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}},\"must_not\":{\"geo_distance\":{\"distance\":\"3km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}}}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}},\"size\":0}"
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}},\"must_not\":{\"geo_distance\":{\"distance\":\"3km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}}}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
   },
   {
     "question_id": 2178,
@@ -567,92 +567,92 @@
   {
     "question_id": 2182,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"must\":{\"term\":{\"is_teaching_hospital\":true}},\"filter\":{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}},\"must_not\":{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}}}},\"_source\":[\"name\",\"bed_count\"]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"5000m\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}},{\"bool\":{\"must_not\":{\"geo_distance\":{\"distance\":\"2000m\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}}}},{\"term\":{\"is_teaching_hospital\":true}}]}},\"_source\":[\"name\",\"bed_count\"],\"size\":1000}"
   },
   {
     "question_id": 2196,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.55,\"lon\":114.28},\"bottom_right\":{\"lat\":30.53,\"lon\":114.3}}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.55,\"lon\":114.28},\"bottom_right\":{\"lat\":30.53,\"lon\":114.3}}}}]}},\"_source\":[\"name\",\"city\",\"district\",\"address\",\"location\",\"level\"]}"
   },
   {
     "question_id": 2198,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":31.24,\"lon\":121.44},\"bottom_right\":{\"lat\":31.22,\"lon\":121.46}}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":31.24,\"lon\":121.44},\"bottom_right\":{\"lat\":31.22,\"lon\":121.46}}}}]}},\"_source\":[\"name\",\"city\",\"district\",\"address\",\"location\",\"level\"]}"
   },
   {
     "question_id": 2204,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.26,\"lon\":120.14},\"bottom_right\":{\"lat\":30.24,\"lon\":120.17}}}},\"aggs\":{\"total_nurses\":{\"sum\":{\"field\":\"nurse_count\"}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.26,\"lon\":120.14},\"bottom_right\":{\"lat\":30.24,\"lon\":120.17}}}}]}},\"aggs\":{\"total_nurses\":{\"sum\":{\"field\":\"nurse_count\"}}},\"size\":0}"
   },
   {
     "question_id": 2205,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.67,\"lon\":104.05},\"bottom_right\":{\"lat\":30.65,\"lon\":104.07}}}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.67,\"lon\":104.05},\"bottom_right\":{\"lat\":30.65,\"lon\":104.07}}}}]}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}},\"size\":0}"
   },
   {
     "question_id": 2207,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":34.27,\"lon\":108.95},\"bottom_right\":{\"lat\":34.25,\"lon\":108.97}}}},\"aggs\":{\"total_outpatient\":{\"sum\":{\"field\":\"annual_outpatient\"}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":34.27,\"lon\":108.95},\"bottom_right\":{\"lat\":34.25,\"lon\":108.97}}}}]}},\"aggs\":{\"total_outpatient\":{\"sum\":{\"field\":\"annual_outpatient\"}}},\"size\":0}"
   },
   {
     "question_id": 2231,
     "db": "Elasticsearch",
-    "query": "{\"_source\":[\"name\",\"bed_count\"],\"query\":{\"bool\":{\"must\":{\"term\":{\"is_teaching_hospital\":true}},\"filter\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":31.23,\"lon\":121.44},\"bottom_right\":{\"lat\":31.21,\"lon\":121.46}}}}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"is_teaching_hospital\":true}},{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":31.23,\"lon\":121.44},\"bottom_right\":{\"lat\":31.21,\"lon\":121.46}}}}]}},\"_source\":[\"name\",\"bed_count\"]}"
   },
   {
     "question_id": 2255,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":30.67,\"lon\":104.05},{\"lat\":30.66,\"lon\":104.07},{\"lat\":30.65,\"lon\":104.06},{\"lat\":30.66,\"lon\":104.04}]}}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":30.67,\"lon\":104.05},{\"lat\":30.66,\"lon\":104.07},{\"lat\":30.65,\"lon\":104.06},{\"lat\":30.66,\"lon\":104.04}]}}}]}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}},\"size\":0}"
   },
   {
     "question_id": 2265,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":30.67,\"lon\":104.05},{\"lat\":30.66,\"lon\":104.07},{\"lat\":30.65,\"lon\":104.06},{\"lat\":30.66,\"lon\":104.04}]}}},\"aggs\":{\"avg_nurses\":{\"avg\":{\"field\":\"nurse_count\"}}}}"
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":[{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":30.67,\"lon\":104.05},{\"lat\":30.66,\"lon\":104.07},{\"lat\":30.65,\"lon\":104.06},{\"lat\":30.66,\"lon\":104.04}]}}}]}},\"aggs\":{\"avg_nurse\":{\"avg\":{\"field\":\"nurse_count\"}}}}"
   },
   {
     "question_id": 2267,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":34.27,\"lon\":108.95},{\"lat\":34.26,\"lon\":108.97},{\"lat\":34.25,\"lon\":108.96},{\"lat\":34.26,\"lon\":108.94}]}}},\"aggs\":{\"avg_doctor_count\":{\"avg\":{\"field\":\"doctor_count\"}}}}"
+    "query": "{\"size\":0,\"query\":{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":34.27,\"lon\":108.95},{\"lat\":34.26,\"lon\":108.97},{\"lat\":34.25,\"lon\":108.96},{\"lat\":34.26,\"lon\":108.94}]}}},\"aggs\":{\"avg_doctor\":{\"avg\":{\"field\":\"doctor_count\"}}}}"
   },
   {
     "question_id": 2272,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":39.92,\"lon\":116.39},{\"lat\":39.91,\"lon\":116.41},{\"lat\":39.9,\"lon\":116.4},{\"lat\":39.91,\"lon\":116.38}]}}},\"aggs\":{\"ambulance_stats\":{\"stats\":{\"field\":\"ambulance_count\"}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":39.92,\"lon\":116.39},{\"lat\":39.91,\"lon\":116.41},{\"lat\":39.9,\"lon\":116.4},{\"lat\":39.91,\"lon\":116.38}]}}}]}},\"aggs\":{\"ambulance_stats\":{\"stats\":{\"field\":\"ambulance_count\"}}},\"size\":0}"
   },
   {
     "question_id": 2274,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":30.26,\"lon\":120.14},{\"lat\":30.25,\"lon\":120.16},{\"lat\":30.24,\"lon\":120.15},{\"lat\":30.25,\"lon\":120.13}]}}},\"aggs\":{\"total_nurses\":{\"sum\":{\"field\":\"nurse_count\"}}}}"
+    "query": "{\"size\":0,\"query\":{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":30.26,\"lon\":120.14},{\"lat\":30.25,\"lon\":120.16},{\"lat\":30.24,\"lon\":120.15},{\"lat\":30.25,\"lon\":120.13}]}}},\"aggs\":{\"nurse_stats\":{\"stats\":{\"field\":\"nurse_count\"}}}}"
   },
   {
     "question_id": 2286,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"must\":[{\"range\":{\"doctor_count\":{\"gt\":700}}}],\"filter\":[{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":30.55,\"lon\":114.28},{\"lat\":30.54,\"lon\":114.3},{\"lat\":30.53,\"lon\":114.29},{\"lat\":30.54,\"lon\":114.27}]}}}]}},\"_source\":[\"name\"]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":30.55,\"lon\":114.28},{\"lat\":30.54,\"lon\":114.3},{\"lat\":30.53,\"lon\":114.29},{\"lat\":30.54,\"lon\":114.27}]}}},{\"range\":{\"doctor_count\":{\"gt\":700}}}]}},\"_source\":[\"name\"],\"size\":1000}"
   },
   {
     "question_id": 2289,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":39.95,\"lon\":116.35},{\"lat\":39.93,\"lon\":116.37},{\"lat\":39.91,\"lon\":116.36},{\"lat\":39.92,\"lon\":116.34}]}}},{\"term\":{\"has_icu\":true}},{\"range\":{\"bed_count\":{\"gt\":500}}}]}},\"_source\":[\"name\"]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_polygon\":{\"location\":{\"points\":[{\"lat\":39.95,\"lon\":116.35},{\"lat\":39.93,\"lon\":116.37},{\"lat\":39.91,\"lon\":116.36},{\"lat\":39.92,\"lon\":116.34}]}}},{\"term\":{\"has_icu\":true}},{\"range\":{\"bed_count\":{\"gt\":500}}}]}},\"_source\":[\"name\"],\"size\":1000}"
   },
   {
     "question_id": 2304,
     "db": "Elasticsearch",
-    "query": "{\"_source\":[\"name\"],\"query\":{\"geo_distance\":{\"distance\":\"4km\",\"location\":{\"lat\":30.247,\"lon\":120.148}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":30.247,\"lon\":120.148},\"order\":\"asc\",\"unit\":\"km\"}}],\"script_fields\":{\"distance_km\":{\"script\":{\"source\":\"doc['location'].arcDistance(params.lat, params.lon) / 1000\",\"params\":{\"lat\":30.247,\"lon\":120.148}}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":{\"geo_distance\":{\"distance\":\"4km\",\"location\":{\"lat\":30.247,\"lon\":120.148}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":30.247,\"lon\":120.148},\"order\":\"asc\",\"unit\":\"m\"}}],\"_source\":[\"name\",\"address\",\"location\"],\"size\":100}"
   },
   {
     "question_id": 2309,
     "db": "Elasticsearch",
-    "query": "{\"_source\":[\"name\",\"level\",\"address\"],\"query\":{\"geo_distance\":{\"distance\":\"1km\",\"location\":{\"lat\":39.9163,\"lon\":116.3972}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9163,\"lon\":116.3972},\"order\":\"asc\",\"unit\":\"km\"}}],\"script_fields\":{\"distance_km\":{\"script\":{\"source\":\"doc['location'].arcDistance(params.lat, params.lon) / 1000\",\"params\":{\"lat\":39.9163,\"lon\":116.3972}}}}}"
+    "query": "{\"_source\":[\"name\",\"level\"],\"query\":{\"geo_distance\":{\"distance\":\"1km\",\"location\":{\"lat\":39.9163,\"lon\":116.3972}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9163,\"lon\":116.3972},\"order\":\"asc\",\"unit\":\"km\"}}],\"script_fields\":{\"distance_km\":{\"script\":{\"source\":\"doc['location'].arcDistance(params.lat, params.lon) / 1000\",\"params\":{\"lat\":39.9163,\"lon\":116.3972}}}}}"
   },
   {
     "question_id": 2322,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":22.549,\"lon\":114.0562},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":22.549,\"lon\":114.0562},\"order\":\"asc\",\"unit\":\"m\"}}]}"
   },
   {
     "question_id": 2325,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":30.66,\"lon\":104.063}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":30.66,\"lon\":104.063},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":30.66,\"lon\":104.063}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":30.66,\"lon\":104.063},\"order\":\"asc\",\"unit\":\"km\"}}]}"
   },
   {
     "question_id": 2330,
@@ -667,47 +667,47 @@
   {
     "question_id": 2345,
     "db": "Elasticsearch",
-    "query": "{\"_source\":[\"name\",\"department_count\"],\"size\":4,\"query\":{\"match_all\":{}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":22.5565,\"lon\":114.1158},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    "query": "{\"size\":4,\"_source\":[\"name\",\"department_count\"],\"query\":{\"bool\":{\"filter\":{\"geo_distance\":{\"distance\":\"100km\",\"location\":{\"lat\":22.5565,\"lon\":114.1158}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":22.5565,\"lon\":114.1158},\"order\":\"asc\",\"unit\":\"m\"}}]}"
   },
   {
     "question_id": 2353,
     "db": "Elasticsearch",
-    "query": "{\"size\":4,\"query\":{\"bool\":{\"filter\":{\"term\":{\"is_teaching_hospital\":true}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":30.646,\"lon\":104.061},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"is_teaching_hospital\":true}}]}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":30.646,\"lon\":104.061},\"order\":\"asc\",\"unit\":\"m\"}}],\"size\":4,\"_source\":[\"name\",\"address\",\"city\",\"district\",\"level\",\"is_teaching_hospital\",\"location\"]}"
   },
   {
     "question_id": 2357,
     "db": "Elasticsearch",
-    "query": "{\"size\":3,\"_source\":[\"name\"],\"query\":{\"bool\":{\"filter\":{\"term\":{\"emergency_24h\":true}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"emergency_24h\":true}},{\"geo_distance\":{\"distance\":\"50km\",\"location\":{\"lat\":31.2235,\"lon\":121.4447}}}]}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"m\"}}],\"size\":3,\"_source\":[\"name\",\"address\",\"district\",\"city\",\"level\",\"emergency_24h\",\"location\"]}"
   },
   {
     "question_id": 2360,
     "db": "Elasticsearch",
-    "query": "{\"size\":5,\"_source\":[\"name\",\"bed_count\",\"rating\"],\"query\":{\"bool\":{\"filter\":{\"range\":{\"bed_count\":{\"gt\":1000}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2125,\"lon\":121.4682},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"bed_count\":{\"gt\":1000}}},{\"geo_distance\":{\"distance\":\"50km\",\"location\":{\"lat\":31.2125,\"lon\":121.4682}}}]}},\"_source\":[\"name\",\"bed_count\",\"rating\"],\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2125,\"lon\":121.4682},\"order\":\"asc\",\"unit\":\"m\"}}],\"size\":5}"
   },
   {
     "question_id": 2368,
     "db": "Elasticsearch",
-    "query": "{\"_source\":[\"name\",\"rating\"],\"size\":4,\"query\":{\"bool\":{\"filter\":{\"range\":{\"bed_count\":{\"gt\":800}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"bed_count\":{\"gt\":800}}},{\"geo_distance\":{\"distance\":\"50000m\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}}]}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"m\"}}],\"_source\":[\"name\",\"rating\"],\"size\":4}"
   },
   {
     "question_id": 2369,
     "db": "Elasticsearch",
-    "query": "{\"_source\":[\"name\",\"level\"],\"size\":5,\"query\":{\"bool\":{\"filter\":{\"term\":{\"level\":\"三级甲等\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":23.109,\"lon\":113.3245},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    "query": "{\"_source\":[\"name\",\"level\"],\"size\":5,\"query\":{\"bool\":{\"filter\":{\"term\":{\"level\":\"三甲\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":23.109,\"lon\":113.3245},\"order\":\"asc\",\"unit\":\"km\"}}]}"
   },
   {
     "question_id": 2375,
     "db": "Elasticsearch",
-    "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"level\":\"三甲\"}},{\"term\":{\"emergency_24h\":true}}],\"filter\":{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":30.66,\"lon\":104.063}}}}}}"
+    "query": "{\"_source\":[\"name\",\"level\",\"emergency_24h\",\"address\"],\"query\":{\"bool\":{\"must\":[{\"term\":{\"level\":\"三甲\"}},{\"term\":{\"emergency_24h\":true}}],\"filter\":{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":30.66,\"lon\":104.063}}}}}}"
   },
   {
     "question_id": 2391,
     "db": "Elasticsearch",
-    "query": "{\"_source\":[\"name\",\"rating\",\"ambulance_count\"],\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}},{\"term\":{\"has_icu\":true}},{\"range\":{\"ambulance_count\":{\"gte\":20}}},{\"range\":{\"rating\":{\"gte\":4.8}}}]}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}},{\"term\":{\"level\":\"三甲\"}},{\"term\":{\"has_icu\":true}},{\"range\":{\"ambulance_count\":{\"gte\":20}}},{\"range\":{\"rating\":{\"gte\":4.8}}}]}},\"_source\":[\"name\",\"rating\",\"ambulance_count\"]}"
   },
   {
     "question_id": 2399,
     "db": "Elasticsearch",
-    "query": "{\"size\":20,\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":31.2304,\"lon\":121.4737}}},{\"range\":{\"rating\":{\"gte\":4.6}}}],\"should\":[{\"term\":{\"level\":\"三级甲等\"}},{\"range\":{\"bed_count\":{\"gt\":1500}}}],\"minimum_should_match\":1}},\"sort\":[{\"annual_outpatient\":{\"order\":\"desc\"}}],\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+    "query": "{\"size\":50,\"_source\":[\"name\",\"level\",\"bed_count\",\"rating\",\"annual_outpatient\",\"location\"],\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":31.2304,\"lon\":121.4737}}},{\"range\":{\"rating\":{\"gte\":4.6}}}],\"should\":[{\"term\":{\"level\":\"三级甲等\"}},{\"range\":{\"bed_count\":{\"gt\":1500}}}],\"minimum_should_match\":1}},\"sort\":[{\"annual_outpatient\":{\"order\":\"desc\"}}],\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
   },
   {
     "question_id": 2405,
@@ -727,47 +727,47 @@
   {
     "question_id": 2439,
     "db": "Elasticsearch",
-    "query": "{\"_source\":[\"name\",\"founded_year\"],\"query\":{\"term\":{\"has_icu\":false}}}"
+    "query": "{\"query\":{\"bool\":{\"must_not\":[{\"term\":{\"has_icu\":true}}]}},\"_source\":[\"name\",\"founded_year\"]}"
   },
   {
     "question_id": 2451,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}}]}},\"aggs\":{\"avg_doctors\":{\"avg\":{\"field\":\"doctor_count\"}}}}"
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}}]}},\"aggs\":{\"avg_doctor_count\":{\"avg\":{\"field\":\"doctor_count\"}}}}"
   },
   {
     "question_id": 2452,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}}]}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}}]}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}},\"size\":0}"
   },
   {
     "question_id": 2456,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"term\":{\"has_icu\":true}},{\"range\":{\"ambulance_count\":{\"gte\":20}}},{\"range\":{\"rating\":{\"gte\":4.8}}}]}},\"aggs\":{\"total_outpatient\":{\"sum\":{\"field\":\"annual_outpatient\"}}}}"
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":[{\"term\":{\"level\":\"三甲\"}},{\"term\":{\"has_icu\":true}},{\"range\":{\"ambulance_count\":{\"gte\":20}}},{\"range\":{\"rating\":{\"gte\":4.8}}}]}},\"aggs\":{\"total_annual_outpatient\":{\"sum\":{\"field\":\"annual_outpatient\"}}}}"
   },
   {
     "question_id": 2475,
     "db": "Elasticsearch",
-    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"range\":{\"nurse_count\":{\"gte\":2000}}},{\"script\":{\"script\":{\"source\":\"doc['bed_count'].value / doc['nurse_count'].value <= 1.2\"}}}]}},\"aggs\":{\"hospital_count\":{\"value_count\":{\"field\":\"name.keyword\"}}}}"
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"range\":{\"nurse_count\":{\"gte\":2000}}},{\"script\":{\"script\":{\"source\":\"doc['bed_count'].value / doc['nurse_count'].value <= 1.2\"}}}]}},\"size\":0,\"track_total_hits\":true}"
   },
   {
     "question_id": 2490,
     "db": "POSTGRESQL",
-    "query": "SELECT * FROM public.vessel_ais_data WHERE mmsi = 351000003"
+    "query": "SELECT id, mmsi, \"timestamp\", longitude, latitude, sog, cog, heading, nav_status, rot, destination, draught, vessel_type, imo, call_sign, eta, last_update FROM public.vessel_ais_data WHERE mmsi = 351000003"
   },
   {
     "question_id": 2493,
     "db": "POSTGRESQL",
-    "query": "SELECT * FROM public.vessel_ais_data WHERE timestamp >= '2024-06-01 08:00:00' AND timestamp <= '2024-06-01 12:00:00' AND nav_status IN (1, 3)"
+    "query": "SELECT * FROM public.vessel_ais_data WHERE \"timestamp\" >= '2024-06-01 08:00:00' AND \"timestamp\" <= '2024-06-01 12:00:00' AND nav_status IN (1, 3)"
   },
   {
     "question_id": 2509,
     "db": "POSTGRESQL",
-    "query": "SELECT mmsi, timestamp FROM public.vessel_ais_data WHERE timestamp >= '2026-05-08 00:00:00' AND timestamp < '2026-05-09 00:00:00'"
+    "query": "SELECT mmsi, \"timestamp\" FROM public.vessel_ais_data WHERE \"timestamp\" >= '2026-05-08 00:00:00' AND \"timestamp\" < '2026-05-09 00:00:00'"
   },
   {
     "question_id": 2549,
     "db": "POSTGRESQL",
-    "query": "SELECT mmsi, imo, MAX(last_update) AS latest_update FROM public.vessel_ais_data WHERE imo IS NOT NULL GROUP BY mmsi, imo ORDER BY imo DESC, latest_update ASC"
+    "query": "SELECT mmsi, imo, MAX(last_update) AS latest_update FROM vessel_ais_data WHERE imo IS NOT NULL GROUP BY mmsi, imo ORDER BY imo DESC, latest_update ASC"
   },
   {
     "question_id": 2560,
@@ -777,12 +777,12 @@
   {
     "question_id": 2570,
     "db": "POSTGRESQL",
-    "query": "SELECT SUM(draught) AS total_draught FROM public.vessel_ais_data WHERE timestamp >= '2024-06-01 00:00:00' AND timestamp < '2024-06-02 00:00:00' AND vessel_type = 70"
+    "query": "SELECT SUM(draught) FROM public.vessel_ais_data WHERE timestamp::date = '2024-06-01' AND vessel_type = 70"
   },
   {
     "question_id": 2577,
     "db": "POSTGRESQL",
-    "query": "SELECT COUNT(DISTINCT mmsi) AS unique_vessel_count FROM public.vessel_ais_data"
+    "query": "SELECT COUNT(DISTINCT mmsi) AS unique_mmsi_count FROM public.vessel_ais_data"
   },
   {
     "question_id": 2598,
@@ -802,17 +802,17 @@
   {
     "question_id": 2618,
     "db": "POSTGRESQL",
-    "query": "SELECT * FROM public.vessel_ais_data WHERE nav_status = (SELECT nav_status FROM public.vessel_ais_data WHERE mmsi = 412000123 ORDER BY timestamp DESC LIMIT 1)"
+    "query": "SELECT * FROM public.vessel_ais_data WHERE nav_status = (SELECT nav_status FROM public.vessel_ais_data WHERE mmsi = 412000123 ORDER BY \"timestamp\" DESC LIMIT 1)"
   },
   {
     "question_id": 2621,
     "db": "POSTGRESQL",
-    "query": "SELECT mmsi, COUNT(*) AS cnt FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE GROUP BY mmsi HAVING COUNT(*) < (SELECT COUNT(*) FROM public.vessel_ais_data WHERE mmsi = 351000023 AND timestamp::date = CURRENT_DATE)"
+    "query": "SELECT mmsi, COUNT(*) AS record_count FROM public.vessel_ais_data WHERE \"timestamp\" >= CURRENT_DATE AND \"timestamp\" < CURRENT_DATE + INTERVAL '1 day' GROUP BY mmsi HAVING COUNT(*) < (SELECT COUNT(*) FROM public.vessel_ais_data WHERE mmsi = 351000023 AND \"timestamp\" >= CURRENT_DATE AND \"timestamp\" < CURRENT_DATE + INTERVAL '1 day')"
   },
   {
     "question_id": 2646,
     "db": "POSTGRESQL",
-    "query": "WITH target AS (SELECT geom FROM public.vessel_ais_data WHERE imo = 8765432 ORDER BY timestamp DESC LIMIT 1), latest AS (SELECT DISTINCT ON (mmsi) * FROM public.vessel_ais_data ORDER BY mmsi, timestamp DESC) SELECT l.* FROM latest l CROSS JOIN target t WHERE l.imo IS DISTINCT FROM 8765432 AND l.vessel_type = 80 AND ST_DWithin(l.geom::geography, t.geom::geography, 15000)"
+    "query": "WITH target AS (SELECT geom FROM vessel_ais_data WHERE imo=8765432 ORDER BY timestamp DESC LIMIT 1), latest AS (SELECT DISTINCT ON (mmsi) * FROM vessel_ais_data ORDER BY mmsi, timestamp DESC) SELECT v.* FROM latest v CROSS JOIN target t WHERE v.imo IS DISTINCT FROM 8765432 AND v.vessel_type=80 AND ST_DWithin(v.geom::geography, t.geom::geography, 15000)"
   },
   {
     "question_id": 2651,
@@ -827,7 +827,7 @@
   {
     "question_id": 2659,
     "db": "POSTGRESQL",
-    "query": "SELECT AVG(sog) AS avg_speed, MAX(sog) AS max_speed FROM vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(113.5, 22.2), 4326)::geography, 8000)"
+    "query": "SELECT AVG(sog) AS avg_speed, MAX(sog) AS max_speed FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(113.5, 22.2), 4326)::geography, 8000)"
   },
   {
     "question_id": 2672,
@@ -837,12 +837,12 @@
   {
     "question_id": 2693,
     "db": "POSTGRESQL",
-    "query": "SELECT * FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND longitude BETWEEN 113.2 AND 113.4 AND latitude BETWEEN 22.0 AND 22.2 AND (heading IS NULL OR heading = 0) LIMIT 10"
+    "query": "SELECT * FROM public.vessel_ais_data WHERE \"timestamp\" >= NOW() - INTERVAL '24 hours' AND longitude BETWEEN 113.2 AND 113.4 AND latitude BETWEEN 22.0 AND 22.2 AND (heading IS NULL OR heading = 0) LIMIT 10"
   },
   {
     "question_id": 2695,
     "db": "POSTGRESQL",
-    "query": "SELECT vessel_type, COUNT(DISTINCT mmsi) AS cnt FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE - 1 AND nav_status = 1 AND geom && ST_MakeEnvelope(113.5, 22.0, 114.0, 22.5, 4326) GROUP BY vessel_type"
+    "query": "SELECT vessel_type, COUNT(DISTINCT mmsi) AS cnt FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE - 1 AND nav_status = 1 AND ST_Within(geom, ST_MakeEnvelope(113.5, 22.0, 114.0, 22.5, 4326)) GROUP BY vessel_type"
   },
   {
     "question_id": 2706,
@@ -862,17 +862,17 @@
   {
     "question_id": 2743,
     "db": "POSTGRESQL",
-    "query": "SELECT date_trunc('hour', timestamp) AS hour, AVG(ST_Distance(geom::geography, ST_SetSRID(ST_MakePoint(114.0, 22.5), 4326)::geography)) AS avg_distance FROM public.vessel_ais_data WHERE mmsi = 412000123 AND timestamp >= (CURRENT_DATE - 1) + INTERVAL '15 hours' AND timestamp < (CURRENT_DATE - 1) + INTERVAL '17 hours' GROUP BY date_trunc('hour', timestamp) ORDER BY hour"
+    "query": "SELECT date_trunc('hour', timestamp) AS hour, AVG(ST_Distance(geom::geography, ST_SetSRID(ST_MakePoint(114.0, 22.5), 4326)::geography)) AS avg_distance FROM vessel_ais_data WHERE mmsi = 412000123 AND timestamp >= (CURRENT_DATE - 1) + TIME '15:00:00' AND timestamp < (CURRENT_DATE - 1) + TIME '17:00:00' GROUP BY date_trunc('hour', timestamp) ORDER BY hour"
   },
   {
     "question_id": 2759,
     "db": "POSTGRESQL",
-    "query": "WITH target AS (SELECT geom FROM vessel_ais_data WHERE mmsi = 351000003 AND timestamp::date = '2024-06-01' ORDER BY timestamp DESC LIMIT 1) SELECT v.mmsi, MIN(ST_Distance(v.geom::geography, t.geom::geography)) AS distance FROM vessel_ais_data v, target t WHERE v.mmsi != 351000003 AND v.timestamp::date = '2024-06-01' GROUP BY v.mmsi ORDER BY distance ASC LIMIT 1"
+    "query": "WITH target AS (SELECT geom FROM vessel_ais_data WHERE mmsi = 351000003 AND timestamp::date = DATE '2024-06-01' ORDER BY timestamp DESC LIMIT 1), latest AS (SELECT DISTINCT ON (mmsi) mmsi, geom FROM vessel_ais_data WHERE timestamp::date = DATE '2024-06-01' ORDER BY mmsi, timestamp DESC) SELECT l.mmsi, ST_Distance(l.geom::geography, t.geom::geography) AS distance FROM latest l CROSS JOIN target t WHERE l.mmsi != 351000003 ORDER BY distance ASC LIMIT 1"
   },
   {
     "question_id": 2761,
     "db": "POSTGRESQL",
-    "query": "SELECT mmsi, ST_Length(ST_MakeLine(geom ORDER BY timestamp)::geography) AS distance FROM public.vessel_ais_data WHERE mmsi = 351000001 AND timestamp >= '2024-06-01 08:00:00' AND timestamp <= '2024-06-01 12:00:00' GROUP BY mmsi"
+    "query": "SELECT mmsi, ST_Length(ST_MakeLine(geom ORDER BY timestamp)::geography) AS distance FROM public.vessel_ais_data WHERE mmsi = 351000001 AND timestamp >= '2024-06-01 08:00:00' AND timestamp < '2024-06-01 12:00:00' GROUP BY mmsi"
   },
   {
     "question_id": 2763,
@@ -882,7 +882,7 @@
   {
     "question_id": 2790,
     "db": "POSTGRESQL",
-    "query": "SELECT * FROM public.vessel_ais_data WHERE \"timestamp\" > '2026-02-02 22:22:22'"
+    "query": "SELECT id, mmsi, \"timestamp\", longitude, latitude, sog, cog, heading, nav_status, rot, destination, draught, vessel_type, imo, call_sign, eta, last_update FROM public.vessel_ais_data WHERE \"timestamp\" > '2026-02-02 22:22:22'"
   },
   {
     "question_id": 2795,
@@ -892,12 +892,12 @@
   {
     "question_id": 2804,
     "db": "POSTGRESQL",
-    "query": "SELECT DISTINCT ON (mmsi) mmsi, imo, timestamp, longitude, latitude FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '16 hours' AND imo > 9000000 ORDER BY mmsi, timestamp DESC"
+    "query": "SELECT id, mmsi, \"timestamp\", longitude, latitude, sog, cog, heading, nav_status, imo, call_sign FROM public.vessel_ais_data WHERE \"timestamp\" >= NOW() - INTERVAL '16 hours' AND imo > 9000000"
   },
   {
     "question_id": 2809,
     "db": "POSTGRESQL",
-    "query": "SELECT mmsi, timestamp, longitude, latitude FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY mmsi ORDER BY timestamp DESC) AS rn FROM public.vessel_ais_data) sub WHERE rn = 1 AND longitude BETWEEN 116.0 AND 117.0 AND latitude BETWEEN 21.0 AND 22.0"
+    "query": "WITH latest AS (SELECT DISTINCT ON (mmsi) mmsi, longitude, latitude, \"timestamp\", sog, cog, nav_status FROM public.vessel_ais_data ORDER BY mmsi, \"timestamp\" DESC) SELECT mmsi, longitude, latitude, \"timestamp\", sog, cog, nav_status FROM latest WHERE longitude >= 116.0 AND longitude <= 117.0 AND latitude >= 21.0 AND latitude <= 22.0"
   },
   {
     "question_id": 2821,
@@ -907,17 +907,17 @@
   {
     "question_id": 2838,
     "db": "POSTGRESQL",
-    "query": "SELECT * FROM public.vessel_ais_data WHERE timestamp >= '2025-02-28 00:00:00' AND timestamp < '2025-03-01 00:00:00'"
+    "query": "SELECT * FROM public.vessel_ais_data WHERE \"timestamp\" >= '2025-02-28 00:00:00' AND \"timestamp\" < '2025-03-01 00:00:00'"
   },
   {
     "question_id": 2861,
     "db": "POSTGRESQL",
-    "query": "SELECT * FROM public.vessel_ais_data WHERE timestamp >= '2024-06-01 00:00:00' AND timestamp < '2024-06-02 00:00:00' AND imo::text LIKE '%88'"
+    "query": "SELECT * FROM public.vessel_ais_data WHERE \"timestamp\" >= '2024-06-01 00:00:00' AND \"timestamp\" < '2024-06-02 00:00:00' AND imo IS NOT NULL AND CAST(imo AS TEXT) LIKE '%88'"
   },
   {
     "question_id": 2872,
     "db": "POSTGRESQL",
-    "query": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND destination = 'SINGAPORE' AND draught > 10"
+    "query": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE destination = 'SINGAPORE' AND draught > 10 AND \"timestamp\" >= NOW() - INTERVAL '24 hours'"
   },
   {
     "question_id": 2898,
@@ -927,7 +927,7 @@
   {
     "question_id": 2923,
     "db": "POSTGRESQL",
-    "query": "SELECT COUNT(DISTINCT mmsi) FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND sog > 8 AND ST_Within(geom, ST_MakeEnvelope(118.0333333333, 24.4166666667, 118.0833333333, 24.4666666667, 4326))"
+    "query": "SELECT COUNT(DISTINCT mmsi) AS vessel_count FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND sog > 8 AND ST_Within(geom, ST_MakeEnvelope(118.0333333333, 24.4166666667, 118.0833333333, 24.4666666667, 4326))"
   },
   {
     "question_id": 2935,
@@ -939,33 +939,33 @@
     "db1": "MYSQL",
     "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '中远海运'",
     "db2": "POSTGRESQL",
-    "query2": "SELECT * FROM public.vessel_ais_data WHERE mmsi IN (result) AND \"timestamp\" >= '2024-06-01 08:00:00' AND \"timestamp\" <= '2024-06-01 12:00:00' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 10000)"
+    "query2": "SELECT * FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= '2024-06-01 08:00:00' AND timestamp <= '2024-06-01 12:00:00' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 10000)"
   },
   {
     "question_id": 2952,
     "db1": "MYSQL",
     "query1": "SELECT mmsi FROM transportation.vessel WHERE endurance > 30 AND max_load > 50000",
     "db2": "POSTGRESQL",
-    "query2": "WITH latest AS (SELECT DISTINCT ON (mmsi) * FROM vessel_ais_data WHERE mmsi IN (result) ORDER BY mmsi, timestamp DESC) SELECT * FROM latest WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 3000)"
+    "query2": "SELECT * FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 3000)"
   },
   {
     "question_id": 2954,
     "db1": "MYSQL",
     "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '中国外运' AND v.max_speed < 15",
     "db2": "POSTGRESQL",
-    "query2": "SELECT COUNT(*) FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= CURRENT_DATE - INTERVAL '1 day' AND timestamp < CURRENT_DATE AND longitude BETWEEN 121.0 AND 121.5 AND latitude BETWEEN 31.0 AND 31.5"
+    "query2": "SELECT COUNT(*) FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = CURRENT_DATE - 1 AND ST_Within(geom, ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326))"
   },
   {
     "question_id": 2976,
     "db1": "MYSQL",
-    "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE CAST(REPLACE(REPLACE(v.endurance, '天', ''), '海里', '') AS UNSIGNED) > 60 AND sc.company_name = '长航集团'",
+    "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '长航集团' AND CAST(REPLACE(REPLACE(v.endurance, '天', ''), '海里', '') AS UNSIGNED) > 60",
     "db2": "POSTGRESQL",
-    "query2": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= CURRENT_DATE - INTERVAL '1 day' AND timestamp < CURRENT_DATE AND longitude BETWEEN 120.5 AND 121.0 AND latitude BETWEEN 30.6 AND 30.9 AND draught > 9"
+    "query2": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = CURRENT_DATE - 1 AND draught > 9 AND ST_Within(geom, ST_MakeEnvelope(120.5, 30.6, 121.0, 30.9, 4326))"
   },
   {
     "question_id": 2987,
     "db1": "POSTGRESQL",
-    "query1": "SELECT mmsi FROM public.vessel_ais_data WHERE ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 10000)",
+    "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 10000)",
     "db2": "MYSQL",
     "query2": "SELECT mmsi, max_load FROM transportation.vessel WHERE mmsi IN (result) ORDER BY max_load DESC LIMIT 10"
   },
@@ -986,14 +986,14 @@
   {
     "question_id": 3009,
     "db1": "MYSQL",
-    "query1": "SELECT mmsi FROM transportation.vessel WHERE captain_name = '陈明' AND CAST(REPLACE(REPLACE(endurance, '天', ''), '海里', '') AS UNSIGNED) > 20",
+    "query1": "SELECT mmsi FROM transportation.vessel WHERE captain_name = '陈明' AND endurance > 20",
     "db2": "POSTGRESQL",
-    "query2": "SELECT DISTINCT ON (mmsi) * FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= CURRENT_DATE - INTERVAL '1 day' AND timestamp < CURRENT_DATE ORDER BY mmsi, sog DESC"
+    "query2": "SELECT DISTINCT ON (mmsi) * FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= CURRENT_DATE - INTERVAL '1 day' AND timestamp < CURRENT_DATE ORDER BY mmsi, sog DESC"
   },
   {
     "question_id": 3019,
     "db1": "POSTGRESQL",
-    "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND sog > 12 AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(113.5, 22.2), 4326)::geography, 15000)",
+    "query1": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND sog > 12 AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(113.5, 22.2), 4326)::geography, 15000)",
     "db2": "MYSQL",
     "query2": "SELECT mmsi, max_load FROM transportation.vessel WHERE mmsi IN (result) ORDER BY max_load DESC LIMIT 8"
   },
@@ -1002,12 +1002,12 @@
     "db1": "MYSQL",
     "query1": "SELECT mmsi FROM transportation.vessel WHERE max_load > 75000",
     "db2": "POSTGRESQL",
-    "query2": "SELECT mmsi, COUNT(*) AS cnt FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = CURRENT_DATE AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(120.5, 30.6), 4326)::geography, 10000) GROUP BY mmsi ORDER BY cnt DESC"
+    "query2": "SELECT mmsi, COUNT(*) AS cnt FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = CURRENT_DATE AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(120.5, 30.6), 4326)::geography, 10000) GROUP BY mmsi ORDER BY cnt DESC"
   },
   {
     "question_id": 3033,
     "db1": "POSTGRESQL",
-    "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE vessel_type = 70 AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 5000)",
+    "query1": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE vessel_type = 70 AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 5000)",
     "db2": "MYSQL",
     "query2": "SELECT mmsi, max_load FROM transportation.vessel WHERE mmsi IN (result) ORDER BY max_load DESC LIMIT 10"
   },
@@ -1021,17 +1021,17 @@
   {
     "question_id": 3039,
     "db": "POSTGRESQL",
-    "query": "SELECT * FROM public.vessel_ais_data WHERE timestamp >= '2024-06-01 08:00:00' AND timestamp <= '2024-06-01 12:00:00'"
+    "query": "SELECT id, mmsi, \"timestamp\", longitude, latitude, sog, cog, heading, nav_status, rot, destination, draught, vessel_type, imo, call_sign, eta FROM public.vessel_ais_data WHERE \"timestamp\" >= '2024-06-01 08:00:00' AND \"timestamp\" <= '2024-06-01 12:00:00'"
   },
   {
     "question_id": 3048,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T2.title FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.titles AS T2 ON T1.title_id = T2.title_id INNER JOIN book_publishing_company.stores AS T3 ON T1.stor_id = T3.stor_id WHERE T1.qty > 20 AND T3.state = 'CA'"
+    "query": "SELECT DISTINCT t.title FROM book_publishing_company.titles t JOIN book_publishing_company.sales s ON t.title_id = s.title_id JOIN book_publishing_company.stores st ON s.stor_id = st.stor_id WHERE s.qty > 20 AND st.state = 'CA'"
   },
   {
     "question_id": 3069,
     "db": "SQLite",
-    "query": "SELECT b.title, p.publisher_name FROM books.book b JOIN books.publisher p ON b.publisher_id = p.publisher_id WHERE b.publication_date >= date('now','start of year') AND b.publication_date < date('now','start of year','+1 year') AND b.book_id IN (SELECT b2.book_id FROM books.book b2 JOIN books.order_line ol ON ol.book_id = b2.book_id JOIN books.cust_order co ON co.order_id = ol.order_id WHERE co.order_date >= date('now','start of year') AND co.order_date < date('now','start of year','+1 year') GROUP BY b2.book_id HAVING SUM(ol.price) > (SELECT AVG(book_sales) FROM (SELECT SUM(ol2.price) AS book_sales FROM books.order_line ol2 JOIN books.cust_order co2 ON co2.order_id = ol2.order_id WHERE co2.order_date >= date('now','start of year') AND co2.order_date < date('now','start of year','+1 year') GROUP BY ol2.book_id))) ORDER BY p.publisher_name"
+    "query": "SELECT b.title, p.publisher_name FROM books.book b JOIN books.publisher p ON b.publisher_id = p.publisher_id JOIN books.order_line ol ON ol.book_id = b.book_id JOIN books.cust_order co ON co.order_id = ol.order_id WHERE STRFTIME('%Y', co.order_date) = STRFTIME('%Y', 'now') GROUP BY b.book_id, b.title, p.publisher_name HAVING SUM(ol.price) > (SELECT AVG(total) FROM (SELECT SUM(ol2.price) AS total FROM books.order_line ol2 JOIN books.cust_order co2 ON co2.order_id = ol2.order_id WHERE STRFTIME('%Y', co2.order_date) = STRFTIME('%Y', 'now') GROUP BY ol2.book_id)) ORDER BY p.publisher_name"
   },
   {
     "question_id": 3072,
@@ -1041,17 +1041,17 @@
   {
     "question_id": 3078,
     "db": "SQLite",
-    "query": "SELECT p.pub_name FROM book_publishing_company.titles t JOIN book_publishing_company.publishers p ON t.pub_id = p.pub_id ORDER BY t.price DESC LIMIT 1"
+    "query": "SELECT p.pub_name FROM book_publishing_company.publishers p JOIN book_publishing_company.titles t ON p.pub_id = t.pub_id ORDER BY t.price DESC LIMIT 1"
   },
   {
     "question_id": 3100,
     "db": "SQLite",
-    "query": "SELECT CAST((SUM(CASE WHEN T2.job_desc = 'Publisher' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.job_desc = 'Designer' THEN 1 ELSE 0 END)) AS REAL) * 100 / SUM(CASE WHEN T2.job_desc = 'Designer' THEN 1 ELSE 0 END) FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id"
+    "query": "SELECT ROUND((COUNT(CASE WHEN T2.job_desc = 'Publisher' THEN 1 END) - COUNT(CASE WHEN T2.job_desc = 'Designer' THEN 1 END)) * 100.0 / COUNT(CASE WHEN T2.job_desc = 'Designer' THEN 1 END), 2) FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id"
   },
   {
     "question_id": 3126,
     "db": "SQLite",
-    "query": "SELECT T2.ApiCalls FROM codebase_comments.Solution AS T1 INNER JOIN codebase_comments.Method AS T2 ON T1.Id = T2.SolutionId WHERE T1.Path = 'mauriciodeamorim_tdd.encontro2\\Tdd.Encontro2.sln'"
+    "query": "SELECT m.ApiCalls FROM codebase_comments.Method m JOIN codebase_comments.Solution s ON m.SolutionId = s.Id WHERE s.Path = 'mauriciodeamorim_tdd.encontro2\\Tdd.Encontro2.sln'"
   },
   {
     "question_id": 3168,
@@ -1061,7 +1061,7 @@
   {
     "question_id": 3202,
     "db": "SQLite",
-    "query": "SELECT COUNT(T2.Id) FROM codebase_comments.Repo AS T1 INNER JOIN codebase_comments.Solution AS T2 ON T1.Id = T2.RepoId WHERE T1.Stars > T1.Forks * 1 / 3"
+    "query": "SELECT COUNT(*) FROM codebase_comments.Solution AS s JOIN codebase_comments.Repo AS r ON s.RepoId = r.Id WHERE r.Stars > r.Forks / 3.0"
   },
   {
     "question_id": 3245,
@@ -1076,27 +1076,27 @@
   {
     "question_id": 3261,
     "db": "SQLite",
-    "query": "SELECT (SELECT COUNT(*) FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Venue AS T2 ON T2.Venue_Id = T1.Venue_Id WHERE T2.Venue_Name = 'M Chinnaswamy Stadium') - (SELECT COUNT(*) FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Venue AS T2 ON T2.Venue_Id = T1.Venue_Id WHERE T2.Venue_Name = 'Maharashtra Cricket Association Stadium')"
+    "query": "SELECT SUM(CASE WHEN T2.Venue_Name = 'M Chinnaswamy Stadium' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.Venue_Name = 'Maharashtra Cricket Association Stadium' THEN 1 ELSE 0 END) FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Venue AS T2 ON T2.Venue_Id = T1.Venue_Id"
   },
   {
     "question_id": 3272,
     "db": "SQLite",
-    "query": "SELECT T2.Season_Year FROM soccer_2016.`Match` AS T1 INNER JOIN soccer_2016.Season AS T2 ON T1.Season_Id = T2.Season_Id INNER JOIN soccer_2016.Venue AS T3 ON T1.Venue_Id = T3.Venue_Id WHERE T3.Venue_Name = 'M Chinnaswamy Stadium' GROUP BY T2.Season_Year ORDER BY COUNT(T1.Match_Id) DESC LIMIT 1"
+    "query": "SELECT s.Season_Year, COUNT(*) AS match_count FROM soccer_2016.Match m JOIN soccer_2016.Venue v ON m.Venue_Id = v.Venue_Id JOIN soccer_2016.Season s ON m.Season_Id = s.Season_Id WHERE v.Venue_Name = 'M Chinnaswamy Stadium' GROUP BY s.Season_Id, s.Season_Year ORDER BY match_count DESC LIMIT 1"
   },
   {
     "question_id": 3274,
     "db": "SQLite",
-    "query": "SELECT T1.Venue_Name FROM soccer_2016.Venue AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Venue_Id = T2.Venue_Id INNER JOIN soccer_2016.Team AS T3 ON T2.Team_1 = T3.Team_Id WHERE T3.Team_Name = 'Kolkata Knight Riders' GROUP BY T1.Venue_Id, T1.Venue_Name ORDER BY COUNT(T2.Match_Id) DESC LIMIT 1"
+    "query": "SELECT v.Venue_Name, COUNT(*) AS match_count FROM soccer_2016.Match m JOIN soccer_2016.Team t ON m.Team_1 = t.Team_Id JOIN soccer_2016.Venue v ON m.Venue_Id = v.Venue_Id WHERE t.Team_Name = 'Kolkata Knight Riders' GROUP BY v.Venue_Id, v.Venue_Name ORDER BY match_count DESC LIMIT 1"
   },
   {
     "question_id": 3279,
     "db": "SQLite",
-    "query": "SELECT T2.Player_Name, COUNT(*) AS captain_count FROM soccer_2016.Player_Match AS T1 INNER JOIN soccer_2016.Player AS T2 ON T1.Player_Id = T2.Player_Id INNER JOIN soccer_2016.Rolee AS T3 ON T1.Role_Id = T3.Role_Id INNER JOIN soccer_2016.Team AS T4 ON T1.Team_Id = T4.Team_Id WHERE T4.Team_Name = 'Deccan Chargers' AND T3.Role_Desc = 'Captain' GROUP BY T2.Player_Id, T2.Player_Name ORDER BY captain_count DESC LIMIT 1"
+    "query": "SELECT p.Player_Name, COUNT(*) AS captain_count FROM soccer_2016.Player_Match pm JOIN soccer_2016.Rolee r ON pm.Role_Id = r.Role_Id JOIN soccer_2016.Player p ON pm.Player_Id = p.Player_Id JOIN soccer_2016.Team t ON pm.Team_Id = t.Team_Id WHERE t.Team_Name = 'Deccan Chargers' AND r.Role_Desc = 'Captain' GROUP BY p.Player_Id, p.Player_Name ORDER BY captain_count DESC LIMIT 1"
   },
   {
     "question_id": 3280,
     "db": "SQLite",
-    "query": "SELECT CAST(SUM(CASE WHEN T2.Batting_hand = 'Right-hand bat' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.Player_Id) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id"
+    "query": "SELECT ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM soccer_2016.Player), 2) FROM soccer_2016.Player p JOIN soccer_2016.Batting_Style b ON p.Batting_hand = b.Batting_Id WHERE b.Batting_hand = 'Right-hand bat'"
   },
   {
     "question_id": 3281,
@@ -1106,57 +1106,57 @@
   {
     "question_id": 3288,
     "db": "SQLite",
-    "query": "SELECT T1.City_Name FROM soccer_2016.City AS T1 INNER JOIN soccer_2016.Country AS T2 ON T1.Country_id = T2.Country_Id WHERE T2.Country_Name = 'U.A.E'"
+    "query": "SELECT c.City_Name FROM soccer_2016.City c JOIN soccer_2016.Country co ON c.Country_id = co.Country_Id WHERE co.Country_Name = 'U.A.E'"
   },
   {
     "question_id": 3289,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM soccer_2016.`Match` AS T1 INNER JOIN soccer_2016.Team AS T2 ON T1.Match_Winner = T2.Team_Id WHERE T2.Team_Name = 'Pune Warriors'"
+    "query": "SELECT COUNT(*) FROM soccer_2016.Match WHERE Match_Winner = (SELECT Team_Id FROM soccer_2016.Team WHERE Team_Name = 'Pune Warriors')"
   },
   {
     "question_id": 3302,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T1.Match_Id FROM soccer_2016.Wicket_Taken AS T1 INNER JOIN soccer_2016.Out_Type AS T2 ON T1.Kind_Out = T2.Out_Id WHERE T2.Out_Name = 'hit wicket'"
+    "query": "SELECT DISTINCT wt.Match_Id FROM soccer_2016.Wicket_Taken wt JOIN soccer_2016.Out_Type ot ON wt.Kind_Out = ot.Out_Id WHERE ot.Out_Name = 'hit wicket'"
   },
   {
     "question_id": 3316,
     "db": "SQLite",
-    "query": "SELECT Toss_Winner FROM soccer_2016.`Match` WHERE Toss_Decide = 2"
+    "query": "SELECT DISTINCT m.Toss_Winner AS Team_Id FROM soccer_2016.Match m JOIN soccer_2016.Toss_Decision td ON m.Toss_Decide = td.Toss_Id WHERE td.Toss_Name = 'bat'"
   },
   {
     "question_id": 3318,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T1.Player_Name, T1.DOB FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Player_Id = T2.Man_of_the_Match"
+    "query": "SELECT DISTINCT p.Player_Name, p.DOB FROM soccer_2016.Player p JOIN soccer_2016.Match m ON p.Player_Id = m.Man_of_the_Match"
   },
   {
     "question_id": 3320,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM soccer_2016.Match AS M INNER JOIN soccer_2016.Team AS T ON M.Match_Winner = T.Team_Id WHERE T.Team_Name = 'Mumbai Indians'"
+    "query": "SELECT COUNT(*) FROM soccer_2016.Match WHERE Match_Winner = (SELECT Team_Id FROM soccer_2016.Team WHERE Team_Name = 'Mumbai Indians')"
   },
   {
     "question_id": 3321,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T1.Team_Name FROM soccer_2016.Team AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Team_Id = T2.Team_2 INNER JOIN soccer_2016.Team AS T3 ON T3.Team_Id = T2.Team_1 WHERE T3.Team_Name = 'Pune Warriors'"
+    "query": "SELECT DISTINCT t.Team_Name FROM soccer_2016.Match m JOIN soccer_2016.Team t ON m.Team_1 = t.Team_Id WHERE m.Team_2 = (SELECT Team_Id FROM soccer_2016.Team WHERE Team_Name = 'Pune Warriors')"
   },
   {
     "question_id": 3330,
     "db": "SQLite",
-    "query": "SELECT COUNT(T2.Venue_Id) FROM soccer_2016.City AS T1 INNER JOIN soccer_2016.Venue AS T2 ON T2.City_Id = T1.City_Id WHERE T1.City_Name = 'Pune'"
+    "query": "SELECT COUNT(*) FROM soccer_2016.Venue AS v JOIN soccer_2016.City AS c ON v.City_Id = c.City_Id WHERE c.City_Name = 'Pune'"
   },
   {
     "question_id": 3337,
     "db": "SQLite",
-    "query": "SELECT T2.Country_Name, COUNT(*) AS umpire_count FROM soccer_2016.Umpire AS T1 INNER JOIN soccer_2016.Country AS T2 ON T1.Umpire_Country = T2.Country_Id GROUP BY T2.Country_Name ORDER BY umpire_count DESC LIMIT 1"
+    "query": "SELECT c.Country_Name, COUNT(*) AS umpire_count FROM soccer_2016.Umpire u JOIN soccer_2016.Country c ON u.Umpire_Country = c.Country_Id GROUP BY c.Country_Name ORDER BY umpire_count DESC LIMIT 1"
   },
   {
     "question_id": 3340,
     "db": "SQLite",
-    "query": "SELECT CAST(COUNT(T1.Player_Id) AS REAL) / COUNT(DISTINCT T1.Country_Name) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id WHERE T2.Batting_hand = 'Right-hand bat'"
+    "query": "SELECT CAST(COUNT(*) AS REAL) / COUNT(DISTINCT T1.Country_Name) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id WHERE T2.Batting_hand = 'Right-hand bat'"
   },
   {
     "question_id": 3348,
     "db": "SQLite",
-    "query": "SELECT p.Player_Name, c.Country_Name, COUNT(*) AS catches FROM soccer_2016.Wicket_Taken AS w INNER JOIN soccer_2016.Out_Type AS o ON w.Kind_Out = o.Out_Id INNER JOIN soccer_2016.Player AS p ON w.Fielders = p.Player_Id INNER JOIN soccer_2016.Country AS c ON p.Country_Name = c.Country_Id WHERE o.Out_Name = 'caught' GROUP BY p.Player_Id, p.Player_Name, c.Country_Name HAVING COUNT(*) > (SELECT AVG(cnt) FROM (SELECT COUNT(*) AS cnt FROM soccer_2016.Wicket_Taken AS w2 INNER JOIN soccer_2016.Out_Type AS o2 ON w2.Kind_Out = o2.Out_Id WHERE o2.Out_Name = 'caught' GROUP BY w2.Fielders)) ORDER BY catches ASC"
+    "query": "SELECT p.Player_Name, c.Country_Name FROM soccer_2016.Player p JOIN soccer_2016.Country c ON p.Country_Name = c.Country_Id JOIN (SELECT Fielders, COUNT(*) AS cnt FROM soccer_2016.Wicket_Taken WHERE Kind_Out = (SELECT Out_Id FROM soccer_2016.Out_Type WHERE Out_Name = 'caught') GROUP BY Fielders) t ON p.Player_Id = t.Fielders WHERE t.cnt > (SELECT AVG(cnt) FROM (SELECT COUNT(*) AS cnt FROM soccer_2016.Wicket_Taken WHERE Kind_Out = (SELECT Out_Id FROM soccer_2016.Out_Type WHERE Out_Name = 'caught') GROUP BY Fielders)) ORDER BY t.cnt ASC"
   },
   {
     "question_id": 3368,
@@ -1166,17 +1166,17 @@
   {
     "question_id": 3375,
     "db": "SQLite",
-    "query": "SELECT T1.Match_Id, T1.Match_Date FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Venue AS T2 ON T1.Venue_Id = T2.Venue_Id WHERE T2.Venue_Name = 'Kingsmead'"
+    "query": "SELECT m.Match_Id, m.Match_Date FROM soccer_2016.Match m JOIN soccer_2016.Venue v ON m.Venue_Id = v.Venue_Id WHERE v.Venue_Name = 'Kingsmead'"
   },
   {
     "question_id": 3422,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T1.Team_Name, T2.Team_Name FROM soccer_2016.Match AS M INNER JOIN soccer_2016.Team AS T1 ON T1.Team_Id = M.Team_1 INNER JOIN soccer_2016.Team AS T2 ON T2.Team_Id = M.Team_2 INNER JOIN soccer_2016.Outcome AS O ON O.Outcome_Id = M.Outcome_type WHERE M.Match_Date LIKE '2015%' AND O.Outcome_Type = 'tie'"
+    "query": "SELECT DISTINCT T1.Team_Name, T2.Team_Name FROM soccer_2016.Match AS M INNER JOIN soccer_2016.Team AS T1 ON T1.Team_Id = M.Team_1 INNER JOIN soccer_2016.Team AS T2 ON T2.Team_Id = M.Team_2 INNER JOIN soccer_2016.Win_By AS W ON W.Win_Id = M.Win_Type WHERE M.Match_Date LIKE '2015%' AND W.Win_Type = 'Tie'"
   },
   {
     "question_id": 3426,
     "db": "SQLite",
-    "query": "SELECT T2.Country_Name FROM soccer_2016.City AS T1 INNER JOIN soccer_2016.Country AS T2 ON T1.Country_Id = T2.Country_Id WHERE T1.City_Name = 'Rajkot'"
+    "query": "SELECT c.Country_Name FROM soccer_2016.City ci JOIN soccer_2016.Country c ON ci.Country_id = c.Country_Id WHERE ci.City_Name = 'Rajkot'"
   },
   {
     "question_id": 3437,
@@ -1186,112 +1186,112 @@
   {
     "question_id": 3441,
     "db": "SQLite",
-    "query": "SELECT COUNT(Player_Id) FROM soccer_2016.Player WHERE DOB LIKE '1970%'"
+    "query": "SELECT COUNT(*) FROM soccer_2016.Player WHERE DOB LIKE '1970%'"
   },
   {
     "question_id": 3443,
     "db": "SQLite",
-    "query": "SELECT COUNT(Match_Id) FROM soccer_2016.Match WHERE Match_Date LIKE '2008-04%'"
+    "query": "SELECT COUNT(*) FROM soccer_2016.Match WHERE Match_Date LIKE '2008-04%'"
   },
   {
     "question_id": 3449,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Country AS T2 ON T1.Country_Name = T2.Country_Id WHERE T2.Country_Name = 'India'"
+    "query": "SELECT COUNT(*) FROM soccer_2016.Player p JOIN soccer_2016.Country c ON p.Country_Name = c.Country_Id WHERE c.Country_Name = 'India'"
   },
   {
     "question_id": 3464,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM soccer_2016.Match AS M INNER JOIN soccer_2016.Team AS T ON M.Match_Winner = T.Team_Id WHERE T.Team_Name = 'Kings XI Punjab' AND M.Match_Date LIKE '2008%'"
+    "query": "SELECT COUNT(*) FROM soccer_2016.Match AS m JOIN soccer_2016.Team AS t ON m.Match_Winner = t.Team_Id WHERE t.Team_Name = 'Kings XI Punjab' AND m.Match_Date LIKE '2008%'"
   },
   {
     "question_id": 3478,
     "db": "SQLite",
-    "query": "SELECT T2.Match_Id FROM soccer_2016.Venue AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Venue_Id = T2.Venue_Id WHERE T1.Venue_Name = 'St George''s Park' ORDER BY T2.Win_Margin DESC LIMIT 1"
+    "query": "SELECT m.Match_Id FROM soccer_2016.Match m JOIN soccer_2016.Venue v ON m.Venue_Id = v.Venue_Id WHERE v.Venue_Name = 'St George''s Park' ORDER BY m.Win_Margin DESC LIMIT 1"
   },
   {
     "question_id": 3487,
     "db": "SQLite",
-    "query": "SELECT MAX(T2.Expression_Corr) FROM genes.Interactions AS T2 INNER JOIN genes.Classification AS C1 ON T2.GeneID1 = C1.GeneID INNER JOIN genes.Classification AS C2 ON T2.GeneID2 = C2.GeneID WHERE C1.Localization = 'nucleus' AND C2.Localization = 'nucleus'"
+    "query": "SELECT MAX(i.Expression_Corr) FROM genes.Interactions i JOIN genes.Classification c1 ON i.GeneID1 = c1.GeneID JOIN genes.Classification c2 ON i.GeneID2 = c2.GeneID WHERE c1.Localization = 'nucleus' AND c2.Localization = 'nucleus'"
   },
   {
     "question_id": 3512,
     "db": "SQLite",
-    "query": "SELECT c.coachID, GROUP_CONCAT(DISTINCT c.tmID) AS teams FROM professional_basketball.coaches AS c WHERE c.year BETWEEN 1970 AND 1980 GROUP BY c.coachID ORDER BY COUNT(DISTINCT c.year) DESC LIMIT 1"
+    "query": "SELECT c.coachID, GROUP_CONCAT(DISTINCT t.name) AS teams FROM professional_basketball.coaches AS c JOIN professional_basketball.teams AS t ON c.tmID = t.tmID AND c.year = t.year WHERE c.year BETWEEN 1970 AND 1980 GROUP BY c.coachID ORDER BY (MAX(c.year) - MIN(c.year)) DESC LIMIT 1"
   },
   {
     "question_id": 3531,
     "db": "SQLite",
-    "query": "SELECT coachID FROM professional_basketball.coaches WHERE lgID = 'NBA' GROUP BY coachID HAVING COUNT(DISTINCT tmID) > 2"
+    "query": "SELECT c.coachID FROM professional_basketball.coaches c JOIN professional_basketball.teams t ON c.tmID = t.tmID AND c.year = t.year WHERE t.lgID = 'NBA' GROUP BY c.coachID HAVING COUNT(DISTINCT c.tmID) > 2"
   },
   {
     "question_id": 3576,
     "db": "SQLite",
-    "query": "SELECT AVG(p.weight * 1.0 / (p.height * p.height)) FROM professional_basketball.players p WHERE p.height IS NOT NULL AND p.height > 0 AND p.weight IS NOT NULL AND EXISTS (SELECT 1 FROM professional_basketball.player_allstar a WHERE a.playerID = p.playerID)"
+    "query": "SELECT AVG(p.weight * 1.0 / (p.height * p.height)) AS avg_bmi FROM professional_basketball.players p WHERE p.playerID IN (SELECT playerID FROM professional_basketball.player_allstar) AND p.height IS NOT NULL AND p.height > 0 AND p.weight IS NOT NULL"
   },
   {
     "question_id": 3581,
     "db": "SQLite",
-    "query": "SELECT DISTINCT t.name FROM professional_basketball.awards_coaches a JOIN professional_basketball.coaches c ON a.coachID=c.coachID AND a.year=c.year JOIN professional_basketball.teams t ON c.tmID=t.tmID AND c.year=t.year WHERE a.year=1992 AND a.award='NBA Coach of the Year'"
+    "query": "SELECT t.name FROM professional_basketball.awards_coaches ac JOIN professional_basketball.coaches c ON ac.coachID = c.coachID AND ac.year = c.year JOIN professional_basketball.teams t ON c.tmID = t.tmID AND c.year = t.year WHERE ac.year = 1992 AND ac.award = 'NBA Coach of the Year'"
   },
   {
     "question_id": 3582,
     "db": "SQLite",
-    "query": "SELECT T1.firstName, T1.lastName FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.players_teams AS T2 ON T1.playerID = T2.playerID WHERE T2.year = 1973 AND T2.lgID = 'NBA' AND T2.fgAttempted > 0 ORDER BY CAST(T2.fgMade AS REAL) / T2.fgAttempted DESC LIMIT 1"
+    "query": "SELECT p.firstName || ' ' || p.lastName AS name FROM professional_basketball.players_teams pt JOIN professional_basketball.players p ON pt.playerID = p.playerID WHERE pt.year = 1973 AND pt.lgID = 'NBA' AND pt.fgAttempted > 0 ORDER BY CAST(pt.fgMade AS REAL) / pt.fgAttempted DESC LIMIT 1"
   },
   {
     "question_id": 3590,
     "db": "SQLite",
-    "query": "SELECT p.birthState, COUNT(DISTINCT p.playerID) AS allstar_count FROM professional_basketball.players p WHERE EXISTS (SELECT 1 FROM professional_basketball.player_allstar a WHERE a.playerID = p.playerID) AND p.birthState IS NOT NULL AND p.birthState <> '' GROUP BY p.birthState ORDER BY allstar_count DESC LIMIT 1"
+    "query": "SELECT T1.birthState, COUNT(DISTINCT T1.playerID) AS allstar_count FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.player_allstar AS T2 ON T1.playerID = T2.playerID WHERE T1.birthState IS NOT NULL AND T1.birthState <> '' GROUP BY T1.birthState ORDER BY allstar_count DESC LIMIT 1"
   },
   {
     "question_id": 3614,
     "db": "SQLite",
-    "query": "SELECT CAST(SUM(lost) AS REAL) * 100 / SUM(games) FROM professional_basketball.teams WHERE name = 'Houston Mavericks'"
+    "query": "SELECT ROUND(SUM(lost) * 100.0 / SUM(games), 2) AS pct FROM professional_basketball.teams WHERE name = 'Houston Mavericks'"
   },
   {
     "question_id": 3674,
     "db": "SQLite",
-    "query": "SELECT AVG(cnt) FROM (SELECT T1.id AS work_id, COUNT(DISTINCT T3.character_id) AS cnt FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id INNER JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id INNER JOIN shakespeare.characters AS T4 ON T3.character_id = T4.id WHERE T4.CharName <> '(stage directions)' GROUP BY T1.id)"
+    "query": "SELECT CAST(SUM(cnt) AS REAL) / COUNT(*) FROM (SELECT T1.id AS work_id, COUNT(DISTINCT T3.character_id) AS cnt FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id INNER JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id INNER JOIN shakespeare.characters AS T4 ON T3.character_id = T4.id WHERE T4.CharName <> '(stage directions)' GROUP BY T1.id) AS sub"
   },
   {
     "question_id": 3676,
     "db": "SQLite",
-    "query": "SELECT COUNT(id) FROM shakespeare.works WHERE GenreType = 'Comedy'"
+    "query": "SELECT COUNT(*) AS comedy_count FROM shakespeare.works WHERE GenreType = 'Comedy'"
   },
   {
     "question_id": 3684,
     "db": "SQLite",
-    "query": "SELECT COUNT(T2.Scene) FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id WHERE T1.Title = 'King John'"
+    "query": "SELECT COUNT(*) FROM shakespeare.chapters JOIN shakespeare.works ON chapters.work_id = works.id WHERE works.Title = 'King John'"
   },
   {
     "question_id": 3686,
     "db": "SQLite",
-    "query": "SELECT T2.Description FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id WHERE T1.Title = 'Midsummer Night''s Dream' AND T2.Act = 2 AND T2.Scene = 2"
+    "query": "SELECT c.Description FROM shakespeare.chapters c JOIN shakespeare.works w ON c.work_id = w.id WHERE w.Title = 'Midsummer Night''s Dream' AND c.Act = 2 AND c.Scene = 2"
   },
   {
     "question_id": 3714,
     "db": "SQLite",
-    "query": "SELECT Date FROM shakespeare.works WHERE id IN (SELECT work_id FROM shakespeare.chapters GROUP BY work_id HAVING COUNT(*) = 154)"
+    "query": "SELECT T1.Date FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id GROUP BY T1.id HAVING COUNT(T2.id) = 154"
   },
   {
     "question_id": 3721,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T2.CharName, T2.Description FROM shakespeare.paragraphs AS T1 INNER JOIN shakespeare.characters AS T2 ON T1.character_id = T2.id WHERE T1.chapter_id = 18710"
+    "query": "SELECT DISTINCT c.CharName, c.Description FROM shakespeare.characters c JOIN shakespeare.paragraphs p ON p.character_id = c.id WHERE p.chapter_id = 18710"
   },
   {
     "question_id": 3791,
     "db": "SQLite",
-    "query": "SELECT T2.publisher_name FROM video_games.game_publisher AS T1 INNER JOIN video_games.publisher AS T2 ON T1.publisher_id = T2.id WHERE T1.game_id = 10031"
+    "query": "SELECT publisher.publisher_name FROM video_games.game_publisher JOIN video_games.publisher ON video_games.game_publisher.publisher_id = video_games.publisher.id WHERE video_games.game_publisher.game_id = 10031"
   },
   {
     "question_id": 3801,
     "db": "SQLite",
-    "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = 'Advent Rising'"
+    "query": "SELECT g.genre_name FROM video_games.game AS ga JOIN video_games.genre AS g ON ga.genre_id = g.id WHERE ga.game_name = 'Advent Rising'"
   },
   {
     "question_id": 3817,
     "db": "SQLite",
-    "query": "SELECT num_sales * 100000 FROM video_games.region_sales WHERE region_id = 2 AND game_platform_id = 9615"
+    "query": "SELECT SUM(rs.num_sales) AS total_sales FROM video_games.region_sales rs WHERE rs.region_id = 2 AND rs.game_platform_id = 9615"
   },
   {
     "question_id": 3819,
@@ -1301,42 +1301,42 @@
   {
     "question_id": 3824,
     "db": "SQLite",
-    "query": "SELECT DISTINCT r.region_name FROM video_games.region_sales rs JOIN video_games.region r ON rs.region_id = r.id WHERE rs.num_sales * 100000 >= 300000"
+    "query": "SELECT DISTINCT T1.region_name FROM video_games.region AS T1 INNER JOIN video_games.region_sales AS T2 ON T1.id = T2.region_id WHERE T2.num_sales * 100000 >= 300000"
   },
   {
     "question_id": 3873,
     "db": "SQLite",
-    "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON gp.publisher_id = p.id JOIN video_games.game_platform gpl ON gpl.game_publisher_id = gp.id WHERE gpl.release_year = 2007 GROUP BY p.id, p.publisher_name ORDER BY COUNT(DISTINCT gp.game_id) DESC, p.id ASC LIMIT 1"
+    "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON p.id = gp.publisher_id JOIN video_games.game_platform gpl ON gp.id = gpl.game_publisher_id WHERE gpl.release_year = 2007 GROUP BY p.id, p.publisher_name ORDER BY COUNT(DISTINCT gp.game_id) DESC LIMIT 1"
   },
   {
     "question_id": 3876,
     "db": "SQLite",
-    "query": "SELECT COUNT(DISTINCT g.id) FROM video_games.publisher AS p INNER JOIN video_games.game_publisher AS gp ON p.id = gp.publisher_id INNER JOIN video_games.game AS g ON gp.game_id = g.id INNER JOIN video_games.genre AS ge ON g.genre_id = ge.id WHERE p.publisher_name = 'Nintendo' AND ge.genre_name = 'Sports'"
+    "query": "SELECT COUNT(DISTINCT game.id) FROM video_games.game JOIN video_games.genre ON game.genre_id = genre.id JOIN video_games.game_publisher ON game.id = game_publisher.game_id JOIN video_games.publisher ON game_publisher.publisher_id = publisher.id WHERE publisher.publisher_name = 'Nintendo' AND genre.genre_name = 'Sports'"
   },
   {
     "question_id": 3902,
     "db": "SQLite",
-    "query": "SELECT CAST(COUNT(DISTINCT CASE WHEN p.publisher_name = 'Brash Entertainment' THEN gp.game_id END) AS REAL) * 100 / COUNT(DISTINCT gp.game_id) FROM video_games.game_publisher gp JOIN video_games.publisher p ON gp.publisher_id = p.id"
+    "query": "SELECT 100.0 * COUNT(DISTINCT gp.game_id) / (SELECT COUNT(*) FROM video_games.game) AS percentage FROM video_games.game_publisher gp JOIN video_games.publisher p ON gp.publisher_id = p.id WHERE p.publisher_name = 'Brash Entertainment'"
   },
   {
     "question_id": 3913,
     "db": "SQLite",
-    "query": "SELECT DISTINCT gp.release_year FROM video_games.region_sales rs JOIN video_games.region r ON rs.region_id = r.id JOIN video_games.game_platform gp ON rs.game_platform_id = gp.id WHERE r.region_name = 'Japan' AND rs.num_sales * 100000 > 200000"
+    "query": "SELECT DISTINCT gp.release_year FROM video_games.region AS r INNER JOIN video_games.region_sales AS rs ON r.id = rs.region_id INNER JOIN video_games.game_platform AS gp ON rs.game_platform_id = gp.id WHERE r.region_name = 'Japan' AND rs.num_sales * 100000 > 200000"
   },
   {
     "question_id": 3915,
     "db": "SQLite",
-    "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON gp.publisher_id=p.id GROUP BY p.id,p.publisher_name ORDER BY COUNT(DISTINCT gp.game_id) DESC,p.id ASC LIMIT 1"
+    "query": "SELECT p.publisher_name, COUNT(DISTINCT gp.game_id) AS game_count FROM video_games.publisher p JOIN video_games.game_publisher gp ON p.id = gp.publisher_id GROUP BY p.id, p.publisher_name ORDER BY game_count DESC LIMIT 1"
   },
   {
     "question_id": 3917,
     "db": "SQLite",
-    "query": "SELECT CAST(COUNT(CASE WHEN T1.platform_name = 'PS4' THEN T2.id ELSE NULL END) AS REAL) * 100 / COUNT(T2.id) FROM video_games.platform AS T1 INNER JOIN video_games.game_platform AS T2 ON T1.id = T2.platform_id WHERE T2.release_year = 2014"
+    "query": "SELECT 100.0 * SUM(CASE WHEN p.platform_name = 'PS4' THEN 1 ELSE 0 END) / COUNT(*) AS pct FROM video_games.game_platform gp JOIN video_games.platform p ON gp.platform_id = p.id WHERE gp.release_year = 2014"
   },
   {
     "question_id": 3931,
     "db": "SQLite",
-    "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = 'Grand Theft Auto V'"
+    "query": "SELECT g.genre_name FROM video_games.game AS ga JOIN video_games.genre AS g ON ga.genre_id = g.id WHERE ga.game_name = 'Grand Theft Auto V'"
   },
   {
     "question_id": 3942,
@@ -1346,7 +1346,7 @@
   {
     "question_id": 3960,
     "db": "SQLite",
-    "query": "SELECT T3.release_year FROM video_games.game AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.game_id INNER JOIN video_games.game_platform AS T3 ON T2.id = T3.game_publisher_id WHERE T1.id = 156"
+    "query": "SELECT gp.release_year FROM video_games.game_platform gp JOIN video_games.game_publisher gpub ON gp.game_publisher_id = gpub.id WHERE gpub.game_id = 156"
   },
   {
     "question_id": 3977,
@@ -1361,77 +1361,77 @@
   {
     "question_id": 4003,
     "db": "SQLite",
-    "query": "SELECT DISTINCT p.Id, p.Year, p.Keyword FROM authors.Paper p INNER JOIN authors.PaperAuthor pa ON p.Id = pa.PaperId WHERE pa.AuthorId < 1000 AND pa.Affiliation = 'ETH Zurich'"
+    "query": "SELECT DISTINCT T2.Id, T2.Year, T2.Keyword FROM authors.PaperAuthor AS T1 INNER JOIN authors.Paper AS T2 ON T1.PaperId = T2.Id WHERE T1.AuthorId < 1000 AND T1.Affiliation = 'ETH Zurich'"
   },
   {
     "question_id": 4008,
     "db": "SQLite",
-    "query": "SELECT DISTINCT j.Id, j.ShortName, j.FullName FROM authors.Paper p INNER JOIN authors.Journal j ON p.JournalId = j.Id WHERE p.Year = 2013 AND p.JournalId != 0 AND p.JournalId != -1 LIMIT 4"
+    "query": "SELECT DISTINCT j.Id, j.ShortName, j.FullName FROM authors.Paper p JOIN authors.Journal j ON p.JournalId = j.Id WHERE p.Year = 2013 AND p.JournalId NOT IN (0, -1) LIMIT 4"
   },
   {
     "question_id": 4014,
     "db": "SQLite",
-    "query": "SELECT T2.HomePage FROM authors.Paper AS T1 INNER JOIN authors.Journal AS T2 ON T1.JournalId = T2.Id WHERE T1.Title = '364: Induction of Mixed Chimerism and Transplantation Tolerance in a Non-Human Primate Lung Allograft Model: Early Results'"
+    "query": "SELECT Journal.HomePage FROM authors.Paper JOIN authors.Journal ON Paper.JournalId = Journal.Id WHERE Paper.Title = '364: Induction of Mixed Chimerism and Transplantation Tolerance in a Non-Human Primate Lung Allograft Model: Early Results'"
   },
   {
     "question_id": 4017,
     "db": "SQLite",
-    "query": "SELECT T1.Title FROM authors.Paper AS T1 INNER JOIN authors.Conference AS T2 ON T1.ConferenceId = T2.Id WHERE T2.HomePage IS NULL OR T2.HomePage = ''"
+    "query": "SELECT Paper.Title FROM authors.Paper JOIN authors.Conference ON Paper.ConferenceId = Conference.Id WHERE Conference.HomePage IS NULL OR Conference.HomePage = ''"
   },
   {
     "question_id": 4035,
     "db": "SQLite",
-    "query": "SELECT T3.FullName FROM authors.PaperAuthor AS T1 INNER JOIN authors.Paper AS T2 ON T1.PaperId = T2.Id INNER JOIN authors.Conference AS T3 ON T2.ConferenceId = T3.Id WHERE T1.Name = 'Jean-luc Hainaut' AND T2.ConferenceId != 0"
+    "query": "SELECT c.FullName FROM authors.Paper p JOIN authors.PaperAuthor pa ON p.Id = pa.PaperId JOIN authors.Author a ON pa.AuthorId = a.Id JOIN authors.Conference c ON p.ConferenceId = c.Id WHERE a.Name = 'Jean-luc Hainaut' AND p.ConferenceId <> 0 LIMIT 1"
   },
   {
     "question_id": 4040,
     "db": "SQLite",
-    "query": "SELECT Name FROM authors.Author WHERE Affiliation = 'University of Oxford' ORDER BY Name ASC"
+    "query": "SELECT DISTINCT Name FROM authors.Author WHERE Affiliation = 'University of Oxford' ORDER BY Name"
   },
   {
     "question_id": 4048,
     "db": "SQLite",
-    "query": "SELECT T1.Title FROM authors.Paper AS T1 INNER JOIN authors.PaperAuthor AS T2 ON T1.Id = T2.PaperId WHERE T2.Name = 'Adam Jones' AND T1.Year BETWEEN 2005 AND 2010"
+    "query": "SELECT DISTINCT p.Title FROM authors.Paper p JOIN authors.PaperAuthor pa ON p.Id = pa.PaperId JOIN authors.Author a ON pa.AuthorId = a.Id WHERE a.Name = 'Adam Jones' AND p.Year BETWEEN 2005 AND 2010"
   },
   {
     "question_id": 4058,
     "db": "SQLite",
-    "query": "SELECT T2.HomePage FROM authors.Paper AS T1 INNER JOIN authors.Conference AS T2 ON T1.ConferenceId = T2.Id WHERE T1.Title = 'Quality evaluation of long duration audiovisual content'"
+    "query": "SELECT Conference.HomePage FROM authors.Paper JOIN authors.Conference ON authors.Paper.ConferenceId = authors.Conference.Id WHERE authors.Paper.Title = 'Quality evaluation of long duration audiovisual content'"
   },
   {
     "question_id": 4063,
     "db": "SQLite",
-    "query": "SELECT SUM(CASE WHEN T2.FullName = 'Informatik & Schule' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.FullName = 'International Conference on Supercomputing' THEN 1 ELSE 0 END) FROM authors.Paper AS T1 INNER JOIN authors.Conference AS T2 ON T1.ConferenceId = T2.Id WHERE T1.Year BETWEEN 1991 AND 2000 AND T2.FullName IN ('Informatik & Schule', 'International Conference on Supercomputing')"
+    "query": "SELECT SUM(CASE WHEN T2.FullName = 'Informatik & Schule' THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.FullName = 'International Conference on Supercomputing' THEN 1 ELSE 0 END) FROM authors.Paper AS T1 INNER JOIN authors.Conference AS T2 ON T1.ConferenceId = T2.Id WHERE T1.Year BETWEEN 1991 AND 2000"
   },
   {
     "question_id": 4068,
     "db": "SQLite",
-    "query": "SELECT T2.Keyword FROM authors.Journal AS T1 INNER JOIN authors.Paper AS T2 ON T1.Id = T2.JournalId WHERE T1.FullName = 'Modeling Identification and Control' AND T2.Year = 1994"
+    "query": "SELECT p.Keyword FROM authors.Paper p JOIN authors.Journal j ON p.JournalId = j.Id WHERE p.Year = 1994 AND j.FullName = 'Modeling Identification and Control'"
   },
   {
     "question_id": 4108,
     "db": "SQLite",
-    "query": "SELECT COUNT(business_id) FROM public_review_platform.Business WHERE state LIKE 'AZ' AND active LIKE 'False'"
+    "query": "SELECT COUNT(*) FROM public_review_platform.Business WHERE state = 'AZ' AND active = 'False'"
   },
   {
     "question_id": 4121,
     "db": "SQLite",
-    "query": "SELECT T3.category_name FROM public_review_platform.Tips AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id WHERE T1.user_id = 70271"
+    "query": "SELECT c.category_name FROM public_review_platform.Tips t JOIN public_review_platform.Business_Categories bc ON t.business_id = bc.business_id JOIN public_review_platform.Categories c ON bc.category_id = c.category_id WHERE t.user_id = 70271"
   },
   {
     "question_id": 4123,
     "db": "SQLite",
-    "query": "SELECT ROUND(COUNT(DISTINCT bc.business_id) * 100.0 / (SELECT COUNT(*) FROM public_review_platform.Business), 2) AS percentage FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON c.category_id = bc.category_id WHERE c.category_name = 'Automotive'"
+    "query": "SELECT ROUND(COUNT(DISTINCT bc.business_id) * 100.0 / (SELECT COUNT(*) FROM public_review_platform.Business), 2) FROM public_review_platform.Business_Categories bc JOIN public_review_platform.Categories c ON bc.category_id = c.category_id WHERE c.category_name = 'Automotive'"
   },
   {
     "question_id": 4126,
     "db": "SQLite",
-    "query": "SELECT COUNT(user_id) FROM public_review_platform.Users WHERE user_yelping_since_year = 2005 AND user_fans LIKE 'None'"
+    "query": "SELECT COUNT(user_id) FROM public_review_platform.Users WHERE user_yelping_since_year = 2005 AND user_fans = 'None'"
   },
   {
     "question_id": 4127,
     "db": "SQLite",
-    "query": "SELECT COUNT(business_id) FROM public_review_platform.Business WHERE city LIKE 'Tolleson' AND active LIKE 'True'"
+    "query": "SELECT COUNT(*) FROM public_review_platform.Business WHERE city = 'Tolleson' AND active = 'True'"
   },
   {
     "question_id": 4155,
@@ -1441,22 +1441,22 @@
   {
     "question_id": 4180,
     "db": "SQLite",
-    "query": "SELECT city, COUNT(business_id) AS business_count FROM public_review_platform.Business WHERE city IN ('Scottsdale', 'Anthem') GROUP BY city ORDER BY business_count DESC LIMIT 1"
+    "query": "SELECT city, COUNT(business_id) AS cnt FROM public_review_platform.Business WHERE city IN ('Scottsdale','Anthem') GROUP BY city ORDER BY cnt DESC LIMIT 1"
   },
   {
     "question_id": 4194,
     "db": "SQLite",
-    "query": "SELECT COUNT(DISTINCT T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id WHERE T1.active LIKE 'True' AND T3.category_name LIKE 'Food'"
+    "query": "SELECT COUNT(DISTINCT b.business_id) FROM public_review_platform.Business b JOIN public_review_platform.Business_Categories bc ON b.business_id = bc.business_id JOIN public_review_platform.Categories c ON bc.category_id = c.category_id WHERE b.active = 'True' AND c.category_name = 'Food'"
   },
   {
     "question_id": 4207,
     "db": "SQLite",
-    "query": "WITH parsed_hours AS (SELECT business_id,day_id,CASE WHEN opening_time IS NULL OR LOWER(TRIM(opening_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(opening_time)) LIKE '%am' OR LOWER(TRIM(opening_time)) LIKE '%pm' THEN CAST(opening_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(opening_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(opening_time AS INTEGER) END)*60 + CASE WHEN INSTR(opening_time,':')>0 THEN CAST(SUBSTR(opening_time,INSTR(opening_time,':')+1,2) AS INTEGER) ELSE 0 END END AS opening_minutes,CASE WHEN closing_time IS NULL OR LOWER(TRIM(closing_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(closing_time)) LIKE '%am' OR LOWER(TRIM(closing_time)) LIKE '%pm' THEN CAST(closing_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(closing_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(closing_time AS INTEGER) END)*60 + CASE WHEN INSTR(closing_time,':')>0 THEN CAST(SUBSTR(closing_time,INSTR(closing_time,':')+1,2) AS INTEGER) ELSE 0 END END AS closing_minutes FROM public_review_platform.Business_Hours),\nnormalized_hours AS (SELECT business_id,day_id,CASE WHEN opening_minutes IS NULL OR closing_minutes IS NULL THEN NULL WHEN opening_minutes=closing_minutes THEN 24.0 WHEN closing_minutes>opening_minutes THEN (closing_minutes-opening_minutes)/60.0 ELSE (closing_minutes-opening_minutes+1440)/60.0 END AS hours FROM parsed_hours)\nSELECT DISTINCT T1.business_id FROM normalized_hours AS T1 INNER JOIN public_review_platform.Days AS T2 ON T1.day_id = T2.day_id WHERE T2.day_of_week = 'Sunday' AND T1.hours > 12"
+    "query": "WITH parsed_hours AS (SELECT business_id,day_id,CASE WHEN opening_time IS NULL OR LOWER(TRIM(opening_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(opening_time)) LIKE '%am' OR LOWER(TRIM(opening_time)) LIKE '%pm' THEN CAST(opening_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(opening_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(opening_time AS INTEGER) END)*60 + CASE WHEN INSTR(opening_time,':')>0 THEN CAST(SUBSTR(opening_time,INSTR(opening_time,':')+1,2) AS INTEGER) ELSE 0 END END AS opening_minutes,CASE WHEN closing_time IS NULL OR LOWER(TRIM(closing_time)) IN ('','none','null') THEN NULL ELSE (CASE WHEN LOWER(TRIM(closing_time)) LIKE '%am' OR LOWER(TRIM(closing_time)) LIKE '%pm' THEN CAST(closing_time AS INTEGER)%12 + CASE WHEN LOWER(TRIM(closing_time)) LIKE '%pm' THEN 12 ELSE 0 END ELSE CAST(closing_time AS INTEGER) END)*60 + CASE WHEN INSTR(closing_time,':')>0 THEN CAST(SUBSTR(closing_time,INSTR(closing_time,':')+1,2) AS INTEGER) ELSE 0 END END AS closing_minutes FROM public_review_platform.Business_Hours), normalized_hours AS (SELECT business_id,day_id,CASE WHEN opening_minutes IS NULL OR closing_minutes IS NULL THEN NULL WHEN opening_minutes=closing_minutes THEN 24.0 WHEN closing_minutes>opening_minutes THEN (closing_minutes-opening_minutes)/60.0 ELSE (closing_minutes-opening_minutes+1440)/60.0 END AS hours FROM parsed_hours) SELECT nh.business_id FROM normalized_hours nh JOIN public_review_platform.Days d ON nh.day_id = d.day_id WHERE d.day_of_week = 'Sunday' AND nh.hours > 12"
   },
   {
     "question_id": 4208,
     "db": "SQLite",
-    "query": "SELECT COUNT(DISTINCT T1.user_id) FROM public_review_platform.Reviews AS T1 INNER JOIN public_review_platform.Elite AS T2 ON T1.user_id = T2.user_id WHERE T1.business_id = 1"
+    "query": "SELECT COUNT(DISTINCT r.user_id) FROM public_review_platform.Reviews r JOIN public_review_platform.Elite e ON r.user_id = e.user_id WHERE r.business_id = 1"
   },
   {
     "question_id": 4255,
@@ -1466,32 +1466,32 @@
   {
     "question_id": 4266,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T2.attribute_value FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Attributes AS T2 ON T1.business_id = T2.business_id WHERE T1.state = 'AZ' AND T1.city = 'Phoenix' AND T1.active = 'False' AND T1.stars = 3.5 AND T1.review_count = 'Medium'"
+    "query": "SELECT DISTINCT T2.attribute_value FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Attributes AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Attributes AS T3 ON T2.attribute_id = T3.attribute_id WHERE T1.state = 'AZ' AND T1.city = 'Phoenix' AND T1.active = 'False' AND T1.stars = 3.5 AND T1.review_count = 'Medium'"
   },
   {
     "question_id": 4268,
     "db": "SQLite",
-    "query": "SELECT CAST(SUM(CASE WHEN T1.stars < 3 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id WHERE T3.category_name = 'Local Services'"
+    "query": "SELECT CAST(SUM(CASE WHEN T1.stars < 3 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.business_id) AS percentage FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id WHERE T3.category_name = 'Local Services'"
   },
   {
     "question_id": 4279,
     "db": "SQLite",
-    "query": "SELECT T3.user_fans FROM public_review_platform.Reviews AS T1 INNER JOIN public_review_platform.Business AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Users AS T3 ON T1.user_id = T3.user_id GROUP BY T1.business_id ORDER BY SUM(CAST(T1.review_votes_useful AS INTEGER)) DESC LIMIT 1"
+    "query": "SELECT T2.user_fans FROM public_review_platform.Reviews AS T1 INNER JOIN public_review_platform.Users AS T2 ON T1.user_id = T2.user_id GROUP BY T1.user_id ORDER BY SUM(CAST(T1.review_votes_useful AS INTEGER) + CAST(T1.review_votes_funny AS INTEGER) + CAST(T1.review_votes_cool AS INTEGER)) DESC LIMIT 1"
   },
   {
     "question_id": 4324,
     "db": "SQLite",
-    "query": "SELECT e.user_id FROM public_review_platform.Elite e JOIN public_review_platform.Years y ON y.year_id = e.year_id WHERE y.actual_year = 2012"
+    "query": "SELECT e.user_id FROM public_review_platform.Elite e JOIN public_review_platform.Years y ON e.year_id = y.year_id WHERE y.actual_year = 2012"
   },
   {
     "question_id": 4326,
     "db": "SQLite",
-    "query": "SELECT COUNT(DISTINCT T1.business_id) FROM public_review_platform.Business_Hours AS T1 INNER JOIN public_review_platform.Days AS T2 ON T1.day_id = T2.day_id INNER JOIN public_review_platform.Checkins AS T3 ON T1.business_id = T3.business_id AND T1.day_id = T3.day_id WHERE T2.day_of_week = 'Sunday' AND T1.opening_time = '10AM' AND T3.label_time_10 = 'None'"
+    "query": "SELECT COUNT(DISTINCT C.business_id) FROM public_review_platform.Checkins AS C INNER JOIN public_review_platform.Days AS D ON C.day_id = D.day_id WHERE D.day_of_week = 'Sunday' AND C.label_time_10 IS NOT NULL AND C.label_time_10 != 'None' AND CAST(C.label_time_10 AS INTEGER) < 10"
   },
   {
     "question_id": 4335,
     "db": "SQLite",
-    "query": "SELECT COUNT(business_id) FROM public_review_platform.Business WHERE city LIKE 'Casa Grande' AND active LIKE 'True'"
+    "query": "SELECT COUNT(*) FROM public_review_platform.Business WHERE city = 'Casa Grande' AND active = 'True'"
   },
   {
     "question_id": 4393,
@@ -1501,22 +1501,22 @@
   {
     "question_id": 4424,
     "db": "SQLite",
-    "query": "SELECT COUNT(DISTINCT b.business_id) FROM public_review_platform.Business b JOIN public_review_platform.Reviews r ON b.business_id = r.business_id WHERE b.city = 'Phoenix' AND b.active = 'true' AND r.review_length = 'Long'"
+    "query": "SELECT COUNT(DISTINCT b.business_id) FROM public_review_platform.Business b JOIN public_review_platform.Reviews r ON b.business_id = r.business_id WHERE b.city = 'Phoenix' AND b.active = 'True' AND r.review_length = 'Long'"
   },
   {
     "question_id": 4429,
     "db": "SQLite",
-    "query": "SELECT AVG(T1.stars) AS avg_stars FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id WHERE T3.category_name = 'Obstetricians & Gynecologists'"
+    "query": "SELECT AVG(b.stars) FROM public_review_platform.Business b JOIN public_review_platform.Business_Categories bc ON b.business_id = bc.business_id JOIN public_review_platform.Categories c ON bc.category_id = c.category_id WHERE c.category_name = 'Obstetricians & Gynecologists'"
   },
   {
     "question_id": 4444,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T3.category_name FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id WHERE T1.active = 'True' AND T1.state = 'AZ' AND T1.city = 'Glendale'"
+    "query": "SELECT DISTINCT c.category_name FROM public_review_platform.Business AS b JOIN public_review_platform.Business_Categories AS bc ON b.business_id = bc.business_id JOIN public_review_platform.Categories AS c ON bc.category_id = c.category_id WHERE b.state = 'AZ' AND b.city = 'Glendale' AND b.active = 'True'"
   },
   {
     "question_id": 4469,
     "db": "SQLite",
-    "query": "SELECT T1.name FROM simpson_episodes.Person AS T1 INNER JOIN simpson_episodes.Credit AS T2 ON T1.name = T2.person INNER JOIN simpson_episodes.Episode AS T3 ON T2.episode_id = T3.episode_id WHERE T3.season = 20 ORDER BY T1.birthdate ASC LIMIT 1;"
+    "query": "SELECT p.name FROM simpson_episodes.Person AS p JOIN simpson_episodes.Credit AS c ON p.name = c.person JOIN simpson_episodes.Episode AS e ON c.episode_id = e.episode_id WHERE e.season = 20 AND p.birthdate IS NOT NULL ORDER BY p.birthdate ASC LIMIT 1;"
   },
   {
     "question_id": 4491,
@@ -1526,62 +1526,62 @@
   {
     "question_id": 4553,
     "db": "SQLite",
-    "query": "SELECT DISTINCT category, role FROM simpson_episodes.Credit WHERE person = 'Bonita Pietila' AND credited = 'true';"
+    "query": "SELECT DISTINCT category, role FROM simpson_episodes.Credit WHERE person = 'Bonita Pietila' AND credited = 'true'"
   },
   {
     "question_id": 4592,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T1.episode_id, T1.title FROM simpson_episodes.Episode AS T1 INNER JOIN simpson_episodes.Vote AS T2 ON T2.episode_id = T1.episode_id WHERE T1.rating > 5.0 AND T1.rating <= 7.0 AND T2.stars = 2 AND T2.votes > 20;"
+    "query": "SELECT DISTINCT T1.episode_id FROM simpson_episodes.Episode AS T1 INNER JOIN simpson_episodes.Vote AS T2 ON T2.episode_id = T1.episode_id WHERE T1.rating > 5.0 AND T1.rating <= 7.0 AND T2.stars = 2 AND T2.votes > 20;"
   },
   {
     "question_id": 4639,
     "db": "SQLite",
-    "query": "SELECT COUNT(award_id) FROM simpson_episodes.Award WHERE year = 2009"
+    "query": "SELECT COUNT(DISTINCT award_id) FROM simpson_episodes.Award WHERE year = 2009"
   },
   {
     "question_id": 4661,
     "db": "SQLite",
-    "query": "SELECT T2.category FROM simpson_episodes.Episode AS T1 INNER JOIN simpson_episodes.Credit AS T2 ON T1.episode_id = T2.episode_id WHERE T2.person = 'Carlton Batten' ORDER BY T1.votes DESC LIMIT 1;"
+    "query": "SELECT c.category FROM simpson_episodes.Credit c WHERE c.person = 'Carlton Batten' AND c.episode_id = (SELECT episode_id FROM simpson_episodes.Episode ORDER BY votes DESC LIMIT 1)"
   },
   {
     "question_id": 4682,
     "db": "SQLite",
-    "query": "SELECT AVG(CAST(A.AnswerText AS REAL)) FROM mental_health_survey.Answer AS A INNER JOIN mental_health_survey.Question AS Q ON A.QuestionID = Q.questionid WHERE Q.questiontext = 'What is your age?' AND A.AnswerText = 'United States'"
+    "query": "SELECT AVG(CAST(a.AnswerText AS REAL)) AS avg_age FROM mental_health_survey.Answer a JOIN mental_health_survey.Answer c ON a.UserID = c.UserID AND a.SurveyID = c.SurveyID WHERE a.QuestionID = 1 AND c.QuestionID = 3 AND c.AnswerText = 'United States'"
   },
   {
     "question_id": 4689,
     "db": "SQLite",
-    "query": "SELECT T2.AnswerText FROM mental_health_survey.Question AS T1 INNER JOIN mental_health_survey.Answer AS T2 ON T1.questionid = T2.QuestionID WHERE T1.questiontext = 'Any additional notes or comments' AND T2.SurveyID = 2014 AND T2.AnswerText IS NOT NULL"
+    "query": "SELECT a.AnswerText FROM mental_health_survey.Answer a JOIN mental_health_survey.Question q ON a.QuestionID = q.questionid WHERE a.SurveyID = 2014 AND q.questiontext = 'Any additional notes or comments' AND a.AnswerText IS NOT NULL AND a.AnswerText <> ''"
   },
   {
     "question_id": 4693,
     "db": "SQLite",
-    "query": "SELECT COUNT(DISTINCT T1.UserID) FROM mental_health_survey.Answer AS T1 WHERE T1.SurveyID = 2016 AND T1.QuestionID = 32 AND T1.AnswerText = 'Yes'"
+    "query": "SELECT COUNT(DISTINCT T1.UserID) FROM mental_health_survey.Answer AS T1 WHERE T1.QuestionID = 32 AND T1.SurveyID = 2016 AND T1.AnswerText = 'Yes'"
   },
   {
     "question_id": 4704,
     "db": "SQLite",
-    "query": "SELECT COUNT(DISTINCT T1.UserID) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Survey AS T2 ON T1.SurveyID = T2.SurveyID WHERE T2.Description = 'mental health survey for 2016'"
+    "query": "SELECT COUNT(DISTINCT UserID) FROM mental_health_survey.Answer WHERE SurveyID = 2016"
   },
   {
     "question_id": 4707,
     "db": "SQLite",
-    "query": "SELECT COUNT(T1.UserID) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid WHERE T2.questiontext = 'What US state or territory do you work in?' AND T1.AnswerText = 'Kansas'"
+    "query": "SELECT COUNT(DISTINCT a.UserID) FROM mental_health_survey.Answer a JOIN mental_health_survey.Question q ON a.QuestionID = q.questionid WHERE q.questiontext = 'What US state or territory do you work in?' AND a.AnswerText = 'Kansas'"
   },
   {
     "question_id": 4723,
     "db": "SQLite",
-    "query": "SELECT (SELECT Total FROM disney.revenue WHERE Year = 1998) - (SELECT Total FROM disney.revenue WHERE Year = 1997)"
+    "query": "SELECT (SELECT Total FROM disney.revenue WHERE Year = 1998) - (SELECT Total FROM disney.revenue WHERE Year = 1997) AS diff"
   },
   {
     "question_id": 4757,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T2.director FROM disney.characters AS T1 INNER JOIN disney.director AS T2 ON T1.movie_title = T2.name WHERE T1.song IS NOT NULL"
+    "query": "SELECT DISTINCT d.director FROM disney.director d JOIN disney.characters c ON d.name = c.movie_title WHERE c.song IS NOT NULL AND TRIM(c.song) <> ''"
   },
   {
     "question_id": 4768,
     "db": "SQLite",
-    "query": "SELECT T1.movie_title, T1.total_gross, T1.MPAA_rating FROM disney.movies_total_gross AS T1 INNER JOIN disney.characters AS T2 ON T1.movie_title = T2.movie_title WHERE T2.hero = 'Elsa'"
+    "query": "SELECT T1.movie_title, T1.total_gross, T1.MPAA_rating FROM disney.movies_total_gross AS T1 INNER JOIN disney.characters AS T2 ON T2.movie_title = T1.movie_title WHERE T2.hero = 'Elsa'"
   },
   {
     "question_id": 4772,
@@ -1591,22 +1591,22 @@
   {
     "question_id": 4774,
     "db": "SQLite",
-    "query": "SELECT COUNT(movie_title) FROM disney.characters WHERE CAST(SUBSTR(release_date, LENGTH(release_date) - 3, 4) AS INTEGER) BETWEEN 1937 AND 1950"
+    "query": "SELECT COUNT(movie_title) FROM disney.characters WHERE CAST(SUBSTR(release_date, INSTR(release_date, ',') + 1) AS int) BETWEEN 1937 AND 1950"
   },
   {
     "question_id": 4805,
     "db": "SQLite",
-    "query": "SELECT T4.noc FROM olympics.person AS T1 INNER JOIN olympics.person_region AS T2 ON T1.id = T2.person_id INNER JOIN olympics.noc_region AS T4 ON T2.region_id = T4.id WHERE T1.gender = 'M' AND T1.height > 0 ORDER BY T1.height DESC LIMIT 1"
+    "query": "SELECT nr.noc FROM olympics.person p JOIN olympics.person_region pr ON pr.person_id = p.id JOIN olympics.noc_region nr ON nr.id = pr.region_id WHERE p.gender = 'M' AND p.height > 0 ORDER BY p.height DESC LIMIT 1"
   },
   {
     "question_id": 4834,
     "db": "SQLite",
-    "query": "SELECT COUNT(T3.id) FROM olympics.games_city AS T1 INNER JOIN olympics.city AS T2 ON T1.city_id = T2.id INNER JOIN olympics.games AS T3 ON T1.games_id = T3.id WHERE T2.city_name = 'Stockholm' AND T3.season = 'Summer'"
+    "query": "SELECT COUNT(DISTINCT g.id) FROM olympics.games g JOIN olympics.games_city gc ON g.id = gc.games_id JOIN olympics.city c ON c.id = gc.city_id WHERE c.city_name = 'Stockholm' AND g.season = 'Summer'"
   },
   {
     "question_id": 4855,
     "db": "SQLite",
-    "query": "SELECT AVG(T2.age) FROM olympics.games AS T1 INNER JOIN olympics.games_competitor AS T2 ON T1.id = T2.games_id WHERE T1.games_name = '1992 Summer'"
+    "query": "SELECT AVG(gc.age) FROM olympics.games_competitor gc JOIN olympics.games g ON gc.games_id = g.id WHERE g.games_year = 1992 AND g.season = 'Summer'"
   },
   {
     "question_id": 4877,
@@ -1616,12 +1616,12 @@
   {
     "question_id": 4903,
     "db": "SQLite",
-    "query": "SELECT AVG(T3.weight) FROM olympics.noc_region AS T1 INNER JOIN olympics.person_region AS T2 ON T1.id = T2.region_id INNER JOIN olympics.person AS T3 ON T2.person_id = T3.id WHERE T1.region_name = 'Tonga' AND T3.gender = 'M' AND T3.weight > 0"
+    "query": "SELECT AVG(p.weight) FROM olympics.person p JOIN olympics.person_region pr ON p.id = pr.person_id JOIN olympics.noc_region nr ON pr.region_id = nr.id WHERE nr.region_name = 'Tonga' AND p.gender = 'M' AND p.weight > 0"
   },
   {
     "question_id": 4912,
     "db": "SQLite",
-    "query": "SELECT COUNT(T2.person_id) FROM olympics.games AS T1 INNER JOIN olympics.games_competitor AS T2 ON T1.id = T2.games_id WHERE T1.games_name = '2000 Summer' AND T2.age = 31"
+    "query": "SELECT COUNT(DISTINCT gc.person_id) FROM olympics.games_competitor gc JOIN olympics.games g ON gc.games_id = g.id WHERE g.games_year = 2000 AND g.season = 'Summer' AND gc.age = 31"
   },
   {
     "question_id": 4917,
@@ -1631,17 +1631,17 @@
   {
     "question_id": 4934,
     "db": "SQLite",
-    "query": "SELECT T1.full_name FROM olympics.person AS T1 INNER JOIN olympics.games_competitor AS T2 ON T1.id = T2.person_id ORDER BY T2.age DESC LIMIT 1"
+    "query": "SELECT p.full_name FROM olympics.games_competitor gc JOIN olympics.person p ON gc.person_id = p.id ORDER BY gc.age DESC LIMIT 1"
   },
   {
     "question_id": 4952,
     "db": "SQLite",
-    "query": "SELECT T4.city_name FROM olympics.games_competitor AS T1 INNER JOIN olympics.games AS T2 ON T1.games_id = T2.id INNER JOIN olympics.games_city AS T3 ON T2.id = T3.games_id INNER JOIN olympics.city AS T4 ON T3.city_id = T4.id ORDER BY T1.age DESC LIMIT 1"
+    "query": "SELECT c.city_name FROM olympics.games_competitor gc JOIN olympics.games_city gcity ON gc.games_id = gcity.games_id JOIN olympics.city c ON gcity.city_id = c.id ORDER BY gc.age DESC LIMIT 1"
   },
   {
     "question_id": 4976,
     "db": "SQLite",
-    "query": "SELECT c.First, c.Last FROM beer_factory.\"transaction\" AS t INNER JOIN beer_factory.customers AS c ON t.CustomerID = c.CustomerID WHERE t.TransactionDate >= '2014-08-01' AND t.TransactionDate < '2014-09-01' GROUP BY t.CustomerID, c.First, c.Last ORDER BY COUNT(*) DESC LIMIT 1"
+    "query": "SELECT c.First || ' ' || c.Last AS full_name FROM beer_factory.\"transaction\" t JOIN beer_factory.customers c ON t.CustomerID = c.CustomerID WHERE t.TransactionDate >= '2014-08-01' AND t.TransactionDate < '2014-09-01' GROUP BY t.CustomerID ORDER BY COUNT(*) DESC LIMIT 1"
   },
   {
     "question_id": 4977,
@@ -1656,32 +1656,32 @@
   {
     "question_id": 5011,
     "db": "SQLite",
-    "query": "SELECT COUNT(T2.RootBeerID) FROM beer_factory.customers AS T1 INNER JOIN beer_factory.`transaction` AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.First = 'Tom' AND T1.Last = 'Hanks' AND T2.TransactionDate >= '2015-01-01' AND T2.TransactionDate < '2017-01-01'"
+    "query": "SELECT COUNT(T2.TransactionID) FROM beer_factory.customers AS T1 INNER JOIN beer_factory.`transaction` AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.First = 'Tom' AND T1.Last = 'Hanks' AND T2.TransactionDate >= '2015-01-01' AND T2.TransactionDate < '2017-01-01'"
   },
   {
     "question_id": 5028,
     "db": "SQLite",
-    "query": "SELECT CAST(COUNT(T2.RootBeerID) AS REAL) / COUNT(DISTINCT T2.TransactionDate) FROM beer_factory.`transaction` AS T2 INNER JOIN beer_factory.rootbeer AS T1 ON T1.RootBeerID = T2.RootBeerID INNER JOIN beer_factory.rootbeerbrand AS T3 ON T1.BrandID = T3.BrandID WHERE T3.Caffeinated = 'TRUE'"
+    "query": "SELECT CAST(COUNT(*) AS REAL) / COUNT(DISTINCT T2.TransactionDate) FROM beer_factory.`transaction` AS T2 INNER JOIN beer_factory.rootbeer AS T1 ON T1.RootBeerID = T2.RootBeerID INNER JOIN beer_factory.rootbeerbrand AS T3 ON T1.BrandID = T3.BrandID WHERE T3.Caffeinated = 'TRUE'"
   },
   {
     "question_id": 5029,
     "db": "SQLite",
-    "query": "SELECT rb.BrandName, rb.CurrentRetailPrice - rb.WholesaleCost AS unit_profit, r.ContainerType FROM beer_factory.rootbeerbrand rb JOIN beer_factory.rootbeer r ON rb.BrandID = r.BrandID WHERE rb.BrandID IN (SELECT BrandID FROM beer_factory.rootbeerbrand ORDER BY CurrentRetailPrice - WholesaleCost DESC LIMIT 1) OR rb.BrandID IN (SELECT BrandID FROM beer_factory.rootbeerbrand ORDER BY CurrentRetailPrice - WholesaleCost ASC LIMIT 1) ORDER BY unit_profit DESC"
+    "query": "SELECT rb.BrandName, rb.CurrentRetailPrice - rb.WholesaleCost AS unit_profit, r.ContainerType FROM beer_factory.rootbeerbrand rb JOIN beer_factory.rootbeer r ON rb.BrandID = r.BrandID WHERE rb.CurrentRetailPrice - rb.WholesaleCost = (SELECT MAX(CurrentRetailPrice - WholesaleCost) FROM beer_factory.rootbeerbrand) OR rb.CurrentRetailPrice - rb.WholesaleCost = (SELECT MIN(CurrentRetailPrice - WholesaleCost) FROM beer_factory.rootbeerbrand)"
   },
   {
     "question_id": 5033,
     "db": "SQLite",
-    "query": "SELECT T1.BrandName FROM beer_factory.rootbeerbrand AS T1 INNER JOIN beer_factory.rootbeerreview AS T2 ON T1.BrandID = T2.BrandID WHERE T2.StarRating = 5 AND T2.ReviewDate BETWEEN '2012-01-01' AND '2012-12-31' GROUP BY T1.BrandID, T1.BrandName ORDER BY COUNT(T2.StarRating) DESC LIMIT 1"
+    "query": "SELECT T1.BrandName FROM beer_factory.rootbeerbrand AS T1 INNER JOIN beer_factory.rootbeerreview AS T2 ON T1.BrandID = T2.BrandID WHERE T2.StarRating = 5 AND T2.ReviewDate BETWEEN '2012-01-01' AND '2012-12-31' GROUP BY T1.BrandID ORDER BY COUNT(T2.StarRating) DESC LIMIT 1"
   },
   {
     "question_id": 5041,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T3.Latitude, T3.Longitude FROM beer_factory.`transaction` AS T1 INNER JOIN beer_factory.location AS T2 ON T1.LocationID = T2.LocationID INNER JOIN beer_factory.geolocation AS T3 ON T2.LocationID = T3.LocationID WHERE T1.CreditCardType = 'American Express'"
+    "query": "SELECT DISTINCT T3.Latitude, T3.Longitude FROM beer_factory.\"transaction\" AS T1 INNER JOIN beer_factory.customers AS T2 ON T1.CustomerID = T2.CustomerID INNER JOIN beer_factory.geolocation AS T3 ON T1.LocationID = T3.LocationID WHERE T1.CreditCardType = 'American Express'"
   },
   {
     "question_id": 5099,
     "db": "SQLite",
-    "query": "SELECT title FROM language_corpus.pages WHERE page = 16203226"
+    "query": "SELECT title FROM language_corpus.pages WHERE page = 16203226 AND lid = 1"
   },
   {
     "question_id": 5110,
@@ -1696,7 +1696,7 @@
   {
     "question_id": 5120,
     "db": "SQLite",
-    "query": "SELECT word FROM language_corpus.words WHERE occurrences = ( SELECT MAX(occurrences) FROM language_corpus.words )"
+    "query": "SELECT word FROM language_corpus.words WHERE occurrences = (SELECT MAX(occurrences) FROM language_corpus.words)"
   },
   {
     "question_id": 5145,
@@ -1706,7 +1706,7 @@
   {
     "question_id": 5181,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM language_corpus.biwords AS T1 INNER JOIN language_corpus.words AS T2 ON T1.w2nd = T2.wid WHERE T2.word = 'base'"
+    "query": "SELECT COUNT(*) FROM language_corpus.biwords b JOIN language_corpus.words w ON b.w2nd = w.wid WHERE w.word = 'base'"
   },
   {
     "question_id": 5206,
@@ -1716,32 +1716,32 @@
   {
     "question_id": 5215,
     "db": "SQLite",
-    "query": "SELECT title FROM books.book WHERE title IS NOT NULL ORDER BY title"
+    "query": "SELECT b.title FROM books.book b JOIN books.order_line ol ON ol.book_id = b.book_id GROUP BY b.book_id, b.title ORDER BY COUNT(*) DESC, b.book_id ASC LIMIT 1"
   },
   {
     "question_id": 5236,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id INNER JOIN books.book_author AS T3 ON T1.book_id = T3.book_id INNER JOIN books.author AS T4 ON T3.author_id = T4.author_id WHERE T2.publisher_name = 'Penguin Classics' AND T4.author_name = 'William Shakespeare'"
+    "query": "SELECT COUNT(DISTINCT b.book_id) FROM books.book b JOIN books.publisher p ON b.publisher_id = p.publisher_id JOIN books.book_author ba ON ba.book_id = b.book_id JOIN books.author a ON a.author_id = ba.author_id WHERE p.publisher_name = 'Penguin Classics' AND a.author_name = 'William Shakespeare'"
   },
   {
     "question_id": 5242,
     "db": "SQLite",
-    "query": "SELECT T2.language_name FROM books.book AS T1 INNER JOIN books.book_language AS T2 ON T1.language_id = T2.language_id WHERE T1.isbn13 = '23755004321'"
+    "query": "SELECT bl.language_name FROM books.book b JOIN books.book_language bl ON b.language_id = bl.language_id WHERE b.isbn13 = '23755004321'"
   },
   {
     "question_id": 5248,
     "db": "SQLite",
-    "query": "SELECT T3.author_name FROM books.book AS T1 INNER JOIN books.book_author AS T2 ON T1.book_id = T2.book_id INNER JOIN books.author AS T3 ON T3.author_id = T2.author_id ORDER BY T1.num_pages DESC LIMIT 1"
+    "query": "SELECT a.author_name FROM books.book b JOIN books.book_author ba ON b.book_id = ba.book_id JOIN books.author a ON ba.author_id = a.author_id ORDER BY b.num_pages DESC LIMIT 1"
   },
   {
     "question_id": 5254,
     "db": "MYSQL",
-    "query": "SELECT contact_phone FROM energy.energy_company WHERE company_name = 'Moss Zarb'"
+    "query": "SELECT email FROM ecommerce.customer WHERE customer_name = 'Moss Zarb';"
   },
   {
     "question_id": 5260,
     "db": "SQLite",
-    "query": "SELECT COUNT(T1.book_id) FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id WHERE T2.publisher_name = 'Ace Hardcover'"
+    "query": "SELECT COUNT(*) FROM books.book b JOIN books.publisher p ON b.publisher_id = p.publisher_id WHERE p.publisher_name = 'Ace Hardcover'"
   },
   {
     "question_id": 5265,
@@ -1751,12 +1751,12 @@
   {
     "question_id": 5294,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM books.customer AS T1 INNER JOIN books.cust_order AS T2 ON T1.customer_id = T2.customer_id INNER JOIN books.shipping_method AS T3 ON T3.method_id = T2.shipping_method_id WHERE T1.first_name = 'Marcelia' AND T1.last_name = 'Goering' AND T3.method_name = 'Priority' AND STRFTIME('%Y', T2.order_date) = '2021'"
+    "query": "SELECT COUNT(*) FROM books.cust_order o JOIN books.customer c ON o.customer_id = c.customer_id JOIN books.shipping_method s ON o.shipping_method_id = s.method_id WHERE c.first_name = 'Marcelia' AND c.last_name = 'Goering' AND s.method_name = 'Priority' AND o.order_date >= '2021-01-01' AND o.order_date < '2022-01-01'"
   },
   {
     "question_id": 5306,
     "db": "SQLite",
-    "query": "SELECT T3.street_number, T3.street_name, T3.city, T4.country_name FROM books.customer_address AS T2 INNER JOIN books.address AS T3 ON T3.address_id = T2.address_id INNER JOIN books.country AS T4 ON T4.country_id = T3.country_id WHERE T3.city = 'Lazaro Cardenas'"
+    "query": "SELECT a.street_number || ' ' || a.street_name || ', ' || a.city || ', ' || c.country_name AS full_address FROM books.customer_address ca JOIN books.address a ON ca.address_id = a.address_id JOIN books.country c ON a.country_id = c.country_id WHERE a.city = 'Lazaro Cardenas'"
   },
   {
     "question_id": 5308,
@@ -1766,17 +1766,17 @@
   {
     "question_id": 5311,
     "db": "SQLite",
-    "query": "SELECT DISTINCT a.city FROM books.customer c JOIN books.customer_address ca ON ca.customer_id = c.customer_id JOIN books.address a ON a.address_id = ca.address_id JOIN books.country co ON co.country_id = a.country_id WHERE co.country_name = 'Costa Rica'"
+    "query": "SELECT DISTINCT a.city FROM books.customer_address ca JOIN books.address a ON ca.address_id = a.address_id JOIN books.country c ON a.country_id = c.country_id WHERE c.country_name = 'Costa Rica'"
   },
   {
     "question_id": 5316,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T2.order_id FROM books.order_status AS T1 INNER JOIN books.order_history AS T2 ON T1.status_id = T2.status_id WHERE T1.status_value = 'Cancelled'"
+    "query": "SELECT DISTINCT co.order_id FROM books.cust_order co JOIN books.order_history oh ON co.order_id = oh.order_id JOIN books.order_status os ON oh.status_id = os.status_id WHERE os.status_value = 'Cancelled'"
   },
   {
     "question_id": 5346,
     "db": "SQLite",
-    "query": "SELECT T3.first_name, T3.last_name FROM books.address AS T1 INNER JOIN books.customer_address AS T2 ON T1.address_id = T2.address_id INNER JOIN books.customer AS T3 ON T3.customer_id = T2.customer_id WHERE T1.street_number = '55' AND T1.street_name = 'Dorton Pass' AND T1.city = 'Huangqiao'"
+    "query": "SELECT c.first_name || ' ' || c.last_name AS full_name FROM books.customer c JOIN books.customer_address ca ON c.customer_id = ca.customer_id JOIN books.address a ON ca.address_id = a.address_id WHERE a.street_number = '55' AND a.street_name = 'Dorton Pass' AND a.city = 'Huangqiao'"
   },
   {
     "question_id": 5355,
@@ -1786,37 +1786,37 @@
   {
     "question_id": 5373,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id WHERE T2.publisher_name = 'Birlinn' AND STRFTIME('%Y', T1.publication_date) = '2008' AND T1.num_pages BETWEEN 600 AND 700"
+    "query": "SELECT COUNT(*) FROM books.book b JOIN books.publisher p ON b.publisher_id = p.publisher_id WHERE p.publisher_name = 'Birlinn' AND b.publication_date LIKE '2008%' AND b.num_pages BETWEEN 600 AND 700"
   },
   {
     "question_id": 5378,
     "db": "SQLite",
-    "query": "SELECT isbn13, price FROM books.book AS T1 INNER JOIN books.order_line AS T2 ON T1.book_id = T2.book_id WHERE T1.book_id = 7160"
+    "query": "SELECT title_id, price FROM book_publishing_company.titles WHERE title_id = '7160'"
   },
   {
     "question_id": 5400,
     "db": "SQLite",
-    "query": "SELECT T1.PRED_CLASS FROM image_and_language.PRED_CLASSES AS T1 INNER JOIN image_and_language.IMG_REL AS T2 ON T1.PRED_CLASS_ID = T2.PRED_CLASS_ID WHERE T2.IMG_ID = 1 AND T2.OBJ1_SAMPLE_ID = 14"
+    "query": "SELECT DISTINCT pc.PRED_CLASS FROM image_and_language.IMG_REL r JOIN image_and_language.PRED_CLASSES pc ON r.PRED_CLASS_ID = pc.PRED_CLASS_ID WHERE r.IMG_ID = 1 AND (r.OBJ1_SAMPLE_ID = 14 OR r.OBJ2_SAMPLE_ID = 14)"
   },
   {
     "question_id": 5411,
     "db": "SQLite",
-    "query": "SELECT COUNT(T1.OBJ_SAMPLE_ID) FROM image_and_language.IMG_OBJ AS T1 INNER JOIN image_and_language.OBJ_CLASSES AS T2 ON T1.OBJ_CLASS_ID = T2.OBJ_CLASS_ID WHERE T1.IMG_ID = 2347915 AND T2.OBJ_CLASS = 'white'"
+    "query": "SELECT COUNT(*) FROM image_and_language.IMG_OBJ_ATT AS T1 INNER JOIN image_and_language.ATT_CLASSES AS T2 ON T1.ATT_CLASS_ID = T2.ATT_CLASS_ID WHERE T1.IMG_ID = 2347915 AND T2.ATT_CLASS = 'white'"
   },
   {
     "question_id": 5412,
     "db": "SQLite",
-    "query": "SELECT COUNT(*) FROM image_and_language.IMG_OBJ_ATT AS T1 INNER JOIN image_and_language.ATT_CLASSES AS T2 ON T1.ATT_CLASS_ID = T2.ATT_CLASS_ID WHERE T1.IMG_ID = 2377985 AND T2.ATT_CLASS = 'electrical'"
+    "query": "SELECT COUNT(*) FROM image_and_language.IMG_OBJ_ATT AS a JOIN image_and_language.ATT_CLASSES AS c ON a.ATT_CLASS_ID = c.ATT_CLASS_ID WHERE a.IMG_ID = 2377985 AND c.ATT_CLASS = 'electrical'"
   },
   {
     "question_id": 5430,
     "db": "SQLite",
-    "query": "SELECT T2.PRED_CLASS_ID FROM image_and_language.IMG_REL AS T1 INNER JOIN image_and_language.PRED_CLASSES AS T2 ON T1.PRED_CLASS_ID = T2.PRED_CLASS_ID GROUP BY T2.PRED_CLASS_ID ORDER BY COUNT(*) DESC LIMIT 1"
+    "query": "SELECT PRED_CLASS_ID FROM image_and_language.IMG_REL GROUP BY PRED_CLASS_ID ORDER BY COUNT(*) DESC LIMIT 1"
   },
   {
     "question_id": 5432,
     "db": "SQLite",
-    "query": "SELECT T2.X, T2.Y FROM image_and_language.IMG_REL AS T1 INNER JOIN image_and_language.IMG_OBJ AS T2 ON T1.IMG_ID = T2.IMG_ID AND T1.OBJ1_SAMPLE_ID = T2.OBJ_SAMPLE_ID WHERE T1.PRED_CLASS_ID = 98"
+    "query": "SELECT o.X, o.Y FROM image_and_language.IMG_REL r JOIN image_and_language.IMG_OBJ o ON r.IMG_ID = o.IMG_ID AND r.OBJ1_SAMPLE_ID = o.OBJ_SAMPLE_ID WHERE r.PRED_CLASS_ID = 98 UNION SELECT o.X, o.Y FROM image_and_language.IMG_REL r JOIN image_and_language.IMG_OBJ o ON r.IMG_ID = o.IMG_ID AND r.OBJ2_SAMPLE_ID = o.OBJ_SAMPLE_ID WHERE r.PRED_CLASS_ID = 98"
   },
   {
     "question_id": 5449,
@@ -1826,37 +1826,37 @@
   {
     "question_id": 5450,
     "db": "SQLite",
-    "query": "SELECT COUNT(ATT_CLASS_ID) FROM image_and_language.IMG_OBJ_ATT WHERE IMG_ID = 4 AND OBJ_SAMPLE_ID = 7"
+    "query": "SELECT COUNT(*) FROM image_and_language.IMG_OBJ_ATT WHERE IMG_ID = 4 AND OBJ_SAMPLE_ID = 7"
   },
   {
     "question_id": 5475,
     "db": "SQLite",
-    "query": "SELECT T2.OBJ_CLASS FROM image_and_language.IMG_OBJ AS T1 INNER JOIN image_and_language.OBJ_CLASSES AS T2 ON T1.OBJ_CLASS_ID = T2.OBJ_CLASS_ID WHERE T1.IMG_ID = 5 AND T1.X = 634 AND T1.Y = 468"
+    "query": "SELECT OBJ_SAMPLE_ID FROM image_and_language.IMG_OBJ WHERE IMG_ID = 5 AND X = 634 AND Y = 468"
   },
   {
     "question_id": 5477,
     "db": "SQLite",
-    "query": "SELECT CAST((SELECT COUNT(OBJ_SAMPLE_ID) FROM image_and_language.IMG_OBJ WHERE IMG_ID = 1) AS REAL) / (SELECT COUNT(OBJ_SAMPLE_ID) FROM image_and_language.IMG_OBJ WHERE IMG_ID = 6)"
+    "query": "SELECT CAST((SELECT COUNT(*) FROM image_and_language.IMG_OBJ WHERE IMG_ID = 1) AS REAL) / (SELECT COUNT(*) FROM image_and_language.IMG_OBJ WHERE IMG_ID = 6) AS ratio"
   },
   {
     "question_id": 5517,
     "db": "SQLite",
-    "query": "SELECT COUNT(T2.PRED_CLASS_ID) FROM image_and_language.IMG_REL AS T1 INNER JOIN image_and_language.PRED_CLASSES AS T2 ON T1.PRED_CLASS_ID = T2.PRED_CLASS_ID WHERE T1.IMG_ID = 107 AND T2.PRED_CLASS = 'has'"
+    "query": "SELECT COUNT(*) AS has_count FROM image_and_language.IMG_REL r JOIN image_and_language.PRED_CLASSES p ON r.PRED_CLASS_ID = p.PRED_CLASS_ID WHERE r.IMG_ID = 107 AND p.PRED_CLASS = 'has'"
   },
   {
     "question_id": 5545,
     "db": "SQLite",
-    "query": "SELECT DISTINCT m.playerID, m.firstName, m.lastName, t.name AS team_name FROM hockey.Master AS m INNER JOIN hockey.Goalies AS g ON m.playerID = g.playerID INNER JOIN hockey.Teams AS t ON g.year = t.year AND g.tmID = t.tmID WHERE m.birthCountry = 'Canada' AND m.deathYear IS NOT NULL ORDER BY m.playerID, t.name"
+    "query": "SELECT DISTINCT M.firstName, M.lastName, T.name FROM hockey.Master AS M INNER JOIN hockey.Goalies AS G ON M.playerID = G.playerID INNER JOIN hockey.Teams AS T ON G.year = T.year AND G.tmID = T.tmID WHERE M.birthCountry = 'Canada' AND M.deathYear IS NOT NULL AND M.pos = 'G'"
   },
   {
     "question_id": 5576,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T1.nameGiven FROM hockey.Master AS T1 INNER JOIN hockey.HOF AS T2 ON T1.hofID = T2.hofID WHERE T1.shootCatch IS NULL"
+    "query": "SELECT DISTINCT T1.nameGiven FROM hockey.Master AS T1 INNER JOIN hockey.HOF AS T2 ON T1.hofID = T2.hofID WHERE T1.shootCatch IS NULL AND T2.category = 'Player'"
   },
   {
     "question_id": 5584,
     "db": "SQLite",
-    "query": "SELECT T1.birthMon FROM hockey.Master AS T1 INNER JOIN hockey.AwardsPlayers AS T2 ON T1.playerID = T2.playerID GROUP BY T1.playerID, T1.birthMon ORDER BY COUNT(T2.award) DESC LIMIT 1"
+    "query": "SELECT m.birthMon FROM hockey.AwardsPlayers a JOIN hockey.Master m ON a.playerID = m.playerID GROUP BY a.playerID ORDER BY COUNT(*) DESC LIMIT 1"
   },
   {
     "question_id": 5624,
@@ -1866,7 +1866,7 @@
   {
     "question_id": 5637,
     "db": "SQLite",
-    "query": "SELECT tmID FROM hockey.TeamSplits WHERE year = 2005 ORDER BY rW DESC LIMIT 1"
+    "query": "SELECT tmID, rW FROM hockey.TeamSplits WHERE year = 2005 ORDER BY rW DESC LIMIT 1"
   },
   {
     "question_id": 5683,
@@ -1876,7 +1876,7 @@
   {
     "question_id": 5686,
     "db": "SQLite",
-    "query": "SELECT T1.year FROM hockey.Teams AS T1 INNER JOIN hockey.TeamsSC AS T2 ON T1.tmID = T2.tmID AND T1.year = T2.year WHERE T1.name = 'Montreal Canadiens' AND T2.PIM = '49' AND T1.year IN (1924, 1923, 1918)"
+    "query": "SELECT T1.year FROM hockey.Teams AS T1 INNER JOIN hockey.TeamsSC AS T2 ON T1.tmID = T2.tmID AND T1.year = T2.year WHERE T1.name = 'Montreal Canadiens' AND CAST(T2.PIM AS INTEGER) = 49 AND T1.year IN (1924, 1923, 1918)"
   },
   {
     "question_id": 5711,
@@ -1886,32 +1886,32 @@
   {
     "question_id": 5716,
     "db": "SQLite",
-    "query": "SELECT DISTINCT ac.coachID FROM professional_basketball.awards_coaches AS ac WHERE ac.coachID NOT IN (SELECT DISTINCT p.playerID FROM professional_basketball.players AS p WHERE p.playerID IS NOT NULL)"
+    "query": "SELECT DISTINCT T1.coachID FROM hockey.AwardsCoaches AS T1 INNER JOIN hockey.Master AS T2 ON T1.coachID = T2.coachID WHERE T2.playerID IS NULL"
   },
   {
     "question_id": 5718,
     "db": "SQLite",
-    "query": "SELECT SUM(T2.GP) FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.players_teams AS T2 ON T1.playerID = T2.playerID WHERE T1.birthCountry = 'USA'"
+    "query": "SELECT SUM(T2.GP) FROM hockey.Master AS T1 INNER JOIN hockey.Scoring AS T2 ON T1.playerID = T2.playerID WHERE T1.birthCountry = 'USA'"
   },
   {
     "question_id": 5732,
     "db": "SQLite",
-    "query": "SELECT T2.author_id FROM music_platform_2.podcasts AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T2.podcast_id = T1.podcast_id WHERE T1.title = 'Pop Rocket' AND T2.rating < 5 AND T2.created_at LIKE '2016%'"
+    "query": "SELECT DISTINCT T2.author_id FROM music_platform_2.podcasts AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T2.podcast_id = T1.podcast_id WHERE T1.title = 'Pop Rocket' AND T2.rating < 5 AND T2.created_at LIKE '2016-%'"
   },
   {
     "question_id": 5739,
     "db": "SQLite",
-    "query": "SELECT T1.title, T1.itunes_url FROM music_platform_2.podcasts AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T2.podcast_id = T1.podcast_id WHERE T2.title = 'Long time listener, calling it quits'"
+    "query": "SELECT p.title, p.itunes_url FROM music_platform_2.reviews r JOIN music_platform_2.podcasts p ON r.podcast_id = p.podcast_id WHERE r.title = 'Long time listener, calling it quits'"
   },
   {
     "question_id": 5751,
     "db": "SQLite",
-    "query": "SELECT DISTINCT T1.title FROM music_platform_2.podcasts AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T2.podcast_id = T1.podcast_id WHERE T2.created_at BETWEEN '2018-08-22T11:53:16-07:00' AND '2018-11-20T11:14:20-07:00'"
+    "query": "SELECT p.podcast_id, p.title FROM music_platform_2.podcasts p JOIN music_platform_2.reviews r ON p.podcast_id = r.podcast_id WHERE r.created_at >= '2018-08-22T11:53:16-07:00' AND r.created_at <= '2018-11-20T11:14:20-07:00' GROUP BY p.podcast_id, p.title"
   },
   {
     "question_id": 5757,
     "db": "SQLite",
-    "query": "SELECT T2.title FROM music_platform_2.categories AS T1 INNER JOIN music_platform_2.podcasts AS T2 ON T2.podcast_id = T1.podcast_id WHERE T1.category = 'art'"
+    "query": "SELECT OBJ_CLASS FROM image_and_language.OBJ_CLASSES WHERE OBJ_CLASS = 'art'"
   },
   {
     "question_id": 5775,
@@ -1921,22 +1921,22 @@
   {
     "question_id": 5780,
     "db": "SQLite",
-    "query": "SELECT T1.title FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Nutrition AS T2 ON T1.recipe_id = T2.recipe_id ORDER BY T2.total_fat DESC LIMIT 1"
+    "query": "SELECT Recipe.title FROM cookbook.Recipe JOIN cookbook.Nutrition ON Recipe.recipe_id = Nutrition.recipe_id ORDER BY Nutrition.total_fat DESC LIMIT 1"
   },
   {
     "question_id": 5783,
     "db": "SQLite",
-    "query": "SELECT T1.title FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Nutrition AS T2 ON T1.recipe_id = T2.recipe_id WHERE T2.iron > 20"
+    "query": "SELECT Recipe.title FROM cookbook.Recipe JOIN cookbook.Nutrition ON Recipe.recipe_id = Nutrition.recipe_id WHERE Nutrition.iron > 20"
   },
   {
     "question_id": 5791,
     "db": "SQLite",
-    "query": "SELECT T2.min_qty FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Quantity AS T2 ON T1.recipe_id = T2.recipe_id INNER JOIN cookbook.Ingredient AS T3 ON T3.ingredient_id = T2.ingredient_id WHERE T1.title = 'Raspberry Chiffon Pie' AND T3.name = 'graham cracker crumbs'"
+    "query": "SELECT q.min_qty FROM cookbook.Quantity q JOIN cookbook.Recipe r ON q.recipe_id = r.recipe_id JOIN cookbook.Ingredient i ON q.ingredient_id = i.ingredient_id WHERE r.title = 'Raspberry Chiffon Pie' AND i.name = 'graham cracker crumbs' AND q.unit = 'cup(s)'"
   },
   {
     "question_id": 5798,
     "db": "SQLite",
-    "query": "SELECT T3.name FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Quantity AS T2 ON T1.recipe_id = T2.recipe_id INNER JOIN cookbook.Ingredient AS T3 ON T3.ingredient_id = T2.ingredient_id WHERE T1.recipe_id = 1397 AND T2.optional = 'TRUE'"
+    "query": "SELECT i.name FROM cookbook.Quantity AS q JOIN cookbook.Ingredient AS i ON q.ingredient_id = i.ingredient_id WHERE q.recipe_id = 1397 AND q.optional = 'TRUE'"
   },
   {
     "question_id": 5805,
@@ -1966,7 +1966,7 @@
   {
     "question_id": 5973,
     "db": "SQLite",
-    "query": "SELECT T1.first_name, T1.last_name, COUNT(T2.rental_id) AS rental_count FROM movie_3.customer AS T1 INNER JOIN movie_3.rental AS T2 ON T1.customer_id = T2.customer_id WHERE (T1.first_name = 'RUTH' AND T1.last_name = 'MARTINEZ') OR (T1.first_name = 'LINDA' AND T1.last_name = 'WILLIAMS') GROUP BY T1.customer_id, T1.first_name, T1.last_name ORDER BY rental_count DESC LIMIT 1"
+    "query": "SELECT c.first_name, c.last_name, COUNT(r.rental_id) AS rental_count FROM movie_3.customer c JOIN movie_3.rental r ON c.customer_id = r.customer_id WHERE (c.first_name = 'RUTH' AND c.last_name = 'MARTINEZ') OR (c.first_name = 'LINDA' AND c.last_name = 'WILLIAMS') GROUP BY c.customer_id, c.first_name, c.last_name ORDER BY rental_count DESC"
   },
   {
     "question_id": 5979,
@@ -1981,17 +1981,17 @@
   {
     "question_id": 6002,
     "db": "SQLite",
-    "query": "SELECT T2.title FROM movie_3.inventory AS T1 INNER JOIN movie_3.film AS T2 ON T1.film_id = T2.film_id WHERE T1.inventory_id = 3479"
+    "query": "SELECT f.title FROM movie_3.inventory AS i JOIN movie_3.film AS f ON i.film_id = f.film_id WHERE i.inventory_id = 3479"
   },
   {
     "question_id": 6022,
     "db": "SQLite",
-    "query": "SELECT T1.rental_rate / T1.rental_duration AS daily_rental_price FROM movie_3.film AS T1 INNER JOIN movie_3.film_category AS T2 ON T1.film_id = T2.film_id INNER JOIN movie_3.category AS T3 ON T2.category_id = T3.category_id WHERE T3.name = 'Children' ORDER BY T1.rental_rate DESC LIMIT 1"
+    "query": "SELECT f.title, f.rental_rate / f.rental_duration AS daily_rental_price FROM movie_3.film f JOIN movie_3.film_category fc ON f.film_id = fc.film_id JOIN movie_3.category c ON fc.category_id = c.category_id WHERE c.name = 'Children' ORDER BY f.rental_rate DESC LIMIT 1"
   },
   {
     "question_id": 6026,
     "db": "SQLite",
-    "query": "SELECT T4.first_name, T4.last_name FROM movie_3.country AS T1 INNER JOIN movie_3.city AS T2 ON T1.country_id = T2.country_id INNER JOIN movie_3.address AS T3 ON T2.city_id = T3.city_id INNER JOIN movie_3.customer AS T4 ON T3.address_id = T4.address_id WHERE T1.country = 'India'"
+    "query": "SELECT c.first_name, c.last_name FROM movie_3.customer c JOIN movie_3.address a ON c.address_id = a.address_id JOIN movie_3.city ci ON a.city_id = ci.city_id JOIN movie_3.country co ON ci.country_id = co.country_id WHERE co.country = 'India'"
   },
   {
     "question_id": 6032,
@@ -2001,7 +2001,7 @@
   {
     "question_id": 6053,
     "db": "SQLite",
-    "query": "SELECT COUNT(film_id) FROM movie_3.film WHERE rental_rate = 0.99"
+    "query": "SELECT COUNT(*) FROM movie_3.film WHERE rental_rate = 0.99"
   },
   {
     "question_id": 6080,
@@ -2011,16 +2011,16 @@
   {
     "question_id": 6103,
     "db": "SQLite",
-    "query": "SELECT T1.address_id FROM movie_3.address AS T1 INNER JOIN movie_3.city AS T2 ON T1.city_id = T2.city_id INNER JOIN movie_3.country AS T3 ON T2.country_id = T3.country_id WHERE T3.country = 'Gansu'"
+    "query": "SELECT address_id FROM movie_3.address WHERE district = 'Gansu'"
   },
   {
     "question_id": 6119,
     "db": "SQLite",
-    "query": "SELECT COUNT(actor_id) FROM movie_3.actor WHERE first_name = 'Dan'"
+    "query": "SELECT COUNT(*) FROM movie_3.actor WHERE first_name = 'Dan'"
   },
   {
     "question_id": 6126,
     "db": "SQLite",
-    "query": "SELECT T2.address FROM movie_3.customer AS T1 INNER JOIN movie_3.address AS T2 ON T1.address_id = T2.address_id WHERE T1.active = 0"
+    "query": "SELECT a.address FROM movie_3.customer c JOIN movie_3.address a ON c.address_id = a.address_id WHERE c.active = 0"
   }
 ]

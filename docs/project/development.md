@@ -56,7 +56,7 @@ PYTHONPATH=src python3 -B -m unittest discover -s tests -p 'test_react.py' -v
 | `--output` | 运行父目录；入口在其中创建指纹子目录 |
 | `--offline` | 写入请求并消费已保存的响应，不直接访问接口 |
 
-`api()` 从环境变量 `MODEL_API_KEY` 读取可选认证信息；凭据文件及本地环境配置由Git忽略。普通模式通过 `completion_payload()` 构造供应方参数，ReAct当前单独构造请求，没有 `--provider` 参数。
+`api()` 从环境变量 `MODEL_API_KEY` 读取可选认证信息；凭据文件及本地环境配置由Git忽略。普通模式和ReAct共用 `completion_payload()` 构造供应方参数，都支持 `--provider vllm|deepseek`；DeepSeek请求关闭思考模式。
 
 离线调用普通RAG时，先使用已保存的服务模型列表生成请求，再通过curl传输：
 
