@@ -66,7 +66,7 @@ python -m unittest discover -s tests -v
 
 模型生成入口会打印实际运行目录。数据、代码和问题集合变化会产生新的运行指纹；后续操作使用该目录，不要照搬历史运行的指纹。
 
-普通 `model` 入口还支持 `--base-url`、`--model`、`--provider vllm|deepseek` 和离线模式的 `--models-file`；认证通过环境变量 `MODEL_API_KEY` 读取。`react` 当前保留独立的请求构建逻辑，没有 `--provider` 参数。参数及离线流程见[开发说明](docs/project/development.md#模型服务与离线运行)。
+普通 `model` 入口还支持 `--base-url`、`--model`、`--provider vllm|deepseek` 和离线模式的 `--models-file`；认证通过环境变量 `MODEL_API_KEY` 读取。`react` 同样支持 `--provider vllm|deepseek`，默认读取原始证据并保留中文表注释、同题原始案例及修订；完整训练集SQLite题目的DeepSeek ReAct运行使用 `scripts/run_sqlite_train_react.py`。参数及离线流程见[开发说明](docs/project/development.md#模型服务与离线运行)。
 
 ## 使用 curl 批量调用
 

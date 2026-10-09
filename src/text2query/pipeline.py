@@ -95,7 +95,7 @@ def ddl_columns(ddl):
     return columns
 
 
-def schema_catalog():
+def schema_catalog(preserve_raw=False):
     tables, encodings = [], {}
     for path in sorted((RAW / 'Schema').glob('*.txt')):
         text, encoding = read_text(path)
@@ -133,15 +133,34 @@ def schema_catalog():
                         break
             ddl = block[:stop]
             columns = ddl_columns(ddl)
-            tables.append({'source': engine, 'database': db, 'table': table, 'columns': columns,
+            entry = {'source': engine, 'database': db, 'table': table, 'columns': columns,
                            'ddl': ddl, 'file': path.name,
-                           'foreign_keys': re.findall(r'FOREIGN KEY[^\n]+', ddl, re.I)})
+                           'foreign_keys': re.findall(r'FOREIGN KEY[^\n]+', ddl, re.I)}
+            if preserve_raw:
+                # Keep executable DDL unchanged; comments/options are retrieval evidence.
+                prefix = text[:event.start()]
+                preceding = re.search(r'(?:(?:^[ \t]*--[^\n]*\n)|(?:^[ \t\r]*\n))+\Z', prefix, re.M)
+                begin = preceding.start() if preceding else event.start()
+                following = re.search(r'(?:(?:^[ \t]*--[^\n]*\n)|(?:^[ \t\r]*\n))+\Z', text[:end], re.M)
+                raw_end = following.start() if following and following.start() > event.start()+stop else end
+                entry.update(raw_schema=text[begin:raw_end],
+                             table_comments=re.findall(r'\bCOMMENT\s*=\s*\x27((?:\x27\x27|[^\x27])*)\x27', block, re.I),
+                             provenance={'file':str(path.relative_to(ROOT)), 'encoding':encoding,
+                                         'start_line':text[:begin].count('\n')+1,
+                                         'end_line':text[:raw_end].count('\n')+1,
+                                         'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+            tables.append(entry)
         if 'PUT /medical_institutions' in text:
             mapping = text.split('PUT /medical_institutions', 1)[1].split('-- ===', 1)[0]
             mapping = re.sub(r'//[^\n]*', '', mapping).strip()
             obj = json.loads(mapping)
-            tables.append({'source': 'Elasticsearch', 'database': None, 'table': 'medical_institutions',
-                           'mapping': obj['mappings']['properties'], 'file': path.name})
+            entry = {'source': 'Elasticsearch', 'database': None, 'table': 'medical_institutions',
+                     'mapping': obj['mappings']['properties'], 'file': path.name}
+            if preserve_raw:
+                entry.update(raw_schema=text[text.index('PUT /medical_institutions'):],
+                             provenance={'file':str(path.relative_to(ROOT)), 'encoding':encoding,
+                                         'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+            tables.append(entry)
     return tables, encodings
 
 

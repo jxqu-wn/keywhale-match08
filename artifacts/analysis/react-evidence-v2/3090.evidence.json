@@ -1,0 +1,727 @@
+{
+  "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+  "initial_prompt": {
+    "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "book_publishing_company"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "weak",
+      "reason": "首条训练示例，仅为候选",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema_adjudications": [],
+    "schema_candidates": [
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.jobs"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.employee"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.administrative_division"
+      },
+      {
+        "source": "MYSQL",
+        "table": "finance_tax.stock_daily_trades"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.dict_grade_level"
+      },
+      {
+        "source": "MYSQL",
+        "table": "transportation.employee"
+      },
+      {
+        "source": "MYSQL",
+        "table": "energy.energy_company"
+      },
+      {
+        "source": "MYSQL",
+        "table": "energy.employee"
+      },
+      {
+        "source": "MYSQL",
+        "table": "transportation.driver"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.energy_position_dict"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.employee_type_dict"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.license_type_dict"
+      }
+    ],
+    "tools": {
+      "get_schema": {
+        "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+        "args": {
+          "tables": [
+            "可选，完整库名.表名或PG裸表名"
+          ],
+          "query": "可选关键词",
+          "source": "可选数据源",
+          "database": "可选数据库",
+          "limit": "可选1到12，默认8",
+          "include_source_documents": "可选布尔值；返回对应完整原始Schema文件"
+        }
+      },
+      "search_knowledge": {
+        "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到12，默认10",
+          "include_dictionary_text": "可选布尔值；返回匹配字典的完整原始INSERT"
+        }
+      },
+      "search_examples": {
+        "purpose": "首先检索训练示例及schema_refs；精确匹配保留全部原始候选、重复/冲突标注和附加修订，原始标注不保证正确。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到5，默认3"
+        }
+      },
+      "check_query": {
+        "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+        "args": {
+          "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+        }
+      },
+      "finish": {
+        "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+        "args": {
+          "prediction": "完整查询对象"
+        }
+      }
+    },
+    "evidence_mode": "raw_with_reviewed_overlays",
+    "exact_examples": [
+      {
+        "question_id": 3090,
+        "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+        "db": "SQLite",
+        "query": "SELECT T1.fname, T1.minit, T1.lname FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.job_lvl DESC LIMIT 1",
+        "raw_annotation": {
+          "question_id": 3090,
+          "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+          "db": "SQLite",
+          "query": "SELECT T1.fname, T1.minit, T1.lname FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.job_lvl DESC LIMIT 1"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3090
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "jobs"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "employee"
+          }
+        ]
+      }
+    ],
+    "workflow": {
+      "next_action": "search_examples",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ]
+    },
+    "instruction": "同题案例完整提供且不受Top-K限制；先search_examples，再查Schema和知识，检查成功后finish。"
+  },
+  "search_examples": {
+    "ok": true,
+    "examples": [
+      {
+        "question_id": 3090,
+        "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+        "db": "SQLite",
+        "query": "SELECT T1.fname, T1.minit, T1.lname FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.job_lvl DESC LIMIT 1",
+        "raw_annotation": {
+          "question_id": 3090,
+          "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+          "db": "SQLite",
+          "query": "SELECT T1.fname, T1.minit, T1.lname FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.job_lvl DESC LIMIT 1"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3090
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "jobs"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "employee"
+          }
+        ]
+      },
+      {
+        "question_id": 3054,
+        "question": "出版社哪个员工的职位级别最低？列出其名、姓和入职日期。",
+        "db": "SQLite",
+        "query": "SELECT fname, lname, hire_date FROM book_publishing_company.employee ORDER BY job_lvl LIMIT 1",
+        "raw_annotation": {
+          "question_id": 3054,
+          "question": "出版社哪个员工的职位级别最低？列出其名、姓和入职日期。",
+          "db": "SQLite",
+          "query": "SELECT fname, lname, hire_date FROM book_publishing_company.employee ORDER BY job_lvl LIMIT 1"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3054
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "employee"
+          }
+        ]
+      },
+      {
+        "question_id": 3087,
+        "question": "出版社员工 O'Rourke 的职位级别是多少？",
+        "db": "SQLite",
+        "query": "SELECT job_lvl FROM book_publishing_company.employee WHERE lname = 'O''Rourke'",
+        "raw_annotation": {
+          "question_id": 3087,
+          "question": "出版社员工 O'Rourke 的职位级别是多少？",
+          "db": "SQLite",
+          "query": "SELECT job_lvl FROM book_publishing_company.employee WHERE lname = 'O''Rourke'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3087
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "employee"
+          }
+        ]
+      }
+    ],
+    "exact_matches": [
+      {
+        "question_id": 3090,
+        "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+        "db": "SQLite",
+        "query": "SELECT T1.fname, T1.minit, T1.lname FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.job_lvl DESC LIMIT 1",
+        "raw_annotation": {
+          "question_id": 3090,
+          "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+          "db": "SQLite",
+          "query": "SELECT T1.fname, T1.minit, T1.lname FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.job_lvl DESC LIMIT 1"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3090
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "jobs"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "employee"
+          }
+        ]
+      }
+    ],
+    "exact_match_count": 1,
+    "corrected_examples": [],
+    "question_correction": null,
+    "instruction": "精确匹配优先核对，但原始标注不保证正确；保留重复与冲突，区分raw_annotation和reviewed_annotation。按schema_refs补查物理表，再检索知识。",
+    "workflow": {
+      "next_action": "get_schema",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": false,
+        "search_knowledge": false,
+        "check_query": false
+      },
+      "scope": {
+        "databases": [
+          "book_publishing_company"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  },
+  "get_schema": {
+    "ok": true,
+    "tables": [
+      {
+        "source": "SQLite",
+        "database": "book_publishing_company",
+        "table": "jobs",
+        "columns": [
+          {
+            "name": "job_id",
+            "type": "INTEGER",
+            "definition": "job_id   INTEGER\r\n        primary key"
+          },
+          {
+            "name": "job_desc",
+            "type": "TEXT",
+            "definition": "job_desc TEXT not null"
+          },
+          {
+            "name": "min_lvl",
+            "type": "INTEGER",
+            "definition": "min_lvl  INTEGER     not null"
+          },
+          {
+            "name": "max_lvl",
+            "type": "INTEGER",
+            "definition": "max_lvl  INTEGER     not null"
+          }
+        ],
+        "ddl": "CREATE TABLE jobs\r\n(\r\n    job_id   INTEGER\r\n        primary key,\r\n    job_desc TEXT not null,\r\n    min_lvl  INTEGER     not null,\r\n    max_lvl  INTEGER     not null\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [],
+        "raw_schema": "\r\n-- 表: jobs\r\nCREATE TABLE jobs\r\n(\r\n    job_id   INTEGER\r\n        primary key,\r\n    job_desc TEXT not null,\r\n    min_lvl  INTEGER     not null,\r\n    max_lvl  INTEGER     not null\r\n)\r\n",
+        "table_comments": [],
+        "provenance": {
+          "file": "data/raw/subject/Schema/bird_schemas.txt",
+          "encoding": "utf-8-sig",
+          "start_line": 272,
+          "end_line": 282,
+          "sha256": "ac29c850c2507718656a9cb89ceba95796d3bf286a26413b4bd43486ad39db6c"
+        }
+      },
+      {
+        "source": "SQLite",
+        "database": "book_publishing_company",
+        "table": "employee",
+        "columns": [
+          {
+            "name": "emp_id",
+            "type": "TEXT",
+            "definition": "emp_id    TEXT\r\n        primary key"
+          },
+          {
+            "name": "fname",
+            "type": "TEXT",
+            "definition": "fname     TEXT not null"
+          },
+          {
+            "name": "minit",
+            "type": "TEXT",
+            "definition": "minit     TEXT"
+          },
+          {
+            "name": "lname",
+            "type": "TEXT",
+            "definition": "lname     TEXT not null"
+          },
+          {
+            "name": "job_id",
+            "type": "INTEGER",
+            "definition": "job_id    INTEGER     not null"
+          },
+          {
+            "name": "job_lvl",
+            "type": "INTEGER",
+            "definition": "job_lvl   INTEGER"
+          },
+          {
+            "name": "pub_id",
+            "type": "TEXT",
+            "definition": "pub_id    TEXT     not null"
+          },
+          {
+            "name": "hire_date",
+            "type": "DATETIME",
+            "definition": "hire_date DATETIME    not null"
+          }
+        ],
+        "ddl": "CREATE TABLE employee\r\n(\r\n    emp_id    TEXT\r\n        primary key,\r\n    fname     TEXT not null,\r\n    minit     TEXT,\r\n    lname     TEXT not null,\r\n    job_id    INTEGER     not null,\r\n    job_lvl   INTEGER,\r\n    pub_id    TEXT     not null,\r\n    hire_date DATETIME    not null,\r\n    foreign key (job_id) references jobs(job_id)\r\n            on update cascade on delete cascade,\r\n    foreign key (pub_id) references publishers(pub_id)\r\n            on update cascade on delete cascade\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (job_id) references jobs(job_id)\r",
+          "foreign key (pub_id) references publishers(pub_id)\r"
+        ],
+        "raw_schema": "\r\n-- 表: employee\r\nCREATE TABLE employee\r\n(\r\n    emp_id    TEXT\r\n        primary key,\r\n    fname     TEXT not null,\r\n    minit     TEXT,\r\n    lname     TEXT not null,\r\n    job_id    INTEGER     not null,\r\n    job_lvl   INTEGER,\r\n    pub_id    TEXT     not null,\r\n    hire_date DATETIME    not null,\r\n    foreign key (job_id) references jobs(job_id)\r\n            on update cascade on delete cascade,\r\n    foreign key (pub_id) references publishers(pub_id)\r\n            on update cascade on delete cascade\r\n)\r\n",
+        "table_comments": [],
+        "provenance": {
+          "file": "data/raw/subject/Schema/bird_schemas.txt",
+          "encoding": "utf-8-sig",
+          "start_line": 293,
+          "end_line": 311,
+          "sha256": "ac29c850c2507718656a9cb89ceba95796d3bf286a26413b4bd43486ad39db6c"
+        }
+      }
+    ],
+    "missing_tables": [],
+    "scope": {
+      "sources": [
+        "SQLite"
+      ],
+      "databases": [
+        "book_publishing_company"
+      ],
+      "confidence": "schema",
+      "reason": "已获取的真实Schema，知识按此范围检索"
+    },
+    "source_documents": [],
+    "reference_documents": [],
+    "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。",
+    "workflow": {
+      "next_action": "search_knowledge",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": true,
+        "search_knowledge": false,
+        "check_query": false
+      },
+      "scope": {
+        "sources": [
+          "SQLite"
+        ],
+        "databases": [
+          "book_publishing_company"
+        ],
+        "confidence": "schema",
+        "reason": "已获取的真实Schema，知识按此范围检索"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  },
+  "search_knowledge": {
+    "ok": true,
+    "knowledge": [
+      {
+        "knowledge_id": 6,
+        "knowledge_text": "在数据库book_publishing_company的表employee中，fname表示员工的名，lname表示员工的姓，minit表示中间名（minit=''表示没有中间名），emp_id表示员工ID，hire_date表示入职日期，job_lvl表示职位级别，job_id和pub_id分别表示关联的职位ID和出版社ID。",
+        "raw_annotation": {
+          "knowledge_id": 6,
+          "knowledge_text": "在数据库book_publishing_company的表employee中，fname表示员工的名，lname表示员工的姓，minit表示中间名（minit=''表示没有中间名），emp_id表示员工ID，hire_date表示入职日期，job_lvl表示职位级别，job_id和pub_id分别表示关联的职位ID和出版社ID。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 6
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 540,
+        "knowledge_text": "在数据库book_publishing_company的表jobs中，字段max_lvl，数据类型为整数（integer），表示最高职位级别，取值为常识证据：职位描述中提及的职位级别范围是（最低级别，最高级别）。",
+        "raw_annotation": {
+          "knowledge_id": 540,
+          "knowledge_text": "在数据库book_publishing_company的表jobs中，字段max_lvl，数据类型为整数（integer），表示最高职位级别，取值为常识证据：职位描述中提及的职位级别范围是（最低级别，最高级别）。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 540
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 534,
+        "knowledge_text": "在数据库book_publishing_company的表employee中，字段job_lvl，数据类型为整数（integer），表示职位级别，取值为常识证据：数值越高表示职位级别越高。",
+        "raw_annotation": {
+          "knowledge_id": 534,
+          "knowledge_text": "在数据库book_publishing_company的表employee中，字段job_lvl，数据类型为整数（integer），表示职位级别，取值为常识证据：数值越高表示职位级别越高。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 534
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 539,
+        "knowledge_text": "在数据库book_publishing_company的表jobs中，字段min_lvl，数据类型为整数（integer），表示最低职位级别。",
+        "raw_annotation": {
+          "knowledge_id": 539,
+          "knowledge_text": "在数据库book_publishing_company的表jobs中，字段min_lvl，数据类型为整数（integer），表示最低职位级别。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 539
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 7,
+        "knowledge_text": "在数据库book_publishing_company的表jobs中，job_desc表示职位描述（如'Chief Financial Officier'表示首席财务官，'Managing Editor'表示总编辑），max_lvl表示该职位的最高级别，job_id是主键。",
+        "raw_annotation": {
+          "knowledge_id": 7,
+          "knowledge_text": "在数据库book_publishing_company的表jobs中，job_desc表示职位描述（如'Chief Financial Officier'表示首席财务官，'Managing Editor'表示总编辑），max_lvl表示该职位的最高级别，job_id是主键。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 7
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 4,
+        "knowledge_text": "在数据库book_publishing_company的表publishers中，pub_name表示出版社名称，country表示国家（如'USA'表示美国，'France'表示法国），pub_id是主键。country!='USA'表示非美国出版社。",
+        "raw_annotation": {
+          "knowledge_id": 4,
+          "knowledge_text": "在数据库book_publishing_company的表publishers中，pub_name表示出版社名称，country表示国家（如'USA'表示美国，'France'表示法国），pub_id是主键。country!='USA'表示非美国出版社。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 4
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 570,
+        "knowledge_text": "在数据库book_publishing_company的表titles中，字段pub_id，数据类型为文本（text），表示出版社ID。",
+        "raw_annotation": {
+          "knowledge_id": 570,
+          "knowledge_text": "在数据库book_publishing_company的表titles中，字段pub_id，数据类型为文本（text），表示出版社ID。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 570
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 530,
+        "knowledge_text": "在数据库book_publishing_company的表employee中，字段fname，数据类型为文本（text），表示员工的名。",
+        "raw_annotation": {
+          "knowledge_id": 530,
+          "knowledge_text": "在数据库book_publishing_company的表employee中，字段fname，数据类型为文本（text），表示员工的名。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 530
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 9,
+        "knowledge_text": "在数据库book_publishing_company的表pub_info中，pr_info表示出版社的详细信息，pub_id与publishers表关联。",
+        "raw_annotation": {
+          "knowledge_id": 9,
+          "knowledge_text": "在数据库book_publishing_company的表pub_info中，pr_info表示出版社的详细信息，pub_id与publishers表关联。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 9
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 542,
+        "knowledge_text": "在数据库book_publishing_company的表publishers中，字段pub_name，数据类型为文本（text），表示出版社名称。",
+        "raw_annotation": {
+          "knowledge_id": 542,
+          "knowledge_text": "在数据库book_publishing_company的表publishers中，字段pub_name，数据类型为文本（text），表示出版社名称。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 542
+        },
+        "scope": {
+          "databases": [
+            "book_publishing_company"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      }
+    ],
+    "dictionary": [],
+    "scope": {
+      "sources": [
+        "SQLite"
+      ],
+      "databases": [
+        "book_publishing_company"
+      ],
+      "confidence": "schema",
+      "reason": "已获取的真实Schema，知识按此范围检索"
+    },
+    "schema_adjudications": [],
+    "query_helpers": [],
+    "workflow": {
+      "next_action": "check_query",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": true,
+        "search_knowledge": true,
+        "check_query": false
+      },
+      "scope": {
+        "sources": [
+          "SQLite"
+        ],
+        "databases": [
+          "book_publishing_company"
+        ],
+        "confidence": "schema",
+        "reason": "已获取的真实Schema，知识按此范围检索"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  }
+}

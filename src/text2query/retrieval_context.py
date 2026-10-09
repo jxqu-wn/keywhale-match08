@@ -1,6 +1,6 @@
 """Question-derived domain routing and scoped, dependency-complete knowledge."""
 import re
-from .pipeline import queries, references, source
+from .pipeline import queries, references, source, normalize
 
 PROFILES = [
     (r'Yelp|精英用户|商家.*营业|商家.*评论|有趣投票|营业时间', ['public_review_platform']),
@@ -51,6 +51,36 @@ def infer_scope(question, examples, catalog):
 
 def row_domains(row):
     return {ref.split('.',1)[0] for sql in queries(row) for ref in references(sql)}
+
+
+def evidence_scope(question, ranked_examples, catalog):
+    """Route by actual case evidence, keeping alternatives instead of a topic gate.
+
+    Literal database declarations retain precedence. Exact questions outrank
+    lexical neighbours; duplicates from different domains remain alternatives.
+    No topic word (e.g. All-Star) declares an exclusive database here.
+    """
+    known = {t.get('database'): t['source'] for t in catalog if t.get('database')}
+    explicit = [db for db in known if re.search(
+        r'(?<![A-Za-z0-9_])' + re.escape(db) + r'(?![A-Za-z0-9_])', question, re.I)]
+    exact = [(score, row) for score, row in ranked_examples
+             if normalize(row['question']) == normalize(question)]
+    support = {}
+    for score, row in exact or ranked_examples:
+        for db in row_domains(row):
+            support[db] = max(support.get(db, 0), score)
+    best = max(support.values(), default=0)
+    domains = sorted(support) if exact else [db for db, score in sorted(
+        support.items(), key=lambda pair: (-pair[1], pair[0])) if score >= best * 0.7]
+    selected = explicit or domains
+    return {'databases': selected,
+            'sources': sorted({known[db] for db in selected if db in known}),
+            'confidence': 'explicit' if explicit else 'exact_case' if exact else 'weak',
+            'reason': '显式库名' if explicit else '同题案例的实际库表引用' if exact else '相似案例的多域候选，尚未确认',
+            'alternatives': domains,
+            'domain_support': [{'database': db, 'score': round(score, 4)}
+                               for db, score in sorted(support.items(), key=lambda pair: -pair[1])],
+            'instruction': '案例引用是领域证据；多个域或显式声明与案例冲突时查证后选择，不能仅凭领域词排除其他库。'}
 
 
 def compatible_example(row, scope):
@@ -109,7 +139,7 @@ def mandatory_knowledge(question, scope):
     return list(dict.fromkeys(result))
 
 
-def select_knowledge(question, knowledge, retriever, scope, catalog):
+def select_knowledge(question, knowledge, retriever, scope, catalog, inspected_tables=None):
     mandatory = mandatory_knowledge(question, scope)
     by_id = {item['knowledge_id']:item for item in knowledge}
     chosen = []
@@ -133,6 +163,16 @@ def select_knowledge(question, knowledge, retriever, scope, catalog):
         # With a strong route, unscoped narrative can crowd out actual field facts.
         if scope['confidence'] != 'weak' and not declared['databases'] and not declared['sources']:
             continue
+        if inspected_tables is not None:
+            # Match identifiers, not a hardcoded topic/knowledge-ID exclusion.
+            # Broad database rules remain available, but facts explicitly about
+            # other tables cannot crowd out the fields actually being queried.
+            named_tables = {f"{t.get('database')}.{t['table']}".lower() for t in catalog
+                            if t.get('database') in declared['databases'] and re.search(
+                                r'(?<![A-Za-z0-9_])' + re.escape(t['table']) + r'(?![A-Za-z0-9_])',
+                                item['knowledge_text'], re.I)}
+            if named_tables and not named_tables.intersection(inspected_tables):
+                continue
         chosen.append({**item,'scope':declared,'retrieval_reason':'域内关键词召回'})
     for item in chosen:
         coordinates = []

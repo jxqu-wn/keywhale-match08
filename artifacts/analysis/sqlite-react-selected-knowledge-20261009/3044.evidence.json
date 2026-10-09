@@ -1,0 +1,440 @@
+{
+  "question_id": 3044,
+  "question": "列出书名ID为 'BU2075' 且在10000到50000范围内的书名和版税百分比。",
+  "initial_user_prompt": {
+    "question": "列出书名ID为 'BU2075' 且在10000到50000范围内的书名和版税百分比。",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "book_publishing_company"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "weak",
+      "reason": "首条训练示例，仅为候选",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema_adjudications": [],
+    "schema_candidates": [
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.authors"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.jobs"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.publishers"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.employee"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.pub_info"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.stores"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.discounts"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.titles"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.roysched"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.sales"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.titleauthor"
+      },
+      {
+        "source": "SQLite",
+        "table": "video_games.game_publisher"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.games_competitor"
+      },
+      {
+        "source": "SQLite",
+        "table": "video_games.game_platform"
+      },
+      {
+        "source": "SQLite",
+        "table": "authors.Paper"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.competitor_event"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.event"
+      },
+      {
+        "source": "SQLite",
+        "table": "video_games.game"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.games_city"
+      }
+    ],
+    "tools": {
+      "get_schema": {
+        "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+        "args": {
+          "tables": [
+            "可选，完整库名.表名或PG裸表名"
+          ],
+          "query": "可选关键词",
+          "source": "可选数据源",
+          "database": "可选数据库",
+          "limit": "可选1到12，默认8"
+        }
+      },
+      "search_knowledge": {
+        "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到12，默认10"
+        }
+      },
+      "search_examples": {
+        "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到5，默认3"
+        }
+      },
+      "check_query": {
+        "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+        "args": {
+          "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+        }
+      },
+      "finish": {
+        "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+        "args": {
+          "prediction": "完整查询对象"
+        }
+      }
+    },
+    "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+  },
+  "observations": [
+    {
+      "step": 0,
+      "action": "get_schema",
+      "args": {
+        "tables": [
+          "book_publishing_company.titles"
+        ],
+        "source": "SQLite"
+      },
+      "observation": {
+        "ok": true,
+        "tables": [
+          {
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "titles",
+            "columns": [
+              {
+                "name": "title_id",
+                "type": "TEXT",
+                "definition": "title_id  TEXT\r\n        primary key"
+              },
+              {
+                "name": "title",
+                "type": "TEXT",
+                "definition": "title     TEXT not null"
+              },
+              {
+                "name": "type",
+                "type": "TEXT",
+                "definition": "type      TEXT    not null"
+              },
+              {
+                "name": "pub_id",
+                "type": "TEXT",
+                "definition": "pub_id    TEXT"
+              },
+              {
+                "name": "price",
+                "type": "REAL",
+                "definition": "price     REAL"
+              },
+              {
+                "name": "advance",
+                "type": "REAL",
+                "definition": "advance   REAL"
+              },
+              {
+                "name": "royalty",
+                "type": "INTEGER",
+                "definition": "royalty   INTEGER"
+              },
+              {
+                "name": "ytd_sales",
+                "type": "INTEGER",
+                "definition": "ytd_sales INTEGER"
+              },
+              {
+                "name": "notes",
+                "type": "TEXT",
+                "definition": "notes     TEXT"
+              },
+              {
+                "name": "pubdate",
+                "type": "DATETIME",
+                "definition": "pubdate   DATETIME    not null"
+              }
+            ],
+            "ddl": "CREATE TABLE titles\r\n(\r\n    title_id  TEXT\r\n        primary key,\r\n    title     TEXT not null,\r\n    type      TEXT    not null,\r\n    pub_id    TEXT,\r\n    price     REAL,\r\n    advance   REAL,\r\n    royalty   INTEGER,\r\n    ytd_sales INTEGER,\r\n    notes     TEXT,\r\n    pubdate   DATETIME    not null,\r\n    foreign key (pub_id) references publishers(pub_id)\r\n            on update cascade on delete cascade\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": [
+              "foreign key (pub_id) references publishers(pub_id)\r"
+            ]
+          }
+        ],
+        "missing_tables": [],
+        "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+      }
+    },
+    {
+      "step": 1,
+      "action": "search_knowledge",
+      "args": {
+        "query": "royalty 版税百分比 titles 范围 10000 50000"
+      },
+      "observation": {
+        "ok": true,
+        "knowledge": [
+          {
+            "knowledge_id": 3,
+            "knowledge_text": "在数据库book_publishing_company的表roysched中，royalty表示版税百分比，lorange表示版税范围下限（lorange=0表示没有最低范围限制），hirange表示版税范围上限，title_id表示关联的书名ID。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 573,
+            "knowledge_text": "在数据库book_publishing_company的表titles中，字段royalty，数据类型为整数（integer），表示版税。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 552,
+            "knowledge_text": "在数据库book_publishing_company的表roysched中，字段royalty，数据类型为整数（integer），表示版税。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 567,
+            "knowledge_text": "在数据库book_publishing_company的表titles中，字段title_id，数据类型为文本（text），表示书名ID。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 10,
+            "knowledge_text": "在数据库book_publishing_company的表titleauthor中，au_id和title_id分别表示作者ID和书名ID，用于关联authors表和titles表。",
+            "scope": {
+              "databases": [
+                "authors",
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 568,
+            "knowledge_text": "在数据库book_publishing_company的表titles中，字段title，数据类型为文本（text），表示书名。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 2,
+            "knowledge_text": "在数据库book_publishing_company的表titles中，pubdate表示出版日期，ytd_sales表示年初至今的销售额，notes表示书籍的备注信息，type表示书籍类型（如'business'表示商业类），price表示书籍价格，advance表示预付款金额，royalty表示版税，title_id是主键。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 1766,
+            "knowledge_text": "计算某类别数量占总数的百分比公式：ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM 总表), 2)。",
+            "declared_scope": {
+              "databases": [],
+              "sources": [
+                "MYSQL",
+                "SQLite",
+                "POSTGRESQL",
+                "Elasticsearch"
+              ]
+            },
+            "scope": {
+              "databases": [],
+              "sources": [
+                "MYSQL",
+                "SQLite",
+                "POSTGRESQL",
+                "Elasticsearch"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 564,
+            "knowledge_text": "在数据库book_publishing_company的表titleauthor中，字段title_id，数据类型为文本（text），表示书名ID。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 558,
+            "knowledge_text": "在数据库book_publishing_company的表sales中，字段title_id，数据类型为文本（text），表示标识书名的ID编号。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          }
+        ],
+        "dictionary": [],
+        "schema_adjudications": [],
+        "query_helpers": []
+      }
+    },
+    {
+      "step": 2,
+      "action": "get_schema",
+      "args": {
+        "tables": [
+          "book_publishing_company.roysched"
+        ],
+        "source": "SQLite"
+      },
+      "observation": {
+        "ok": true,
+        "tables": [
+          {
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "roysched",
+            "columns": [
+              {
+                "name": "title_id",
+                "type": "TEXT",
+                "definition": "title_id TEXT not null"
+              },
+              {
+                "name": "lorange",
+                "type": "INTEGER",
+                "definition": "lorange  INTEGER"
+              },
+              {
+                "name": "hirange",
+                "type": "INTEGER",
+                "definition": "hirange  INTEGER"
+              },
+              {
+                "name": "royalty",
+                "type": "INTEGER",
+                "definition": "royalty  INTEGER"
+              }
+            ],
+            "ddl": "CREATE TABLE roysched\r\n(\r\n    title_id TEXT not null,\r\n    lorange  INTEGER,\r\n    hirange  INTEGER,\r\n    royalty  INTEGER,\r\n    foreign key (title_id)  references titles(title_id)\r\n            on update cascade on delete cascade\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": [
+              "foreign key (title_id)  references titles(title_id)\r"
+            ]
+          }
+        ],
+        "missing_tables": [],
+        "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+      }
+    }
+  ],
+  "prediction": {
+    "db": "SQLite",
+    "query": "SELECT t.title, r.royalty FROM book_publishing_company.titles t JOIN book_publishing_company.roysched r ON t.title_id = r.title_id WHERE t.title_id = 'BU2075' AND r.lorange >= 10000 AND r.hirange <= 50000"
+  },
+  "original_training_annotation": {
+    "question_id": 3044,
+    "question": "列出书名ID为 'BU2075' 且在10000到50000范围内的书名和版税百分比。",
+    "db": "SQLite",
+    "query": "SELECT T1.title, T2.royalty FROM book_publishing_company.titles AS T1 INNER JOIN book_publishing_company.roysched AS T2 ON T1.title_id = T2.title_id WHERE T2.lorange > 10000 AND T2.hirange < 50000 AND T1.title_ID = 'BU2075'"
+  },
+  "assessment": "部分理想：知识引导发现正确表，边界口径未说明",
+  "analysis": "模型最初只查titles。知识ID3明确roysched.royalty表示版税百分比、lorange/hirange表示区间上下限，促使模型再次查roysched Schema；这是工具检索实际发挥作用的正例。\n\ntitles.royalty的知识573/2与roysched.royalty同名，可能混淆；1766是类别数量占比，与版税百分比无关。未返回单独的lorange/hirange字段条目，但ID3已覆盖含义。\n\n最终条件为lorange >= 10000 AND hirange <= 50000；原始标注为>和<。题干“10000到50000范围内”未说明端点是否包含、区间完全包含还是相交，现有知识未消除歧义。应提供明确业务定义，而非凭旧示例替代定义。"
+}

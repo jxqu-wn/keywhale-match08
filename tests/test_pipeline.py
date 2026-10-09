@@ -1,4 +1,5 @@
 import unittest
+import tempfile
 from pathlib import Path
 
 import sys
@@ -9,7 +10,7 @@ from text2query import pipeline as p
 class PipelineTests(unittest.TestCase):
     def test_schema_engines_and_nested_columns(self):
         catalog, encodings = p.schema_catalog()
-        self.assertEqual(encodings['core_schema.txt'], 'gb18030')
+        self.assertIn(encodings['core_schema.txt'], ('utf-8-sig', 'gb18030'))
         vehicle = next(x for x in catalog if x.get('database') == 'transportation' and x['table'] == 'vehicle')
         self.assertIn('load_capacity', [c['name'] for c in vehicle['columns']])
         self.assertIn('company_id', [c['name'] for c in vehicle['columns']])
@@ -17,6 +18,16 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(ais['source'], 'POSTGRESQL')
         self.assertIn('geom', [c['name'] for c in ais['columns']])
         self.assertEqual(next(x for x in catalog if x['table'] == 'medical_institutions')['mapping']['location']['type'], 'geo_point')
+
+    def test_schema_reader_preserves_chinese_in_supported_encodings(self):
+        text = "-- 船舶类型字典\nCREATE TABLE sample (id INT) COMMENT='中文表注释';"
+        with tempfile.TemporaryDirectory() as directory:
+            for encoding in ('utf-8-sig', 'gb18030'):
+                path = Path(directory) / (encoding + '.txt')
+                path.write_bytes(text.encode(encoding))
+                decoded, actual_encoding = p.read_text(path)
+                self.assertEqual(decoded, text)
+                self.assertEqual(actual_encoding, encoding)
 
     def test_parameter_groups_do_not_leak(self):
         rows = [{'question_id':i,'question':f'查询{i}公里内的船舶','db':'POSTGRESQL'} for i in range(1,10)]

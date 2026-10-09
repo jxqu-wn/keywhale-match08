@@ -1,0 +1,2898 @@
+{
+  "examples_missing": [
+    {
+      "question_id": 109,
+      "question": "查询所有驾驶员中，联系电话为空的驾驶员",
+      "db": "MYSQL",
+      "query": "SELECT name FROM transportation.driver WHERE phone IS NULL;"
+    },
+    {
+      "question_id": 1087,
+      "question": "请查询会员等级为DIAMOND的用户",
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE level_code = 'DIAMOND' ORDER BY customer_id;"
+    },
+    {
+      "question_id": 1103,
+      "question": "帮我统计支付状态为FAILED的支付记录数量。",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS payment_count FROM ecommerce.payment WHERE payment_status_code = 'FAILED';"
+    },
+    {
+      "question_id": 1126,
+      "question": "请帮我按支付方式名称统计支付金额",
+      "db": "MYSQL",
+      "query": "SELECT d.method_name, ROUND(SUM(p.payment_amount), 2) AS pay_amount FROM ecommerce.payment p JOIN common.payment_method_dict d ON p.payment_method_code = d.method_code GROUP BY d.method_code, d.method_name ORDER BY d.method_code;"
+    },
+    {
+      "question_id": 1128,
+      "question": "请查询应付金额最高的10个订单。",
+      "db": "MYSQL",
+      "query": "SELECT order_id, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC, order_id ASC LIMIT 10;"
+    }
+  ],
+  "examples_changed": [
+    {
+      "raw": {
+        "question_id": 3518,
+        "question": "1977年NBA年度最佳教练奖得主在1976年执教的球队属于哪个赛区？",
+        "db": "SQLite",
+        "query": "SELECT DISTINCT T3.divID FROM professional_basketball.awards_coaches AS T1 INNER JOIN professional_basketball.coaches AS T2 ON T1.coachID = T2.coachID INNER JOIN professional_basketball.teams AS T3 ON T2.tmID = T3.tmID WHERE T1.year = 1977 AND T1.award = 'NBA Coach of the Year' AND T3.year = 1976"
+      },
+      "processed": {
+        "question_id": 3518,
+        "question": "1977年NBA年度最佳教练奖得主在1976年执教的球队属于哪个赛区？",
+        "db": "SQLite",
+        "query": "SELECT DISTINCT t.divID FROM professional_basketball.awards_coaches a JOIN professional_basketball.coaches c ON a.coachID=c.coachID JOIN professional_basketball.teams t ON c.tmID=t.tmID AND c.year=t.year WHERE a.year=1977 AND a.award='NBA Coach of the Year' AND c.year=1976",
+        "annotation_origin": "reviewed_training_overlay",
+        "curation_reason": "题目明确获奖年1977与执教年1976不同，球队表须与实际执教年份匹配。"
+      }
+    },
+    {
+      "raw": {
+        "question_id": 3579,
+        "question": "东部联盟全明星球员的平均身高是多少？",
+        "db": "SQLite",
+        "query": "SELECT AVG(DISTINCT height) FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.player_allstar AS T2 ON T1.playerID = T2.playerID WHERE conference = 'East'"
+      },
+      "processed": {
+        "question_id": 3579,
+        "question": "东部联盟全明星球员的平均身高是多少？",
+        "db": "SQLite",
+        "query": "SELECT AVG(p.height) FROM professional_basketball.players p WHERE EXISTS (SELECT 1 FROM professional_basketball.player_allstar a WHERE a.playerID=p.playerID AND a.conference='East')",
+        "annotation_origin": "reviewed_training_overlay",
+        "curation_reason": "去重球员而非AVG(DISTINCT height)；同身高不同球员均应计入。"
+      }
+    },
+    {
+      "raw": {
+        "question_id": 3596,
+        "question": "2010年获得NBA年度最佳教练奖的教练执教的是哪支球队？",
+        "db": "SQLite",
+        "query": "SELECT DISTINCT T1.tmID FROM professional_basketball.coaches AS T1 INNER JOIN professional_basketball.awards_coaches AS T2 ON T1.coachID = T2.coachID WHERE T2.year = 2010 AND T2.award = 'NBA Coach of the Year'"
+      },
+      "processed": {
+        "question_id": 3596,
+        "question": "2010年获得NBA年度最佳教练奖的教练执教的是哪支球队？",
+        "db": "SQLite",
+        "query": "SELECT DISTINCT c.tmID FROM professional_basketball.coaches c JOIN professional_basketball.awards_coaches a ON a.coachID=c.coachID AND a.year=c.year WHERE a.year=2010 AND a.award='NBA Coach of the Year'",
+        "annotation_origin": "reviewed_training_overlay",
+        "curation_reason": "获奖当年球队，补上年份关联，不包含职业生涯其他年份球队。"
+      }
+    },
+    {
+      "raw": {
+        "question_id": 3772,
+        "question": "哪个发行商发行的游戏数量最多？",
+        "db": "SQLite",
+        "query": "SELECT T.publisher_name FROM ( SELECT T2.publisher_name, COUNT(DISTINCT T2.id) FROM video_games.game_publisher AS T1 INNER JOIN video_games.publisher AS T2 ON T1.publisher_id = T2.id GROUP BY T1.publisher_id ORDER BY COUNT(T2.id) DESC LIMIT 1 ) t"
+      },
+      "processed": {
+        "question_id": 3772,
+        "question": "哪个发行商发行的游戏数量最多？",
+        "db": "SQLite",
+        "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON gp.publisher_id=p.id GROUP BY p.id,p.publisher_name ORDER BY COUNT(DISTINCT gp.game_id) DESC,p.id ASC LIMIT 1",
+        "annotation_origin": "reviewed_training_overlay",
+        "curation_reason": "按发行商主键统计不同游戏，不统计发行商ID或发行关系条数；并列按ID稳定取一。"
+      }
+    },
+    {
+      "raw": {
+        "question_id": 3875,
+        "question": "哪个发行商发行的动作类游戏最多？",
+        "db": "SQLite",
+        "query": "SELECT T4.publisher_name FROM video_games.genre AS T1 INNER JOIN video_games.game AS T2 ON T1.id = T2.genre_id INNER JOIN video_games.game_publisher AS T3 ON T2.id = T3.game_id INNER JOIN video_games.publisher AS T4 ON T3.publisher_id = T4.id WHERE T1.genre_name = 'Action' GROUP BY T4.publisher_name ORDER BY COUNT(DISTINCT T2.id) DESC LIMIT 1"
+      },
+      "processed": {
+        "question_id": 3875,
+        "question": "哪个发行商发行的动作类游戏最多？",
+        "db": "SQLite",
+        "query": "SELECT p.publisher_name FROM video_games.publisher p JOIN video_games.game_publisher gp ON gp.publisher_id=p.id JOIN video_games.game g ON g.id=gp.game_id JOIN video_games.genre ge ON ge.id=g.genre_id WHERE ge.genre_name='Action' GROUP BY p.id,p.publisher_name ORDER BY COUNT(DISTINCT g.id) DESC,p.id ASC LIMIT 1",
+        "annotation_origin": "reviewed_training_overlay",
+        "curation_reason": "按发行商主键区分同名主体，并按不同游戏数排名。"
+      }
+    }
+  ],
+  "examples_unchanged": [
+    {
+      "raw": {
+        "question_id": 1,
+        "question": "统计各公司驾驶员中女性驾驶员的比例",
+        "db": "MYSQL",
+        "query": "SELECT c.company_name, ROUND(SUM(CASE WHEN d.gender='女' THEN 1 ELSE 0 END)*100.0/COUNT(*),2) AS female_pct FROM transportation.vehicle_company c JOIN transportation.driver d ON c.company_id = d.company_id GROUP BY c.company_id;"
+      },
+      "processed": {
+        "question_id": 1,
+        "question": "统计各公司驾驶员中女性驾驶员的比例",
+        "db": "MYSQL",
+        "query": "SELECT c.company_name, ROUND(SUM(CASE WHEN d.gender='女' THEN 1 ELSE 0 END)*100.0/COUNT(*),2) AS female_pct FROM transportation.vehicle_company c JOIN transportation.driver d ON c.company_id = d.company_id GROUP BY c.company_id;"
+      }
+    },
+    {
+      "raw": {
+        "question_id": 2,
+        "question": "统计每个公司驾驶员中驾照状态为正常的比例",
+        "db": "MYSQL",
+        "query": "SELECT c.company_name, ROUND(SUM(CASE WHEN d.status='正常' THEN 1 ELSE 0 END)*100.0/COUNT(*),2) AS valid_pct FROM transportation.vehicle_company c JOIN transportation.driver d ON c.company_id = d.company_id GROUP BY c.company_id;"
+      },
+      "processed": {
+        "question_id": 2,
+        "question": "统计每个公司驾驶员中驾照状态为正常的比例",
+        "db": "MYSQL",
+        "query": "SELECT c.company_name, ROUND(SUM(CASE WHEN d.status='正常' THEN 1 ELSE 0 END)*100.0/COUNT(*),2) AS valid_pct FROM transportation.vehicle_company c JOIN transportation.driver d ON c.company_id = d.company_id GROUP BY c.company_id;"
+      }
+    },
+    {
+      "raw": {
+        "question_id": 3,
+        "question": "统计每种车型的车辆数量",
+        "db": "MYSQL",
+        "query": "SELECT t.type_name AS vehicle_type, COUNT(*) AS count FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code GROUP BY v.vehicle_type_code;"
+      },
+      "processed": {
+        "question_id": 3,
+        "question": "统计每种车型的车辆数量",
+        "db": "MYSQL",
+        "query": "SELECT t.type_name AS vehicle_type, COUNT(*) AS count FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code GROUP BY v.vehicle_type_code;"
+      }
+    }
+  ],
+  "knowledge_changed": [
+    {
+      "raw": {
+        "knowledge_id": 83,
+        "knowledge_text": "在数据库professional_basketball的表中，BMI计算公式为 weight / (height * height)，其中height单位为英寸，weight单位为磅。"
+      },
+      "processed": {
+        "knowledge_id": 83,
+        "knowledge_text": "在数据库professional_basketball的表中，BMI计算公式为 weight / (height * height)，其中height单位为英寸，weight单位为磅。这是本赛题明确给出的计算口径，不改成公斤/厘米公式；统计全明星球员平均BMI时先按playerID去重，再按球员计算平均，排除height为空或0。",
+        "annotation_origin": "reviewed_knowledge_overlay"
+      }
+    },
+    {
+      "raw": {
+        "knowledge_id": 150,
+        "knowledge_text": "在数据库public_review_platform的表Business_Hours和Days中，opening_time表示营业开始时间，closing_time表示营业结束时间，day_of_week表示星期几，day_id与Days表关联。营业时长 = closing_time - opening_time。"
+      },
+      "processed": {
+        "knowledge_id": 150,
+        "knowledge_text": "在数据库public_review_platform的Business_Hours和Days中，opening_time、closing_time是12小时制文本（如8AM、9PM），不能直接相减。先解析为分钟数；相等按24小时，结束早于开始按跨午夜补1440分钟，最后除60得小时。NULL/空/None为未知，不当作全天。day_id关联Days。",
+        "annotation_origin": "reviewed_knowledge_overlay"
+      }
+    },
+    {
+      "raw": {
+        "knowledge_id": 153,
+        "knowledge_text": "在数据库public_review_platform的表Elite中，year_id表示精英用户年份，user_id关联Users表。用户可能在同一年成为精英用户。"
+      },
+      "processed": {
+        "knowledge_id": 153,
+        "knowledge_text": "public_review_platform.Elite.year_id是Years.year_id外键；实际精英年份取Years.actual_year。user_id关联Users。按实际年份过滤须JOIN Years，不假设代理键等于年份。",
+        "annotation_origin": "reviewed_knowledge_overlay"
+      }
+    },
+    {
+      "raw": {
+        "knowledge_id": 158,
+        "knowledge_text": "在数据库public_review_platform的表Elite和Users中，user_average_stars=5表示最佳精英用户（平均评分最高），user_average_stars=1表示最差精英用户（平均评分最低），year_id表示精英年份。"
+      },
+      "processed": {
+        "knowledge_id": 158,
+        "knowledge_text": "public_review_platform.Elite和Users通过user_id关联。user_average_stars=5/1表示最高/最低平均评分。Elite.year_id是年份代理键，实际精英年份须关联Years.actual_year。",
+        "annotation_origin": "reviewed_knowledge_overlay"
+      }
+    },
+    {
+      "raw": {
+        "knowledge_id": 1355,
+        "knowledge_text": "在数据库public_review_platform的表Business_Hours中，字段closing_time，数据类型为文本（text），表示商家的营业结束时间，取值为常识证据：该商家营业多长时间：closing_time - opening_time。"
+      },
+      "processed": {
+        "knowledge_id": 1355,
+        "knowledge_text": "public_review_platform.Business_Hours.closing_time为营业结束时间文本；不能直接closing_time-opening_time。按照知识159解析AM/PM及分钟，处理跨午夜，相等按知识163为24小时。",
+        "annotation_origin": "reviewed_knowledge_overlay"
+      }
+    },
+    {
+      "raw": {
+        "knowledge_id": 1624,
+        "knowledge_text": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。"
+      },
+      "processed": {
+        "knowledge_id": 1624,
+        "knowledge_text": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。这是赛题知识约定，使用total_assets，不自行减去total_liabilities；PB依赖本BPS公式，应同时参考知识1625。",
+        "annotation_origin": "reviewed_knowledge_overlay",
+        "declared_scope": {
+          "databases": [
+            "finance_tax"
+          ],
+          "sources": [
+            "MYSQL"
+          ]
+        }
+      }
+    },
+    {
+      "raw": {
+        "knowledge_id": 1757,
+        "knowledge_text": "漳州港招银港区航道。招银港区航道自厦门湾南侧（24°25.0′N,118°05.0′E）至招银码头（24°28.0′N,118°02.0′E），全长约6海里，航道宽度180米，水深-12米。航道两侧设有浮灯，航道内设有2处转向点。该水域船舶交通密集，船舶应遵守《厦门水域船舶定线制》，向厦门VTS中心报告。"
+      },
+      "processed": {
+        "knowledge_id": 1757,
+        "knowledge_text": "漳州港招银港区航道。招银港区航道自厦门湾南侧（24°25.0′N,118°05.0′E）至招银码头（24°28.0′N,118°02.0′E），全长约6海里，航道宽度180米，水深-12米。航道两侧设有浮灯，航道内设有2处转向点。该水域船舶交通密集，船舶应遵守《厦门水域船舶定线制》，向厦门VTS中心报告。坐标确定换算：24°25.0′N=24.4166666667，24°28.0′N=24.4666666667；118°05.0′E=118.0833333333，118°02.0′E=118.0333333333。矩形包络是近似范围，不等于宽180米的真实航道。",
+        "annotation_origin": "reviewed_knowledge_overlay",
+        "declared_scope": {
+          "databases": [
+            "public"
+          ],
+          "sources": [
+            "POSTGRESQL"
+          ]
+        }
+      }
+    }
+  ],
+  "knowledge_unchanged": [
+    {
+      "raw": {
+        "knowledge_id": 1,
+        "knowledge_text": "在数据库book_publishing_company的表sales中，qty表示销售数量，ord_date表示订单日期，payterms表示付款条件（如'ON invoice'表示发票付款），ord_num表示订单编号，stor_id和title_id分别表示关联的商店ID和书名ID。"
+      },
+      "processed": {
+        "knowledge_id": 1,
+        "knowledge_text": "在数据库book_publishing_company的表sales中，qty表示销售数量，ord_date表示订单日期，payterms表示付款条件（如'ON invoice'表示发票付款），ord_num表示订单编号，stor_id和title_id分别表示关联的商店ID和书名ID。"
+      }
+    },
+    {
+      "raw": {
+        "knowledge_id": 2,
+        "knowledge_text": "在数据库book_publishing_company的表titles中，pubdate表示出版日期，ytd_sales表示年初至今的销售额，notes表示书籍的备注信息，type表示书籍类型（如'business'表示商业类），price表示书籍价格，advance表示预付款金额，royalty表示版税，title_id是主键。"
+      },
+      "processed": {
+        "knowledge_id": 2,
+        "knowledge_text": "在数据库book_publishing_company的表titles中，pubdate表示出版日期，ytd_sales表示年初至今的销售额，notes表示书籍的备注信息，type表示书籍类型（如'business'表示商业类），price表示书籍价格，advance表示预付款金额，royalty表示版税，title_id是主键。"
+      }
+    },
+    {
+      "raw": {
+        "knowledge_id": 3,
+        "knowledge_text": "在数据库book_publishing_company的表roysched中，royalty表示版税百分比，lorange表示版税范围下限（lorange=0表示没有最低范围限制），hirange表示版税范围上限，title_id表示关联的书名ID。"
+      },
+      "processed": {
+        "knowledge_id": 3,
+        "knowledge_text": "在数据库book_publishing_company的表roysched中，royalty表示版税百分比，lorange表示版税范围下限（lorange=0表示没有最低范围限制），hirange表示版税范围上限，title_id表示关联的书名ID。"
+      }
+    }
+  ],
+  "schema_comment_comparisons": [
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "administrative_division",
+      "comment": "统一行政区划表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 行政区划字典表\r\nCREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';\r\n\r\n-- 行政区划示例数据\r\nINSERT INTO administrative_division (id, name, full_name, province_name, city_name, county_name, level, longitude, latitude)\r\nVALUES\r\n('310000', '上海市', '上海市', '', '', '', 1, NULL, NULL),\r\n('310101', '黄浦区', '上海市-黄浦区', '上海市', '黄浦区', '', 3, NULL, NULL),\r\n('310115', '浦东新区', '上海市-浦东新区', '上海市', '浦东新区', '', 3, NULL, NULL),\r\n('320500', '苏州市', '江苏省-苏州市', '江苏省', '苏州市', '', 2, NULL, NULL),\r\n('320100', '南京市', '江苏省-南京市', '江苏省', '南京市', '', 2, NULL, NULL),\r\n('320102', '玄武区', '江苏省-南京市-玄武区', '江苏省', '南京市', '玄武区', 3, NULL, NULL),\r\n('320115', '江宁区', '江苏省-南京市-江宁区', '江苏省', '南京市', '江宁区', 3, NULL, NULL);\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "administrative_division",
+        "columns": [
+          {
+            "name": "id",
+            "type": "CHAR(6)",
+            "definition": "id CHAR(6) PRIMARY KEY COMMENT '行政区划代码'"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(50)",
+            "definition": "name VARCHAR(50) NOT NULL COMMENT '行政区划名称'"
+          },
+          {
+            "name": "full_name",
+            "type": "VARCHAR(100)",
+            "definition": "full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称'"
+          },
+          {
+            "name": "province_name",
+            "type": "VARCHAR(20)",
+            "definition": "province_name VARCHAR(20) NOT NULL COMMENT '省级名称'"
+          },
+          {
+            "name": "city_name",
+            "type": "VARCHAR(20)",
+            "definition": "city_name VARCHAR(20) NOT NULL COMMENT '市级名称'"
+          },
+          {
+            "name": "county_name",
+            "type": "VARCHAR(20)",
+            "definition": "county_name VARCHAR(20) NOT NULL COMMENT '县级名称'"
+          },
+          {
+            "name": "level",
+            "type": "TINYINT",
+            "definition": "level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)'"
+          },
+          {
+            "name": "longitude",
+            "type": "DECIMAL(10, 6)",
+            "definition": "longitude DECIMAL(10, 6) COMMENT '经度'"
+          },
+          {
+            "name": "latitude",
+            "type": "DECIMAL(10, 6)",
+            "definition": "latitude DECIMAL(10, 6) COMMENT '纬度'"
+          }
+        ],
+        "ddl": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "vehicle_type_dict",
+      "comment": "车辆类型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 11,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 交通库\r\n-- 车辆类型字典表\r\nCREATE TABLE vehicle_type_dict (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（客车/货车/危化品车等）',\r\n    category VARCHAR(20) COMMENT '大类'\r\n) ENGINE=InnoDB COMMENT='车辆类型字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "vehicle_type_dict",
+        "columns": [
+          {
+            "name": "type_code",
+            "type": "VARCHAR(20)",
+            "definition": "type_code VARCHAR(20) PRIMARY KEY COMMENT '类型代码'"
+          },
+          {
+            "name": "type_name",
+            "type": "VARCHAR(50)",
+            "definition": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称（客车/货车/危化品车等）'"
+          },
+          {
+            "name": "category",
+            "type": "VARCHAR(20)",
+            "definition": "category VARCHAR(20) COMMENT '大类'"
+          }
+        ],
+        "ddl": "CREATE TABLE vehicle_type_dict (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（客车/货车/危化品车等）',\r\n    category VARCHAR(20) COMMENT '大类'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "vessel_type_dict",
+      "comment": "船舶类型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 船舶类型字典表\r\nCREATE TABLE vessel_type_dict (\r\n    type_code SMALLINT PRIMARY KEY COMMENT 'AIS船舶类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(20) COMMENT '大类'\r\n) ENGINE=InnoDB COMMENT='船舶类型字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "vessel_type_dict",
+        "columns": [
+          {
+            "name": "type_code",
+            "type": "SMALLINT",
+            "definition": "type_code SMALLINT PRIMARY KEY COMMENT 'AIS船舶类型代码'"
+          },
+          {
+            "name": "type_name",
+            "type": "VARCHAR(50)",
+            "definition": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称'"
+          },
+          {
+            "name": "category",
+            "type": "VARCHAR(20)",
+            "definition": "category VARCHAR(20) COMMENT '大类'"
+          }
+        ],
+        "ddl": "CREATE TABLE vessel_type_dict (\r\n    type_code SMALLINT PRIMARY KEY COMMENT 'AIS船舶类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(20) COMMENT '大类'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "employee_type_dict",
+      "comment": "人员类型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 人员类型字典表\r\nCREATE TABLE employee_type_dict (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '人员类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（船长/大副/轮机长/水手等）'\r\n) ENGINE=InnoDB COMMENT='人员类型字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "employee_type_dict",
+        "columns": [
+          {
+            "name": "type_code",
+            "type": "VARCHAR(20)",
+            "definition": "type_code VARCHAR(20) PRIMARY KEY COMMENT '人员类型代码'"
+          },
+          {
+            "name": "type_name",
+            "type": "VARCHAR(50)",
+            "definition": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称（船长/大副/轮机长/水手等）'"
+          }
+        ],
+        "ddl": "CREATE TABLE employee_type_dict (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '人员类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称（船长/大副/轮机长/水手等）'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "license_type_dict",
+      "comment": "驾照类型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 2,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 驾照类型字典表\r\nCREATE TABLE license_type_dict (\r\n    license_code VARCHAR(5) PRIMARY KEY COMMENT '驾照代码',\r\n    license_name VARCHAR(50) NOT NULL COMMENT '驾照名称'\r\n) ENGINE=InnoDB COMMENT='驾照类型字典';\r\n\r\n-- 车辆类型字典\r\nINSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');\r\n\r\n-- 船舶类型字典\r\nINSERT INTO common.vessel_type_dict (type_code, type_name, category) VALUES\r\n(20, '客船', '客运'),\r\n(21, '高速客船', '客运'),\r\n(30, '货船', '货运'),\r\n(31, '散货船', '货运'),\r\n(32, '集装箱船', '货运'),\r\n(33, '滚装船', '货运'),\r\n(34, '液化气船', '特种'),\r\n(35, '油轮', '货运'),\r\n(36, '化学品船', '特种'),\r\n(37, '冷藏船', '货运'),\r\n(40, '拖船', '作业'),\r\n(41, '挖泥船', '作业'),\r\n(42, '消防船', '公务'),\r\n(43, '医疗船', '公务'),\r\n(50, '引航船', '作业'),\r\n(51, '搜救船', '公务'),\r\n(52, '交通船', '作业'),\r\n(53, '公务船', '公务'),\r\n(60, '帆船', '娱乐'),\r\n(70, '渔船', '渔业'),\r\n(71, '拖网渔船', '渔业'),\r\n(80, '军事舰艇', '军事'),\r\n(90, '其他', '其他');\r\n\r\n-- 人员类型字典 (employee_type_dict) 用于船舶公司员工\r\nINSERT INTO common.employee_type_dict (type_code, type_name) VALUES\r\n('CAPTAIN', '船长'),\r\n('CHIEF_OFFICER', '大副'),\r\n('SECOND_OFFICER', '二副'),\r\n('THIRD_OFFICER', '三副'),\r\n('CHIEF_ENGINEER', '轮机长'),\r\n('SECOND_ENGINEER', '大管轮'),\r\n('THIRD_ENGINEER', '二管轮'),\r\n('ELECTRICIAN', '电机员'),\r\n('BOSUN', '水手长'),\r\n('ABLE_SEAMAN', '一级水手'),\r\n('ORDINARY_SEAMAN', '二级水手'),\r\n('OILER', '加油工'),\r\n('COOK', '厨师'),\r\n('STEWARD', '服务员'),\r\n('PURSER', '事务长'),\r\n('MEDICAL', '船医');\r\n\r\n-- 驾照类型字典\r\nINSERT INTO common.license_type_dict (license_code, license_name) VALUES\r\n('A1', '大型客车'),\r\n('A2', '牵引车'),\r\n('A3', '城市公交车'),\r\n('B1', '中型客车'),\r\n('B2', '大型货车'),\r\n('C1', '小型汽车'),\r\n('C2', '小型自动挡汽车'),\r\n('C3', '低速载货汽车'),\r\n('C4', '三轮汽车');\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "license_type_dict",
+        "columns": [
+          {
+            "name": "license_code",
+            "type": "VARCHAR(5)",
+            "definition": "license_code VARCHAR(5) PRIMARY KEY COMMENT '驾照代码'"
+          },
+          {
+            "name": "license_name",
+            "type": "VARCHAR(50)",
+            "definition": "license_name VARCHAR(50) NOT NULL COMMENT '驾照名称'"
+          }
+        ],
+        "ddl": "CREATE TABLE license_type_dict (\r\n    license_code VARCHAR(5) PRIMARY KEY COMMENT '驾照代码',\r\n    license_name VARCHAR(50) NOT NULL COMMENT '驾照名称'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "dict_registration_type",
+      "comment": "企业登记注册类型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 2,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 金融库\r\n-- 登记注册类型字典表\r\nCREATE TABLE dict_registration_type (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '注册类型代码',\r\n    type_name VARCHAR(100) NOT NULL COMMENT '注册类型名称',\r\n    description VARCHAR(200) COMMENT '说明'\r\n) COMMENT='企业登记注册类型字典';\r\n\r\nINSERT INTO dict_registration_type (type_code, type_name) VALUES\r\n('111', '国有独资公司'),\r\n('112', '有限责任公司'),\r\n('113', '股份有限公司'),\r\n('114', '私营有限责任公司'),\r\n('115', '私营股份有限公司'),\r\n('116', '外商投资企业'),\r\n('117', '港澳台商投资企业'),\r\n('118', '合伙企业');\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "dict_registration_type",
+        "columns": [
+          {
+            "name": "type_code",
+            "type": "VARCHAR(20)",
+            "definition": "type_code VARCHAR(20) PRIMARY KEY COMMENT '注册类型代码'"
+          },
+          {
+            "name": "type_name",
+            "type": "VARCHAR(100)",
+            "definition": "type_name VARCHAR(100) NOT NULL COMMENT '注册类型名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(200)",
+            "definition": "description VARCHAR(200) COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE dict_registration_type (\r\n    type_code VARCHAR(20) PRIMARY KEY COMMENT '注册类型代码',\r\n    type_name VARCHAR(100) NOT NULL COMMENT '注册类型名称',\r\n    description VARCHAR(200) COMMENT '说明'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "dict_size_category",
+      "comment": "企业规模划型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 2,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 企业规模划型字典表\r\nCREATE TABLE dict_size_category (\r\n    size_code VARCHAR(10) PRIMARY KEY COMMENT '规模代码',\r\n    size_name VARCHAR(20) NOT NULL COMMENT '规模名称'\r\n) COMMENT='企业规模划型字典';\r\n\r\nINSERT INTO dict_size_category (size_code, size_name) VALUES\r\n('L', '大型'),\r\n('M', '中型'),\r\n('S', '小型'),\r\n('XS', '微型');\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "dict_size_category",
+        "columns": [
+          {
+            "name": "size_code",
+            "type": "VARCHAR(10)",
+            "definition": "size_code VARCHAR(10) PRIMARY KEY COMMENT '规模代码'"
+          },
+          {
+            "name": "size_name",
+            "type": "VARCHAR(20)",
+            "definition": "size_name VARCHAR(20) NOT NULL COMMENT '规模名称'"
+          }
+        ],
+        "ddl": "CREATE TABLE dict_size_category (\r\n    size_code VARCHAR(10) PRIMARY KEY COMMENT '规模代码',\r\n    size_name VARCHAR(20) NOT NULL COMMENT '规模名称'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "dict_stock_type",
+      "comment": "股票分类字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 3,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 股票分类字典表\r\nCREATE TABLE dict_stock_type (\r\n    type_category VARCHAR(30) COMMENT '分类维度',\r\n    type_code VARCHAR(20) COMMENT '类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    PRIMARY KEY (type_category, type_code)\r\n) COMMENT='股票分类字典';\r\n\r\nINSERT INTO dict_stock_type (type_category, type_code, type_name) VALUES\r\n('SHARE_RIGHT', 'COMMON', '普通股'),\r\n('SHARE_RIGHT', 'PREFERRED', '优先股'),\r\n('REGISTER', 'REGISTERED', '记名股票'),\r\n('REGISTER', 'BEARER', '无记名股票'),\r\n('PAR_VALUE', 'PAR', '面额股票'),\r\n('PAR_VALUE', 'NO_PAR', '无面额股票'),\r\n('MARKET_CLASS', 'A', 'A股'),\r\n('MARKET_CLASS', 'B', 'B股'),\r\n('MARKET_CLASS', 'H', 'H股'),\r\n('MARKET_CLASS', 'N', 'N股');\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "dict_stock_type",
+        "columns": [
+          {
+            "name": "type_category",
+            "type": "VARCHAR(30)",
+            "definition": "type_category VARCHAR(30) COMMENT '分类维度'"
+          },
+          {
+            "name": "type_code",
+            "type": "VARCHAR(20)",
+            "definition": "type_code VARCHAR(20) COMMENT '类型代码'"
+          },
+          {
+            "name": "type_name",
+            "type": "VARCHAR(50)",
+            "definition": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称'"
+          }
+        ],
+        "ddl": "CREATE TABLE dict_stock_type (\r\n    type_category VARCHAR(30) COMMENT '分类维度',\r\n    type_code VARCHAR(20) COMMENT '类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    PRIMARY KEY (type_category, type_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "dict_industry",
+      "comment": "行业分类字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 2,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 行业分类字典表\r\nCREATE TABLE dict_industry (\r\n    industry_code VARCHAR(20) PRIMARY KEY COMMENT '行业代码（国标）',\r\n    industry_name VARCHAR(100) NOT NULL COMMENT '行业名称'\r\n) COMMENT='行业分类字典';\r\n\r\nINSERT INTO dict_industry (industry_code, industry_name) VALUES\r\n('I65', '软件和信息技术服务业'),\r\n('C39', '计算机、通信和其他电子设备制造业'),\r\n('L72', '商务服务业'),\r\n('C26', '化学原料和化学制品制造业'),\r\n('C27', '医药制造业'),\r\n('B06', '石油和天然气开采业'),\r\n('G60', '交通运输、仓储和邮政业'),\r\n('K70', '房地产业'),\r\n('J66', '金融业');\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "dict_industry",
+        "columns": [
+          {
+            "name": "industry_code",
+            "type": "VARCHAR(20)",
+            "definition": "industry_code VARCHAR(20) PRIMARY KEY COMMENT '行业代码（国标）'"
+          },
+          {
+            "name": "industry_name",
+            "type": "VARCHAR(100)",
+            "definition": "industry_name VARCHAR(100) NOT NULL COMMENT '行业名称'"
+          }
+        ],
+        "ddl": "CREATE TABLE dict_industry (\r\n    industry_code VARCHAR(20) PRIMARY KEY COMMENT '行业代码（国标）',\r\n    industry_name VARCHAR(100) NOT NULL COMMENT '行业名称'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "energy_type_dict",
+      "comment": "能源类型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n\r\n\r\n-- 工业库\r\n-- 能源类型字典\r\nCREATE TABLE energy_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码',\r\n    type_name VARCHAR(30) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(20) COMMENT '大类',\r\n    is_renewable TINYINT(1) DEFAULT 0 COMMENT '是否可再生'\r\n) ENGINE=InnoDB COMMENT='能源类型字典';\r\n\r\nINSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES\r\n('THERMAL', '火电', '传统能源', 0),\r\n('HYDRO', '水电', '清洁能源', 1),\r\n('WIND', '风电', '新能源', 1),\r\n('SOLAR', '光伏', '新能源', 1),\r\n('NUCLEAR', '核电', '清洁能源', 0),\r\n('BIOMASS', '生物质发电', '新能源', 1),\r\n('GAS', '天然气发电', '清洁能源', 0),\r\n('PUMPED', '抽水蓄能', '清洁能源', 1),\r\n('GEOTHERMAL', '地热发电', '新能源', 1),\r\n('HYDROGEN', '氢能', '新能源', 1);\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "energy_type_dict",
+        "columns": [
+          {
+            "name": "type_code",
+            "type": "VARCHAR(10)",
+            "definition": "type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码'"
+          },
+          {
+            "name": "type_name",
+            "type": "VARCHAR(30)",
+            "definition": "type_name VARCHAR(30) NOT NULL COMMENT '类型名称'"
+          },
+          {
+            "name": "category",
+            "type": "VARCHAR(20)",
+            "definition": "category VARCHAR(20) COMMENT '大类'"
+          },
+          {
+            "name": "is_renewable",
+            "type": "TINYINT(1)",
+            "definition": "is_renewable TINYINT(1) DEFAULT 0 COMMENT '是否可再生'"
+          }
+        ],
+        "ddl": "CREATE TABLE energy_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码',\r\n    type_name VARCHAR(30) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(20) COMMENT '大类',\r\n    is_renewable TINYINT(1) DEFAULT 0 COMMENT '是否可再生'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "voltage_level_dict",
+      "comment": "电压等级字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 电压等级字典\r\nCREATE TABLE voltage_level_dict (\r\n    level_code VARCHAR(10) PRIMARY KEY COMMENT '电压等级代码',\r\n    level_name VARCHAR(20) NOT NULL COMMENT '等级名称',\r\n    level_value INT COMMENT '电压值(kV)',\r\n    category VARCHAR(20) COMMENT '类别'\r\n) ENGINE=InnoDB COMMENT='电压等级字典';\r\n\r\nINSERT INTO voltage_level_dict (level_code, level_name, level_value, category) VALUES\r\n('LV', '低压', 0, '低压'),\r\n('MV10', '10kV', 10, '中压'),\r\n('MV35', '35kV', 35, '中压'),\r\n('HV110', '110kV', 110, '高压'),\r\n('HV220', '220kV', 220, '高压'),\r\n('EHV330', '330kV', 330, '超高压'),\r\n('EHV500', '500kV', 500, '超高压'),\r\n('EHV750', '750kV', 750, '超高压'),\r\n('UHV1000', '1000kV', 1000, '特高压');\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "voltage_level_dict",
+        "columns": [
+          {
+            "name": "level_code",
+            "type": "VARCHAR(10)",
+            "definition": "level_code VARCHAR(10) PRIMARY KEY COMMENT '电压等级代码'"
+          },
+          {
+            "name": "level_name",
+            "type": "VARCHAR(20)",
+            "definition": "level_name VARCHAR(20) NOT NULL COMMENT '等级名称'"
+          },
+          {
+            "name": "level_value",
+            "type": "INT",
+            "definition": "level_value INT COMMENT '电压值(kV)'"
+          },
+          {
+            "name": "category",
+            "type": "VARCHAR(20)",
+            "definition": "category VARCHAR(20) COMMENT '类别'"
+          }
+        ],
+        "ddl": "CREATE TABLE voltage_level_dict (\r\n    level_code VARCHAR(10) PRIMARY KEY COMMENT '电压等级代码',\r\n    level_name VARCHAR(20) NOT NULL COMMENT '等级名称',\r\n    level_value INT COMMENT '电压值(kV)',\r\n    category VARCHAR(20) COMMENT '类别'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "energy_position_dict",
+      "comment": "能源行业岗位字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 员工岗位字典\r\nCREATE TABLE energy_position_dict (\r\n    position_code VARCHAR(20) PRIMARY KEY COMMENT '岗位代码',\r\n    position_name VARCHAR(50) NOT NULL COMMENT '岗位名称',\r\n    category VARCHAR(30) COMMENT '类别'\r\n) ENGINE=InnoDB COMMENT='能源行业岗位字典';\r\n\r\nINSERT INTO energy_position_dict (position_code, position_name, category) VALUES\r\n('GM', '总经理', '管理'),\r\n('DM', '副总经理', '管理'),\r\n('CE', '总工程师', '技术'),\r\n('PM', '项目经理', '管理'),\r\n('OE', '运行工程师', '运行'),\r\n('ME', '检修工程师', '检修'),\r\n('SE', '安全工程师', '管理'),\r\n('EE', '电气工程师', '技术'),\r\n('TE', '热控工程师', '技术'),\r\n('CE2', '土建工程师', '技术'),\r\n('OP', '值班员', '运行'),\r\n('MT', '检修工', '检修'),\r\n('EL', '电工', '检修'),\r\n('AD', '行政专员', '管理'),\r\n('HR', '人事专员', '管理');\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "energy_position_dict",
+        "columns": [
+          {
+            "name": "position_code",
+            "type": "VARCHAR(20)",
+            "definition": "position_code VARCHAR(20) PRIMARY KEY COMMENT '岗位代码'"
+          },
+          {
+            "name": "position_name",
+            "type": "VARCHAR(50)",
+            "definition": "position_name VARCHAR(50) NOT NULL COMMENT '岗位名称'"
+          },
+          {
+            "name": "category",
+            "type": "VARCHAR(30)",
+            "definition": "category VARCHAR(30) COMMENT '类别'"
+          }
+        ],
+        "ddl": "CREATE TABLE energy_position_dict (\r\n    position_code VARCHAR(20) PRIMARY KEY COMMENT '岗位代码',\r\n    position_name VARCHAR(50) NOT NULL COMMENT '岗位名称',\r\n    category VARCHAR(30) COMMENT '类别'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "station_type_dict",
+      "comment": "场站类型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 场站类型字典\r\nCREATE TABLE station_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '场站类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(30) COMMENT '大类'\r\n) ENGINE=InnoDB COMMENT='场站类型字典';\r\n\r\nINSERT INTO station_type_dict (type_code, type_name, category) VALUES\r\n('PP', '发电厂', '发电'),\r\n('SUB', '变电站', '变电'),\r\n('TL', '输电线路', '输电'),\r\n('DS', '配电站', '配电'),\r\n('WP', '风电场', '发电'),\r\n('SP', '光伏电站', '发电'),\r\n('HP', '水电站', '发电'),\r\n('NP', '核电站', '发电'),\r\n('ES', '储能站', '配电'),\r\n('CC', '集控中心', '变电');\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "station_type_dict",
+        "columns": [
+          {
+            "name": "type_code",
+            "type": "VARCHAR(10)",
+            "definition": "type_code VARCHAR(10) PRIMARY KEY COMMENT '场站类型代码'"
+          },
+          {
+            "name": "type_name",
+            "type": "VARCHAR(50)",
+            "definition": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称'"
+          },
+          {
+            "name": "category",
+            "type": "VARCHAR(30)",
+            "definition": "category VARCHAR(30) COMMENT '大类'"
+          }
+        ],
+        "ddl": "CREATE TABLE station_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '场站类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(30) COMMENT '大类'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "cert_type_dict",
+      "comment": "资质类型字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE cert_type_dict (\r\n    cert_type_code VARCHAR(20) PRIMARY KEY COMMENT '资质类型代码',\r\n    cert_type_name VARCHAR(50) NOT NULL COMMENT '资质类型名称',\r\n    category VARCHAR(20) COMMENT '类别',\r\n    valid_years TINYINT COMMENT '有效期(年)'\r\n) ENGINE=InnoDB COMMENT='资质类型字典';\r\n\r\nINSERT INTO cert_type_dict (cert_type_code, cert_type_name, category, valid_years) VALUES\r\n('POWER_SUPPLY', '供电类电力业务许可证', '电力业务', 20),\r\n('POWER_GEN', '发电类电力业务许可证', '电力业务', 20),\r\n('POWER_NEW', '新能源类电力业务许可证', '电力业务', 20),\r\n('INSTALL_REPAIR', '承装修试许可证', '承装修试', 5),\r\n('SAFETY', '安全生产许可证', '安全', 3);\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "cert_type_dict",
+        "columns": [
+          {
+            "name": "cert_type_code",
+            "type": "VARCHAR(20)",
+            "definition": "cert_type_code VARCHAR(20) PRIMARY KEY COMMENT '资质类型代码'"
+          },
+          {
+            "name": "cert_type_name",
+            "type": "VARCHAR(50)",
+            "definition": "cert_type_name VARCHAR(50) NOT NULL COMMENT '资质类型名称'"
+          },
+          {
+            "name": "category",
+            "type": "VARCHAR(20)",
+            "definition": "category VARCHAR(20) COMMENT '类别'"
+          },
+          {
+            "name": "valid_years",
+            "type": "TINYINT",
+            "definition": "valid_years TINYINT COMMENT '有效期(年)'"
+          }
+        ],
+        "ddl": "CREATE TABLE cert_type_dict (\r\n    cert_type_code VARCHAR(20) PRIMARY KEY COMMENT '资质类型代码',\r\n    cert_type_name VARCHAR(50) NOT NULL COMMENT '资质类型名称',\r\n    category VARCHAR(20) COMMENT '类别',\r\n    valid_years TINYINT COMMENT '有效期(年)'\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "product_category",
+      "comment": "商品分类表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n\r\n\r\n-- 电商\r\nCREATE TABLE product_category (\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID',\r\n  category_name VARCHAR(100) NOT NULL COMMENT '商品分类名称',\r\n  parent_category_id BIGINT DEFAULT NULL COMMENT '父级商品分类ID',\r\n  category_level TINYINT NOT NULL COMMENT '分类层级',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (category_id),\r\n  KEY idx_category_parent (parent_category_id),\r\n  KEY idx_category_level (category_level)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品分类表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "product_category",
+        "columns": [
+          {
+            "name": "category_id",
+            "type": "BIGINT",
+            "definition": "category_id BIGINT NOT NULL COMMENT '商品分类ID'"
+          },
+          {
+            "name": "category_name",
+            "type": "VARCHAR(100)",
+            "definition": "category_name VARCHAR(100) NOT NULL COMMENT '商品分类名称'"
+          },
+          {
+            "name": "parent_category_id",
+            "type": "BIGINT",
+            "definition": "parent_category_id BIGINT DEFAULT NULL COMMENT '父级商品分类ID'"
+          },
+          {
+            "name": "category_level",
+            "type": "TINYINT",
+            "definition": "category_level TINYINT NOT NULL COMMENT '分类层级'"
+          },
+          {
+            "name": "sort_order",
+            "type": "INT",
+            "definition": "sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号'"
+          }
+        ],
+        "ddl": "CREATE TABLE product_category (\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID',\r\n  category_name VARCHAR(100) NOT NULL COMMENT '商品分类名称',\r\n  parent_category_id BIGINT DEFAULT NULL COMMENT '父级商品分类ID',\r\n  category_level TINYINT NOT NULL COMMENT '分类层级',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (category_id),\r\n  KEY idx_category_parent (parent_category_id),\r\n  KEY idx_category_level (category_level)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "customer_level_dict",
+      "comment": "用户等级字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE customer_level_dict (\r\n  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码',\r\n  level_name VARCHAR(64) NOT NULL COMMENT '用户等级名称',\r\n  min_growth_value INT NOT NULL DEFAULT 0 COMMENT '最低成长值',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (level_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户等级字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "customer_level_dict",
+        "columns": [
+          {
+            "name": "level_code",
+            "type": "VARCHAR(32)",
+            "definition": "level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码'"
+          },
+          {
+            "name": "level_name",
+            "type": "VARCHAR(64)",
+            "definition": "level_name VARCHAR(64) NOT NULL COMMENT '用户等级名称'"
+          },
+          {
+            "name": "min_growth_value",
+            "type": "INT",
+            "definition": "min_growth_value INT NOT NULL DEFAULT 0 COMMENT '最低成长值'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          },
+          {
+            "name": "sort_order",
+            "type": "INT",
+            "definition": "sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号'"
+          }
+        ],
+        "ddl": "CREATE TABLE customer_level_dict (\r\n  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码',\r\n  level_name VARCHAR(64) NOT NULL COMMENT '用户等级名称',\r\n  min_growth_value INT NOT NULL DEFAULT 0 COMMENT '最低成长值',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (level_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "customer_status_dict",
+      "comment": "用户状态字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE customer_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '用户状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户状态字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "customer_status_dict",
+        "columns": [
+          {
+            "name": "status_code",
+            "type": "VARCHAR(32)",
+            "definition": "status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码'"
+          },
+          {
+            "name": "status_name",
+            "type": "VARCHAR(64)",
+            "definition": "status_name VARCHAR(64) NOT NULL COMMENT '用户状态名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE customer_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '用户状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "product_status_dict",
+      "comment": "商品状态字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE product_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '商品状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品状态字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "product_status_dict",
+        "columns": [
+          {
+            "name": "status_code",
+            "type": "VARCHAR(32)",
+            "definition": "status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码'"
+          },
+          {
+            "name": "status_name",
+            "type": "VARCHAR(64)",
+            "definition": "status_name VARCHAR(64) NOT NULL COMMENT '商品状态名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE product_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '商品状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "order_status_dict",
+      "comment": "订单状态字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE order_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '订单状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单状态字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "order_status_dict",
+        "columns": [
+          {
+            "name": "status_code",
+            "type": "VARCHAR(32)",
+            "definition": "status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码'"
+          },
+          {
+            "name": "status_name",
+            "type": "VARCHAR(64)",
+            "definition": "status_name VARCHAR(64) NOT NULL COMMENT '订单状态名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE order_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '订单状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "payment_method_dict",
+      "comment": "支付方式字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE payment_method_dict (\r\n  method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码',\r\n  method_name VARCHAR(64) NOT NULL COMMENT '支付方式名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (method_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付方式字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "payment_method_dict",
+        "columns": [
+          {
+            "name": "method_code",
+            "type": "VARCHAR(32)",
+            "definition": "method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码'"
+          },
+          {
+            "name": "method_name",
+            "type": "VARCHAR(64)",
+            "definition": "method_name VARCHAR(64) NOT NULL COMMENT '支付方式名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE payment_method_dict (\r\n  method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码',\r\n  method_name VARCHAR(64) NOT NULL COMMENT '支付方式名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (method_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "payment_status_dict",
+      "comment": "支付状态字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE payment_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '支付状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付状态字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "payment_status_dict",
+        "columns": [
+          {
+            "name": "status_code",
+            "type": "VARCHAR(32)",
+            "definition": "status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码'"
+          },
+          {
+            "name": "status_name",
+            "type": "VARCHAR(64)",
+            "definition": "status_name VARCHAR(64) NOT NULL COMMENT '支付状态名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE payment_status_dict (\r\n  status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码',\r\n  status_name VARCHAR(64) NOT NULL COMMENT '支付状态名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (status_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "refund_reason_dict",
+      "comment": "退款原因字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE refund_reason_dict (\r\n  reason_code VARCHAR(32) NOT NULL COMMENT '退款原因编码',\r\n  reason_name VARCHAR(64) NOT NULL COMMENT '退款原因名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (reason_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='退款原因字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "refund_reason_dict",
+        "columns": [
+          {
+            "name": "reason_code",
+            "type": "VARCHAR(32)",
+            "definition": "reason_code VARCHAR(32) NOT NULL COMMENT '退款原因编码'"
+          },
+          {
+            "name": "reason_name",
+            "type": "VARCHAR(64)",
+            "definition": "reason_name VARCHAR(64) NOT NULL COMMENT '退款原因名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE refund_reason_dict (\r\n  reason_code VARCHAR(32) NOT NULL COMMENT '退款原因编码',\r\n  reason_name VARCHAR(64) NOT NULL COMMENT '退款原因名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (reason_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "order_channel_dict",
+      "comment": "下单渠道字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE order_channel_dict (\r\n  channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码',\r\n  channel_name VARCHAR(64) NOT NULL COMMENT '下单渠道名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (channel_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='下单渠道字典';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "order_channel_dict",
+        "columns": [
+          {
+            "name": "channel_code",
+            "type": "VARCHAR(32)",
+            "definition": "channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码'"
+          },
+          {
+            "name": "channel_name",
+            "type": "VARCHAR(64)",
+            "definition": "channel_name VARCHAR(64) NOT NULL COMMENT '下单渠道名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE order_channel_dict (\r\n  channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码',\r\n  channel_name VARCHAR(64) NOT NULL COMMENT '下单渠道名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (channel_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "common",
+      "table": "platform_dict",
+      "comment": "销售平台字典",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE platform_dict (\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码',\r\n  platform_name VARCHAR(64) NOT NULL COMMENT '销售平台名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (platform_code)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='销售平台字典';\r\n\r\nINSERT INTO product_category (category_id, category_name, parent_category_id, category_level, sort_order) VALUES\r\n  (1000, '数码家电', NULL, 1, 1),\r\n  (1100, '手机通讯', 1000, 2, 1),\r\n  (1200, '电脑办公', 1000, 2, 2),\r\n  (1300, '家用电器', 1000, 2, 3),\r\n  (2000, '服饰鞋包', NULL, 1, 2),\r\n  (2100, '男装', 2000, 2, 1),\r\n  (2200, '女装', 2000, 2, 2),\r\n  (2300, '鞋靴', 2000, 2, 3),\r\n  (3000, '食品生鲜', NULL, 1, 3),\r\n  (3100, '休闲零食', 3000, 2, 1),\r\n  (3200, '粮油调味', 3000, 2, 2),\r\n  (3300, '水果生鲜', 3000, 2, 3),\r\n  (4000, '美妆个护', NULL, 1, 4),\r\n  (4100, '护肤', 4000, 2, 1),\r\n  (4200, '彩妆', 4000, 2, 2),\r\n  (4300, '个人护理', 4000, 2, 3),\r\n  (5000, '母婴玩具', NULL, 1, 5),\r\n  (5100, '婴童用品', 5000, 2, 1),\r\n  (5200, '玩具乐器', 5000, 2, 2),\r\n  (6000, '运动户外', NULL, 1, 6),\r\n  (6100, '运动服饰', 6000, 2, 1),\r\n  (6200, '户外装备', 6000, 2, 2);\r\n\r\nINSERT INTO customer_level_dict (level_code, level_name, min_growth_value, description, sort_order) VALUES\r\n  ('NORMAL', '普通会员', 0, '默认会员等级', 1),\r\n  ('SILVER', '银卡会员', 1000, '中等活跃用户', 2),\r\n  ('GOLD', '金卡会员', 5000, '高价值用户', 3),\r\n  ('DIAMOND', '钻石会员', 20000, '核心高价值用户', 4);\r\n\r\nINSERT INTO customer_status_dict (status_code, status_name, description) VALUES\r\n  ('ACTIVE', '正常', '用户账号可正常下单'),\r\n  ('FROZEN', '冻结', '用户账号被限制操作'),\r\n  ('CANCELLED', '注销', '用户账号已注销');\r\n\r\nINSERT INTO product_status_dict (status_code, status_name, description) VALUES\r\n  ('ON_SALE', '上架', '商品正在销售'),\r\n  ('OFF_SALE', '下架', '商品已停止销售'),\r\n  ('SOLD_OUT', '缺货', '商品暂无可售库存');\r\n\r\nINSERT INTO order_status_dict (status_code, status_name, description) VALUES\r\n  ('PENDING_PAY', '待支付', '订单已创建但未支付'),\r\n  ('PAID', '已支付', '订单已完成支付'),\r\n  ('SHIPPED', '已发货', '订单已发货'),\r\n  ('COMPLETED', '已完成', '订单交易完成'),\r\n  ('CANCELLED', '已取消', '订单已取消'),\r\n  ('REFUNDED', '已退款', '订单已退款');\r\n\r\nINSERT INTO payment_method_dict (method_code, method_name, description) VALUES\r\n  ('ALIPAY', '支付宝', '使用支付宝支付'),\r\n  ('WECHAT', '微信支付', '使用微信支付'),\r\n  ('BANK_CARD', '银行卡', '使用银行卡支付'),\r\n  ('BALANCE', '账户余额', '使用平台账户余额支付');\r\n\r\nINSERT INTO payment_status_dict (status_code, status_name, description) VALUES\r\n  ('SUCCESS', '支付成功', '支付已成功入账'),\r\n  ('FAILED', '支付失败', '支付未成功'),\r\n  ('REFUNDING', '退款中', '退款流程处理中'),\r\n  ('REFUNDED', '已退款', '支付金额已退回');\r\n\r\nINSERT INTO refund_reason_dict (reason_code, reason_name, description) VALUES\r\n  ('QUALITY', '质量问题', '商品存在质量问题'),\r\n  ('WRONG_ITEM', '错发漏发', '商品错发或漏发'),\r\n  ('NO_REASON', '七天无理由', '用户无理由退货'),\r\n  ('OUT_OF_STOCK', '缺货退款', '商家缺货导致退款'),\r\n  ('OTHER', '其他原因', '其他退款原因');\r\n\r\nINSERT INTO order_channel_dict (channel_code, channel_name, description) VALUES\r\n  ('APP', '手机App', '用户通过手机App下单'),\r\n  ('MINI_PROGRAM', '小程序', '用户通过小程序下单'),\r\n  ('WEB', '网页端', '用户通过网页端下单'),\r\n  ('LIVE', '直播间', '用户通过直播间下单');\r\n\r\nINSERT INTO platform_dict (platform_code, platform_name, description) VALUES\r\n  ('TMALL', '天猫', '天猫销售平台'),\r\n  ('JD', '京东', '京东销售平台'),\r\n  ('PDD', '拼多多', '拼多多销售平台'),\r\n  ('SELF', '自营商城', '品牌自营商城');\r\n\r\n\r\n-- 教育\r\n-- 1. 性别字典\r\nDROP TABLE IF EXISTS dict_gender;\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "common",
+        "table": "platform_dict",
+        "columns": [
+          {
+            "name": "platform_code",
+            "type": "VARCHAR(32)",
+            "definition": "platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码'"
+          },
+          {
+            "name": "platform_name",
+            "type": "VARCHAR(64)",
+            "definition": "platform_name VARCHAR(64) NOT NULL COMMENT '销售平台名称'"
+          },
+          {
+            "name": "description",
+            "type": "VARCHAR(255)",
+            "definition": "description VARCHAR(255) DEFAULT NULL COMMENT '说明'"
+          }
+        ],
+        "ddl": "CREATE TABLE platform_dict (\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码',\r\n  platform_name VARCHAR(64) NOT NULL COMMENT '销售平台名称',\r\n  description VARCHAR(255) DEFAULT NULL COMMENT '说明',\r\n  PRIMARY KEY (platform_code)\r\n)",
+        "file": "commom_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "transportation",
+      "table": "vehicle_company",
+      "comment": "车辆运输公司信息表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "-- 1. 车辆公司表\r\nCREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "transportation",
+        "table": "vehicle_company",
+        "columns": [
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号'"
+          },
+          {
+            "name": "company_name",
+            "type": "VARCHAR(100)",
+            "definition": "company_name VARCHAR(100) NOT NULL COMMENT '公司名称'"
+          },
+          {
+            "name": "business_type",
+            "type": "VARCHAR(50)",
+            "definition": "business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）'"
+          },
+          {
+            "name": "establish_date",
+            "type": "DATE",
+            "definition": "establish_date DATE COMMENT '成立日期'"
+          },
+          {
+            "name": "legal_person",
+            "type": "VARCHAR(50)",
+            "definition": "legal_person VARCHAR(50) COMMENT '法人'"
+          },
+          {
+            "name": "contact_phone",
+            "type": "VARCHAR(20)",
+            "definition": "contact_phone VARCHAR(20) COMMENT '联系电话'"
+          },
+          {
+            "name": "address",
+            "type": "VARCHAR(200)",
+            "definition": "address VARCHAR(200) COMMENT '公司地址'"
+          },
+          {
+            "name": "area_id",
+            "type": "CHAR(6)",
+            "definition": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+          },
+          {
+            "name": "status",
+            "type": "ENUM('运营','停业','注销')",
+            "definition": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"
+          }
+        ],
+        "ddl": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "transportation",
+      "table": "driver",
+      "comment": "驾驶员信息表（车辆公司员工）",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 3,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 2. 驾驶员表（车辆公司的员工）\r\nCREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "transportation",
+        "table": "driver",
+        "columns": [
+          {
+            "name": "driver_id",
+            "type": "VARCHAR(18)",
+            "definition": "driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号'"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(50)",
+            "definition": "name VARCHAR(50) NOT NULL COMMENT '姓名'"
+          },
+          {
+            "name": "gender",
+            "type": "ENUM('男','女')",
+            "definition": "gender ENUM('男','女') NOT NULL COMMENT '性别'"
+          },
+          {
+            "name": "birth_date",
+            "type": "DATE",
+            "definition": "birth_date DATE NOT NULL COMMENT '出生日期'"
+          },
+          {
+            "name": "license_type",
+            "type": "VARCHAR(5)",
+            "definition": "license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码'"
+          },
+          {
+            "name": "issue_date",
+            "type": "DATE",
+            "definition": "issue_date DATE NOT NULL COMMENT '发证日期'"
+          },
+          {
+            "name": "valid_years",
+            "type": "TINYINT",
+            "definition": "valid_years TINYINT NOT NULL COMMENT '有效期(年)'"
+          },
+          {
+            "name": "phone",
+            "type": "VARCHAR(20)",
+            "definition": "phone VARCHAR(20) COMMENT '联系电话'"
+          },
+          {
+            "name": "address",
+            "type": "VARCHAR(200)",
+            "definition": "address VARCHAR(200) COMMENT '联系地址'"
+          },
+          {
+            "name": "area_id",
+            "type": "CHAR(6)",
+            "definition": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+          },
+          {
+            "name": "status",
+            "type": "ENUM('正常','暂扣','吊销','过期')",
+            "definition": "status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态'"
+          },
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID'"
+          }
+        ],
+        "ddl": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r",
+          "FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r",
+          "FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "transportation",
+      "table": "vehicle",
+      "comment": "车辆登记表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 3. 车辆登记表\r\nCREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "transportation",
+        "table": "vehicle",
+        "columns": [
+          {
+            "name": "vehicle_id",
+            "type": "VARCHAR(20)",
+            "definition": "vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号'"
+          },
+          {
+            "name": "plate_number",
+            "type": "VARCHAR(10)",
+            "definition": "plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号'"
+          },
+          {
+            "name": "owner_id",
+            "type": "VARCHAR(18)",
+            "definition": "owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号'"
+          },
+          {
+            "name": "vehicle_type_code",
+            "type": "VARCHAR(20)",
+            "definition": "vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码'"
+          },
+          {
+            "name": "brand",
+            "type": "VARCHAR(30)",
+            "definition": "brand VARCHAR(30) NOT NULL COMMENT '品牌'"
+          },
+          {
+            "name": "model",
+            "type": "VARCHAR(30)",
+            "definition": "model VARCHAR(30) NOT NULL COMMENT '型号'"
+          },
+          {
+            "name": "manufacture_year",
+            "type": "YEAR",
+            "definition": "manufacture_year YEAR NOT NULL COMMENT '生产年份'"
+          },
+          {
+            "name": "load_capacity",
+            "type": "DECIMAL(8,2)",
+            "definition": "load_capacity DECIMAL(8,2) COMMENT '载重(吨)'"
+          },
+          {
+            "name": "seat_count",
+            "type": "TINYINT",
+            "definition": "seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）'"
+          },
+          {
+            "name": "color",
+            "type": "VARCHAR(20)",
+            "definition": "color VARCHAR(20) COMMENT '颜色'"
+          },
+          {
+            "name": "register_date",
+            "type": "DATE",
+            "definition": "register_date DATE NOT NULL COMMENT '注册日期'"
+          },
+          {
+            "name": "area_id",
+            "type": "CHAR(6)",
+            "definition": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+          },
+          {
+            "name": "insurance_expire",
+            "type": "DATE",
+            "definition": "insurance_expire DATE COMMENT '保险到期日'"
+          },
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID'"
+          }
+        ],
+        "ddl": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r",
+          "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r",
+          "FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r",
+          "FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "transportation",
+      "table": "shipping_company",
+      "comment": "船舶公司信息表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 4. 船舶公司表（独立）\r\nCREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='船舶公司信息表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "transportation",
+        "table": "shipping_company",
+        "columns": [
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号'"
+          },
+          {
+            "name": "company_name",
+            "type": "VARCHAR(100)",
+            "definition": "company_name VARCHAR(100) NOT NULL COMMENT '公司名称'"
+          },
+          {
+            "name": "business_type",
+            "type": "VARCHAR(50)",
+            "definition": "business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）'"
+          },
+          {
+            "name": "establish_date",
+            "type": "DATE",
+            "definition": "establish_date DATE NOT NULL COMMENT '成立日期'"
+          },
+          {
+            "name": "legal_person",
+            "type": "VARCHAR(50)",
+            "definition": "legal_person VARCHAR(50) NOT NULL COMMENT '法人'"
+          },
+          {
+            "name": "contact_phone",
+            "type": "VARCHAR(20)",
+            "definition": "contact_phone VARCHAR(20) COMMENT '联系电话'"
+          },
+          {
+            "name": "address",
+            "type": "VARCHAR(200)",
+            "definition": "address VARCHAR(200) COMMENT '公司地址'"
+          },
+          {
+            "name": "area_id",
+            "type": "CHAR(6)",
+            "definition": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+          },
+          {
+            "name": "status",
+            "type": "ENUM('运营','停业','注销')",
+            "definition": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"
+          }
+        ],
+        "ddl": "CREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "transportation",
+      "table": "employee",
+      "comment": "船舶公司员工表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 3,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 5. 员工表（船舶公司的员工）\r\nCREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    employee_type_code VARCHAR(20) NOT NULL COMMENT '人员类型代码（船长/大副等）',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    status ENUM('在职','离职','退休') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (employee_type_code) REFERENCES common.employee_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id)\r\n) ENGINE=InnoDB COMMENT='船舶公司员工表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "transportation",
+        "table": "employee",
+        "columns": [
+          {
+            "name": "employee_id",
+            "type": "VARCHAR(18)",
+            "definition": "employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号'"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(50)",
+            "definition": "name VARCHAR(50) NOT NULL COMMENT '姓名'"
+          },
+          {
+            "name": "gender",
+            "type": "ENUM('男','女')",
+            "definition": "gender ENUM('男','女') NOT NULL COMMENT '性别'"
+          },
+          {
+            "name": "employee_type_code",
+            "type": "VARCHAR(20)",
+            "definition": "employee_type_code VARCHAR(20) NOT NULL COMMENT '人员类型代码（船长/大副等）'"
+          },
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID'"
+          },
+          {
+            "name": "hire_date",
+            "type": "DATE",
+            "definition": "hire_date DATE COMMENT '入职日期'"
+          },
+          {
+            "name": "phone",
+            "type": "VARCHAR(20)",
+            "definition": "phone VARCHAR(20) COMMENT '联系电话'"
+          },
+          {
+            "name": "status",
+            "type": "ENUM('在职','离职','退休')",
+            "definition": "status ENUM('在职','离职','退休') DEFAULT '在职' COMMENT '状态'"
+          }
+        ],
+        "ddl": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    employee_type_code VARCHAR(20) NOT NULL COMMENT '人员类型代码（船长/大副等）',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    status ENUM('在职','离职','退休') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (employee_type_code) REFERENCES common.employee_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (employee_type_code) REFERENCES common.employee_type_dict(type_code),\r",
+          "FOREIGN KEY (company_id) REFERENCES shipping_company(company_id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "transportation",
+      "table": "vessel",
+      "comment": "船舶基础信息表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 6. 船舶基础信息表（船舶公司的子表）（通过mmsi关联Postgre中的ais数据）\r\nCREATE TABLE vessel (\r\n    mmsi INT UNSIGNED NOT NULL COMMENT '船舶MMSI，9位唯一标识',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',\r\n    vessel_type SMALLINT COMMENT '船舶类型代码（参照AIS标准）',\r\n    max_load DECIMAL(10,2) COMMENT '最大荷载量（吨）',\r\n    max_speed DECIMAL(4,1) COMMENT '最大航速（节）',\r\n    endurance VARCHAR(32) COMMENT '自持力（天/海里）',\r\n    captain_name VARCHAR(32) COMMENT '船长姓名',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    UNIQUE KEY uk_mmsi (mmsi),\r\n    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id) ON DELETE RESTRICT ON UPDATE CASCADE,\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vessel_type) REFERENCES common.vessel_type_dict(type_code)\r\n) ENGINE=InnoDB COMMENT='船舶基础信息表';\r\n\r\n\r\n\r\n\r\n-- =====================================================\r\n-- 金融库\r\nCREATE DATABASE IF NOT EXISTS finance_tax;\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "transportation",
+        "table": "vessel",
+        "columns": [
+          {
+            "name": "mmsi",
+            "type": "INT",
+            "definition": "mmsi INT UNSIGNED NOT NULL COMMENT '船舶MMSI，9位唯一标识'"
+          },
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID'"
+          },
+          {
+            "name": "vessel_type",
+            "type": "SMALLINT",
+            "definition": "vessel_type SMALLINT COMMENT '船舶类型代码（参照AIS标准）'"
+          },
+          {
+            "name": "max_load",
+            "type": "DECIMAL(10,2)",
+            "definition": "max_load DECIMAL(10,2) COMMENT '最大荷载量（吨）'"
+          },
+          {
+            "name": "max_speed",
+            "type": "DECIMAL(4,1)",
+            "definition": "max_speed DECIMAL(4,1) COMMENT '最大航速（节）'"
+          },
+          {
+            "name": "endurance",
+            "type": "VARCHAR(32)",
+            "definition": "endurance VARCHAR(32) COMMENT '自持力（天/海里）'"
+          },
+          {
+            "name": "captain_name",
+            "type": "VARCHAR(32)",
+            "definition": "captain_name VARCHAR(32) COMMENT '船长姓名'"
+          },
+          {
+            "name": "area_id",
+            "type": "CHAR(6)",
+            "definition": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+          }
+        ],
+        "ddl": "CREATE TABLE vessel (\r\n    mmsi INT UNSIGNED NOT NULL COMMENT '船舶MMSI，9位唯一标识',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属船舶公司ID',\r\n    vessel_type SMALLINT COMMENT '船舶类型代码（参照AIS标准）',\r\n    max_load DECIMAL(10,2) COMMENT '最大荷载量（吨）',\r\n    max_speed DECIMAL(4,1) COMMENT '最大航速（节）',\r\n    endurance VARCHAR(32) COMMENT '自持力（天/海里）',\r\n    captain_name VARCHAR(32) COMMENT '船长姓名',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    UNIQUE KEY uk_mmsi (mmsi),\r\n    FOREIGN KEY (company_id) REFERENCES shipping_company(company_id) ON DELETE RESTRICT ON UPDATE CASCADE,\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vessel_type) REFERENCES common.vessel_type_dict(type_code)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (company_id) REFERENCES shipping_company(company_id) ON DELETE RESTRICT ON UPDATE CASCADE,\r",
+          "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r",
+          "FOREIGN KEY (vessel_type) REFERENCES common.vessel_type_dict(type_code)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "finance_tax",
+      "table": "companies",
+      "comment": "公司基础信息主表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 4,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 公司主表\r\nCREATE TABLE companies (\r\n    company_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '公司唯一ID',\r\n    company_name VARCHAR(200) NOT NULL UNIQUE COMMENT '公司法定全称',\r\n    stock_code VARCHAR(20) UNIQUE COMMENT '股票代码（若上市）',\r\n    established_year YEAR COMMENT '注册/成立年份',\r\n    registered_capital DECIMAL(18,2) COMMENT '注册资本（万元）',\r\n    industry_code VARCHAR(20) COMMENT '所属行业代码',\r\n    registration_type_code VARCHAR(20) COMMENT '登记注册类型代码',\r\n    is_private BOOLEAN COMMENT '是否民营企业',\r\n    size_category_code VARCHAR(10) COMMENT '规模划型代码',\r\n    is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业',\r\n    is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业',\r\n\r\n    FOREIGN KEY (industry_code) REFERENCES common.dict_industry(industry_code),\r\n    FOREIGN KEY (registration_type_code) REFERENCES common.dict_registration_type(type_code),\r\n    FOREIGN KEY (size_category_code) REFERENCES common.dict_size_category(size_code)\r\n) COMMENT='公司基础信息主表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "finance_tax",
+        "table": "companies",
+        "columns": [
+          {
+            "name": "company_id",
+            "type": "BIGINT",
+            "definition": "company_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '公司唯一ID'"
+          },
+          {
+            "name": "company_name",
+            "type": "VARCHAR(200)",
+            "definition": "company_name VARCHAR(200) NOT NULL UNIQUE COMMENT '公司法定全称'"
+          },
+          {
+            "name": "stock_code",
+            "type": "VARCHAR(20)",
+            "definition": "stock_code VARCHAR(20) UNIQUE COMMENT '股票代码（若上市）'"
+          },
+          {
+            "name": "established_year",
+            "type": "YEAR",
+            "definition": "established_year YEAR COMMENT '注册/成立年份'"
+          },
+          {
+            "name": "registered_capital",
+            "type": "DECIMAL(18,2)",
+            "definition": "registered_capital DECIMAL(18,2) COMMENT '注册资本（万元）'"
+          },
+          {
+            "name": "industry_code",
+            "type": "VARCHAR(20)",
+            "definition": "industry_code VARCHAR(20) COMMENT '所属行业代码'"
+          },
+          {
+            "name": "registration_type_code",
+            "type": "VARCHAR(20)",
+            "definition": "registration_type_code VARCHAR(20) COMMENT '登记注册类型代码'"
+          },
+          {
+            "name": "is_private",
+            "type": "BOOLEAN",
+            "definition": "is_private BOOLEAN COMMENT '是否民营企业'"
+          },
+          {
+            "name": "size_category_code",
+            "type": "VARCHAR(10)",
+            "definition": "size_category_code VARCHAR(10) COMMENT '规模划型代码'"
+          },
+          {
+            "name": "is_key_high_tech",
+            "type": "BOOLEAN",
+            "definition": "is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业'"
+          },
+          {
+            "name": "is_tech_advanced_service",
+            "type": "BOOLEAN",
+            "definition": "is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业'"
+          }
+        ],
+        "ddl": "CREATE TABLE companies (\r\n    company_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '公司唯一ID',\r\n    company_name VARCHAR(200) NOT NULL UNIQUE COMMENT '公司法定全称',\r\n    stock_code VARCHAR(20) UNIQUE COMMENT '股票代码（若上市）',\r\n    established_year YEAR COMMENT '注册/成立年份',\r\n    registered_capital DECIMAL(18,2) COMMENT '注册资本（万元）',\r\n    industry_code VARCHAR(20) COMMENT '所属行业代码',\r\n    registration_type_code VARCHAR(20) COMMENT '登记注册类型代码',\r\n    is_private BOOLEAN COMMENT '是否民营企业',\r\n    size_category_code VARCHAR(10) COMMENT '规模划型代码',\r\n    is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业',\r\n    is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业',\r\n\r\n    FOREIGN KEY (industry_code) REFERENCES common.dict_industry(industry_code),\r\n    FOREIGN KEY (registration_type_code) REFERENCES common.dict_registration_type(type_code),\r\n    FOREIGN KEY (size_category_code) REFERENCES common.dict_size_category(size_code)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (industry_code) REFERENCES common.dict_industry(industry_code),\r",
+          "FOREIGN KEY (registration_type_code) REFERENCES common.dict_registration_type(type_code),\r",
+          "FOREIGN KEY (size_category_code) REFERENCES common.dict_size_category(size_code)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "finance_tax",
+      "table": "stocks",
+      "comment": "股票基本信息表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 股票信息表\r\nCREATE TABLE stocks (\r\n    stock_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    stock_code VARCHAR(20) NOT NULL UNIQUE COMMENT '股票代码',\r\n    stock_name VARCHAR(50) NOT NULL COMMENT '股票简称',\r\n    stock_full_name VARCHAR(200) COMMENT '公司全称（冗余）',\r\n    share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT '股东权利类型（引用字典）',\r\n    register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT '记名方式',\r\n    par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT '面额类型',\r\n    market_class VARCHAR(5) COMMENT '上市地点分类（A/B/H/N等）',\r\n    listing_date DATE COMMENT '上市时间',\r\n    total_shares BIGINT NOT NULL COMMENT '股本（股）',\r\n    current_price DECIMAL(10,2) COMMENT '最新股票价格（元）',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id)\r\n) COMMENT='股票基本信息表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "finance_tax",
+        "table": "stocks",
+        "columns": [
+          {
+            "name": "stock_id",
+            "type": "BIGINT",
+            "definition": "stock_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID'"
+          },
+          {
+            "name": "company_id",
+            "type": "BIGINT",
+            "definition": "company_id BIGINT NOT NULL COMMENT '关联公司ID'"
+          },
+          {
+            "name": "stock_code",
+            "type": "VARCHAR(20)",
+            "definition": "stock_code VARCHAR(20) NOT NULL UNIQUE COMMENT '股票代码'"
+          },
+          {
+            "name": "stock_name",
+            "type": "VARCHAR(50)",
+            "definition": "stock_name VARCHAR(50) NOT NULL COMMENT '股票简称'"
+          },
+          {
+            "name": "stock_full_name",
+            "type": "VARCHAR(200)",
+            "definition": "stock_full_name VARCHAR(200) COMMENT '公司全称（冗余）'"
+          },
+          {
+            "name": "share_right_type",
+            "type": "VARCHAR(20)",
+            "definition": "share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT '股东权利类型（引用字典）'"
+          },
+          {
+            "name": "register_type",
+            "type": "VARCHAR(20)",
+            "definition": "register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT '记名方式'"
+          },
+          {
+            "name": "par_value_type",
+            "type": "VARCHAR(20)",
+            "definition": "par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT '面额类型'"
+          },
+          {
+            "name": "market_class",
+            "type": "VARCHAR(5)",
+            "definition": "market_class VARCHAR(5) COMMENT '上市地点分类（A/B/H/N等）'"
+          },
+          {
+            "name": "listing_date",
+            "type": "DATE",
+            "definition": "listing_date DATE COMMENT '上市时间'"
+          },
+          {
+            "name": "total_shares",
+            "type": "BIGINT",
+            "definition": "total_shares BIGINT NOT NULL COMMENT '股本（股）'"
+          },
+          {
+            "name": "current_price",
+            "type": "DECIMAL(10,2)",
+            "definition": "current_price DECIMAL(10,2) COMMENT '最新股票价格（元）'"
+          }
+        ],
+        "ddl": "CREATE TABLE stocks (\r\n    stock_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    stock_code VARCHAR(20) NOT NULL UNIQUE COMMENT '股票代码',\r\n    stock_name VARCHAR(50) NOT NULL COMMENT '股票简称',\r\n    stock_full_name VARCHAR(200) COMMENT '公司全称（冗余）',\r\n    share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT '股东权利类型（引用字典）',\r\n    register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT '记名方式',\r\n    par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT '面额类型',\r\n    market_class VARCHAR(5) COMMENT '上市地点分类（A/B/H/N等）',\r\n    listing_date DATE COMMENT '上市时间',\r\n    total_shares BIGINT NOT NULL COMMENT '股本（股）',\r\n    current_price DECIMAL(10,2) COMMENT '最新股票价格（元）',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (company_id) REFERENCES companies(company_id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "finance_tax",
+      "table": "stock_daily_trades",
+      "comment": "股票每日成交汇总信息",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 股票日成交信息表\r\nCREATE TABLE stock_daily_trades (\r\n    trade_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    stock_id BIGINT NOT NULL COMMENT '关联股票ID',\r\n    trade_date DATE NOT NULL COMMENT '交易日期',\r\n    volume BIGINT NOT NULL COMMENT '成交量（股）',\r\n    avg_trade_size INT COMMENT '每笔成交股数',\r\n    open_price DECIMAL(10,2) NOT NULL COMMENT '开盘价',\r\n    close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价',\r\n    high_price DECIMAL(10,2) NOT NULL COMMENT '最高价',\r\n    low_price DECIMAL(10,2) NOT NULL COMMENT '最低价',\r\n\r\n    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),\r\n    UNIQUE KEY uk_stock_date (stock_id, trade_date)\r\n) COMMENT='股票每日成交汇总信息';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "finance_tax",
+        "table": "stock_daily_trades",
+        "columns": [
+          {
+            "name": "trade_id",
+            "type": "BIGINT",
+            "definition": "trade_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID'"
+          },
+          {
+            "name": "stock_id",
+            "type": "BIGINT",
+            "definition": "stock_id BIGINT NOT NULL COMMENT '关联股票ID'"
+          },
+          {
+            "name": "trade_date",
+            "type": "DATE",
+            "definition": "trade_date DATE NOT NULL COMMENT '交易日期'"
+          },
+          {
+            "name": "volume",
+            "type": "BIGINT",
+            "definition": "volume BIGINT NOT NULL COMMENT '成交量（股）'"
+          },
+          {
+            "name": "avg_trade_size",
+            "type": "INT",
+            "definition": "avg_trade_size INT COMMENT '每笔成交股数'"
+          },
+          {
+            "name": "open_price",
+            "type": "DECIMAL(10,2)",
+            "definition": "open_price DECIMAL(10,2) NOT NULL COMMENT '开盘价'"
+          },
+          {
+            "name": "close_price",
+            "type": "DECIMAL(10,2)",
+            "definition": "close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价'"
+          },
+          {
+            "name": "high_price",
+            "type": "DECIMAL(10,2)",
+            "definition": "high_price DECIMAL(10,2) NOT NULL COMMENT '最高价'"
+          },
+          {
+            "name": "low_price",
+            "type": "DECIMAL(10,2)",
+            "definition": "low_price DECIMAL(10,2) NOT NULL COMMENT '最低价'"
+          }
+        ],
+        "ddl": "CREATE TABLE stock_daily_trades (\r\n    trade_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    stock_id BIGINT NOT NULL COMMENT '关联股票ID',\r\n    trade_date DATE NOT NULL COMMENT '交易日期',\r\n    volume BIGINT NOT NULL COMMENT '成交量（股）',\r\n    avg_trade_size INT COMMENT '每笔成交股数',\r\n    open_price DECIMAL(10,2) NOT NULL COMMENT '开盘价',\r\n    close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价',\r\n    high_price DECIMAL(10,2) NOT NULL COMMENT '最高价',\r\n    low_price DECIMAL(10,2) NOT NULL COMMENT '最低价',\r\n\r\n    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),\r\n    UNIQUE KEY uk_stock_date (stock_id, trade_date)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "finance_tax",
+      "table": "company_financials",
+      "comment": "公司定期财务摘要信息",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 5,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 公司财务信息表\r\nCREATE TABLE company_financials (\r\n    financial_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    report_date DATE NOT NULL COMMENT '报表日期',\r\n    dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）',\r\n    dividend_stock INT DEFAULT 0 COMMENT '每股股息（分/股）',\r\n    total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）',\r\n    total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_report (company_id, report_date)\r\n) COMMENT='公司定期财务摘要信息';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "finance_tax",
+        "table": "company_financials",
+        "columns": [
+          {
+            "name": "financial_id",
+            "type": "BIGINT",
+            "definition": "financial_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID'"
+          },
+          {
+            "name": "company_id",
+            "type": "BIGINT",
+            "definition": "company_id BIGINT NOT NULL COMMENT '关联公司ID'"
+          },
+          {
+            "name": "report_date",
+            "type": "DATE",
+            "definition": "report_date DATE NOT NULL COMMENT '报表日期'"
+          },
+          {
+            "name": "dividend_cash",
+            "type": "DECIMAL(18,2)",
+            "definition": "dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）'"
+          },
+          {
+            "name": "dividend_stock",
+            "type": "INT",
+            "definition": "dividend_stock INT DEFAULT 0 COMMENT '每股股息（分/股）'"
+          },
+          {
+            "name": "total_assets",
+            "type": "DECIMAL(18,2)",
+            "definition": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"
+          },
+          {
+            "name": "total_liabilities",
+            "type": "DECIMAL(18,2)",
+            "definition": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"
+          }
+        ],
+        "ddl": "CREATE TABLE company_financials (\r\n    financial_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '词条ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    report_date DATE NOT NULL COMMENT '报表日期',\r\n    dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）',\r\n    dividend_stock INT DEFAULT 0 COMMENT '每股股息（分/股）',\r\n    total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）',\r\n    total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_report (company_id, report_date)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (company_id) REFERENCES companies(company_id),\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "finance_tax",
+      "table": "corporate_income_tax_returns",
+      "comment": "企业所得税年度申报信息表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 企业所得税申报信息表\r\nCREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';\r\n\r\n\r\n\r\n-- ============================================\r\n-- 工业库\r\nCREATE DATABASE IF NOT EXISTS energy;\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "finance_tax",
+        "table": "corporate_income_tax_returns",
+        "columns": [
+          {
+            "name": "return_id",
+            "type": "BIGINT",
+            "definition": "return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID'"
+          },
+          {
+            "name": "company_id",
+            "type": "BIGINT",
+            "definition": "company_id BIGINT NOT NULL COMMENT '关联公司ID'"
+          },
+          {
+            "name": "tax_year",
+            "type": "YEAR",
+            "definition": "tax_year YEAR NOT NULL COMMENT '纳税年度'"
+          },
+          {
+            "name": "revenue",
+            "type": "DECIMAL(18,2)",
+            "definition": "revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）'"
+          },
+          {
+            "name": "non_taxable_income",
+            "type": "DECIMAL(18,2)",
+            "definition": "non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）'"
+          },
+          {
+            "name": "deductions",
+            "type": "DECIMAL(18,2)",
+            "definition": "deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）'"
+          },
+          {
+            "name": "prior_year_losses",
+            "type": "DECIMAL(18,2)",
+            "definition": "prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）'"
+          },
+          {
+            "name": "building_asset_value",
+            "type": "DECIMAL(18,2)",
+            "definition": "building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）'"
+          },
+          {
+            "name": "employee_count",
+            "type": "INT",
+            "definition": "employee_count INT COMMENT '从业人数（全年季度平均值）'"
+          },
+          {
+            "name": "total_assets",
+            "type": "DECIMAL(18,2)",
+            "definition": "total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）'"
+          },
+          {
+            "name": "is_restricted_industry",
+            "type": "BOOLEAN",
+            "definition": "is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业'"
+          }
+        ],
+        "ddl": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (company_id) REFERENCES companies(company_id),\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "energy",
+      "table": "energy_company",
+      "comment": "能源企业信息表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 4,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 能源企业表\r\nCREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "energy",
+        "table": "energy_company",
+        "columns": [
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号'"
+          },
+          {
+            "name": "company_name",
+            "type": "VARCHAR(100)",
+            "definition": "company_name VARCHAR(100) NOT NULL COMMENT '企业名称'"
+          },
+          {
+            "name": "business_type",
+            "type": "VARCHAR(50)",
+            "definition": "business_type VARCHAR(50) NOT NULL COMMENT '经营类型'"
+          },
+          {
+            "name": "establish_date",
+            "type": "DATE",
+            "definition": "establish_date DATE COMMENT '成立日期'"
+          },
+          {
+            "name": "legal_person",
+            "type": "VARCHAR(50)",
+            "definition": "legal_person VARCHAR(50) COMMENT '法人代表'"
+          },
+          {
+            "name": "contact_phone",
+            "type": "VARCHAR(20)",
+            "definition": "contact_phone VARCHAR(20) COMMENT '联系电话'"
+          },
+          {
+            "name": "area_id",
+            "type": "CHAR(6)",
+            "definition": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+          },
+          {
+            "name": "staff_count",
+            "type": "INT",
+            "definition": "staff_count INT COMMENT '员工总数'"
+          },
+          {
+            "name": "status",
+            "type": "ENUM('运营','停业','注销')",
+            "definition": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"
+          }
+        ],
+        "ddl": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "energy",
+      "table": "company_certification",
+      "comment": "企业资质表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 企业资质表\r\nCREATE TABLE company_certification (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '企业编号',\r\n    cert_type VARCHAR(50) NOT NULL COMMENT '资质类型',\r\n    cert_no VARCHAR(50) COMMENT '证书编号',\r\n    issue_date DATE COMMENT '发证日期',\r\n    expire_date DATE COMMENT '到期日期',\r\n    issue_authority VARCHAR(100) COMMENT '发证机关',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id)\r\n) ENGINE=InnoDB COMMENT='企业资质表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "energy",
+        "table": "company_certification",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INT",
+            "definition": "id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID'"
+          },
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) NOT NULL COMMENT '企业编号'"
+          },
+          {
+            "name": "cert_type",
+            "type": "VARCHAR(50)",
+            "definition": "cert_type VARCHAR(50) NOT NULL COMMENT '资质类型'"
+          },
+          {
+            "name": "cert_no",
+            "type": "VARCHAR(50)",
+            "definition": "cert_no VARCHAR(50) COMMENT '证书编号'"
+          },
+          {
+            "name": "issue_date",
+            "type": "DATE",
+            "definition": "issue_date DATE COMMENT '发证日期'"
+          },
+          {
+            "name": "expire_date",
+            "type": "DATE",
+            "definition": "expire_date DATE COMMENT '到期日期'"
+          },
+          {
+            "name": "issue_authority",
+            "type": "VARCHAR(100)",
+            "definition": "issue_authority VARCHAR(100) COMMENT '发证机关'"
+          }
+        ],
+        "ddl": "CREATE TABLE company_certification (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '企业编号',\r\n    cert_type VARCHAR(50) NOT NULL COMMENT '资质类型',\r\n    cert_no VARCHAR(50) COMMENT '证书编号',\r\n    issue_date DATE COMMENT '发证日期',\r\n    expire_date DATE COMMENT '到期日期',\r\n    issue_authority VARCHAR(100) COMMENT '发证机关',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (company_id) REFERENCES energy_company(company_id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "energy",
+      "table": "energy_station",
+      "comment": "能源场站表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 能源场站表\r\nCREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "energy",
+        "table": "energy_station",
+        "columns": [
+          {
+            "name": "station_id",
+            "type": "VARCHAR(20)",
+            "definition": "station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号'"
+          },
+          {
+            "name": "station_name",
+            "type": "VARCHAR(100)",
+            "definition": "station_name VARCHAR(100) NOT NULL COMMENT '场站名称'"
+          },
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号'"
+          },
+          {
+            "name": "station_type_code",
+            "type": "VARCHAR(10)",
+            "definition": "station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码'"
+          },
+          {
+            "name": "energy_type_code",
+            "type": "VARCHAR(10)",
+            "definition": "energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码'"
+          },
+          {
+            "name": "installed_capacity",
+            "type": "DECIMAL(12,2)",
+            "definition": "installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)'"
+          },
+          {
+            "name": "annual_generation",
+            "type": "DECIMAL(12,2)",
+            "definition": "annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)'"
+          },
+          {
+            "name": "grid_connect_date",
+            "type": "DATE",
+            "definition": "grid_connect_date DATE COMMENT '并网日期'"
+          },
+          {
+            "name": "area_id",
+            "type": "CHAR(6)",
+            "definition": "area_id CHAR(6) NOT NULL COMMENT '所在地区划代码'"
+          },
+          {
+            "name": "status",
+            "type": "ENUM('运行','在建','停机','退役')",
+            "definition": "status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态'"
+          }
+        ],
+        "ddl": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r",
+          "FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r",
+          "FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r",
+          "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "energy",
+      "table": "supply_area",
+      "comment": "供电区域表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 供电区域表\r\nCREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n) ENGINE=InnoDB COMMENT='供电区域表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "energy",
+        "table": "supply_area",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INT",
+            "definition": "id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID'"
+          },
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号'"
+          },
+          {
+            "name": "area_id",
+            "type": "CHAR(6)",
+            "definition": "area_id CHAR(6) NOT NULL COMMENT '供电区域代码'"
+          },
+          {
+            "name": "supply_level",
+            "type": "VARCHAR(10)",
+            "definition": "supply_level VARCHAR(10) COMMENT '供电等级'"
+          },
+          {
+            "name": "household_count",
+            "type": "INT",
+            "definition": "household_count INT COMMENT '供电户数'"
+          },
+          {
+            "name": "annual_supply",
+            "type": "DECIMAL(12,2)",
+            "definition": "annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)'"
+          }
+        ],
+        "ddl": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r",
+          "FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "energy",
+      "table": "employee",
+      "comment": "能源企业员工表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 7,
+      "rank_after": 1,
+      "raw_schema": "\r\n-- 员工表\r\nCREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_id VARCHAR(20) COMMENT '所属场站编号',\r\n    position_code VARCHAR(20) NOT NULL COMMENT '岗位代码',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    education VARCHAR(20) COMMENT '学历',\r\n    status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_id) REFERENCES energy_station(station_id),\r\n    FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)\r\n) ENGINE=InnoDB COMMENT='能源企业员工表';\r\n\r\n\r\n-- =====================================================\r\n-- 2024教育库\r\nCREATE DATABASE IF NOT EXISTS education_2024;\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "energy",
+        "table": "employee",
+        "columns": [
+          {
+            "name": "employee_id",
+            "type": "VARCHAR(18)",
+            "definition": "employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号'"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(50)",
+            "definition": "name VARCHAR(50) NOT NULL COMMENT '姓名'"
+          },
+          {
+            "name": "gender",
+            "type": "ENUM('男','女')",
+            "definition": "gender ENUM('男','女') NOT NULL COMMENT '性别'"
+          },
+          {
+            "name": "birth_date",
+            "type": "DATE",
+            "definition": "birth_date DATE NOT NULL COMMENT '出生日期'"
+          },
+          {
+            "name": "company_id",
+            "type": "VARCHAR(20)",
+            "definition": "company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号'"
+          },
+          {
+            "name": "station_id",
+            "type": "VARCHAR(20)",
+            "definition": "station_id VARCHAR(20) COMMENT '所属场站编号'"
+          },
+          {
+            "name": "position_code",
+            "type": "VARCHAR(20)",
+            "definition": "position_code VARCHAR(20) NOT NULL COMMENT '岗位代码'"
+          },
+          {
+            "name": "hire_date",
+            "type": "DATE",
+            "definition": "hire_date DATE COMMENT '入职日期'"
+          },
+          {
+            "name": "phone",
+            "type": "VARCHAR(20)",
+            "definition": "phone VARCHAR(20) COMMENT '联系电话'"
+          },
+          {
+            "name": "education",
+            "type": "VARCHAR(20)",
+            "definition": "education VARCHAR(20) COMMENT '学历'"
+          },
+          {
+            "name": "status",
+            "type": "ENUM('在职','离职','退休','外派')",
+            "definition": "status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态'"
+          }
+        ],
+        "ddl": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_id VARCHAR(20) COMMENT '所属场站编号',\r\n    position_code VARCHAR(20) NOT NULL COMMENT '岗位代码',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    education VARCHAR(20) COMMENT '学历',\r\n    status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_id) REFERENCES energy_station(station_id),\r\n    FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r",
+          "FOREIGN KEY (station_id) REFERENCES energy_station(station_id),\r",
+          "FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "ecommerce",
+      "table": "customer",
+      "comment": "用户表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 3,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE customer (\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID',\r\n  customer_name VARCHAR(100) NOT NULL COMMENT '用户姓名',\r\n  gender ENUM('M', 'F', 'U') NOT NULL DEFAULT 'U' COMMENT '性别：M男，F女，U未知',\r\n  phone VARCHAR(32) DEFAULT NULL COMMENT '手机号',\r\n  email VARCHAR(128) DEFAULT NULL COMMENT '邮箱',\r\n  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码，关联common.customer_level_dict.level_code',\r\n  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码，关联common.customer_status_dict.status_code',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '省级行政区划编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '城市行政区划编码，关联common.administrative_division.division_code',\r\n  register_time DATETIME NOT NULL COMMENT '注册时间',\r\n  last_login_time DATETIME DEFAULT NULL COMMENT '最近登录时间',\r\n  growth_value INT NOT NULL DEFAULT 0 COMMENT '成长值',\r\n  PRIMARY KEY (customer_id),\r\n  UNIQUE KEY uk_customer_phone (phone),\r\n  KEY idx_customer_level (level_code),\r\n  KEY idx_customer_status (status_code),\r\n  KEY idx_customer_region (province_code, city_code),\r\n  KEY idx_customer_register_time (register_time)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "ecommerce",
+        "table": "customer",
+        "columns": [
+          {
+            "name": "customer_id",
+            "type": "BIGINT",
+            "definition": "customer_id BIGINT NOT NULL COMMENT '用户ID'"
+          },
+          {
+            "name": "customer_name",
+            "type": "VARCHAR(100)",
+            "definition": "customer_name VARCHAR(100) NOT NULL COMMENT '用户姓名'"
+          },
+          {
+            "name": "gender",
+            "type": "ENUM('M', 'F', 'U')",
+            "definition": "gender ENUM('M', 'F', 'U') NOT NULL DEFAULT 'U' COMMENT '性别：M男，F女，U未知'"
+          },
+          {
+            "name": "phone",
+            "type": "VARCHAR(32)",
+            "definition": "phone VARCHAR(32) DEFAULT NULL COMMENT '手机号'"
+          },
+          {
+            "name": "email",
+            "type": "VARCHAR(128)",
+            "definition": "email VARCHAR(128) DEFAULT NULL COMMENT '邮箱'"
+          },
+          {
+            "name": "level_code",
+            "type": "VARCHAR(32)",
+            "definition": "level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码，关联common.customer_level_dict.level_code'"
+          },
+          {
+            "name": "status_code",
+            "type": "VARCHAR(32)",
+            "definition": "status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码，关联common.customer_status_dict.status_code'"
+          },
+          {
+            "name": "province_code",
+            "type": "VARCHAR(12)",
+            "definition": "province_code VARCHAR(12) NOT NULL COMMENT '省级行政区划编码，关联common.administrative_division.division_code'"
+          },
+          {
+            "name": "city_code",
+            "type": "VARCHAR(12)",
+            "definition": "city_code VARCHAR(12) NOT NULL COMMENT '城市行政区划编码，关联common.administrative_division.division_code'"
+          },
+          {
+            "name": "register_time",
+            "type": "DATETIME",
+            "definition": "register_time DATETIME NOT NULL COMMENT '注册时间'"
+          },
+          {
+            "name": "last_login_time",
+            "type": "DATETIME",
+            "definition": "last_login_time DATETIME DEFAULT NULL COMMENT '最近登录时间'"
+          },
+          {
+            "name": "growth_value",
+            "type": "INT",
+            "definition": "growth_value INT NOT NULL DEFAULT 0 COMMENT '成长值'"
+          }
+        ],
+        "ddl": "CREATE TABLE customer (\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID',\r\n  customer_name VARCHAR(100) NOT NULL COMMENT '用户姓名',\r\n  gender ENUM('M', 'F', 'U') NOT NULL DEFAULT 'U' COMMENT '性别：M男，F女，U未知',\r\n  phone VARCHAR(32) DEFAULT NULL COMMENT '手机号',\r\n  email VARCHAR(128) DEFAULT NULL COMMENT '邮箱',\r\n  level_code VARCHAR(32) NOT NULL COMMENT '用户等级编码，关联common.customer_level_dict.level_code',\r\n  status_code VARCHAR(32) NOT NULL COMMENT '用户状态编码，关联common.customer_status_dict.status_code',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '省级行政区划编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '城市行政区划编码，关联common.administrative_division.division_code',\r\n  register_time DATETIME NOT NULL COMMENT '注册时间',\r\n  last_login_time DATETIME DEFAULT NULL COMMENT '最近登录时间',\r\n  growth_value INT NOT NULL DEFAULT 0 COMMENT '成长值',\r\n  PRIMARY KEY (customer_id),\r\n  UNIQUE KEY uk_customer_phone (phone),\r\n  KEY idx_customer_level (level_code),\r\n  KEY idx_customer_status (status_code),\r\n  KEY idx_customer_region (province_code, city_code),\r\n  KEY idx_customer_register_time (register_time)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "ecommerce",
+      "table": "product",
+      "comment": "商品表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 3,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE product (\r\n  product_id BIGINT NOT NULL COMMENT '商品ID',\r\n  product_name VARCHAR(200) NOT NULL COMMENT '商品名称',\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID，关联common.product_category.category_id',\r\n  brand_name VARCHAR(100) NOT NULL COMMENT '品牌名称',\r\n  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码，关联common.product_status_dict.status_code',\r\n  sale_price DECIMAL(12,2) NOT NULL COMMENT '销售单价',\r\n  cost_price DECIMAL(12,2) NOT NULL COMMENT '成本单价',\r\n  listed_time DATETIME NOT NULL COMMENT '上架时间',\r\n  PRIMARY KEY (product_id),\r\n  KEY idx_product_category (category_id),\r\n  KEY idx_product_status (status_code),\r\n  KEY idx_product_brand (brand_name),\r\n  KEY idx_product_price (sale_price)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "ecommerce",
+        "table": "product",
+        "columns": [
+          {
+            "name": "product_id",
+            "type": "BIGINT",
+            "definition": "product_id BIGINT NOT NULL COMMENT '商品ID'"
+          },
+          {
+            "name": "product_name",
+            "type": "VARCHAR(200)",
+            "definition": "product_name VARCHAR(200) NOT NULL COMMENT '商品名称'"
+          },
+          {
+            "name": "category_id",
+            "type": "BIGINT",
+            "definition": "category_id BIGINT NOT NULL COMMENT '商品分类ID，关联common.product_category.category_id'"
+          },
+          {
+            "name": "brand_name",
+            "type": "VARCHAR(100)",
+            "definition": "brand_name VARCHAR(100) NOT NULL COMMENT '品牌名称'"
+          },
+          {
+            "name": "status_code",
+            "type": "VARCHAR(32)",
+            "definition": "status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码，关联common.product_status_dict.status_code'"
+          },
+          {
+            "name": "sale_price",
+            "type": "DECIMAL(12,2)",
+            "definition": "sale_price DECIMAL(12,2) NOT NULL COMMENT '销售单价'"
+          },
+          {
+            "name": "cost_price",
+            "type": "DECIMAL(12,2)",
+            "definition": "cost_price DECIMAL(12,2) NOT NULL COMMENT '成本单价'"
+          },
+          {
+            "name": "listed_time",
+            "type": "DATETIME",
+            "definition": "listed_time DATETIME NOT NULL COMMENT '上架时间'"
+          }
+        ],
+        "ddl": "CREATE TABLE product (\r\n  product_id BIGINT NOT NULL COMMENT '商品ID',\r\n  product_name VARCHAR(200) NOT NULL COMMENT '商品名称',\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID，关联common.product_category.category_id',\r\n  brand_name VARCHAR(100) NOT NULL COMMENT '品牌名称',\r\n  status_code VARCHAR(32) NOT NULL COMMENT '商品状态编码，关联common.product_status_dict.status_code',\r\n  sale_price DECIMAL(12,2) NOT NULL COMMENT '销售单价',\r\n  cost_price DECIMAL(12,2) NOT NULL COMMENT '成本单价',\r\n  listed_time DATETIME NOT NULL COMMENT '上架时间',\r\n  PRIMARY KEY (product_id),\r\n  KEY idx_product_category (category_id),\r\n  KEY idx_product_status (status_code),\r\n  KEY idx_product_brand (brand_name),\r\n  KEY idx_product_price (sale_price)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": []
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "ecommerce",
+      "table": "inventory",
+      "comment": "库存表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE inventory (\r\n  inventory_id BIGINT NOT NULL COMMENT '库存ID',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  warehouse_code VARCHAR(32) NOT NULL COMMENT '仓库编码',\r\n  warehouse_name VARCHAR(100) NOT NULL COMMENT '仓库名称',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '仓库所在省份编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '仓库所在城市编码，关联common.administrative_division.division_code',\r\n  stock_quantity INT NOT NULL DEFAULT 0 COMMENT '当前库存数量',\r\n  locked_quantity INT NOT NULL DEFAULT 0 COMMENT '锁定库存数量',\r\n  safety_stock INT NOT NULL DEFAULT 0 COMMENT '安全库存数量',\r\n  updated_time DATETIME NOT NULL COMMENT '库存更新时间',\r\n  PRIMARY KEY (inventory_id),\r\n  UNIQUE KEY uk_inventory_product_warehouse (product_id, warehouse_code),\r\n  KEY idx_inventory_product (product_id),\r\n  KEY idx_inventory_region (province_code, city_code),\r\n  CONSTRAINT fk_inventory_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='库存表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "ecommerce",
+        "table": "inventory",
+        "columns": [
+          {
+            "name": "inventory_id",
+            "type": "BIGINT",
+            "definition": "inventory_id BIGINT NOT NULL COMMENT '库存ID'"
+          },
+          {
+            "name": "product_id",
+            "type": "BIGINT",
+            "definition": "product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id'"
+          },
+          {
+            "name": "warehouse_code",
+            "type": "VARCHAR(32)",
+            "definition": "warehouse_code VARCHAR(32) NOT NULL COMMENT '仓库编码'"
+          },
+          {
+            "name": "warehouse_name",
+            "type": "VARCHAR(100)",
+            "definition": "warehouse_name VARCHAR(100) NOT NULL COMMENT '仓库名称'"
+          },
+          {
+            "name": "province_code",
+            "type": "VARCHAR(12)",
+            "definition": "province_code VARCHAR(12) NOT NULL COMMENT '仓库所在省份编码，关联common.administrative_division.division_code'"
+          },
+          {
+            "name": "city_code",
+            "type": "VARCHAR(12)",
+            "definition": "city_code VARCHAR(12) NOT NULL COMMENT '仓库所在城市编码，关联common.administrative_division.division_code'"
+          },
+          {
+            "name": "stock_quantity",
+            "type": "INT",
+            "definition": "stock_quantity INT NOT NULL DEFAULT 0 COMMENT '当前库存数量'"
+          },
+          {
+            "name": "locked_quantity",
+            "type": "INT",
+            "definition": "locked_quantity INT NOT NULL DEFAULT 0 COMMENT '锁定库存数量'"
+          },
+          {
+            "name": "safety_stock",
+            "type": "INT",
+            "definition": "safety_stock INT NOT NULL DEFAULT 0 COMMENT '安全库存数量'"
+          },
+          {
+            "name": "updated_time",
+            "type": "DATETIME",
+            "definition": "updated_time DATETIME NOT NULL COMMENT '库存更新时间'"
+          }
+        ],
+        "ddl": "CREATE TABLE inventory (\r\n  inventory_id BIGINT NOT NULL COMMENT '库存ID',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  warehouse_code VARCHAR(32) NOT NULL COMMENT '仓库编码',\r\n  warehouse_name VARCHAR(100) NOT NULL COMMENT '仓库名称',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '仓库所在省份编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '仓库所在城市编码，关联common.administrative_division.division_code',\r\n  stock_quantity INT NOT NULL DEFAULT 0 COMMENT '当前库存数量',\r\n  locked_quantity INT NOT NULL DEFAULT 0 COMMENT '锁定库存数量',\r\n  safety_stock INT NOT NULL DEFAULT 0 COMMENT '安全库存数量',\r\n  updated_time DATETIME NOT NULL COMMENT '库存更新时间',\r\n  PRIMARY KEY (inventory_id),\r\n  UNIQUE KEY uk_inventory_product_warehouse (product_id, warehouse_code),\r\n  KEY idx_inventory_product (product_id),\r\n  KEY idx_inventory_region (province_code, city_code),\r\n  CONSTRAINT fk_inventory_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (product_id) REFERENCES product(product_id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "ecommerce",
+      "table": "orders",
+      "comment": "订单表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 2,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "ecommerce",
+        "table": "orders",
+        "columns": [
+          {
+            "name": "order_id",
+            "type": "BIGINT",
+            "definition": "order_id BIGINT NOT NULL COMMENT '订单ID'"
+          },
+          {
+            "name": "order_no",
+            "type": "VARCHAR(64)",
+            "definition": "order_no VARCHAR(64) NOT NULL COMMENT '订单编号'"
+          },
+          {
+            "name": "customer_id",
+            "type": "BIGINT",
+            "definition": "customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id'"
+          },
+          {
+            "name": "order_status_code",
+            "type": "VARCHAR(32)",
+            "definition": "order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code'"
+          },
+          {
+            "name": "order_channel_code",
+            "type": "VARCHAR(32)",
+            "definition": "order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code'"
+          },
+          {
+            "name": "platform_code",
+            "type": "VARCHAR(32)",
+            "definition": "platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code'"
+          },
+          {
+            "name": "order_time",
+            "type": "DATETIME",
+            "definition": "order_time DATETIME NOT NULL COMMENT '下单时间'"
+          },
+          {
+            "name": "pay_time",
+            "type": "DATETIME",
+            "definition": "pay_time DATETIME DEFAULT NULL COMMENT '支付时间'"
+          },
+          {
+            "name": "finish_time",
+            "type": "DATETIME",
+            "definition": "finish_time DATETIME DEFAULT NULL COMMENT '完成时间'"
+          },
+          {
+            "name": "total_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额'"
+          },
+          {
+            "name": "discount_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额'"
+          },
+          {
+            "name": "freight_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额'"
+          },
+          {
+            "name": "payable_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额'"
+          },
+          {
+            "name": "receiver_province_code",
+            "type": "VARCHAR(12)",
+            "definition": "receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code'"
+          },
+          {
+            "name": "receiver_city_code",
+            "type": "VARCHAR(12)",
+            "definition": "receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code'"
+          }
+        ],
+        "ddl": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "ecommerce",
+      "table": "order_item",
+      "comment": "订单明细表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "ecommerce",
+        "table": "order_item",
+        "columns": [
+          {
+            "name": "order_item_id",
+            "type": "BIGINT",
+            "definition": "order_item_id BIGINT NOT NULL COMMENT '订单明细ID'"
+          },
+          {
+            "name": "order_id",
+            "type": "BIGINT",
+            "definition": "order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id'"
+          },
+          {
+            "name": "product_id",
+            "type": "BIGINT",
+            "definition": "product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id'"
+          },
+          {
+            "name": "quantity",
+            "type": "INT",
+            "definition": "quantity INT NOT NULL COMMENT '购买数量'"
+          },
+          {
+            "name": "unit_price",
+            "type": "DECIMAL(12,2)",
+            "definition": "unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价'"
+          },
+          {
+            "name": "discount_amount",
+            "type": "DECIMAL(12,2)",
+            "definition": "discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额'"
+          },
+          {
+            "name": "item_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额'"
+          },
+          {
+            "name": "item_cost_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额'"
+          },
+          {
+            "name": "refund_quantity",
+            "type": "INT",
+            "definition": "refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量'"
+          },
+          {
+            "name": "refund_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额'"
+          },
+          {
+            "name": "refund_reason_code",
+            "type": "VARCHAR(32)",
+            "definition": "refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code'"
+          }
+        ],
+        "ddl": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (order_id) REFERENCES orders(order_id),\r",
+          "FOREIGN KEY (product_id) REFERENCES product(product_id)\r"
+        ]
+      }
+    },
+    {
+      "source": "MYSQL",
+      "database": "ecommerce",
+      "table": "payment",
+      "comment": "支付表",
+      "present_before": false,
+      "present_after": true,
+      "rank_before": 1,
+      "rank_after": 1,
+      "raw_schema": "\r\nCREATE TABLE payment (\r\n  payment_id BIGINT NOT NULL COMMENT '支付ID',\r\n  payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code',\r\n  payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code',\r\n  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间',\r\n  created_time DATETIME NOT NULL COMMENT '支付记录创建时间',\r\n  PRIMARY KEY (payment_id),\r\n  UNIQUE KEY uk_payment_no (payment_no),\r\n  UNIQUE KEY uk_payment_order (order_id),\r\n  KEY idx_payment_method (payment_method_code),\r\n  KEY idx_payment_status (payment_status_code),\r\n  KEY idx_payment_paid_time (paid_time),\r\n  CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付表';\r\n\r\n\r\n-- =====================================================\r\n-- 医院库（ES）\r\nPUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}\r\n",
+      "processed_schema": {
+        "source": "MYSQL",
+        "database": "ecommerce",
+        "table": "payment",
+        "columns": [
+          {
+            "name": "payment_id",
+            "type": "BIGINT",
+            "definition": "payment_id BIGINT NOT NULL COMMENT '支付ID'"
+          },
+          {
+            "name": "payment_no",
+            "type": "VARCHAR(64)",
+            "definition": "payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号'"
+          },
+          {
+            "name": "order_id",
+            "type": "BIGINT",
+            "definition": "order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id'"
+          },
+          {
+            "name": "payment_method_code",
+            "type": "VARCHAR(32)",
+            "definition": "payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code'"
+          },
+          {
+            "name": "payment_status_code",
+            "type": "VARCHAR(32)",
+            "definition": "payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code'"
+          },
+          {
+            "name": "payment_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额'"
+          },
+          {
+            "name": "refund_amount",
+            "type": "DECIMAL(14,2)",
+            "definition": "refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额'"
+          },
+          {
+            "name": "paid_time",
+            "type": "DATETIME",
+            "definition": "paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间'"
+          },
+          {
+            "name": "created_time",
+            "type": "DATETIME",
+            "definition": "created_time DATETIME NOT NULL COMMENT '支付记录创建时间'"
+          }
+        ],
+        "ddl": "CREATE TABLE payment (\r\n  payment_id BIGINT NOT NULL COMMENT '支付ID',\r\n  payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code',\r\n  payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code',\r\n  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间',\r\n  created_time DATETIME NOT NULL COMMENT '支付记录创建时间',\r\n  PRIMARY KEY (payment_id),\r\n  UNIQUE KEY uk_payment_no (payment_no),\r\n  UNIQUE KEY uk_payment_order (order_id),\r\n  KEY idx_payment_method (payment_method_code),\r\n  KEY idx_payment_status (payment_status_code),\r\n  KEY idx_payment_paid_time (paid_time),\r\n  CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)\r\n)",
+        "file": "core_schema.txt",
+        "foreign_keys": [
+          "FOREIGN KEY (order_id) REFERENCES orders(order_id)\r"
+        ]
+      }
+    }
+  ],
+  "dictionary_missing_or_changed": [],
+  "dictionary_unchanged_samples": [
+    {
+      "raw": {
+        "id": "data/raw/subject/Schema/commom_schema.txt:641",
+        "file": "data/raw/subject/Schema/commom_schema.txt",
+        "source": "MYSQL",
+        "database": "common",
+        "table": "administrative_division",
+        "text": "INSERT INTO administrative_division (id, name, full_name, province_name, city_name, county_name, level, longitude, latitude)\r\nVALUES\r\n('310000', '上海市', '上海市', '', '', '', 1, NULL, NULL),\r\n('310101', '黄浦区', '上海市-黄浦区', '上海市', '黄浦区', '', 3, NULL, NULL),\r\n('310115', '浦东新区', '上海市-浦东新区', '上海市', '浦东新区', '', 3, NULL, NULL),\r\n('320500', '苏州市', '江苏省-苏州市', '江苏省', '苏州市', '', 2, NULL, NULL),\r\n('320100', '南京市', '江苏省-南京市', '江苏省', '南京市', '', 2, NULL, NULL),\r\n('320102', '玄武区', '江苏省-南京市-玄武区', '江苏省', '南京市', '玄武区', 3, NULL, NULL),\r\n('320115', '江宁区', '江苏省-南京市-江宁区', '江苏省', '南京市', '江宁区', 3, NULL, NULL);",
+        "provenance": {
+          "file": "data/raw/subject/Schema/commom_schema.txt",
+          "sha256": "a6e0b1048576e4d55b66e496aff505047c2aca0a8f87ae0bde87329ca8ed8e94",
+          "encoding": "utf-8-sig",
+          "start_line": 19
+        }
+      },
+      "processed": {
+        "id": "commom_schema.txt:641",
+        "file": "data/raw/subject/Schema/commom_schema.txt",
+        "source": "MYSQL",
+        "database": "common",
+        "table": "administrative_division",
+        "text": "INSERT INTO administrative_division (id, name, full_name, province_name, city_name, county_name, level, longitude, latitude)\r\nVALUES\r\n('310000', '上海市', '上海市', '', '', '', 1, NULL, NULL),\r\n('310101', '黄浦区', '上海市-黄浦区', '上海市', '黄浦区', '', 3, NULL, NULL),\r\n('310115', '浦东新区', '上海市-浦东新区', '上海市', '浦东新区', '', 3, NULL, NULL),\r\n('320500', '苏州市', '江苏省-苏州市', '江苏省', '苏州市', '', 2, NULL, NULL),\r\n('320100', '南京市', '江苏省-南京市', '江苏省', '南京市', '', 2, NULL, NULL),\r\n('320102', '玄武区', '江苏省-南京市-玄武区', '江苏省', '南京市', '玄武区', 3, NULL, NULL),\r\n('320115', '江宁区', '江苏省-南京市-江宁区', '江苏省', '南京市', '江宁区', 3, NULL, NULL);"
+      }
+    },
+    {
+      "raw": {
+        "id": "data/raw/subject/Schema/commom_schema.txt:2124",
+        "file": "data/raw/subject/Schema/commom_schema.txt",
+        "source": "MYSQL",
+        "database": "common",
+        "table": "vehicle_type_dict",
+        "text": "INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');",
+        "provenance": {
+          "file": "data/raw/subject/Schema/commom_schema.txt",
+          "sha256": "a6e0b1048576e4d55b66e496aff505047c2aca0a8f87ae0bde87329ca8ed8e94",
+          "encoding": "utf-8-sig",
+          "start_line": 57
+        }
+      },
+      "processed": {
+        "id": "commom_schema.txt:2124",
+        "file": "data/raw/subject/Schema/commom_schema.txt",
+        "source": "MYSQL",
+        "database": "common",
+        "table": "vehicle_type_dict",
+        "text": "INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');"
+      }
+    },
+    {
+      "raw": {
+        "id": "data/raw/subject/Schema/commom_schema.txt:2421",
+        "file": "data/raw/subject/Schema/commom_schema.txt",
+        "source": "MYSQL",
+        "database": "common",
+        "table": "vessel_type_dict",
+        "text": "INSERT INTO common.vessel_type_dict (type_code, type_name, category) VALUES\r\n(20, '客船', '客运'),\r\n(21, '高速客船', '客运'),\r\n(30, '货船', '货运'),\r\n(31, '散货船', '货运'),\r\n(32, '集装箱船', '货运'),\r\n(33, '滚装船', '货运'),\r\n(34, '液化气船', '特种'),\r\n(35, '油轮', '货运'),\r\n(36, '化学品船', '特种'),\r\n(37, '冷藏船', '货运'),\r\n(40, '拖船', '作业'),\r\n(41, '挖泥船', '作业'),\r\n(42, '消防船', '公务'),\r\n(43, '医疗船', '公务'),\r\n(50, '引航船', '作业'),\r\n(51, '搜救船', '公务'),\r\n(52, '交通船', '作业'),\r\n(53, '公务船', '公务'),\r\n(60, '帆船', '娱乐'),\r\n(70, '渔船', '渔业'),\r\n(71, '拖网渔船', '渔业'),\r\n(80, '军事舰艇', '军事'),\r\n(90, '其他', '其他');",
+        "provenance": {
+          "file": "data/raw/subject/Schema/commom_schema.txt",
+          "sha256": "a6e0b1048576e4d55b66e496aff505047c2aca0a8f87ae0bde87329ca8ed8e94",
+          "encoding": "utf-8-sig",
+          "start_line": 68
+        }
+      },
+      "processed": {
+        "id": "commom_schema.txt:2421",
+        "file": "data/raw/subject/Schema/commom_schema.txt",
+        "source": "MYSQL",
+        "database": "common",
+        "table": "vessel_type_dict",
+        "text": "INSERT INTO common.vessel_type_dict (type_code, type_name, category) VALUES\r\n(20, '客船', '客运'),\r\n(21, '高速客船', '客运'),\r\n(30, '货船', '货运'),\r\n(31, '散货船', '货运'),\r\n(32, '集装箱船', '货运'),\r\n(33, '滚装船', '货运'),\r\n(34, '液化气船', '特种'),\r\n(35, '油轮', '货运'),\r\n(36, '化学品船', '特种'),\r\n(37, '冷藏船', '货运'),\r\n(40, '拖船', '作业'),\r\n(41, '挖泥船', '作业'),\r\n(42, '消防船', '公务'),\r\n(43, '医疗船', '公务'),\r\n(50, '引航船', '作业'),\r\n(51, '搜救船', '公务'),\r\n(52, '交通船', '作业'),\r\n(53, '公务船', '公务'),\r\n(60, '帆船', '娱乐'),\r\n(70, '渔船', '渔业'),\r\n(71, '拖网渔船', '渔业'),\r\n(80, '军事舰艇', '军事'),\r\n(90, '其他', '其他');"
+      }
+    }
+  ],
+  "reference_documents": [
+    {
+      "text": "本赛题的数据源包含MySQL、PostgreSQL、Elasticsearch和SQLite四种数据库系统\r\n\r\n其中BIRD数据集改造的问答对，其对应数据均在SQLite中\r\n通用数据库Common的数据全部存储于MySQL\r\n医疗库存储于Elasticsearch\r\n船舶库存储于PostgreSQL\r\n其他领域数据存储于MySQL\r\n\r\n请参赛队伍在构建解决方案时注意查询指令方言特性。\r\n\r\n说明1：在Elasticsearch、PostgreSQL中仅包含一个库，可以查询指令可以直接对表名进行查询，SQLite和MySQL中包含多个数据库，查询指令中要以库名.表名的形式进行查询。\r\n说明2：通用数据库Common中的行政区划表和字典表，参赛队伍可以将其视为知识，允许进行重构，以其他形式存储查询。字典表全部数据在commom_schema中，行政区划表数据在administrative_division.sql中。",
+      "provenance": {
+        "file": "data/reference/数据库说明及行政区划表数据/数据库说明.txt",
+        "sha256": "8a600a86c0d38ef65c3b69bb22cb338b20e3e0c633202e419130beb499d5286e"
+      }
+    },
+    {
+      "text": "administrative_division是common库下的行政区划表，现在开放给所有参赛队伍，数据包含初赛中用到的行政区划信息。\r\n参赛队伍可以将其视为知识其进行重构，改造为更加适合大模型检索匹配的形式存储,也可以当做字典表进行关联查询。\r\n注：表中数据未必全部符合现实情况，请参赛选手构建解决方案时让大模型以该表数据为准，而不是利用模型本身的常识。\r\n\r\n涉及到区域查询的查询指令中，区划代码可以是两种查询形式：\r\n1.检索行政区划知识后匹配到行政区划代码，例如：SELECT COUNT（*） FROM FACTORY  WHERE area_id LIKE '11%';\r\n2.关联通用数据库中的行政区划表，例如：SELECT COUNT(*) FROM FACTORY f JOIN common.administrative_division ad ON f.area_id = ad.id WHERE ad.name = '北京市';\r\n",
+      "provenance": {
+        "file": "data/reference/数据库说明及行政区划表数据/行政区划表数据/区划表说明.txt",
+        "sha256": "7d1ffcc8c79fd260a28327ae24b2e4f3abe8bbf3395ca1f845ebedc7280d6480"
+      }
+    }
+  ]
+}

@@ -1,0 +1,288 @@
+{
+  "archive": "data/raw/archives/赛题8.zip",
+  "archive_sha256": "32ee71b45ec33664d45c755f3ff599820fbada86bd6912cfba8aa2e9b2caaa56",
+  "full_raw_train_identical_to_archive": true,
+  "full_raw_knowledge_identical_to_archive": true,
+  "disney_date_knowledge": {
+    "knowledge_id": 200,
+    "archive": {
+      "knowledge_id": 200,
+      "knowledge_text": "在数据库disney的表中，release_date格式为'Mon DD, YYYY'或'DD-Mon-YY'，需使用SUBSTR和INSTR函数提取年份：SUBSTR(release_date, LENGTH(release_date)-3, 4)='2016'或CAST(SUBSTR(release_date, INSTR(release_date, ',')+1) AS int) BETWEEN 1970 AND 1979。"
+    },
+    "raw": {
+      "knowledge_id": 200,
+      "knowledge_text": "在数据库disney的表中，release_date格式为'Mon DD, YYYY'或'DD-Mon-YY'，需使用SUBSTR和INSTR函数提取年份：SUBSTR(release_date, LENGTH(release_date)-3, 4)='2016'或CAST(SUBSTR(release_date, INSTR(release_date, ',')+1) AS int) BETWEEN 1970 AND 1979。"
+    },
+    "processed": {
+      "knowledge_id": 200,
+      "knowledge_text": "在数据库disney的表中，release_date格式为'Mon DD, YYYY'或'DD-Mon-YY'，需使用SUBSTR和INSTR函数提取年份：SUBSTR(release_date, LENGTH(release_date)-3, 4)='2016'或CAST(SUBSTR(release_date, INSTR(release_date, ',')+1) AS int) BETWEEN 1970 AND 1979。"
+    },
+    "all_three_identical": true
+  },
+  "44_record_comparisons": [
+    {
+      "question_id": 3295,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3359,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3458,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3491,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3497,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3514,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3528,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3609,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3656,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 3757,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4120,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4132,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4267,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4333,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4394,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4518,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4597,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4624,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4675,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4726,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 4797,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5024,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5121,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5177,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5223,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5404,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5452,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5484,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5501,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5502,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5569,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5597,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5626,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5651,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5674,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5706,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5843,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5858,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5879,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5929,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 5935,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 6054,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 6197,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    },
+    {
+      "question_id": 6226,
+      "archived_record_identical": true,
+      "processed_record_present": true,
+      "processed_prediction_identical": true
+    }
+  ]
+}

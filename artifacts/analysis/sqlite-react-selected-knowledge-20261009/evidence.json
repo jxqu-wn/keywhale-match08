@@ -1,0 +1,3448 @@
+[
+  {
+    "question_id": 3040,
+    "question": "哪一天的订单数量最多？该天的总订单数量是多少？",
+    "initial_user_prompt": {
+      "question": "哪一天的订单数量最多？该天的总订单数量是多少？",
+      "requirements": [],
+      "business_rules": [],
+      "routing": {
+        "databases": [
+          "book_publishing_company"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "education_merge": {},
+      "education_scope": {},
+      "schema_adjudications": [],
+      "schema_candidates": [
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.authors"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.jobs"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.publishers"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.employee"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.pub_info"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.stores"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.discounts"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titles"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.roysched"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.sales"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titleauthor"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.address_status"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.author"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book_language"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.country"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.address"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.customer"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.customer_address"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_status"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.publisher"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book_author"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.shipping_method"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.cust_order"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_history"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_line"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.customer"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.product"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.inventory"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.orders"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.order_item"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.payment"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.order_status_dict"
+        }
+      ],
+      "tools": {
+        "get_schema": {
+          "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+          "args": {
+            "tables": [
+              "可选，完整库名.表名或PG裸表名"
+            ],
+            "query": "可选关键词",
+            "source": "可选数据源",
+            "database": "可选数据库",
+            "limit": "可选1到12，默认8"
+          }
+        },
+        "search_knowledge": {
+          "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到12，默认10"
+          }
+        },
+        "search_examples": {
+          "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到5，默认3"
+          }
+        },
+        "check_query": {
+          "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+          "args": {
+            "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+          }
+        },
+        "finish": {
+          "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+          "args": {
+            "prediction": "完整查询对象"
+          }
+        }
+      },
+      "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+    },
+    "observations": [
+      {
+        "step": 0,
+        "action": "get_schema",
+        "args": {
+          "tables": [
+            "books.cust_order",
+            "books.order_line",
+            "books.order_history",
+            "books.order_status"
+          ],
+          "source": "SQLite"
+        },
+        "observation": {
+          "ok": true,
+          "tables": [
+            {
+              "source": "SQLite",
+              "database": "books",
+              "table": "order_status",
+              "columns": [
+                {
+                  "name": "status_id",
+                  "type": "INTEGER",
+                  "definition": "status_id    INTEGER\r\n            primary key"
+                },
+                {
+                  "name": "status_value",
+                  "type": "TEXT",
+                  "definition": "status_value TEXT"
+                }
+              ],
+              "ddl": "CREATE TABLE order_status\r\n(\r\n    status_id    INTEGER\r\n            primary key,\r\n    status_value TEXT\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            },
+            {
+              "source": "SQLite",
+              "database": "books",
+              "table": "cust_order",
+              "columns": [
+                {
+                  "name": "order_id",
+                  "type": "INTEGER",
+                  "definition": "order_id           INTEGER\r\n        primary key autoincrement"
+                },
+                {
+                  "name": "order_date",
+                  "type": "DATETIME",
+                  "definition": "order_date         DATETIME"
+                },
+                {
+                  "name": "customer_id",
+                  "type": "INTEGER",
+                  "definition": "customer_id        INTEGER\r\n        references customer"
+                },
+                {
+                  "name": "shipping_method_id",
+                  "type": "INTEGER",
+                  "definition": "shipping_method_id INTEGER\r\n        references shipping_method"
+                },
+                {
+                  "name": "dest_address_id",
+                  "type": "INTEGER",
+                  "definition": "dest_address_id    INTEGER\r\n        references address"
+                }
+              ],
+              "ddl": "CREATE TABLE \"cust_order\"\r\n(\r\n    order_id           INTEGER\r\n        primary key autoincrement,\r\n    order_date         DATETIME,\r\n    customer_id        INTEGER\r\n        references customer,\r\n    shipping_method_id INTEGER\r\n        references shipping_method,\r\n    dest_address_id    INTEGER\r\n        references address\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            },
+            {
+              "source": "SQLite",
+              "database": "books",
+              "table": "order_history",
+              "columns": [
+                {
+                  "name": "history_id",
+                  "type": "INTEGER",
+                  "definition": "history_id  INTEGER\r\n        primary key autoincrement"
+                },
+                {
+                  "name": "order_id",
+                  "type": "INTEGER",
+                  "definition": "order_id    INTEGER\r\n        references cust_order"
+                },
+                {
+                  "name": "status_id",
+                  "type": "INTEGER",
+                  "definition": "status_id   INTEGER\r\n        references order_status"
+                },
+                {
+                  "name": "status_date",
+                  "type": "DATETIME",
+                  "definition": "status_date DATETIME"
+                }
+              ],
+              "ddl": "CREATE TABLE \"order_history\"\r\n(\r\n    history_id  INTEGER\r\n        primary key autoincrement,\r\n    order_id    INTEGER\r\n        references cust_order,\r\n    status_id   INTEGER\r\n        references order_status,\r\n    status_date DATETIME\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            },
+            {
+              "source": "SQLite",
+              "database": "books",
+              "table": "order_line",
+              "columns": [
+                {
+                  "name": "line_id",
+                  "type": "INTEGER",
+                  "definition": "line_id  INTEGER\r\n        primary key autoincrement"
+                },
+                {
+                  "name": "order_id",
+                  "type": "INTEGER",
+                  "definition": "order_id INTEGER\r\n        references cust_order"
+                },
+                {
+                  "name": "book_id",
+                  "type": "INTEGER",
+                  "definition": "book_id  INTEGER\r\n        references book"
+                },
+                {
+                  "name": "price",
+                  "type": "REAL",
+                  "definition": "price    REAL"
+                }
+              ],
+              "ddl": "CREATE TABLE \"order_line\"\r\n(\r\n    line_id  INTEGER\r\n        primary key autoincrement,\r\n    order_id INTEGER\r\n        references cust_order,\r\n    book_id  INTEGER\r\n        references book,\r\n    price    REAL\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            }
+          ],
+          "missing_tables": [],
+          "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+        }
+      },
+      {
+        "step": 1,
+        "action": "search_knowledge",
+        "args": {
+          "query": "订单数量 按天 统计 cust_order order_date"
+        },
+        "observation": {
+          "ok": true,
+          "knowledge": [
+            {
+              "knowledge_id": 1,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，qty表示销售数量，ord_date表示订单日期，payterms表示付款条件（如'ON invoice'表示发票付款），ord_num表示订单编号，stor_id和title_id分别表示关联的商店ID和书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 526,
+              "knowledge_text": "在数据库book_publishing_company的表discounts中，字段lowqty，数据类型为整数（integer），表示最低数量（数量下限），取值为常识证据：享受折扣的最低数量。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 527,
+              "knowledge_text": "在数据库book_publishing_company的表discounts中，字段highqty，数据类型为整数（integer），表示最高数量（最大数量），取值为常识证据：享受折扣的最高数量。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 555,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段ord_date，数据类型为日期时间（datetime），表示订单日期。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 554,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段ord_num，数据类型为文本（text），表示标识订单的ID编号。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 556,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段qty，数据类型为整数（integer），表示销售数量。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1766,
+              "knowledge_text": "计算某类别数量占总数的百分比公式：ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM 总表), 2)。",
+              "declared_scope": {
+                "databases": [],
+                "sources": [
+                  "MYSQL",
+                  "SQLite",
+                  "POSTGRESQL",
+                  "Elasticsearch"
+                ]
+              },
+              "scope": {
+                "databases": [],
+                "sources": [
+                  "MYSQL",
+                  "SQLite",
+                  "POSTGRESQL",
+                  "Elasticsearch"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            }
+          ],
+          "dictionary": [],
+          "schema_adjudications": [],
+          "query_helpers": []
+        }
+      }
+    ],
+    "prediction": {
+      "db": "SQLite",
+      "query": "SELECT DATE(order_date) AS order_day, COUNT(*) AS order_count FROM books.cust_order GROUP BY DATE(order_date) ORDER BY order_count DESC LIMIT 1"
+    },
+    "original_training_annotation": {
+      "question_id": 3040,
+      "question": "哪一天的订单数量最多？该天的总订单数量是多少？",
+      "db": "SQLite",
+      "query": "SELECT ord_date, SUM(qty) FROM book_publishing_company.sales GROUP BY ord_date ORDER BY SUM(qty) DESC LIMIT 1"
+    },
+    "assessment": "不理想：跨库Schema与知识不一致",
+    "analysis": "首轮routing指向book_publishing_company，候选却同时包含books与ecommerce等33张表。模型只获取books的4张表Schema，最终使用books.cust_order按DATE(order_date)统计COUNT(*)。知识工具却仍返回出版公司sales的qty/ord_date/ord_num等信息，没有提供所选books.cust_order的对应业务知识。\n\n原始训练标注使用book_publishing_company.sales，按ord_date计算SUM(qty)。题干独立看没有库名且“订单数量”存在口径歧义，不能仅凭标注认定自然语言唯一解；但本次输出明显偏离训练记录的目标库和统计口径。知识ID1、555、554、556支持目标出版库，526、527（折扣上下限）、1766（占比公式）与题意无关。\n\n理想上下文应明确订单笔数与订购件数的区别、所属库、日期粒度。关键问题是Schema允许跨库检索，而search_knowledge固定使用初始scope；本次两类证据失配后check_query仍通过。"
+  },
+  {
+    "question_id": 3041,
+    "question": "1992年订购数量最多的书名是什么？",
+    "initial_user_prompt": {
+      "question": "1992年订购数量最多的书名是什么？",
+      "requirements": [],
+      "business_rules": [],
+      "routing": {
+        "databases": [
+          "book_publishing_company"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "education_merge": {},
+      "education_scope": {},
+      "schema_adjudications": [],
+      "schema_candidates": [
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.authors"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.jobs"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.publishers"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.employee"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.pub_info"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.stores"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.discounts"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titles"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.roysched"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.sales"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titleauthor"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.address_status"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.author"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book_language"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.country"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.address"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.customer"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.customer_address"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_status"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.publisher"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book_author"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.shipping_method"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.cust_order"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_history"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_line"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.film_text"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.actor"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.address"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.category"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.city"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.country"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.customer"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.film"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.film_actor"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.film_category"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.inventory"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.language"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.payment"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.rental"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.staff"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.store"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.inventory"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.order_item"
+        }
+      ],
+      "tools": {
+        "get_schema": {
+          "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+          "args": {
+            "tables": [
+              "可选，完整库名.表名或PG裸表名"
+            ],
+            "query": "可选关键词",
+            "source": "可选数据源",
+            "database": "可选数据库",
+            "limit": "可选1到12，默认8"
+          }
+        },
+        "search_knowledge": {
+          "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到12，默认10"
+          }
+        },
+        "search_examples": {
+          "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到5，默认3"
+          }
+        },
+        "check_query": {
+          "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+          "args": {
+            "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+          }
+        },
+        "finish": {
+          "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+          "args": {
+            "prediction": "完整查询对象"
+          }
+        }
+      },
+      "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+    },
+    "observations": [
+      {
+        "step": 0,
+        "action": "get_schema",
+        "args": {
+          "tables": [
+            "book_publishing_company.sales",
+            "book_publishing_company.titles"
+          ],
+          "source": "SQLite"
+        },
+        "observation": {
+          "ok": true,
+          "tables": [
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "titles",
+              "columns": [
+                {
+                  "name": "title_id",
+                  "type": "TEXT",
+                  "definition": "title_id  TEXT\r\n        primary key"
+                },
+                {
+                  "name": "title",
+                  "type": "TEXT",
+                  "definition": "title     TEXT not null"
+                },
+                {
+                  "name": "type",
+                  "type": "TEXT",
+                  "definition": "type      TEXT    not null"
+                },
+                {
+                  "name": "pub_id",
+                  "type": "TEXT",
+                  "definition": "pub_id    TEXT"
+                },
+                {
+                  "name": "price",
+                  "type": "REAL",
+                  "definition": "price     REAL"
+                },
+                {
+                  "name": "advance",
+                  "type": "REAL",
+                  "definition": "advance   REAL"
+                },
+                {
+                  "name": "royalty",
+                  "type": "INTEGER",
+                  "definition": "royalty   INTEGER"
+                },
+                {
+                  "name": "ytd_sales",
+                  "type": "INTEGER",
+                  "definition": "ytd_sales INTEGER"
+                },
+                {
+                  "name": "notes",
+                  "type": "TEXT",
+                  "definition": "notes     TEXT"
+                },
+                {
+                  "name": "pubdate",
+                  "type": "DATETIME",
+                  "definition": "pubdate   DATETIME    not null"
+                }
+              ],
+              "ddl": "CREATE TABLE titles\r\n(\r\n    title_id  TEXT\r\n        primary key,\r\n    title     TEXT not null,\r\n    type      TEXT    not null,\r\n    pub_id    TEXT,\r\n    price     REAL,\r\n    advance   REAL,\r\n    royalty   INTEGER,\r\n    ytd_sales INTEGER,\r\n    notes     TEXT,\r\n    pubdate   DATETIME    not null,\r\n    foreign key (pub_id) references publishers(pub_id)\r\n            on update cascade on delete cascade\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": [
+                "foreign key (pub_id) references publishers(pub_id)\r"
+              ]
+            },
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "sales",
+              "columns": [
+                {
+                  "name": "stor_id",
+                  "type": "TEXT",
+                  "definition": "stor_id  TEXT     not null"
+                },
+                {
+                  "name": "ord_num",
+                  "type": "TEXT",
+                  "definition": "ord_num  TEXT  not null"
+                },
+                {
+                  "name": "ord_date",
+                  "type": "DATETIME",
+                  "definition": "ord_date DATETIME    not null"
+                },
+                {
+                  "name": "qty",
+                  "type": "INTEGER",
+                  "definition": "qty      INTEGER     not null"
+                },
+                {
+                  "name": "payterms",
+                  "type": "TEXT",
+                  "definition": "payterms TEXT  not null"
+                },
+                {
+                  "name": "title_id",
+                  "type": "TEXT",
+                  "definition": "title_id TEXT   not null"
+                }
+              ],
+              "ddl": "CREATE TABLE sales\r\n(\r\n    stor_id  TEXT     not null,\r\n    ord_num  TEXT  not null,\r\n    ord_date DATETIME    not null,\r\n    qty      INTEGER     not null,\r\n    payterms TEXT  not null,\r\n    title_id TEXT   not null,\r\n    primary key (stor_id, ord_num, title_id),\r\n    foreign key (stor_id)   references stores(stor_id)\r\n            on update cascade on delete cascade,\r\n    foreign key (title_id)  references titles(title_id)\r\n            on update cascade on delete cascade\r\n\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": [
+                "foreign key (stor_id)   references stores(stor_id)\r",
+                "foreign key (title_id)  references titles(title_id)\r"
+              ]
+            }
+          ],
+          "missing_tables": [],
+          "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+        }
+      },
+      {
+        "step": 1,
+        "action": "search_knowledge",
+        "args": {
+          "query": "book_publishing_company 订购数量 书名 sales qty 1992",
+          "limit": 10
+        },
+        "observation": {
+          "ok": true,
+          "knowledge": [
+            {
+              "knowledge_id": 556,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段qty，数据类型为整数（integer），表示销售数量。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，qty表示销售数量，ord_date表示订单日期，payterms表示付款条件（如'ON invoice'表示发票付款），ord_num表示订单编号，stor_id和title_id分别表示关联的商店ID和书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 558,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段title_id，数据类型为文本（text），表示标识书名的ID编号。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 3,
+              "knowledge_text": "在数据库book_publishing_company的表roysched中，royalty表示版税百分比，lorange表示版税范围下限（lorange=0表示没有最低范围限制），hirange表示版税范围上限，title_id表示关联的书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 568,
+              "knowledge_text": "在数据库book_publishing_company的表titles中，字段title，数据类型为文本（text），表示书名。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 557,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段payterms，数据类型为文本（text），表示付款方式。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 564,
+              "knowledge_text": "在数据库book_publishing_company的表titleauthor中，字段title_id，数据类型为文本（text），表示书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 567,
+              "knowledge_text": "在数据库book_publishing_company的表titles中，字段title_id，数据类型为文本（text），表示书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 555,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段ord_date，数据类型为日期时间（datetime），表示订单日期。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 553,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段stor_id，数据类型为文本（text），表示标识商店的ID编号。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            }
+          ],
+          "dictionary": [],
+          "schema_adjudications": [],
+          "query_helpers": []
+        }
+      }
+    ],
+    "prediction": {
+      "db": "SQLite",
+      "query": "SELECT t.title FROM book_publishing_company.sales s JOIN book_publishing_company.titles t ON s.title_id = t.title_id WHERE strftime('%Y', s.ord_date) = '1992' GROUP BY t.title_id, t.title ORDER BY SUM(s.qty) DESC LIMIT 1"
+    },
+    "original_training_annotation": {
+      "question_id": 3041,
+      "question": "1992年订购数量最多的书名是什么？",
+      "db": "SQLite",
+      "query": "SELECT T2.title FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.titles AS T2 ON T1.title_id = T2.title_id WHERE STRFTIME('%Y', T1.ord_date) = '1992' ORDER BY T1.qty DESC LIMIT 1"
+    },
+    "assessment": "基本可用：核心知识命中，但噪声较多",
+    "analysis": "ID556和1解释sales.qty是销售数量，555解释ord_date，568解释titles.title，558/567解释title_id；Schema提供sales到titles的关联。因此年筛选、返回书名和按书聚合均有依据。\n\n版税表知识3、付款方式557、作者书籍关系564不是必需信息。首轮44张候选表还来自books、movie_3和ecommerce，范围偏宽。\n\n最终SQL按书SUM(qty)再排序，原始标注按单条qty排序。根据“1992年订购数量最多的书名”的一般解释，聚合同一本书所有订单更合理；不能把偏离原始标注直接记为错误。理想知识应明确统计对象是书籍，全年订购量为SUM(qty)。"
+  },
+  {
+    "question_id": 3044,
+    "question": "列出书名ID为 'BU2075' 且在10000到50000范围内的书名和版税百分比。",
+    "initial_user_prompt": {
+      "question": "列出书名ID为 'BU2075' 且在10000到50000范围内的书名和版税百分比。",
+      "requirements": [],
+      "business_rules": [],
+      "routing": {
+        "databases": [
+          "book_publishing_company"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "education_merge": {},
+      "education_scope": {},
+      "schema_adjudications": [],
+      "schema_candidates": [
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.authors"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.jobs"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.publishers"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.employee"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.pub_info"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.stores"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.discounts"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titles"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.roysched"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.sales"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titleauthor"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.game_publisher"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.games_competitor"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.game_platform"
+        },
+        {
+          "source": "SQLite",
+          "table": "authors.Paper"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.competitor_event"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.event"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.game"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.games_city"
+        }
+      ],
+      "tools": {
+        "get_schema": {
+          "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+          "args": {
+            "tables": [
+              "可选，完整库名.表名或PG裸表名"
+            ],
+            "query": "可选关键词",
+            "source": "可选数据源",
+            "database": "可选数据库",
+            "limit": "可选1到12，默认8"
+          }
+        },
+        "search_knowledge": {
+          "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到12，默认10"
+          }
+        },
+        "search_examples": {
+          "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到5，默认3"
+          }
+        },
+        "check_query": {
+          "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+          "args": {
+            "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+          }
+        },
+        "finish": {
+          "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+          "args": {
+            "prediction": "完整查询对象"
+          }
+        }
+      },
+      "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+    },
+    "observations": [
+      {
+        "step": 0,
+        "action": "get_schema",
+        "args": {
+          "tables": [
+            "book_publishing_company.titles"
+          ],
+          "source": "SQLite"
+        },
+        "observation": {
+          "ok": true,
+          "tables": [
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "titles",
+              "columns": [
+                {
+                  "name": "title_id",
+                  "type": "TEXT",
+                  "definition": "title_id  TEXT\r\n        primary key"
+                },
+                {
+                  "name": "title",
+                  "type": "TEXT",
+                  "definition": "title     TEXT not null"
+                },
+                {
+                  "name": "type",
+                  "type": "TEXT",
+                  "definition": "type      TEXT    not null"
+                },
+                {
+                  "name": "pub_id",
+                  "type": "TEXT",
+                  "definition": "pub_id    TEXT"
+                },
+                {
+                  "name": "price",
+                  "type": "REAL",
+                  "definition": "price     REAL"
+                },
+                {
+                  "name": "advance",
+                  "type": "REAL",
+                  "definition": "advance   REAL"
+                },
+                {
+                  "name": "royalty",
+                  "type": "INTEGER",
+                  "definition": "royalty   INTEGER"
+                },
+                {
+                  "name": "ytd_sales",
+                  "type": "INTEGER",
+                  "definition": "ytd_sales INTEGER"
+                },
+                {
+                  "name": "notes",
+                  "type": "TEXT",
+                  "definition": "notes     TEXT"
+                },
+                {
+                  "name": "pubdate",
+                  "type": "DATETIME",
+                  "definition": "pubdate   DATETIME    not null"
+                }
+              ],
+              "ddl": "CREATE TABLE titles\r\n(\r\n    title_id  TEXT\r\n        primary key,\r\n    title     TEXT not null,\r\n    type      TEXT    not null,\r\n    pub_id    TEXT,\r\n    price     REAL,\r\n    advance   REAL,\r\n    royalty   INTEGER,\r\n    ytd_sales INTEGER,\r\n    notes     TEXT,\r\n    pubdate   DATETIME    not null,\r\n    foreign key (pub_id) references publishers(pub_id)\r\n            on update cascade on delete cascade\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": [
+                "foreign key (pub_id) references publishers(pub_id)\r"
+              ]
+            }
+          ],
+          "missing_tables": [],
+          "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+        }
+      },
+      {
+        "step": 1,
+        "action": "search_knowledge",
+        "args": {
+          "query": "royalty 版税百分比 titles 范围 10000 50000"
+        },
+        "observation": {
+          "ok": true,
+          "knowledge": [
+            {
+              "knowledge_id": 3,
+              "knowledge_text": "在数据库book_publishing_company的表roysched中，royalty表示版税百分比，lorange表示版税范围下限（lorange=0表示没有最低范围限制），hirange表示版税范围上限，title_id表示关联的书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 573,
+              "knowledge_text": "在数据库book_publishing_company的表titles中，字段royalty，数据类型为整数（integer），表示版税。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 552,
+              "knowledge_text": "在数据库book_publishing_company的表roysched中，字段royalty，数据类型为整数（integer），表示版税。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 567,
+              "knowledge_text": "在数据库book_publishing_company的表titles中，字段title_id，数据类型为文本（text），表示书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 10,
+              "knowledge_text": "在数据库book_publishing_company的表titleauthor中，au_id和title_id分别表示作者ID和书名ID，用于关联authors表和titles表。",
+              "scope": {
+                "databases": [
+                  "authors",
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 568,
+              "knowledge_text": "在数据库book_publishing_company的表titles中，字段title，数据类型为文本（text），表示书名。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 2,
+              "knowledge_text": "在数据库book_publishing_company的表titles中，pubdate表示出版日期，ytd_sales表示年初至今的销售额，notes表示书籍的备注信息，type表示书籍类型（如'business'表示商业类），price表示书籍价格，advance表示预付款金额，royalty表示版税，title_id是主键。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1766,
+              "knowledge_text": "计算某类别数量占总数的百分比公式：ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM 总表), 2)。",
+              "declared_scope": {
+                "databases": [],
+                "sources": [
+                  "MYSQL",
+                  "SQLite",
+                  "POSTGRESQL",
+                  "Elasticsearch"
+                ]
+              },
+              "scope": {
+                "databases": [],
+                "sources": [
+                  "MYSQL",
+                  "SQLite",
+                  "POSTGRESQL",
+                  "Elasticsearch"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 564,
+              "knowledge_text": "在数据库book_publishing_company的表titleauthor中，字段title_id，数据类型为文本（text），表示书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 558,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段title_id，数据类型为文本（text），表示标识书名的ID编号。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            }
+          ],
+          "dictionary": [],
+          "schema_adjudications": [],
+          "query_helpers": []
+        }
+      },
+      {
+        "step": 2,
+        "action": "get_schema",
+        "args": {
+          "tables": [
+            "book_publishing_company.roysched"
+          ],
+          "source": "SQLite"
+        },
+        "observation": {
+          "ok": true,
+          "tables": [
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "roysched",
+              "columns": [
+                {
+                  "name": "title_id",
+                  "type": "TEXT",
+                  "definition": "title_id TEXT not null"
+                },
+                {
+                  "name": "lorange",
+                  "type": "INTEGER",
+                  "definition": "lorange  INTEGER"
+                },
+                {
+                  "name": "hirange",
+                  "type": "INTEGER",
+                  "definition": "hirange  INTEGER"
+                },
+                {
+                  "name": "royalty",
+                  "type": "INTEGER",
+                  "definition": "royalty  INTEGER"
+                }
+              ],
+              "ddl": "CREATE TABLE roysched\r\n(\r\n    title_id TEXT not null,\r\n    lorange  INTEGER,\r\n    hirange  INTEGER,\r\n    royalty  INTEGER,\r\n    foreign key (title_id)  references titles(title_id)\r\n            on update cascade on delete cascade\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": [
+                "foreign key (title_id)  references titles(title_id)\r"
+              ]
+            }
+          ],
+          "missing_tables": [],
+          "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+        }
+      }
+    ],
+    "prediction": {
+      "db": "SQLite",
+      "query": "SELECT t.title, r.royalty FROM book_publishing_company.titles t JOIN book_publishing_company.roysched r ON t.title_id = r.title_id WHERE t.title_id = 'BU2075' AND r.lorange >= 10000 AND r.hirange <= 50000"
+    },
+    "original_training_annotation": {
+      "question_id": 3044,
+      "question": "列出书名ID为 'BU2075' 且在10000到50000范围内的书名和版税百分比。",
+      "db": "SQLite",
+      "query": "SELECT T1.title, T2.royalty FROM book_publishing_company.titles AS T1 INNER JOIN book_publishing_company.roysched AS T2 ON T1.title_id = T2.title_id WHERE T2.lorange > 10000 AND T2.hirange < 50000 AND T1.title_ID = 'BU2075'"
+    },
+    "assessment": "部分理想：知识引导发现正确表，边界口径未说明",
+    "analysis": "模型最初只查titles。知识ID3明确roysched.royalty表示版税百分比、lorange/hirange表示区间上下限，促使模型再次查roysched Schema；这是工具检索实际发挥作用的正例。\n\ntitles.royalty的知识573/2与roysched.royalty同名，可能混淆；1766是类别数量占比，与版税百分比无关。未返回单独的lorange/hirange字段条目，但ID3已覆盖含义。\n\n最终条件为lorange >= 10000 AND hirange <= 50000；原始标注为>和<。题干“10000到50000范围内”未说明端点是否包含、区间完全包含还是相交，现有知识未消除歧义。应提供明确业务定义，而非凭旧示例替代定义。"
+  },
+  {
+    "question_id": 3090,
+    "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+    "initial_user_prompt": {
+      "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+      "requirements": [],
+      "business_rules": [],
+      "routing": {
+        "databases": [
+          "book_publishing_company"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "education_merge": {},
+      "education_scope": {},
+      "schema_adjudications": [],
+      "schema_candidates": [
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.authors"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.jobs"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.publishers"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.employee"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.pub_info"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.stores"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.discounts"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titles"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.roysched"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.sales"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titleauthor"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.dict_grade_level"
+        },
+        {
+          "source": "MYSQL",
+          "table": "energy.energy_company"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.administrative_division"
+        },
+        {
+          "source": "MYSQL",
+          "table": "finance_tax.stock_daily_trades"
+        }
+      ],
+      "tools": {
+        "get_schema": {
+          "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+          "args": {
+            "tables": [
+              "可选，完整库名.表名或PG裸表名"
+            ],
+            "query": "可选关键词",
+            "source": "可选数据源",
+            "database": "可选数据库",
+            "limit": "可选1到12，默认8"
+          }
+        },
+        "search_knowledge": {
+          "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到12，默认10"
+          }
+        },
+        "search_examples": {
+          "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到5，默认3"
+          }
+        },
+        "check_query": {
+          "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+          "args": {
+            "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+          }
+        },
+        "finish": {
+          "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+          "args": {
+            "prediction": "完整查询对象"
+          }
+        }
+      },
+      "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+    },
+    "observations": [
+      {
+        "step": 0,
+        "action": "get_schema",
+        "args": {
+          "tables": [
+            "book_publishing_company.employee",
+            "book_publishing_company.jobs",
+            "book_publishing_company.publishers"
+          ]
+        },
+        "observation": {
+          "ok": true,
+          "tables": [
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "jobs",
+              "columns": [
+                {
+                  "name": "job_id",
+                  "type": "INTEGER",
+                  "definition": "job_id   INTEGER\r\n        primary key"
+                },
+                {
+                  "name": "job_desc",
+                  "type": "TEXT",
+                  "definition": "job_desc TEXT not null"
+                },
+                {
+                  "name": "min_lvl",
+                  "type": "INTEGER",
+                  "definition": "min_lvl  INTEGER     not null"
+                },
+                {
+                  "name": "max_lvl",
+                  "type": "INTEGER",
+                  "definition": "max_lvl  INTEGER     not null"
+                }
+              ],
+              "ddl": "CREATE TABLE jobs\r\n(\r\n    job_id   INTEGER\r\n        primary key,\r\n    job_desc TEXT not null,\r\n    min_lvl  INTEGER     not null,\r\n    max_lvl  INTEGER     not null\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            },
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "publishers",
+              "columns": [
+                {
+                  "name": "pub_id",
+                  "type": "TEXT",
+                  "definition": "pub_id   TEXT\r\n        primary key"
+                },
+                {
+                  "name": "pub_name",
+                  "type": "TEXT",
+                  "definition": "pub_name TEXT"
+                },
+                {
+                  "name": "city",
+                  "type": "TEXT",
+                  "definition": "city     TEXT"
+                },
+                {
+                  "name": "state",
+                  "type": "TEXT",
+                  "definition": "state    TEXT"
+                },
+                {
+                  "name": "country",
+                  "type": "TEXT",
+                  "definition": "country  TEXT"
+                }
+              ],
+              "ddl": "CREATE TABLE publishers\r\n(\r\n    pub_id   TEXT\r\n        primary key,\r\n    pub_name TEXT,\r\n    city     TEXT,\r\n    state    TEXT,\r\n    country  TEXT\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            },
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "employee",
+              "columns": [
+                {
+                  "name": "emp_id",
+                  "type": "TEXT",
+                  "definition": "emp_id    TEXT\r\n        primary key"
+                },
+                {
+                  "name": "fname",
+                  "type": "TEXT",
+                  "definition": "fname     TEXT not null"
+                },
+                {
+                  "name": "minit",
+                  "type": "TEXT",
+                  "definition": "minit     TEXT"
+                },
+                {
+                  "name": "lname",
+                  "type": "TEXT",
+                  "definition": "lname     TEXT not null"
+                },
+                {
+                  "name": "job_id",
+                  "type": "INTEGER",
+                  "definition": "job_id    INTEGER     not null"
+                },
+                {
+                  "name": "job_lvl",
+                  "type": "INTEGER",
+                  "definition": "job_lvl   INTEGER"
+                },
+                {
+                  "name": "pub_id",
+                  "type": "TEXT",
+                  "definition": "pub_id    TEXT     not null"
+                },
+                {
+                  "name": "hire_date",
+                  "type": "DATETIME",
+                  "definition": "hire_date DATETIME    not null"
+                }
+              ],
+              "ddl": "CREATE TABLE employee\r\n(\r\n    emp_id    TEXT\r\n        primary key,\r\n    fname     TEXT not null,\r\n    minit     TEXT,\r\n    lname     TEXT not null,\r\n    job_id    INTEGER     not null,\r\n    job_lvl   INTEGER,\r\n    pub_id    TEXT     not null,\r\n    hire_date DATETIME    not null,\r\n    foreign key (job_id) references jobs(job_id)\r\n            on update cascade on delete cascade,\r\n    foreign key (pub_id) references publishers(pub_id)\r\n            on update cascade on delete cascade\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": [
+                "foreign key (job_id) references jobs(job_id)\r",
+                "foreign key (pub_id) references publishers(pub_id)\r"
+              ]
+            }
+          ],
+          "missing_tables": [],
+          "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+        }
+      },
+      {
+        "step": 1,
+        "action": "search_knowledge",
+        "args": {
+          "query": "出版社 员工 职位级别 job_lvl 最高 全名"
+        },
+        "observation": {
+          "ok": true,
+          "knowledge": [
+            {
+              "knowledge_id": 6,
+              "knowledge_text": "在数据库book_publishing_company的表employee中，fname表示员工的名，lname表示员工的姓，minit表示中间名（minit=''表示没有中间名），emp_id表示员工ID，hire_date表示入职日期，job_lvl表示职位级别，job_id和pub_id分别表示关联的职位ID和出版社ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 540,
+              "knowledge_text": "在数据库book_publishing_company的表jobs中，字段max_lvl，数据类型为整数（integer），表示最高职位级别，取值为常识证据：职位描述中提及的职位级别范围是（最低级别，最高级别）。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 534,
+              "knowledge_text": "在数据库book_publishing_company的表employee中，字段job_lvl，数据类型为整数（integer），表示职位级别，取值为常识证据：数值越高表示职位级别越高。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 539,
+              "knowledge_text": "在数据库book_publishing_company的表jobs中，字段min_lvl，数据类型为整数（integer），表示最低职位级别。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 7,
+              "knowledge_text": "在数据库book_publishing_company的表jobs中，job_desc表示职位描述（如'Chief Financial Officier'表示首席财务官，'Managing Editor'表示总编辑），max_lvl表示该职位的最高级别，job_id是主键。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 4,
+              "knowledge_text": "在数据库book_publishing_company的表publishers中，pub_name表示出版社名称，country表示国家（如'USA'表示美国，'France'表示法国），pub_id是主键。country!='USA'表示非美国出版社。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 570,
+              "knowledge_text": "在数据库book_publishing_company的表titles中，字段pub_id，数据类型为文本（text），表示出版社ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 530,
+              "knowledge_text": "在数据库book_publishing_company的表employee中，字段fname，数据类型为文本（text），表示员工的名。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 9,
+              "knowledge_text": "在数据库book_publishing_company的表pub_info中，pr_info表示出版社的详细信息，pub_id与publishers表关联。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 542,
+              "knowledge_text": "在数据库book_publishing_company的表publishers中，字段pub_name，数据类型为文本（text），表示出版社名称。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            }
+          ],
+          "dictionary": [],
+          "schema_adjudications": [],
+          "query_helpers": []
+        }
+      }
+    ],
+    "prediction": {
+      "db": "SQLite",
+      "query": "SELECT e.fname || ' ' || e.lname AS full_name FROM book_publishing_company.employee e ORDER BY e.job_lvl DESC LIMIT 1"
+    },
+    "original_training_annotation": {
+      "question_id": 3090,
+      "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+      "db": "SQLite",
+      "query": "SELECT T1.fname, T1.minit, T1.lname FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.job_lvl DESC LIMIT 1"
+    },
+    "assessment": "知识基本足够，最终输出未完整利用",
+    "analysis": "知识ID6给出fname、lname、minit（中间名）和job_lvl；534明确数值越高职位级别越高。employee Schema包含这四个字段，足以支持按员工job_lvl取最高者。\n\njobs.max_lvl相关知识540/7和min_lvl知识539属于职位等级范围，可能干扰“员工实际级别”判断；出版社国家与名称、pub_info、titles.pub_id等信息没有必要。\n\n最终只拼接fname与lname，遗漏已有知识明确说明的minit；原始标注返回fname/minit/lname。因此主要问题是“全名”返回列检查未发挥作用，而不是缺少中间名知识。可明确全名包含非空minit，并处理空值。"
+  },
+  {
+    "question_id": 3099,
+    "question": "1993年，Fremont 的书店比 Portland 的书店在图书销售数量上多出百分之多少？",
+    "initial_user_prompt": {
+      "question": "1993年，Fremont 的书店比 Portland 的书店在图书销售数量上多出百分之多少？",
+      "requirements": [],
+      "business_rules": [],
+      "routing": {
+        "databases": [
+          "book_publishing_company"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "education_merge": {},
+      "education_scope": {},
+      "schema_adjudications": [],
+      "schema_candidates": [
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.authors"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.jobs"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.publishers"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.employee"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.pub_info"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.stores"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.discounts"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titles"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.roysched"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.sales"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titleauthor"
+        },
+        {
+          "source": "SQLite",
+          "table": "codebase_comments.Method"
+        },
+        {
+          "source": "SQLite",
+          "table": "codebase_comments.MethodParameter"
+        },
+        {
+          "source": "SQLite",
+          "table": "codebase_comments.Repo"
+        },
+        {
+          "source": "SQLite",
+          "table": "codebase_comments.Solution"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.platform_dict"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.inventory"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.cert_type_dict"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.order_item"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.product"
+        },
+        {
+          "source": "MYSQL",
+          "table": "transportation.driver"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.orders"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.administrative_division"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.license_type_dict"
+        }
+      ],
+      "tools": {
+        "get_schema": {
+          "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+          "args": {
+            "tables": [
+              "可选，完整库名.表名或PG裸表名"
+            ],
+            "query": "可选关键词",
+            "source": "可选数据源",
+            "database": "可选数据库",
+            "limit": "可选1到12，默认8"
+          }
+        },
+        "search_knowledge": {
+          "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到12，默认10"
+          }
+        },
+        "search_examples": {
+          "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到5，默认3"
+          }
+        },
+        "check_query": {
+          "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+          "args": {
+            "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+          }
+        },
+        "finish": {
+          "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+          "args": {
+            "prediction": "完整查询对象"
+          }
+        }
+      },
+      "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+    },
+    "observations": [
+      {
+        "step": 0,
+        "action": "get_schema",
+        "args": {
+          "tables": [
+            "book_publishing_company.stores",
+            "book_publishing_company.sales",
+            "book_publishing_company.titles"
+          ],
+          "source": "SQLite"
+        },
+        "observation": {
+          "ok": true,
+          "tables": [
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "stores",
+              "columns": [
+                {
+                  "name": "stor_id",
+                  "type": "TEXT",
+                  "definition": "stor_id     TEXT\r\n        primary key"
+                },
+                {
+                  "name": "stor_name",
+                  "type": "TEXT",
+                  "definition": "stor_name    TEXT"
+                },
+                {
+                  "name": "stor_address",
+                  "type": "TEXT",
+                  "definition": "stor_address TEXT"
+                },
+                {
+                  "name": "city",
+                  "type": "TEXT",
+                  "definition": "city         TEXT"
+                },
+                {
+                  "name": "state",
+                  "type": "TEXT",
+                  "definition": "state        TEXT"
+                },
+                {
+                  "name": "zip",
+                  "type": "TEXT",
+                  "definition": "zip          TEXT"
+                }
+              ],
+              "ddl": "CREATE TABLE stores\r\n(\r\n    stor_id     TEXT\r\n        primary key,\r\n    stor_name    TEXT,\r\n    stor_address TEXT,\r\n    city         TEXT,\r\n    state        TEXT,\r\n    zip          TEXT\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            },
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "titles",
+              "columns": [
+                {
+                  "name": "title_id",
+                  "type": "TEXT",
+                  "definition": "title_id  TEXT\r\n        primary key"
+                },
+                {
+                  "name": "title",
+                  "type": "TEXT",
+                  "definition": "title     TEXT not null"
+                },
+                {
+                  "name": "type",
+                  "type": "TEXT",
+                  "definition": "type      TEXT    not null"
+                },
+                {
+                  "name": "pub_id",
+                  "type": "TEXT",
+                  "definition": "pub_id    TEXT"
+                },
+                {
+                  "name": "price",
+                  "type": "REAL",
+                  "definition": "price     REAL"
+                },
+                {
+                  "name": "advance",
+                  "type": "REAL",
+                  "definition": "advance   REAL"
+                },
+                {
+                  "name": "royalty",
+                  "type": "INTEGER",
+                  "definition": "royalty   INTEGER"
+                },
+                {
+                  "name": "ytd_sales",
+                  "type": "INTEGER",
+                  "definition": "ytd_sales INTEGER"
+                },
+                {
+                  "name": "notes",
+                  "type": "TEXT",
+                  "definition": "notes     TEXT"
+                },
+                {
+                  "name": "pubdate",
+                  "type": "DATETIME",
+                  "definition": "pubdate   DATETIME    not null"
+                }
+              ],
+              "ddl": "CREATE TABLE titles\r\n(\r\n    title_id  TEXT\r\n        primary key,\r\n    title     TEXT not null,\r\n    type      TEXT    not null,\r\n    pub_id    TEXT,\r\n    price     REAL,\r\n    advance   REAL,\r\n    royalty   INTEGER,\r\n    ytd_sales INTEGER,\r\n    notes     TEXT,\r\n    pubdate   DATETIME    not null,\r\n    foreign key (pub_id) references publishers(pub_id)\r\n            on update cascade on delete cascade\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": [
+                "foreign key (pub_id) references publishers(pub_id)\r"
+              ]
+            },
+            {
+              "source": "SQLite",
+              "database": "book_publishing_company",
+              "table": "sales",
+              "columns": [
+                {
+                  "name": "stor_id",
+                  "type": "TEXT",
+                  "definition": "stor_id  TEXT     not null"
+                },
+                {
+                  "name": "ord_num",
+                  "type": "TEXT",
+                  "definition": "ord_num  TEXT  not null"
+                },
+                {
+                  "name": "ord_date",
+                  "type": "DATETIME",
+                  "definition": "ord_date DATETIME    not null"
+                },
+                {
+                  "name": "qty",
+                  "type": "INTEGER",
+                  "definition": "qty      INTEGER     not null"
+                },
+                {
+                  "name": "payterms",
+                  "type": "TEXT",
+                  "definition": "payterms TEXT  not null"
+                },
+                {
+                  "name": "title_id",
+                  "type": "TEXT",
+                  "definition": "title_id TEXT   not null"
+                }
+              ],
+              "ddl": "CREATE TABLE sales\r\n(\r\n    stor_id  TEXT     not null,\r\n    ord_num  TEXT  not null,\r\n    ord_date DATETIME    not null,\r\n    qty      INTEGER     not null,\r\n    payterms TEXT  not null,\r\n    title_id TEXT   not null,\r\n    primary key (stor_id, ord_num, title_id),\r\n    foreign key (stor_id)   references stores(stor_id)\r\n            on update cascade on delete cascade,\r\n    foreign key (title_id)  references titles(title_id)\r\n            on update cascade on delete cascade\r\n\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": [
+                "foreign key (stor_id)   references stores(stor_id)\r",
+                "foreign key (title_id)  references titles(title_id)\r"
+              ]
+            }
+          ],
+          "missing_tables": [],
+          "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+        }
+      },
+      {
+        "step": 1,
+        "action": "search_knowledge",
+        "args": {
+          "query": "book_publishing_company sales qty 图书销售数量 城市 百分比",
+          "limit": 10
+        },
+        "observation": {
+          "ok": true,
+          "knowledge": [
+            {
+              "knowledge_id": 556,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段qty，数据类型为整数（integer），表示销售数量。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，qty表示销售数量，ord_date表示订单日期，payterms表示付款条件（如'ON invoice'表示发票付款），ord_num表示订单编号，stor_id和title_id分别表示关联的商店ID和书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 3,
+              "knowledge_text": "在数据库book_publishing_company的表roysched中，royalty表示版税百分比，lorange表示版税范围下限（lorange=0表示没有最低范围限制），hirange表示版税范围上限，title_id表示关联的书名ID。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1766,
+              "knowledge_text": "计算某类别数量占总数的百分比公式：ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM 总表), 2)。",
+              "declared_scope": {
+                "databases": [],
+                "sources": [
+                  "MYSQL",
+                  "SQLite",
+                  "POSTGRESQL",
+                  "Elasticsearch"
+                ]
+              },
+              "scope": {
+                "databases": [],
+                "sources": [
+                  "MYSQL",
+                  "SQLite",
+                  "POSTGRESQL",
+                  "Elasticsearch"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 557,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段payterms，数据类型为文本（text），表示付款方式。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 555,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段ord_date，数据类型为日期时间（datetime），表示订单日期。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 553,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段stor_id，数据类型为文本（text），表示标识商店的ID编号。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 554,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段ord_num，数据类型为文本（text），表示标识订单的ID编号。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 558,
+              "knowledge_text": "在数据库book_publishing_company的表sales中，字段title_id，数据类型为文本（text），表示标识书名的ID编号。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 574,
+              "knowledge_text": "在数据库book_publishing_company的表titles中，字段ytd_sales，数据类型为整数（integer），表示年初至今的销售额。",
+              "scope": {
+                "databases": [
+                  "book_publishing_company"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            }
+          ],
+          "dictionary": [],
+          "schema_adjudications": [],
+          "query_helpers": []
+        }
+      },
+      {
+        "step": 2,
+        "action": "search_examples",
+        "args": {
+          "query": "Fremont Portland 书店 图书销售数量 百分比 book_publishing_company",
+          "limit": 3
+        },
+        "observation": {
+          "ok": true,
+          "examples": [
+            {
+              "question_id": 3099,
+              "question": "1993年，Fremont 的书店比 Portland 的书店在图书销售数量上多出百分之多少？",
+              "db": "SQLite",
+              "query": "SELECT CAST(SUM(CASE WHEN T2.city = 'Fremont' THEN qty END) - SUM(CASE WHEN T2.city = 'Portland' THEN qty END) AS REAL) * 100 / SUM(CASE WHEN T2.city = 'Fremont' THEN qty END) FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.stores AS T2 ON T1.stor_id = T2.stor_id WHERE STRFTIME('%Y', T1.ord_date) = '1993'",
+              "schema_refs": [
+                {
+                  "query_key": "query",
+                  "source": "SQLite",
+                  "database": "book_publishing_company",
+                  "table": "stores"
+                },
+                {
+                  "query_key": "query",
+                  "source": "SQLite",
+                  "database": "book_publishing_company",
+                  "table": "sales"
+                }
+              ]
+            },
+            {
+              "question_id": 3098,
+              "question": "位于 Remulade 的书店完成了多少笔图书销售订单？",
+              "db": "SQLite",
+              "query": "SELECT COUNT(T1.ord_num) FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.stores AS T2 ON T1.stor_id = T2.stor_id WHERE T2.city = 'Remulade'",
+              "schema_refs": [
+                {
+                  "query_key": "query",
+                  "source": "SQLite",
+                  "database": "book_publishing_company",
+                  "table": "stores"
+                },
+                {
+                  "query_key": "query",
+                  "source": "SQLite",
+                  "database": "book_publishing_company",
+                  "table": "sales"
+                }
+              ]
+            },
+            {
+              "question_id": 3146,
+              "question": "解决方案ID18所在的GitHub仓库比ID19所在的仓库复刻数多出百分之多少？",
+              "db": "SQLite",
+              "query": "SELECT CAST((SUM(CASE WHEN T2.Id = 18 THEN T1.Forks ELSE 0 END) - SUM(CASE WHEN T2.Id = 19 THEN T1.Forks ELSE 0 END)) AS REAL) * 100 / SUM(CASE WHEN T2.Id = 19 THEN T1.Forks ELSE 0 END) FROM codebase_comments.Repo AS T1 INNER JOIN codebase_comments.Solution AS T2 ON T1.Id = T2.RepoId",
+              "schema_refs": [
+                {
+                  "query_key": "query",
+                  "source": "SQLite",
+                  "database": "codebase_comments",
+                  "table": "Repo"
+                },
+                {
+                  "query_key": "query",
+                  "source": "SQLite",
+                  "database": "codebase_comments",
+                  "table": "Solution"
+                }
+              ]
+            }
+          ],
+          "corrected_examples": [],
+          "question_correction": null,
+          "instruction": "仅供参考，不复制原参数；Schema、业务规则和当前问题优先。"
+        }
+      }
+    ],
+    "prediction": {
+      "db": "SQLite",
+      "query": "SELECT CAST(SUM(CASE WHEN T2.city = 'Fremont' THEN T1.qty END) - SUM(CASE WHEN T2.city = 'Portland' THEN T1.qty END) AS REAL) * 100 / SUM(CASE WHEN T2.city = 'Portland' THEN T1.qty END) FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.stores AS T2 ON T1.stor_id = T2.stor_id WHERE STRFTIME('%Y', T1.ord_date) = '1993'"
+    },
+    "original_training_annotation": {
+      "question_id": 3099,
+      "question": "1993年，Fremont 的书店比 Portland 的书店在图书销售数量上多出百分之多少？",
+      "db": "SQLite",
+      "query": "SELECT CAST(SUM(CASE WHEN T2.city = 'Fremont' THEN qty END) - SUM(CASE WHEN T2.city = 'Portland' THEN qty END) AS REAL) * 100 / SUM(CASE WHEN T2.city = 'Fremont' THEN qty END) FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.stores AS T2 ON T1.stor_id = T2.stor_id WHERE STRFTIME('%Y', T1.ord_date) = '1993'"
+    },
+    "assessment": "不理想：错误同题示例与不匹配公式混入",
+    "analysis": "知识556/1/555/553提供销售数量、日期和商店关联键；stores.city在Schema中可见。但ID1766是COUNT(*)/总体COUNT(*)的数量占比公式，本题需要相对增幅(Fremont数量-Portland数量)/Portland数量，统计对象和分母均不同。版税知识3、付款方式557、ytd_sales574也是噪声。\n\n这是7题中唯一实际调用search_examples的题目。返回的第一条就是3099本题，示例却以Fremont的销量作分母，按题意应以Portland作分母。第三条3146来自codebase_comments，库不同，但其相对增幅公式以被比较者ID19为分母；可作计算结构参考，不能作为当前库字段知识。\n\n最终模型使用Portland分母，纠正了同题示例。这不能证明检索理想：提示词把search_examples描述为“已修正训练示例”，但本次仍返回存在口径问题的原始标注。理想上下文应给出本题相对增幅公式，并对同题错误示例进行修正或隔离。"
+  },
+  {
+    "question_id": 3877,
+    "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+    "initial_user_prompt": {
+      "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+      "requirements": [],
+      "business_rules": [],
+      "routing": {
+        "databases": [
+          "video_games"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "education_merge": {},
+      "education_scope": {},
+      "schema_adjudications": [],
+      "schema_candidates": [
+        {
+          "source": "SQLite",
+          "table": "video_games.genre"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.game"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.platform"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.publisher"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.game_publisher"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.game_platform"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.region"
+        },
+        {
+          "source": "SQLite",
+          "table": "video_games.region_sales"
+        },
+        {
+          "source": "MYSQL",
+          "table": "transportation.vessel"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.energy_type_dict"
+        },
+        {
+          "source": "SQLite",
+          "table": "disney.revenue"
+        },
+        {
+          "source": "POSTGRESQL",
+          "table": "public.vessel_ais_data"
+        },
+        {
+          "source": "SQLite",
+          "table": "book_publishing_company.titles"
+        },
+        {
+          "source": "MYSQL",
+          "table": "energy.energy_station"
+        },
+        {
+          "source": "MYSQL",
+          "table": "finance_tax.stocks"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.games_city"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.administrative_division"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.vessel_type_dict"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.station_type_dict"
+        }
+      ],
+      "tools": {
+        "get_schema": {
+          "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+          "args": {
+            "tables": [
+              "可选，完整库名.表名或PG裸表名"
+            ],
+            "query": "可选关键词",
+            "source": "可选数据源",
+            "database": "可选数据库",
+            "limit": "可选1到12，默认8"
+          }
+        },
+        "search_knowledge": {
+          "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到12，默认10"
+          }
+        },
+        "search_examples": {
+          "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到5，默认3"
+          }
+        },
+        "check_query": {
+          "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+          "args": {
+            "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+          }
+        },
+        "finish": {
+          "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+          "args": {
+            "prediction": "完整查询对象"
+          }
+        }
+      },
+      "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+    },
+    "observations": [
+      {
+        "step": 0,
+        "action": "get_schema",
+        "args": {
+          "tables": [
+            "video_games.game",
+            "video_games.genre"
+          ],
+          "source": "SQLite"
+        },
+        "observation": {
+          "ok": true,
+          "tables": [
+            {
+              "source": "SQLite",
+              "database": "video_games",
+              "table": "genre",
+              "columns": [
+                {
+                  "name": "id",
+                  "type": "INTEGER",
+                  "definition": "id         INTEGER not null\r\n            primary key"
+                },
+                {
+                  "name": "genre_name",
+                  "type": "TEXT",
+                  "definition": "genre_name TEXT default NULL"
+                }
+              ],
+              "ddl": "CREATE TABLE genre\r\n(\r\n    id         INTEGER not null\r\n            primary key,\r\n    genre_name TEXT default NULL\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            },
+            {
+              "source": "SQLite",
+              "database": "video_games",
+              "table": "game",
+              "columns": [
+                {
+                  "name": "id",
+                  "type": "INTEGER",
+                  "definition": "id        INTEGER not null\r\n            primary key"
+                },
+                {
+                  "name": "genre_id",
+                  "type": "INTEGER",
+                  "definition": "genre_id  INTEGER          default NULL"
+                },
+                {
+                  "name": "game_name",
+                  "type": "TEXT",
+                  "definition": "game_name TEXT default NULL"
+                }
+              ],
+              "ddl": "CREATE TABLE game\r\n(\r\n    id        INTEGER not null\r\n            primary key,\r\n    genre_id  INTEGER          default NULL,\r\n    game_name TEXT default NULL,\r\n    foreign key (genre_id) references genre(id)\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": [
+                "foreign key (genre_id) references genre(id)\r"
+              ]
+            }
+          ],
+          "missing_tables": [],
+          "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+        }
+      },
+      {
+        "step": 1,
+        "action": "search_knowledge",
+        "args": {
+          "query": "video_games genre 游戏类型"
+        },
+        "observation": {
+          "ok": true,
+          "knowledge": [
+            {
+              "knowledge_id": 120,
+              "knowledge_text": "在数据库video_games的表game_platform中，release_year表示游戏发行年份。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "字段/公式依赖，必须同时提供"
+            },
+            {
+              "knowledge_id": 121,
+              "knowledge_text": "在数据库video_games的表中，game表和game_publisher表通过game_id关联，game_publisher表和publisher表通过publisher_id关联，game_publisher表和game_platform表通过id和game_publisher_id关联，game_platform表和platform表通过platform_id关联，game_platform表和region_sales表通过id和game_platform_id关联，region_sales表和region表通过region_id关联。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "字段/公式依赖，必须同时提供"
+            },
+            {
+              "knowledge_id": 123,
+              "knowledge_text": "在数据库video_games的表game_platform中，id表示游戏平台记录的唯一标识。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "字段/公式依赖，必须同时提供"
+            },
+            {
+              "knowledge_id": 1539,
+              "knowledge_text": "在数据库video_games的表game_platform中，字段release_year，数据类型为整数（integer），表示游戏的发行年份。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "字段/公式依赖，必须同时提供"
+            },
+            {
+              "knowledge_id": 126,
+              "knowledge_text": "在数据库video_games的表genre中，id表示游戏类型ID。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 107,
+              "knowledge_text": "在数据库video_games的表genre中，genre_name表示游戏类型：genre_name = 'Action' 表示动作类游戏。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 122,
+              "knowledge_text": "在数据库video_games的表game中，game_name表示游戏名称，genre_id与genre表的id关联表示游戏类型。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1543,
+              "knowledge_text": "在数据库video_games的表genre中，字段id，数据类型为整数（integer），表示游戏类型的唯一标识符。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1544,
+              "knowledge_text": "在数据库video_games的表genre中，字段genre_name，数据类型为文本（text），表示游戏类型，取值为常识证据：游戏类型对游戏有重大影响。类型指的是游戏的类别或种类，例如动作、冒险、策略或角色扮演。类型可以决定游戏的总体风格和玩法，以及玩家的期望。类型也会影响游戏的受众，因为不同的类型可能吸引不同的玩家群体。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1534,
+              "knowledge_text": "在数据库video_games的表game中，字段genre_id，数据类型为整数（integer），表示游戏类型的ID，取值为常识证据：如果游戏A和游戏B具有相同的类型，那么喜欢游戏A的用户可能也会喜欢游戏B。",
+              "scope": {
+                "databases": [
+                  "video_games"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            }
+          ],
+          "dictionary": [],
+          "schema_adjudications": [],
+          "query_helpers": []
+        }
+      }
+    ],
+    "prediction": {
+      "db": "SQLite",
+      "query": "SELECT g.genre_name FROM video_games.game AS ga JOIN video_games.genre AS g ON ga.genre_id = g.id WHERE ga.game_name = 'Games in 1: Sonic Advance & ChuChu Rocket!'"
+    },
+    "original_training_annotation": {
+      "question_id": 3877,
+      "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+      "db": "SQLite",
+      "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2 Games in 1: Sonic Advance & ChuChu Rocket!'"
+    },
+    "assessment": "关键知识齐全，但强制知识过多；最终参数丢失",
+    "analysis": "ID122明确game_name是游戏名、game.genre_id关联genre.id；126/1543和107/1544解释类型标识与名称。Schema只需game和genre，关键关联与输出字段均已覆盖。\n\nID120、121、123、1539被标为“字段/公式依赖，必须同时提供”，却描述发行年份、游戏平台记录及多表销售关联，本题并不需要。强制条目占10条结果中的4条，强制依赖按整个video_games域触发，粒度过粗。1544/1534还含较长的一般常识叙述。\n\n最终WHERE game_name = 'Games in 1: Sonic Advance & ChuChu Rocket!'，遗漏题干及原始标注中的开头2；应该保留'2 Games in 1: Sonic Advance & ChuChu Rocket!'。这属于题目字面参数保真失败，现有字段知识并不缺失。无真实数据执行，不能断言实际返回行数。"
+  },
+  {
+    "question_id": 6204,
+    "question": "列出菲律宾国家的至少3个城市。",
+    "initial_user_prompt": {
+      "question": "列出菲律宾国家的至少3个城市。",
+      "requirements": [],
+      "business_rules": [],
+      "routing": {
+        "databases": [
+          "movie_3"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "education_merge": {},
+      "education_scope": {},
+      "schema_adjudications": [
+        {
+          "rule_id": "administrative_division_actual_key",
+          "status": "implemented",
+          "source": "以common.administrative_division实际CREATE TABLE定义为准，电商字段注释存在过时引用；用户授权自主处理",
+          "tables": [
+            "common.administrative_division"
+          ],
+          "trigger_pattern": "行政|区划|省份|城市|收货|家庭地区",
+          "instruction": "common.administrative_division的行政区划代码字段是id CHAR(6)，没有division_code。电商Schema注释中common.administrative_division.division_code是过时引用，关联省、市或收货区划代码时使用common.administrative_division.id，保留业务表自身province_code/city_code/receiver_province_code等真实列名。区划代码按字符串比较，保留前导零；不臆造division_code。"
+        }
+      ],
+      "schema_candidates": [
+        {
+          "source": "SQLite",
+          "table": "books.address_status"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.author"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book_language"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.country"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.address"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.customer"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.customer_address"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_status"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.publisher"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.book_author"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.shipping_method"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.cust_order"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_history"
+        },
+        {
+          "source": "SQLite",
+          "table": "books.order_line"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.film_text"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.actor"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.address"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.category"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.city"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.country"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.customer"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.film"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.film_actor"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.film_category"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.inventory"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.language"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.payment"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.rental"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.staff"
+        },
+        {
+          "source": "SQLite",
+          "table": "movie_3.store"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.city"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.games"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.games_city"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.medal"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.noc_region"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.person"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.games_competitor"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.person_region"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.sport"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.event"
+        },
+        {
+          "source": "SQLite",
+          "table": "olympics.competitor_event"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Attributes"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Categories"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Compliments"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Days"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Years"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Business_Attributes"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Business_Categories"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Business_Hours"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Checkins"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Elite"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Reviews"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Tips"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Users_Compliments"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Business"
+        },
+        {
+          "source": "SQLite",
+          "table": "public_review_platform.Users"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Batting_Style"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Bowling_Style"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.City"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Country"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Extra_Type"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Extra_Runs"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Out_Type"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Outcome"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Player"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Rolee"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Season"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Team"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Toss_Decision"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Umpire"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Venue"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Win_By"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Match"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Ball_by_Ball"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Batsman_Scored"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Player_Match"
+        },
+        {
+          "source": "SQLite",
+          "table": "soccer_2016.Wicket_Taken"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.dict_grade_level"
+        },
+        {
+          "source": "SQLite",
+          "table": "disney.revenue"
+        },
+        {
+          "source": "MYSQL",
+          "table": "education_2024.course"
+        },
+        {
+          "source": "MYSQL",
+          "table": "education_2025.course"
+        },
+        {
+          "source": "MYSQL",
+          "table": "finance_tax.corporate_income_tax_returns"
+        },
+        {
+          "source": "MYSQL",
+          "table": "ecommerce.inventory"
+        },
+        {
+          "source": "MYSQL",
+          "table": "common.administrative_division"
+        }
+      ],
+      "tools": {
+        "get_schema": {
+          "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+          "args": {
+            "tables": [
+              "可选，完整库名.表名或PG裸表名"
+            ],
+            "query": "可选关键词",
+            "source": "可选数据源",
+            "database": "可选数据库",
+            "limit": "可选1到12，默认8"
+          }
+        },
+        "search_knowledge": {
+          "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到12，默认10"
+          }
+        },
+        "search_examples": {
+          "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+          "args": {
+            "query": "补充检索词",
+            "limit": "可选1到5，默认3"
+          }
+        },
+        "check_query": {
+          "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+          "args": {
+            "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+          }
+        },
+        "finish": {
+          "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+          "args": {
+            "prediction": "完整查询对象"
+          }
+        }
+      },
+      "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+    },
+    "observations": [
+      {
+        "step": 0,
+        "action": "get_schema",
+        "args": {
+          "tables": [
+            "movie_3.city",
+            "movie_3.country"
+          ]
+        },
+        "observation": {
+          "ok": true,
+          "tables": [
+            {
+              "source": "SQLite",
+              "database": "movie_3",
+              "table": "city",
+              "columns": [
+                {
+                  "name": "city_id",
+                  "type": "INTEGER",
+                  "definition": "city_id     INTEGER\r\n        primary key autoincrement"
+                },
+                {
+                  "name": "city",
+                  "type": "TEXT",
+                  "definition": "city        TEXT                               not null"
+                },
+                {
+                  "name": "country_id",
+                  "type": "INTEGER",
+                  "definition": "country_id  INTEGER                            not null\r\n        references country\r\n            on update cascade"
+                },
+                {
+                  "name": "last_update",
+                  "type": "DATETIME",
+                  "definition": "last_update DATETIME default CURRENT_TIMESTAMP not null"
+                }
+              ],
+              "ddl": "CREATE TABLE \"city\"\r\n(\r\n    city_id     INTEGER\r\n        primary key autoincrement,\r\n    city        TEXT                               not null,\r\n    country_id  INTEGER                            not null\r\n        references country\r\n            on update cascade,\r\n    last_update DATETIME default CURRENT_TIMESTAMP not null\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            },
+            {
+              "source": "SQLite",
+              "database": "movie_3",
+              "table": "country",
+              "columns": [
+                {
+                  "name": "country_id",
+                  "type": "INTEGER",
+                  "definition": "country_id  INTEGER\r\n        primary key autoincrement"
+                },
+                {
+                  "name": "country",
+                  "type": "TEXT",
+                  "definition": "country     TEXT                               not null"
+                },
+                {
+                  "name": "last_update",
+                  "type": "DATETIME",
+                  "definition": "last_update DATETIME default CURRENT_TIMESTAMP not null"
+                }
+              ],
+              "ddl": "CREATE TABLE \"country\"\r\n(\r\n    country_id  INTEGER\r\n        primary key autoincrement,\r\n    country     TEXT                               not null,\r\n    last_update DATETIME default CURRENT_TIMESTAMP not null\r\n)",
+              "file": "bird_schemas.txt",
+              "foreign_keys": []
+            }
+          ],
+          "missing_tables": [],
+          "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+        }
+      },
+      {
+        "step": 2,
+        "action": "search_knowledge",
+        "args": {
+          "query": "movie_3 country Philippines city 国家 城市"
+        },
+        "observation": {
+          "ok": true,
+          "knowledge": [
+            {
+              "knowledge_id": 354,
+              "knowledge_text": "在数据库movie_3的表country中，country_id表示国家ID，country表示国家名称；'India'表示印度，'Italy'表示意大利，'United States'表示美国，'Australia'表示澳大利亚，'Canada'表示加拿大，'Algeria'表示阿尔及利亚，'United Arab Emirates'表示阿拉伯联合酋长国，'Philippines'表示菲律宾。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1092,
+              "knowledge_text": "在数据库movie_3的表city中，字段country_id，数据类型为整数（integer），表示标识该城市所属国家的编号。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 355,
+              "knowledge_text": "在数据库movie_3的表city中，city_id表示城市ID，city表示城市名称（如'Woodridge'、'Clarksville'、'Lethbridge'、'Abu Dhabi'、'Arlington'），country_id关联所属国家。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1094,
+              "knowledge_text": "在数据库movie_3的表country中，字段country_id，数据类型为整数（integer），表示标识国家的唯一ID编号。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1091,
+              "knowledge_text": "在数据库movie_3的表city中，字段city，数据类型为文本（text），表示城市名称。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 369,
+              "knowledge_text": "在数据库movie_3中，计算某国与另一国每天平均租借电影数量的差值：AVG(IIF(country = '国家A', 1, 0)) - AVG(IIF(country = '国家B', 1, 0))。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 390,
+              "knowledge_text": "在数据库movie_3中，计算意大利客户在电影租借上的总花费：SUM(amount) WHERE country = 'Italy'，需关联payment、customer、address、city、country表。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 391,
+              "knowledge_text": "在数据库movie_3中，计算意大利客户单次电影租借的平均花费：AVG(amount) WHERE country = 'Italy'，需关联payment、customer、address、city、country表。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 1090,
+              "knowledge_text": "在数据库movie_3的表city中，字段city_id，数据类型为整数（integer），表示标识城市的唯一ID编号。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            },
+            {
+              "knowledge_id": 365,
+              "knowledge_text": "在数据库movie_3中，计算位于特定国家（如印度）的顾客占总顾客的百分比：CAST(SUM(CASE WHEN country = 'India' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(customer_id)。",
+              "scope": {
+                "databases": [
+                  "movie_3"
+                ],
+                "sources": [
+                  "SQLite"
+                ]
+              },
+              "retrieval_reason": "域内关键词召回"
+            }
+          ],
+          "dictionary": [],
+          "schema_adjudications": [
+            {
+              "rule_id": "administrative_division_actual_key",
+              "status": "implemented",
+              "source": "以common.administrative_division实际CREATE TABLE定义为准，电商字段注释存在过时引用；用户授权自主处理",
+              "tables": [
+                "common.administrative_division"
+              ],
+              "trigger_pattern": "行政|区划|省份|城市|收货|家庭地区",
+              "instruction": "common.administrative_division的行政区划代码字段是id CHAR(6)，没有division_code。电商Schema注释中common.administrative_division.division_code是过时引用，关联省、市或收货区划代码时使用common.administrative_division.id，保留业务表自身province_code/city_code/receiver_province_code等真实列名。区划代码按字符串比较，保留前导零；不臆造division_code。"
+            }
+          ],
+          "query_helpers": []
+        }
+      }
+    ],
+    "prediction": {
+      "db": "SQLite",
+      "query": "SELECT c.city FROM movie_3.city c JOIN movie_3.country co ON c.country_id = co.country_id WHERE co.country = 'Philippines' LIMIT 3"
+    },
+    "original_training_annotation": {
+      "question_id": 6204,
+      "question": "列出菲律宾国家的至少3个城市。",
+      "db": "SQLite",
+      "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE country = 'Philippines'"
+    },
+    "assessment": "核心知识命中，但噪声和跨源裁决明显",
+    "analysis": "ID354明确Philippines对应菲律宾；1092/355提供city.country_id含义与城市国家关系，1094/1091提供国家ID和城市名称。city/country Schema齐全，足够支持查询。\n\n369（租借数量差）、390/391（意大利租借花费）、365（印度客户占比）均不相关。首轮候选表达85张，来自11个库。首轮及知识结果还携带common.administrative_division的id/division_code裁决，这是另一套库的行政区划定义，因“城市”关键词触发，不能为movie_3查询提供依据。\n\n模型先生成SQL，被检查要求补做知识检索；检索后SQL不变。因此知识至少确认了国家名称，但未促使新逻辑调整。最终LIMIT 3，原始标注不限制条数。题干“至少3个”允许存在多种输出解释；LIMIT 3只在匹配记录充足时返回3个，未检查数量。这里缺少的是输出数量口径，不是城市关联知识。"
+  }
+]

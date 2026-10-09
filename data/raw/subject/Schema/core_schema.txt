@@ -1,58 +1,58 @@
 -- =====================================================
--- ½»Í¨¿âÏà¹Ø±í
+-- äº¤é€šåº“ç›¸å…³è¡¨
 CREATE DATABASE IF NOT EXISTS transportation;
 USE transportation;
--- 1. ³µÁ¾¹«Ë¾±í
+-- 1. è½¦è¾†å…¬å¸è¡¨
 CREATE TABLE vehicle_company (
-    company_id VARCHAR(20) PRIMARY KEY COMMENT '³µÁ¾¹«Ë¾±àºÅ',
-    company_name VARCHAR(100) NOT NULL COMMENT '¹«Ë¾Ãû³Æ',
-    business_type VARCHAR(50) NOT NULL COMMENT '¾­ÓªÀàĞÍ£¨¿ÍÔË/»õÔË/Î£»¯Æ·ÔËÊä£©',
-    establish_date DATE COMMENT '³ÉÁ¢ÈÕÆÚ',
-    legal_person VARCHAR(50) COMMENT '·¨ÈË',
-    contact_phone VARCHAR(20) COMMENT 'ÁªÏµµç»°',
-    address VARCHAR(200) COMMENT '¹«Ë¾µØÖ·',
-    area_id CHAR(6) NOT NULL COMMENT '×¢²áµØÇø»®´úÂë',
-    status ENUM('ÔËÓª','Í£Òµ','×¢Ïú') DEFAULT 'ÔËÓª' COMMENT '¾­Óª×´Ì¬',
+    company_id VARCHAR(20) PRIMARY KEY COMMENT 'è½¦è¾†å…¬å¸ç¼–å·',
+    company_name VARCHAR(100) NOT NULL COMMENT 'å…¬å¸åç§°',
+    business_type VARCHAR(50) NOT NULL COMMENT 'ç»è¥ç±»å‹ï¼ˆå®¢è¿/è´§è¿/å±åŒ–å“è¿è¾“ï¼‰',
+    establish_date DATE COMMENT 'æˆç«‹æ—¥æœŸ',
+    legal_person VARCHAR(50) COMMENT 'æ³•äºº',
+    contact_phone VARCHAR(20) COMMENT 'è”ç³»ç”µè¯',
+    address VARCHAR(200) COMMENT 'å…¬å¸åœ°å€',
+    area_id CHAR(6) NOT NULL COMMENT 'æ³¨å†Œåœ°åŒºåˆ’ä»£ç ',
+    status ENUM('è¿è¥','åœä¸š','æ³¨é”€') DEFAULT 'è¿è¥' COMMENT 'ç»è¥çŠ¶æ€',
     FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)
-) ENGINE=InnoDB COMMENT='³µÁ¾ÔËÊä¹«Ë¾ĞÅÏ¢±í';
+) ENGINE=InnoDB COMMENT='è½¦è¾†è¿è¾“å…¬å¸ä¿¡æ¯è¡¨';
 
--- 2. ¼İÊ»Ô±±í£¨³µÁ¾¹«Ë¾µÄÔ±¹¤£©
+-- 2. é©¾é©¶å‘˜è¡¨ï¼ˆè½¦è¾†å…¬å¸çš„å‘˜å·¥ï¼‰
 CREATE TABLE driver (
-    driver_id VARCHAR(18) PRIMARY KEY COMMENT 'Éí·İÖ¤ºÅ',
-    name VARCHAR(50) NOT NULL COMMENT 'ĞÕÃû',
-    gender ENUM('ÄĞ','Å®') NOT NULL COMMENT 'ĞÔ±ğ',
-    birth_date DATE NOT NULL COMMENT '³öÉúÈÕÆÚ',
-    license_type VARCHAR(5) NOT NULL COMMENT '¼İÕÕÀàĞÍ´úÂë',
-    issue_date DATE NOT NULL COMMENT '·¢Ö¤ÈÕÆÚ',
-    valid_years TINYINT NOT NULL COMMENT 'ÓĞĞ§ÆÚ(Äê)',
-    phone VARCHAR(20) COMMENT 'ÁªÏµµç»°',
-    address VARCHAR(200) COMMENT 'ÁªÏµµØÖ·',
-    area_id CHAR(6) NOT NULL COMMENT 'ĞĞÕşÇø»®´úÂë',
-    status ENUM('Õı³£','Ôİ¿Û','µõÏú','¹ıÆÚ') DEFAULT 'Õı³£' COMMENT '¼İÕÕ×´Ì¬',
-    company_id VARCHAR(20) NOT NULL COMMENT 'ËùÊô³µÁ¾¹«Ë¾ID',
+    driver_id VARCHAR(18) PRIMARY KEY COMMENT 'èº«ä»½è¯å·',
+    name VARCHAR(50) NOT NULL COMMENT 'å§“å',
+    gender ENUM('ç”·','å¥³') NOT NULL COMMENT 'æ€§åˆ«',
+    birth_date DATE NOT NULL COMMENT 'å‡ºç”Ÿæ—¥æœŸ',
+    license_type VARCHAR(5) NOT NULL COMMENT 'é©¾ç…§ç±»å‹ä»£ç ',
+    issue_date DATE NOT NULL COMMENT 'å‘è¯æ—¥æœŸ',
+    valid_years TINYINT NOT NULL COMMENT 'æœ‰æ•ˆæœŸ(å¹´)',
+    phone VARCHAR(20) COMMENT 'è”ç³»ç”µè¯',
+    address VARCHAR(200) COMMENT 'è”ç³»åœ°å€',
+    area_id CHAR(6) NOT NULL COMMENT 'è¡Œæ”¿åŒºåˆ’ä»£ç ',
+    status ENUM('æ­£å¸¸','æš‚æ‰£','åŠé”€','è¿‡æœŸ') DEFAULT 'æ­£å¸¸' COMMENT 'é©¾ç…§çŠ¶æ€',
+    company_id VARCHAR(20) NOT NULL COMMENT 'æ‰€å±è½¦è¾†å…¬å¸ID',
     INDEX idx_name (name),
     INDEX idx_license (license_type),
     FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),
     FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),
     FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)
-) ENGINE=InnoDB COMMENT='¼İÊ»Ô±ĞÅÏ¢±í£¨³µÁ¾¹«Ë¾Ô±¹¤£©';
+) ENGINE=InnoDB COMMENT='é©¾é©¶å‘˜ä¿¡æ¯è¡¨ï¼ˆè½¦è¾†å…¬å¸å‘˜å·¥ï¼‰';
 
--- 3. ³µÁ¾µÇ¼Ç±í
+-- 3. è½¦è¾†ç™»è®°è¡¨
 CREATE TABLE vehicle (
-    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '³µÁ¾Î¨Ò»±àºÅ',
-    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '³µÅÆºÅ',
-    owner_id VARCHAR(18) NOT NULL COMMENT '³µÖ÷£¨¼İÊ»Ô±£©Éí·İÖ¤ºÅ',
-    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '³µÁ¾ÀàĞÍ´úÂë',
-    brand VARCHAR(30) NOT NULL COMMENT 'Æ·ÅÆ',
-    model VARCHAR(30) NOT NULL COMMENT 'ĞÍºÅ',
-    manufacture_year YEAR NOT NULL COMMENT 'Éú²úÄê·İ',
-    load_capacity DECIMAL(8,2) COMMENT 'ÔØÖØ(¶Ö)',
-    seat_count TINYINT UNSIGNED COMMENT '×ùÎ»Êı£¨¿Í³µÓÃ£©',
-    color VARCHAR(20) COMMENT 'ÑÕÉ«',
-    register_date DATE NOT NULL COMMENT '×¢²áÈÕÆÚ',
-    area_id CHAR(6) NOT NULL COMMENT '×¢²áµØÇø»®´úÂë',
-    insurance_expire DATE COMMENT '±£ÏÕµ½ÆÚÈÕ',
-    company_id VARCHAR(20) NOT NULL COMMENT 'ËùÊô³µÁ¾¹«Ë¾ID',
+    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT 'è½¦è¾†å”¯ä¸€ç¼–å·',
+    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT 'è½¦ç‰Œå·',
+    owner_id VARCHAR(18) NOT NULL COMMENT 'è½¦ä¸»ï¼ˆé©¾é©¶å‘˜ï¼‰èº«ä»½è¯å·',
+    vehicle_type_code VARCHAR(20) NOT NULL COMMENT 'è½¦è¾†ç±»å‹ä»£ç ',
+    brand VARCHAR(30) NOT NULL COMMENT 'å“ç‰Œ',
+    model VARCHAR(30) NOT NULL COMMENT 'å‹å·',
+    manufacture_year YEAR NOT NULL COMMENT 'ç”Ÿäº§å¹´ä»½',
+    load_capacity DECIMAL(8,2) COMMENT 'è½½é‡(å¨)',
+    seat_count TINYINT UNSIGNED COMMENT 'åº§ä½æ•°ï¼ˆå®¢è½¦ç”¨ï¼‰',
+    color VARCHAR(20) COMMENT 'é¢œè‰²',
+    register_date DATE NOT NULL COMMENT 'æ³¨å†Œæ—¥æœŸ',
+    area_id CHAR(6) NOT NULL COMMENT 'æ³¨å†Œåœ°åŒºåˆ’ä»£ç ',
+    insurance_expire DATE COMMENT 'ä¿é™©åˆ°æœŸæ—¥',
+    company_id VARCHAR(20) NOT NULL COMMENT 'æ‰€å±è½¦è¾†å…¬å¸ID',
     INDEX idx_plate (plate_number),
     INDEX idx_owner (owner_id),
     INDEX idx_type (vehicle_type_code),
@@ -60,233 +60,233 @@ CREATE TABLE vehicle (
     FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),
     FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),
     FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)
-) ENGINE=InnoDB COMMENT='³µÁ¾µÇ¼Ç±í';
+) ENGINE=InnoDB COMMENT='è½¦è¾†ç™»è®°è¡¨';
 
--- 4. ´¬²°¹«Ë¾±í£¨¶ÀÁ¢£©
+-- 4. èˆ¹èˆ¶å…¬å¸è¡¨ï¼ˆç‹¬ç«‹ï¼‰
 CREATE TABLE shipping_company (
-    company_id VARCHAR(20) PRIMARY KEY COMMENT '´¬²°¹«Ë¾±àºÅ',
-    company_name VARCHAR(100) NOT NULL COMMENT '¹«Ë¾Ãû³Æ',
-    business_type VARCHAR(50) NOT NULL COMMENT '¾­ÓªÀàĞÍ£¨¼¯×°Ïä/É¢»õ/ÓÍÂÖ/¿ÍÔË£©',
-    establish_date DATE NOT NULL COMMENT '³ÉÁ¢ÈÕÆÚ',
-    legal_person VARCHAR(50) NOT NULL COMMENT '·¨ÈË',
-    contact_phone VARCHAR(20) COMMENT 'ÁªÏµµç»°',
-    address VARCHAR(200) COMMENT '¹«Ë¾µØÖ·',
-    area_id CHAR(6) NOT NULL COMMENT 'ĞĞÕşÇø»®´úÂë',
-    status ENUM('ÔËÓª','Í£Òµ','×¢Ïú') DEFAULT 'ÔËÓª' COMMENT '¾­Óª×´Ì¬',
+    company_id VARCHAR(20) PRIMARY KEY COMMENT 'èˆ¹èˆ¶å…¬å¸ç¼–å·',
+    company_name VARCHAR(100) NOT NULL COMMENT 'å…¬å¸åç§°',
+    business_type VARCHAR(50) NOT NULL COMMENT 'ç»è¥ç±»å‹ï¼ˆé›†è£…ç®±/æ•£è´§/æ²¹è½®/å®¢è¿ï¼‰',
+    establish_date DATE NOT NULL COMMENT 'æˆç«‹æ—¥æœŸ',
+    legal_person VARCHAR(50) NOT NULL COMMENT 'æ³•äºº',
+    contact_phone VARCHAR(20) COMMENT 'è”ç³»ç”µè¯',
+    address VARCHAR(200) COMMENT 'å…¬å¸åœ°å€',
+    area_id CHAR(6) NOT NULL COMMENT 'è¡Œæ”¿åŒºåˆ’ä»£ç ',
+    status ENUM('è¿è¥','åœä¸š','æ³¨é”€') DEFAULT 'è¿è¥' COMMENT 'ç»è¥çŠ¶æ€',
     FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)
-) ENGINE=InnoDB COMMENT='´¬²°¹«Ë¾ĞÅÏ¢±í';
+) ENGINE=InnoDB COMMENT='èˆ¹èˆ¶å…¬å¸ä¿¡æ¯è¡¨';
 
--- 5. Ô±¹¤±í£¨´¬²°¹«Ë¾µÄÔ±¹¤£©
+-- 5. å‘˜å·¥è¡¨ï¼ˆèˆ¹èˆ¶å…¬å¸çš„å‘˜å·¥ï¼‰
 CREATE TABLE employee (
-    employee_id VARCHAR(18) PRIMARY KEY COMMENT 'Éí·İÖ¤ºÅ',
-    name VARCHAR(50) NOT NULL COMMENT 'ĞÕÃû',
-    gender ENUM('ÄĞ','Å®') NOT NULL COMMENT 'ĞÔ±ğ',
-    employee_type_code VARCHAR(20) NOT NULL COMMENT 'ÈËÔ±ÀàĞÍ´úÂë£¨´¬³¤/´ó¸±µÈ£©',
-    company_id VARCHAR(20) NOT NULL COMMENT 'ËùÊô´¬²°¹«Ë¾ID',
-    hire_date DATE COMMENT 'ÈëÖ°ÈÕÆÚ',
-    phone VARCHAR(20) COMMENT 'ÁªÏµµç»°',
-    status ENUM('ÔÚÖ°','ÀëÖ°','ÍËĞİ') DEFAULT 'ÔÚÖ°' COMMENT '×´Ì¬',
+    employee_id VARCHAR(18) PRIMARY KEY COMMENT 'èº«ä»½è¯å·',
+    name VARCHAR(50) NOT NULL COMMENT 'å§“å',
+    gender ENUM('ç”·','å¥³') NOT NULL COMMENT 'æ€§åˆ«',
+    employee_type_code VARCHAR(20) NOT NULL COMMENT 'äººå‘˜ç±»å‹ä»£ç ï¼ˆèˆ¹é•¿/å¤§å‰¯ç­‰ï¼‰',
+    company_id VARCHAR(20) NOT NULL COMMENT 'æ‰€å±èˆ¹èˆ¶å…¬å¸ID',
+    hire_date DATE COMMENT 'å…¥èŒæ—¥æœŸ',
+    phone VARCHAR(20) COMMENT 'è”ç³»ç”µè¯',
+    status ENUM('åœ¨èŒ','ç¦»èŒ','é€€ä¼‘') DEFAULT 'åœ¨èŒ' COMMENT 'çŠ¶æ€',
     FOREIGN KEY (employee_type_code) REFERENCES common.employee_type_dict(type_code),
     FOREIGN KEY (company_id) REFERENCES shipping_company(company_id)
-) ENGINE=InnoDB COMMENT='´¬²°¹«Ë¾Ô±¹¤±í';
+) ENGINE=InnoDB COMMENT='èˆ¹èˆ¶å…¬å¸å‘˜å·¥è¡¨';
 
--- 6. ´¬²°»ù´¡ĞÅÏ¢±í£¨´¬²°¹«Ë¾µÄ×Ó±í£©£¨Í¨¹ımmsi¹ØÁªPostgreÖĞµÄaisÊı¾İ£©
+-- 6. èˆ¹èˆ¶åŸºç¡€ä¿¡æ¯è¡¨ï¼ˆèˆ¹èˆ¶å…¬å¸çš„å­è¡¨ï¼‰ï¼ˆé€šè¿‡mmsiå…³è”Postgreä¸­çš„aisæ•°æ®ï¼‰
 CREATE TABLE vessel (
-    mmsi INT UNSIGNED NOT NULL COMMENT '´¬²°MMSI£¬9Î»Î¨Ò»±êÊ¶',
-    company_id VARCHAR(20) NOT NULL COMMENT 'ËùÊô´¬²°¹«Ë¾ID',
-    vessel_type SMALLINT COMMENT '´¬²°ÀàĞÍ´úÂë£¨²ÎÕÕAIS±ê×¼£©',
-    max_load DECIMAL(10,2) COMMENT '×î´óºÉÔØÁ¿£¨¶Ö£©',
-    max_speed DECIMAL(4,1) COMMENT '×î´óº½ËÙ£¨½Ú£©',
-    endurance VARCHAR(32) COMMENT '×Ô³ÖÁ¦£¨Ìì/º£Àï£©',
-    captain_name VARCHAR(32) COMMENT '´¬³¤ĞÕÃû',
-    area_id CHAR(6) NOT NULL COMMENT '×¢²áµØÇø»®´úÂë',
+    mmsi INT UNSIGNED NOT NULL COMMENT 'èˆ¹èˆ¶MMSIï¼Œ9ä½å”¯ä¸€æ ‡è¯†',
+    company_id VARCHAR(20) NOT NULL COMMENT 'æ‰€å±èˆ¹èˆ¶å…¬å¸ID',
+    vessel_type SMALLINT COMMENT 'èˆ¹èˆ¶ç±»å‹ä»£ç ï¼ˆå‚ç…§AISæ ‡å‡†ï¼‰',
+    max_load DECIMAL(10,2) COMMENT 'æœ€å¤§è·è½½é‡ï¼ˆå¨ï¼‰',
+    max_speed DECIMAL(4,1) COMMENT 'æœ€å¤§èˆªé€Ÿï¼ˆèŠ‚ï¼‰',
+    endurance VARCHAR(32) COMMENT 'è‡ªæŒåŠ›ï¼ˆå¤©/æµ·é‡Œï¼‰',
+    captain_name VARCHAR(32) COMMENT 'èˆ¹é•¿å§“å',
+    area_id CHAR(6) NOT NULL COMMENT 'æ³¨å†Œåœ°åŒºåˆ’ä»£ç ',
     UNIQUE KEY uk_mmsi (mmsi),
     FOREIGN KEY (company_id) REFERENCES shipping_company(company_id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),
     FOREIGN KEY (vessel_type) REFERENCES common.vessel_type_dict(type_code)
-) ENGINE=InnoDB COMMENT='´¬²°»ù´¡ĞÅÏ¢±í';
+) ENGINE=InnoDB COMMENT='èˆ¹èˆ¶åŸºç¡€ä¿¡æ¯è¡¨';
 
 
 
 
 -- =====================================================
--- ½ğÈÚ¿â
+-- é‡‘èåº“
 CREATE DATABASE IF NOT EXISTS finance_tax;
 USE finance_tax;
 
--- ¹«Ë¾Ö÷±í
+-- å…¬å¸ä¸»è¡¨
 CREATE TABLE companies (
-    company_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '¹«Ë¾Î¨Ò»ID',
-    company_name VARCHAR(200) NOT NULL UNIQUE COMMENT '¹«Ë¾·¨¶¨È«³Æ',
-    stock_code VARCHAR(20) UNIQUE COMMENT '¹ÉÆ±´úÂë£¨ÈôÉÏÊĞ£©',
-    established_year YEAR COMMENT '×¢²á/³ÉÁ¢Äê·İ',
-    registered_capital DECIMAL(18,2) COMMENT '×¢²á×Ê±¾£¨ÍòÔª£©',
-    industry_code VARCHAR(20) COMMENT 'ËùÊôĞĞÒµ´úÂë',
-    registration_type_code VARCHAR(20) COMMENT 'µÇ¼Ç×¢²áÀàĞÍ´úÂë',
-    is_private BOOLEAN COMMENT 'ÊÇ·ñÃñÓªÆóÒµ',
-    size_category_code VARCHAR(10) COMMENT '¹æÄ£»®ĞÍ´úÂë',
-    is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT 'ÊÇ·ñÖØµã·ö³Ö¸ßĞÂ¼¼ÊõÆóÒµ',
-    is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT 'ÊÇ·ñ¼¼ÊõÏÈ½øĞÍ·şÎñÆóÒµ',
+    company_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'å…¬å¸å”¯ä¸€ID',
+    company_name VARCHAR(200) NOT NULL UNIQUE COMMENT 'å…¬å¸æ³•å®šå…¨ç§°',
+    stock_code VARCHAR(20) UNIQUE COMMENT 'è‚¡ç¥¨ä»£ç ï¼ˆè‹¥ä¸Šå¸‚ï¼‰',
+    established_year YEAR COMMENT 'æ³¨å†Œ/æˆç«‹å¹´ä»½',
+    registered_capital DECIMAL(18,2) COMMENT 'æ³¨å†Œèµ„æœ¬ï¼ˆä¸‡å…ƒï¼‰',
+    industry_code VARCHAR(20) COMMENT 'æ‰€å±è¡Œä¸šä»£ç ',
+    registration_type_code VARCHAR(20) COMMENT 'ç™»è®°æ³¨å†Œç±»å‹ä»£ç ',
+    is_private BOOLEAN COMMENT 'æ˜¯å¦æ°‘è¥ä¼ä¸š',
+    size_category_code VARCHAR(10) COMMENT 'è§„æ¨¡åˆ’å‹ä»£ç ',
+    is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT 'æ˜¯å¦é‡ç‚¹æ‰¶æŒé«˜æ–°æŠ€æœ¯ä¼ä¸š',
+    is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT 'æ˜¯å¦æŠ€æœ¯å…ˆè¿›å‹æœåŠ¡ä¼ä¸š',
 
     FOREIGN KEY (industry_code) REFERENCES common.dict_industry(industry_code),
     FOREIGN KEY (registration_type_code) REFERENCES common.dict_registration_type(type_code),
     FOREIGN KEY (size_category_code) REFERENCES common.dict_size_category(size_code)
-) COMMENT='¹«Ë¾»ù´¡ĞÅÏ¢Ö÷±í';
+) COMMENT='å…¬å¸åŸºç¡€ä¿¡æ¯ä¸»è¡¨';
 
--- ¹ÉÆ±ĞÅÏ¢±í
+-- è‚¡ç¥¨ä¿¡æ¯è¡¨
 CREATE TABLE stocks (
-    stock_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '´ÊÌõID',
-    company_id BIGINT NOT NULL COMMENT '¹ØÁª¹«Ë¾ID',
-    stock_code VARCHAR(20) NOT NULL UNIQUE COMMENT '¹ÉÆ±´úÂë',
-    stock_name VARCHAR(50) NOT NULL COMMENT '¹ÉÆ±¼ò³Æ',
-    stock_full_name VARCHAR(200) COMMENT '¹«Ë¾È«³Æ£¨ÈßÓà£©',
-    share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT '¹É¶«È¨ÀûÀàĞÍ£¨ÒıÓÃ×Öµä£©',
-    register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT '¼ÇÃû·½Ê½',
-    par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT 'Ãæ¶îÀàĞÍ',
-    market_class VARCHAR(5) COMMENT 'ÉÏÊĞµØµã·ÖÀà£¨A/B/H/NµÈ£©',
-    listing_date DATE COMMENT 'ÉÏÊĞÊ±¼ä',
-    total_shares BIGINT NOT NULL COMMENT '¹É±¾£¨¹É£©',
-    current_price DECIMAL(10,2) COMMENT '×îĞÂ¹ÉÆ±¼Û¸ñ£¨Ôª£©',
+    stock_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'è¯æ¡ID',
+    company_id BIGINT NOT NULL COMMENT 'å…³è”å…¬å¸ID',
+    stock_code VARCHAR(20) NOT NULL UNIQUE COMMENT 'è‚¡ç¥¨ä»£ç ',
+    stock_name VARCHAR(50) NOT NULL COMMENT 'è‚¡ç¥¨ç®€ç§°',
+    stock_full_name VARCHAR(200) COMMENT 'å…¬å¸å…¨ç§°ï¼ˆå†—ä½™ï¼‰',
+    share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT 'è‚¡ä¸œæƒåˆ©ç±»å‹ï¼ˆå¼•ç”¨å­—å…¸ï¼‰',
+    register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT 'è®°åæ–¹å¼',
+    par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT 'é¢é¢ç±»å‹',
+    market_class VARCHAR(5) COMMENT 'ä¸Šå¸‚åœ°ç‚¹åˆ†ç±»ï¼ˆA/B/H/Nç­‰ï¼‰',
+    listing_date DATE COMMENT 'ä¸Šå¸‚æ—¶é—´',
+    total_shares BIGINT NOT NULL COMMENT 'è‚¡æœ¬ï¼ˆè‚¡ï¼‰',
+    current_price DECIMAL(10,2) COMMENT 'æœ€æ–°è‚¡ç¥¨ä»·æ ¼ï¼ˆå…ƒï¼‰',
 
     FOREIGN KEY (company_id) REFERENCES companies(company_id)
-) COMMENT='¹ÉÆ±»ù±¾ĞÅÏ¢±í';
+) COMMENT='è‚¡ç¥¨åŸºæœ¬ä¿¡æ¯è¡¨';
 
--- ¹ÉÆ±ÈÕ³É½»ĞÅÏ¢±í
+-- è‚¡ç¥¨æ—¥æˆäº¤ä¿¡æ¯è¡¨
 CREATE TABLE stock_daily_trades (
-    trade_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '´ÊÌõID',
-    stock_id BIGINT NOT NULL COMMENT '¹ØÁª¹ÉÆ±ID',
-    trade_date DATE NOT NULL COMMENT '½»Ò×ÈÕÆÚ',
-    volume BIGINT NOT NULL COMMENT '³É½»Á¿£¨¹É£©',
-    avg_trade_size INT COMMENT 'Ã¿±Ê³É½»¹ÉÊı',
-    open_price DECIMAL(10,2) NOT NULL COMMENT '¿ªÅÌ¼Û',
-    close_price DECIMAL(10,2) NOT NULL COMMENT 'ÊÕÅÌ¼Û',
-    high_price DECIMAL(10,2) NOT NULL COMMENT '×î¸ß¼Û',
-    low_price DECIMAL(10,2) NOT NULL COMMENT '×îµÍ¼Û',
+    trade_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'è¯æ¡ID',
+    stock_id BIGINT NOT NULL COMMENT 'å…³è”è‚¡ç¥¨ID',
+    trade_date DATE NOT NULL COMMENT 'äº¤æ˜“æ—¥æœŸ',
+    volume BIGINT NOT NULL COMMENT 'æˆäº¤é‡ï¼ˆè‚¡ï¼‰',
+    avg_trade_size INT COMMENT 'æ¯ç¬”æˆäº¤è‚¡æ•°',
+    open_price DECIMAL(10,2) NOT NULL COMMENT 'å¼€ç›˜ä»·',
+    close_price DECIMAL(10,2) NOT NULL COMMENT 'æ”¶ç›˜ä»·',
+    high_price DECIMAL(10,2) NOT NULL COMMENT 'æœ€é«˜ä»·',
+    low_price DECIMAL(10,2) NOT NULL COMMENT 'æœ€ä½ä»·',
 
     FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),
     UNIQUE KEY uk_stock_date (stock_id, trade_date)
-) COMMENT='¹ÉÆ±Ã¿ÈÕ³É½»»ã×ÜĞÅÏ¢';
+) COMMENT='è‚¡ç¥¨æ¯æ—¥æˆäº¤æ±‡æ€»ä¿¡æ¯';
 
--- ¹«Ë¾²ÆÎñĞÅÏ¢±í
+-- å…¬å¸è´¢åŠ¡ä¿¡æ¯è¡¨
 CREATE TABLE company_financials (
-    financial_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '´ÊÌõID',
-    company_id BIGINT NOT NULL COMMENT '¹ØÁª¹«Ë¾ID',
-    report_date DATE NOT NULL COMMENT '±¨±íÈÕÆÚ',
-    dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT 'ÏÖ½ğ·Öºì×Ü¶î£¨ÍòÔª£©',
-    dividend_stock INT DEFAULT 0 COMMENT 'Ã¿¹É¹ÉÏ¢£¨·Ö/¹É£©',
-    total_assets DECIMAL(18,2) NOT NULL COMMENT '×Ü×Ê²ú£¨ÍòÔª£©',
-    total_liabilities DECIMAL(18,2) NOT NULL COMMENT '×Ü¸ºÕ®£¨ÍòÔª£©',
+    financial_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'è¯æ¡ID',
+    company_id BIGINT NOT NULL COMMENT 'å…³è”å…¬å¸ID',
+    report_date DATE NOT NULL COMMENT 'æŠ¥è¡¨æ—¥æœŸ',
+    dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT 'ç°é‡‘åˆ†çº¢æ€»é¢ï¼ˆä¸‡å…ƒï¼‰',
+    dividend_stock INT DEFAULT 0 COMMENT 'æ¯è‚¡è‚¡æ¯ï¼ˆåˆ†/è‚¡ï¼‰',
+    total_assets DECIMAL(18,2) NOT NULL COMMENT 'æ€»èµ„äº§ï¼ˆä¸‡å…ƒï¼‰',
+    total_liabilities DECIMAL(18,2) NOT NULL COMMENT 'æ€»è´Ÿå€ºï¼ˆä¸‡å…ƒï¼‰',
 
     FOREIGN KEY (company_id) REFERENCES companies(company_id),
     UNIQUE KEY uk_company_report (company_id, report_date)
-) COMMENT='¹«Ë¾¶¨ÆÚ²ÆÎñÕªÒªĞÅÏ¢';
+) COMMENT='å…¬å¸å®šæœŸè´¢åŠ¡æ‘˜è¦ä¿¡æ¯';
 
--- ÆóÒµËùµÃË°Éê±¨ĞÅÏ¢±í
+-- ä¼ä¸šæ‰€å¾—ç¨ç”³æŠ¥ä¿¡æ¯è¡¨
 CREATE TABLE corporate_income_tax_returns (
-    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'Éê±¨ID',
-    company_id BIGINT NOT NULL COMMENT '¹ØÁª¹«Ë¾ID',
-    tax_year YEAR NOT NULL COMMENT 'ÄÉË°Äê¶È',
-    revenue DECIMAL(18,2) NOT NULL COMMENT 'ÊÕÈë×Ü¶î£¨ÍòÔª£©',
-    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '²»Õ÷Ë°ÊÕÈëÓëÃâË°ÊÕÈë£¨ÍòÔª£©',
-    deductions DECIMAL(18,2) NOT NULL COMMENT '¿Û³ı½ğ¶î£¨ÍòÔª£©',
-    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT 'ÔÊĞíÃÖ²¹µÄÒÔÇ°Äê¶È¿÷Ëğ£¨ÍòÔª£©',
-    building_asset_value DECIMAL(18,2) COMMENT '·¿Îİ½¨ÖşÎï×Ê²úÔ­Öµ£¨ÍòÔª£©',
-    employee_count INT COMMENT '´ÓÒµÈËÊı£¨È«Äê¼¾¶ÈÆ½¾ùÖµ£©',
-    total_assets DECIMAL(18,2) COMMENT '×Ê²ú×Ü¶î£¨ÍòÔª£¬È«Äê¼¾¶ÈÆ½¾ùÖµ£©',
-    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT 'ÊÇ·ñ´ÓÊÂ¹ú¼ÒÏŞÖÆ»ò½ûÖ¹ĞĞÒµ',
+    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ç”³æŠ¥ID',
+    company_id BIGINT NOT NULL COMMENT 'å…³è”å…¬å¸ID',
+    tax_year YEAR NOT NULL COMMENT 'çº³ç¨å¹´åº¦',
+    revenue DECIMAL(18,2) NOT NULL COMMENT 'æ”¶å…¥æ€»é¢ï¼ˆä¸‡å…ƒï¼‰',
+    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT 'ä¸å¾ç¨æ”¶å…¥ä¸å…ç¨æ”¶å…¥ï¼ˆä¸‡å…ƒï¼‰',
+    deductions DECIMAL(18,2) NOT NULL COMMENT 'æ‰£é™¤é‡‘é¢ï¼ˆä¸‡å…ƒï¼‰',
+    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT 'å…è®¸å¼¥è¡¥çš„ä»¥å‰å¹´åº¦äºæŸï¼ˆä¸‡å…ƒï¼‰',
+    building_asset_value DECIMAL(18,2) COMMENT 'æˆ¿å±‹å»ºç­‘ç‰©èµ„äº§åŸå€¼ï¼ˆä¸‡å…ƒï¼‰',
+    employee_count INT COMMENT 'ä»ä¸šäººæ•°ï¼ˆå…¨å¹´å­£åº¦å¹³å‡å€¼ï¼‰',
+    total_assets DECIMAL(18,2) COMMENT 'èµ„äº§æ€»é¢ï¼ˆä¸‡å…ƒï¼Œå…¨å¹´å­£åº¦å¹³å‡å€¼ï¼‰',
+    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT 'æ˜¯å¦ä»äº‹å›½å®¶é™åˆ¶æˆ–ç¦æ­¢è¡Œä¸š',
 
     FOREIGN KEY (company_id) REFERENCES companies(company_id),
     UNIQUE KEY uk_company_year (company_id, tax_year)
-) COMMENT='ÆóÒµËùµÃË°Äê¶ÈÉê±¨ĞÅÏ¢±í';
+) COMMENT='ä¼ä¸šæ‰€å¾—ç¨å¹´åº¦ç”³æŠ¥ä¿¡æ¯è¡¨';
 
 
 
 -- ============================================
--- ¹¤Òµ¿â
+-- å·¥ä¸šåº“
 CREATE DATABASE IF NOT EXISTS energy;
 USE energy;
 
--- ÄÜÔ´ÆóÒµ±í
+-- èƒ½æºä¼ä¸šè¡¨
 CREATE TABLE energy_company (
-    company_id VARCHAR(20) PRIMARY KEY COMMENT 'ÆóÒµ±àºÅ',
-    company_name VARCHAR(100) NOT NULL COMMENT 'ÆóÒµÃû³Æ',
-    business_type VARCHAR(50) NOT NULL COMMENT '¾­ÓªÀàĞÍ',
-    establish_date DATE COMMENT '³ÉÁ¢ÈÕÆÚ',
-    legal_person VARCHAR(50) COMMENT '·¨ÈË´ú±í',
-    contact_phone VARCHAR(20) COMMENT 'ÁªÏµµç»°',
-    area_id CHAR(6) NOT NULL COMMENT '×¢²áµØÇø»®´úÂë',
-    staff_count INT COMMENT 'Ô±¹¤×ÜÊı',
-    status ENUM('ÔËÓª','Í£Òµ','×¢Ïú') DEFAULT 'ÔËÓª' COMMENT '¾­Óª×´Ì¬',
+    company_id VARCHAR(20) PRIMARY KEY COMMENT 'ä¼ä¸šç¼–å·',
+    company_name VARCHAR(100) NOT NULL COMMENT 'ä¼ä¸šåç§°',
+    business_type VARCHAR(50) NOT NULL COMMENT 'ç»è¥ç±»å‹',
+    establish_date DATE COMMENT 'æˆç«‹æ—¥æœŸ',
+    legal_person VARCHAR(50) COMMENT 'æ³•äººä»£è¡¨',
+    contact_phone VARCHAR(20) COMMENT 'è”ç³»ç”µè¯',
+    area_id CHAR(6) NOT NULL COMMENT 'æ³¨å†Œåœ°åŒºåˆ’ä»£ç ',
+    staff_count INT COMMENT 'å‘˜å·¥æ€»æ•°',
+    status ENUM('è¿è¥','åœä¸š','æ³¨é”€') DEFAULT 'è¿è¥' COMMENT 'ç»è¥çŠ¶æ€',
     FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)
-) ENGINE=InnoDB COMMENT='ÄÜÔ´ÆóÒµĞÅÏ¢±í';
+) ENGINE=InnoDB COMMENT='èƒ½æºä¼ä¸šä¿¡æ¯è¡¨';
 
--- ÆóÒµ×ÊÖÊ±í
+-- ä¼ä¸šèµ„è´¨è¡¨
 CREATE TABLE company_certification (
-    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '¼ÇÂ¼ID',
-    company_id VARCHAR(20) NOT NULL COMMENT 'ÆóÒµ±àºÅ',
-    cert_type VARCHAR(50) NOT NULL COMMENT '×ÊÖÊÀàĞÍ',
-    cert_no VARCHAR(50) COMMENT 'Ö¤Êé±àºÅ',
-    issue_date DATE COMMENT '·¢Ö¤ÈÕÆÚ',
-    expire_date DATE COMMENT 'µ½ÆÚÈÕÆÚ',
-    issue_authority VARCHAR(100) COMMENT '·¢Ö¤»ú¹Ø',
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'è®°å½•ID',
+    company_id VARCHAR(20) NOT NULL COMMENT 'ä¼ä¸šç¼–å·',
+    cert_type VARCHAR(50) NOT NULL COMMENT 'èµ„è´¨ç±»å‹',
+    cert_no VARCHAR(50) COMMENT 'è¯ä¹¦ç¼–å·',
+    issue_date DATE COMMENT 'å‘è¯æ—¥æœŸ',
+    expire_date DATE COMMENT 'åˆ°æœŸæ—¥æœŸ',
+    issue_authority VARCHAR(100) COMMENT 'å‘è¯æœºå…³',
     FOREIGN KEY (company_id) REFERENCES energy_company(company_id)
-) ENGINE=InnoDB COMMENT='ÆóÒµ×ÊÖÊ±í';
+) ENGINE=InnoDB COMMENT='ä¼ä¸šèµ„è´¨è¡¨';
 
--- ÄÜÔ´³¡Õ¾±í
+-- èƒ½æºåœºç«™è¡¨
 CREATE TABLE energy_station (
-    station_id VARCHAR(20) PRIMARY KEY COMMENT '³¡Õ¾±àºÅ',
-    station_name VARCHAR(100) NOT NULL COMMENT '³¡Õ¾Ãû³Æ',
-    company_id VARCHAR(20) NOT NULL COMMENT 'ËùÊôÆóÒµ±àºÅ',
-    station_type_code VARCHAR(10) NOT NULL COMMENT '³¡Õ¾ÀàĞÍ´úÂë',
-    energy_type_code VARCHAR(10) NOT NULL COMMENT 'ÄÜÔ´ÀàĞÍ´úÂë',
-    installed_capacity DECIMAL(12,2) COMMENT '×°»úÈİÁ¿(MW)',
-    annual_generation DECIMAL(12,2) COMMENT 'Äê·¢µçÁ¿(ÍòkWh)',
-    grid_connect_date DATE COMMENT '²¢ÍøÈÕÆÚ',
-    area_id CHAR(6) NOT NULL COMMENT 'ËùÔÚµØÇø»®´úÂë',
-    status ENUM('ÔËĞĞ','ÔÚ½¨','Í£»ú','ÍËÒÛ') DEFAULT 'ÔËĞĞ' COMMENT 'ÔËĞĞ×´Ì¬',
+    station_id VARCHAR(20) PRIMARY KEY COMMENT 'åœºç«™ç¼–å·',
+    station_name VARCHAR(100) NOT NULL COMMENT 'åœºç«™åç§°',
+    company_id VARCHAR(20) NOT NULL COMMENT 'æ‰€å±ä¼ä¸šç¼–å·',
+    station_type_code VARCHAR(10) NOT NULL COMMENT 'åœºç«™ç±»å‹ä»£ç ',
+    energy_type_code VARCHAR(10) NOT NULL COMMENT 'èƒ½æºç±»å‹ä»£ç ',
+    installed_capacity DECIMAL(12,2) COMMENT 'è£…æœºå®¹é‡(MW)',
+    annual_generation DECIMAL(12,2) COMMENT 'å¹´å‘ç”µé‡(ä¸‡kWh)',
+    grid_connect_date DATE COMMENT 'å¹¶ç½‘æ—¥æœŸ',
+    area_id CHAR(6) NOT NULL COMMENT 'æ‰€åœ¨åœ°åŒºåˆ’ä»£ç ',
+    status ENUM('è¿è¡Œ','åœ¨å»º','åœæœº','é€€å½¹') DEFAULT 'è¿è¡Œ' COMMENT 'è¿è¡ŒçŠ¶æ€',
     FOREIGN KEY (company_id) REFERENCES energy_company(company_id),
     FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),
     FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),
     FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)
-) ENGINE=InnoDB COMMENT='ÄÜÔ´³¡Õ¾±í';
+) ENGINE=InnoDB COMMENT='èƒ½æºåœºç«™è¡¨';
 
--- ¹©µçÇøÓò±í
+-- ä¾›ç”µåŒºåŸŸè¡¨
 CREATE TABLE supply_area (
-    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '¼ÇÂ¼ID',
-    company_id VARCHAR(20) NOT NULL COMMENT '¹©µçÆóÒµ±àºÅ',
-    area_id CHAR(6) NOT NULL COMMENT '¹©µçÇøÓò´úÂë',
-    supply_level VARCHAR(10) COMMENT '¹©µçµÈ¼¶',
-    household_count INT COMMENT '¹©µç»§Êı',
-    annual_supply DECIMAL(12,2) COMMENT 'Äê¹©µçÁ¿(ÍòkWh)',
+    id INT AUTO_INCREMENT PRIMARY KEY COMMENT 'è®°å½•ID',
+    company_id VARCHAR(20) NOT NULL COMMENT 'ä¾›ç”µä¼ä¸šç¼–å·',
+    area_id CHAR(6) NOT NULL COMMENT 'ä¾›ç”µåŒºåŸŸä»£ç ',
+    supply_level VARCHAR(10) COMMENT 'ä¾›ç”µç­‰çº§',
+    household_count INT COMMENT 'ä¾›ç”µæˆ·æ•°',
+    annual_supply DECIMAL(12,2) COMMENT 'å¹´ä¾›ç”µé‡(ä¸‡kWh)',
     FOREIGN KEY (company_id) REFERENCES energy_company(company_id),
     FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),
     UNIQUE KEY uk_company_area (company_id, area_id)
-) ENGINE=InnoDB COMMENT='¹©µçÇøÓò±í';
+) ENGINE=InnoDB COMMENT='ä¾›ç”µåŒºåŸŸè¡¨';
 
--- Ô±¹¤±í
+-- å‘˜å·¥è¡¨
 CREATE TABLE employee (
-    employee_id VARCHAR(18) PRIMARY KEY COMMENT 'Éí·İÖ¤ºÅ',
-    name VARCHAR(50) NOT NULL COMMENT 'ĞÕÃû',
-    gender ENUM('ÄĞ','Å®') NOT NULL COMMENT 'ĞÔ±ğ',
-    birth_date DATE NOT NULL COMMENT '³öÉúÈÕÆÚ',
-    company_id VARCHAR(20) NOT NULL COMMENT 'ËùÊôÆóÒµ±àºÅ',
-    station_id VARCHAR(20) COMMENT 'ËùÊô³¡Õ¾±àºÅ',
-    position_code VARCHAR(20) NOT NULL COMMENT '¸ÚÎ»´úÂë',
-    hire_date DATE COMMENT 'ÈëÖ°ÈÕÆÚ',
-    phone VARCHAR(20) COMMENT 'ÁªÏµµç»°',
-    education VARCHAR(20) COMMENT 'Ñ§Àú',
-    status ENUM('ÔÚÖ°','ÀëÖ°','ÍËĞİ','ÍâÅÉ') DEFAULT 'ÔÚÖ°' COMMENT '×´Ì¬',
+    employee_id VARCHAR(18) PRIMARY KEY COMMENT 'èº«ä»½è¯å·',
+    name VARCHAR(50) NOT NULL COMMENT 'å§“å',
+    gender ENUM('ç”·','å¥³') NOT NULL COMMENT 'æ€§åˆ«',
+    birth_date DATE NOT NULL COMMENT 'å‡ºç”Ÿæ—¥æœŸ',
+    company_id VARCHAR(20) NOT NULL COMMENT 'æ‰€å±ä¼ä¸šç¼–å·',
+    station_id VARCHAR(20) COMMENT 'æ‰€å±åœºç«™ç¼–å·',
+    position_code VARCHAR(20) NOT NULL COMMENT 'å²—ä½ä»£ç ',
+    hire_date DATE COMMENT 'å…¥èŒæ—¥æœŸ',
+    phone VARCHAR(20) COMMENT 'è”ç³»ç”µè¯',
+    education VARCHAR(20) COMMENT 'å­¦å†',
+    status ENUM('åœ¨èŒ','ç¦»èŒ','é€€ä¼‘','å¤–æ´¾') DEFAULT 'åœ¨èŒ' COMMENT 'çŠ¶æ€',
     FOREIGN KEY (company_id) REFERENCES energy_company(company_id),
     FOREIGN KEY (station_id) REFERENCES energy_station(station_id),
     FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)
-) ENGINE=InnoDB COMMENT='ÄÜÔ´ÆóÒµÔ±¹¤±í';
+) ENGINE=InnoDB COMMENT='èƒ½æºä¼ä¸šå‘˜å·¥è¡¨';
 
 
 -- =====================================================
--- 2024½ÌÓı¿â
+-- 2024æ•™è‚²åº“
 CREATE DATABASE IF NOT EXISTS education_2024;
 USE education_2024;
--- Ñ§ÆÚ±í
+-- å­¦æœŸè¡¨
 CREATE TABLE semester (
     semester_id       INT AUTO_INCREMENT PRIMARY KEY,
     academic_year     INT NOT NULL,
@@ -295,14 +295,14 @@ CREATE TABLE semester (
     end_date_key      INT NOT NULL
 );
 
--- ÔºÏµ±í£¨ÕæÊµÔºÏµÃû³Æ£©
+-- é™¢ç³»è¡¨ï¼ˆçœŸå®é™¢ç³»åç§°ï¼‰
 CREATE TABLE department (
     department_id     INT AUTO_INCREMENT PRIMARY KEY,
     department_code   VARCHAR(20) NOT NULL,
     department_name   VARCHAR(100) NOT NULL
 );
 
--- ½ÌÊ¦±í
+-- æ•™å¸ˆè¡¨
 CREATE TABLE teacher (
     teacher_id        INT AUTO_INCREMENT PRIMARY KEY,
     teacher_no        VARCHAR(20) NOT NULL,
@@ -314,7 +314,7 @@ CREATE TABLE teacher (
     FOREIGN KEY (department_id) REFERENCES department(department_id)
 );
 
--- °à¼¶±í
+-- ç­çº§è¡¨
 CREATE TABLE class (
     class_id          INT AUTO_INCREMENT PRIMARY KEY,
     class_code        VARCHAR(20) NOT NULL,
@@ -324,7 +324,7 @@ CREATE TABLE class (
     FOREIGN KEY (department_id) REFERENCES department(department_id)
 );
 
--- Ñ§Éú±í
+-- å­¦ç”Ÿè¡¨
 CREATE TABLE student (
     student_id            INT AUTO_INCREMENT PRIMARY KEY,
     student_no            VARCHAR(20) NOT NULL,
@@ -340,7 +340,7 @@ CREATE TABLE student (
     FOREIGN KEY (class_id) REFERENCES class(class_id)
 );
 
--- ¿Î³Ì±í
+-- è¯¾ç¨‹è¡¨
 CREATE TABLE course (
     course_id         INT AUTO_INCREMENT PRIMARY KEY,
     course_code       VARCHAR(20) NOT NULL,
@@ -354,7 +354,7 @@ CREATE TABLE course (
     FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)
 );
 
--- Ñ¡¿Î±í
+-- é€‰è¯¾è¡¨
 CREATE TABLE enrollment (
     enrollment_id     INT AUTO_INCREMENT PRIMARY KEY,
     student_id        INT NOT NULL,
@@ -368,7 +368,7 @@ CREATE TABLE enrollment (
     FOREIGN KEY (semester_id) REFERENCES semester(semester_id)
 );
 
--- ³É¼¨±í
+-- æˆç»©è¡¨
 CREATE TABLE exam_score (
     exam_score_id     INT AUTO_INCREMENT PRIMARY KEY,
     enrollment_id     INT NOT NULL,
@@ -384,7 +384,7 @@ CREATE TABLE exam_score (
 
 
 -- =====================================================
--- 2025½ÌÓı¿â
+-- 2025æ•™è‚²åº“
 CREATE DATABASE IF NOT EXISTS education_2025;
 USE education_2025;
 CREATE TABLE semester (
@@ -473,7 +473,7 @@ CREATE TABLE exam_score (
 
 
 -- =====================================================
--- µçÉÌ¿â
+-- ç”µå•†åº“
 CREATE DATABASE IF NOT EXISTS ecommerce
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -481,76 +481,76 @@ CREATE DATABASE IF NOT EXISTS ecommerce
 USE ecommerce;
 
 CREATE TABLE customer (
-  customer_id BIGINT NOT NULL COMMENT 'ÓÃ»§ID',
-  customer_name VARCHAR(100) NOT NULL COMMENT 'ÓÃ»§ĞÕÃû',
-  gender ENUM('M', 'F', 'U') NOT NULL DEFAULT 'U' COMMENT 'ĞÔ±ğ£ºMÄĞ£¬FÅ®£¬UÎ´Öª',
-  phone VARCHAR(32) DEFAULT NULL COMMENT 'ÊÖ»úºÅ',
-  email VARCHAR(128) DEFAULT NULL COMMENT 'ÓÊÏä',
-  level_code VARCHAR(32) NOT NULL COMMENT 'ÓÃ»§µÈ¼¶±àÂë£¬¹ØÁªcommon.customer_level_dict.level_code',
-  status_code VARCHAR(32) NOT NULL COMMENT 'ÓÃ»§×´Ì¬±àÂë£¬¹ØÁªcommon.customer_status_dict.status_code',
-  province_code VARCHAR(12) NOT NULL COMMENT 'Ê¡¼¶ĞĞÕşÇø»®±àÂë£¬¹ØÁªcommon.administrative_division.division_code',
-  city_code VARCHAR(12) NOT NULL COMMENT '³ÇÊĞĞĞÕşÇø»®±àÂë£¬¹ØÁªcommon.administrative_division.division_code',
-  register_time DATETIME NOT NULL COMMENT '×¢²áÊ±¼ä',
-  last_login_time DATETIME DEFAULT NULL COMMENT '×î½üµÇÂ¼Ê±¼ä',
-  growth_value INT NOT NULL DEFAULT 0 COMMENT '³É³¤Öµ',
+  customer_id BIGINT NOT NULL COMMENT 'ç”¨æˆ·ID',
+  customer_name VARCHAR(100) NOT NULL COMMENT 'ç”¨æˆ·å§“å',
+  gender ENUM('M', 'F', 'U') NOT NULL DEFAULT 'U' COMMENT 'æ€§åˆ«ï¼šMç”·ï¼ŒFå¥³ï¼ŒUæœªçŸ¥',
+  phone VARCHAR(32) DEFAULT NULL COMMENT 'æ‰‹æœºå·',
+  email VARCHAR(128) DEFAULT NULL COMMENT 'é‚®ç®±',
+  level_code VARCHAR(32) NOT NULL COMMENT 'ç”¨æˆ·ç­‰çº§ç¼–ç ï¼Œå…³è”common.customer_level_dict.level_code',
+  status_code VARCHAR(32) NOT NULL COMMENT 'ç”¨æˆ·çŠ¶æ€ç¼–ç ï¼Œå…³è”common.customer_status_dict.status_code',
+  province_code VARCHAR(12) NOT NULL COMMENT 'çœçº§è¡Œæ”¿åŒºåˆ’ç¼–ç ï¼Œå…³è”common.administrative_division.division_code',
+  city_code VARCHAR(12) NOT NULL COMMENT 'åŸå¸‚è¡Œæ”¿åŒºåˆ’ç¼–ç ï¼Œå…³è”common.administrative_division.division_code',
+  register_time DATETIME NOT NULL COMMENT 'æ³¨å†Œæ—¶é—´',
+  last_login_time DATETIME DEFAULT NULL COMMENT 'æœ€è¿‘ç™»å½•æ—¶é—´',
+  growth_value INT NOT NULL DEFAULT 0 COMMENT 'æˆé•¿å€¼',
   PRIMARY KEY (customer_id),
   UNIQUE KEY uk_customer_phone (phone),
   KEY idx_customer_level (level_code),
   KEY idx_customer_status (status_code),
   KEY idx_customer_region (province_code, city_code),
   KEY idx_customer_register_time (register_time)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ÓÃ»§±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ç”¨æˆ·è¡¨';
 
 CREATE TABLE product (
-  product_id BIGINT NOT NULL COMMENT 'ÉÌÆ·ID',
-  product_name VARCHAR(200) NOT NULL COMMENT 'ÉÌÆ·Ãû³Æ',
-  category_id BIGINT NOT NULL COMMENT 'ÉÌÆ··ÖÀàID£¬¹ØÁªcommon.product_category.category_id',
-  brand_name VARCHAR(100) NOT NULL COMMENT 'Æ·ÅÆÃû³Æ',
-  status_code VARCHAR(32) NOT NULL COMMENT 'ÉÌÆ·×´Ì¬±àÂë£¬¹ØÁªcommon.product_status_dict.status_code',
-  sale_price DECIMAL(12,2) NOT NULL COMMENT 'ÏúÊÛµ¥¼Û',
-  cost_price DECIMAL(12,2) NOT NULL COMMENT '³É±¾µ¥¼Û',
-  listed_time DATETIME NOT NULL COMMENT 'ÉÏ¼ÜÊ±¼ä',
+  product_id BIGINT NOT NULL COMMENT 'å•†å“ID',
+  product_name VARCHAR(200) NOT NULL COMMENT 'å•†å“åç§°',
+  category_id BIGINT NOT NULL COMMENT 'å•†å“åˆ†ç±»IDï¼Œå…³è”common.product_category.category_id',
+  brand_name VARCHAR(100) NOT NULL COMMENT 'å“ç‰Œåç§°',
+  status_code VARCHAR(32) NOT NULL COMMENT 'å•†å“çŠ¶æ€ç¼–ç ï¼Œå…³è”common.product_status_dict.status_code',
+  sale_price DECIMAL(12,2) NOT NULL COMMENT 'é”€å”®å•ä»·',
+  cost_price DECIMAL(12,2) NOT NULL COMMENT 'æˆæœ¬å•ä»·',
+  listed_time DATETIME NOT NULL COMMENT 'ä¸Šæ¶æ—¶é—´',
   PRIMARY KEY (product_id),
   KEY idx_product_category (category_id),
   KEY idx_product_status (status_code),
   KEY idx_product_brand (brand_name),
   KEY idx_product_price (sale_price)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ÉÌÆ·±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='å•†å“è¡¨';
 
 CREATE TABLE inventory (
-  inventory_id BIGINT NOT NULL COMMENT '¿â´æID',
-  product_id BIGINT NOT NULL COMMENT 'ÉÌÆ·ID£¬¹ØÁªecommerce.product.product_id',
-  warehouse_code VARCHAR(32) NOT NULL COMMENT '²Ö¿â±àÂë',
-  warehouse_name VARCHAR(100) NOT NULL COMMENT '²Ö¿âÃû³Æ',
-  province_code VARCHAR(12) NOT NULL COMMENT '²Ö¿âËùÔÚÊ¡·İ±àÂë£¬¹ØÁªcommon.administrative_division.division_code',
-  city_code VARCHAR(12) NOT NULL COMMENT '²Ö¿âËùÔÚ³ÇÊĞ±àÂë£¬¹ØÁªcommon.administrative_division.division_code',
-  stock_quantity INT NOT NULL DEFAULT 0 COMMENT 'µ±Ç°¿â´æÊıÁ¿',
-  locked_quantity INT NOT NULL DEFAULT 0 COMMENT 'Ëø¶¨¿â´æÊıÁ¿',
-  safety_stock INT NOT NULL DEFAULT 0 COMMENT '°²È«¿â´æÊıÁ¿',
-  updated_time DATETIME NOT NULL COMMENT '¿â´æ¸üĞÂÊ±¼ä',
+  inventory_id BIGINT NOT NULL COMMENT 'åº“å­˜ID',
+  product_id BIGINT NOT NULL COMMENT 'å•†å“IDï¼Œå…³è”ecommerce.product.product_id',
+  warehouse_code VARCHAR(32) NOT NULL COMMENT 'ä»“åº“ç¼–ç ',
+  warehouse_name VARCHAR(100) NOT NULL COMMENT 'ä»“åº“åç§°',
+  province_code VARCHAR(12) NOT NULL COMMENT 'ä»“åº“æ‰€åœ¨çœä»½ç¼–ç ï¼Œå…³è”common.administrative_division.division_code',
+  city_code VARCHAR(12) NOT NULL COMMENT 'ä»“åº“æ‰€åœ¨åŸå¸‚ç¼–ç ï¼Œå…³è”common.administrative_division.division_code',
+  stock_quantity INT NOT NULL DEFAULT 0 COMMENT 'å½“å‰åº“å­˜æ•°é‡',
+  locked_quantity INT NOT NULL DEFAULT 0 COMMENT 'é”å®šåº“å­˜æ•°é‡',
+  safety_stock INT NOT NULL DEFAULT 0 COMMENT 'å®‰å…¨åº“å­˜æ•°é‡',
+  updated_time DATETIME NOT NULL COMMENT 'åº“å­˜æ›´æ–°æ—¶é—´',
   PRIMARY KEY (inventory_id),
   UNIQUE KEY uk_inventory_product_warehouse (product_id, warehouse_code),
   KEY idx_inventory_product (product_id),
   KEY idx_inventory_region (province_code, city_code),
   CONSTRAINT fk_inventory_product FOREIGN KEY (product_id) REFERENCES product(product_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='¿â´æ±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='åº“å­˜è¡¨';
 
 CREATE TABLE orders (
-  order_id BIGINT NOT NULL COMMENT '¶©µ¥ID',
-  order_no VARCHAR(64) NOT NULL COMMENT '¶©µ¥±àºÅ',
-  customer_id BIGINT NOT NULL COMMENT 'ÓÃ»§ID£¬¹ØÁªecommerce.customer.customer_id',
-  order_status_code VARCHAR(32) NOT NULL COMMENT '¶©µ¥×´Ì¬±àÂë£¬¹ØÁªcommon.order_status_dict.status_code',
-  order_channel_code VARCHAR(32) NOT NULL COMMENT 'ÏÂµ¥ÇşµÀ±àÂë£¬¹ØÁªcommon.order_channel_dict.channel_code',
-  platform_code VARCHAR(32) NOT NULL COMMENT 'ÏúÊÛÆ½Ì¨±àÂë£¬¹ØÁªcommon.platform_dict.platform_code',
-  order_time DATETIME NOT NULL COMMENT 'ÏÂµ¥Ê±¼ä',
-  pay_time DATETIME DEFAULT NULL COMMENT 'Ö§¸¶Ê±¼ä',
-  finish_time DATETIME DEFAULT NULL COMMENT 'Íê³ÉÊ±¼ä',
-  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '¶©µ¥ÉÌÆ·×Ü½ğ¶î',
-  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '¶©µ¥ÓÅ»İ½ğ¶î',
-  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'ÔË·Ñ½ğ¶î',
-  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '¶©µ¥Ó¦¸¶½ğ¶î',
-  receiver_province_code VARCHAR(12) NOT NULL COMMENT 'ÊÕ»õÊ¡·İ±àÂë£¬¹ØÁªcommon.administrative_division.division_code',
-  receiver_city_code VARCHAR(12) NOT NULL COMMENT 'ÊÕ»õ³ÇÊĞ±àÂë£¬¹ØÁªcommon.administrative_division.division_code',
+  order_id BIGINT NOT NULL COMMENT 'è®¢å•ID',
+  order_no VARCHAR(64) NOT NULL COMMENT 'è®¢å•ç¼–å·',
+  customer_id BIGINT NOT NULL COMMENT 'ç”¨æˆ·IDï¼Œå…³è”ecommerce.customer.customer_id',
+  order_status_code VARCHAR(32) NOT NULL COMMENT 'è®¢å•çŠ¶æ€ç¼–ç ï¼Œå…³è”common.order_status_dict.status_code',
+  order_channel_code VARCHAR(32) NOT NULL COMMENT 'ä¸‹å•æ¸ é“ç¼–ç ï¼Œå…³è”common.order_channel_dict.channel_code',
+  platform_code VARCHAR(32) NOT NULL COMMENT 'é”€å”®å¹³å°ç¼–ç ï¼Œå…³è”common.platform_dict.platform_code',
+  order_time DATETIME NOT NULL COMMENT 'ä¸‹å•æ—¶é—´',
+  pay_time DATETIME DEFAULT NULL COMMENT 'æ”¯ä»˜æ—¶é—´',
+  finish_time DATETIME DEFAULT NULL COMMENT 'å®Œæˆæ—¶é—´',
+  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'è®¢å•å•†å“æ€»é‡‘é¢',
+  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'è®¢å•ä¼˜æƒ é‡‘é¢',
+  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'è¿è´¹é‡‘é¢',
+  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'è®¢å•åº”ä»˜é‡‘é¢',
+  receiver_province_code VARCHAR(12) NOT NULL COMMENT 'æ”¶è´§çœä»½ç¼–ç ï¼Œå…³è”common.administrative_division.division_code',
+  receiver_city_code VARCHAR(12) NOT NULL COMMENT 'æ”¶è´§åŸå¸‚ç¼–ç ï¼Œå…³è”common.administrative_division.division_code',
   PRIMARY KEY (order_id),
   UNIQUE KEY uk_orders_order_no (order_no),
   KEY idx_orders_customer (customer_id),
@@ -559,38 +559,38 @@ CREATE TABLE orders (
   KEY idx_orders_channel_platform (order_channel_code, platform_code),
   KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),
   CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='¶©µ¥±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='è®¢å•è¡¨';
 
 CREATE TABLE order_item (
-  order_item_id BIGINT NOT NULL COMMENT '¶©µ¥Ã÷Ï¸ID',
-  order_id BIGINT NOT NULL COMMENT '¶©µ¥ID£¬¹ØÁªecommerce.orders.order_id',
-  product_id BIGINT NOT NULL COMMENT 'ÉÌÆ·ID£¬¹ØÁªecommerce.product.product_id',
-  quantity INT NOT NULL COMMENT '¹ºÂòÊıÁ¿',
-  unit_price DECIMAL(12,2) NOT NULL COMMENT '³É½»µ¥¼Û',
-  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT 'Ã÷Ï¸ÓÅ»İ½ğ¶î',
-  item_amount DECIMAL(14,2) NOT NULL COMMENT 'Ã÷Ï¸Ó¦¸¶½ğ¶î',
-  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT 'Ã÷Ï¸³É±¾½ğ¶î',
-  refund_quantity INT NOT NULL DEFAULT 0 COMMENT 'ÍË¿îÊıÁ¿',
-  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'ÍË¿î½ğ¶î',
-  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT 'ÍË¿îÔ­Òò±àÂë£¬¹ØÁªcommon.refund_reason_dict.reason_code',
+  order_item_id BIGINT NOT NULL COMMENT 'è®¢å•æ˜ç»†ID',
+  order_id BIGINT NOT NULL COMMENT 'è®¢å•IDï¼Œå…³è”ecommerce.orders.order_id',
+  product_id BIGINT NOT NULL COMMENT 'å•†å“IDï¼Œå…³è”ecommerce.product.product_id',
+  quantity INT NOT NULL COMMENT 'è´­ä¹°æ•°é‡',
+  unit_price DECIMAL(12,2) NOT NULL COMMENT 'æˆäº¤å•ä»·',
+  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT 'æ˜ç»†ä¼˜æƒ é‡‘é¢',
+  item_amount DECIMAL(14,2) NOT NULL COMMENT 'æ˜ç»†åº”ä»˜é‡‘é¢',
+  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT 'æ˜ç»†æˆæœ¬é‡‘é¢',
+  refund_quantity INT NOT NULL DEFAULT 0 COMMENT 'é€€æ¬¾æ•°é‡',
+  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'é€€æ¬¾é‡‘é¢',
+  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT 'é€€æ¬¾åŸå› ç¼–ç ï¼Œå…³è”common.refund_reason_dict.reason_code',
   PRIMARY KEY (order_item_id),
   KEY idx_order_item_order (order_id),
   KEY idx_order_item_product (product_id),
   KEY idx_order_item_refund_reason (refund_reason_code),
   CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),
   CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='¶©µ¥Ã÷Ï¸±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='è®¢å•æ˜ç»†è¡¨';
 
 CREATE TABLE payment (
-  payment_id BIGINT NOT NULL COMMENT 'Ö§¸¶ID',
-  payment_no VARCHAR(64) NOT NULL COMMENT 'Ö§¸¶Á÷Ë®ºÅ',
-  order_id BIGINT NOT NULL COMMENT '¶©µ¥ID£¬¹ØÁªecommerce.orders.order_id',
-  payment_method_code VARCHAR(32) NOT NULL COMMENT 'Ö§¸¶·½Ê½±àÂë£¬¹ØÁªcommon.payment_method_dict.method_code',
-  payment_status_code VARCHAR(32) NOT NULL COMMENT 'Ö§¸¶×´Ì¬±àÂë£¬¹ØÁªcommon.payment_status_dict.status_code',
-  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'Ö§¸¶½ğ¶î',
-  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'ÍË¿î½ğ¶î',
-  paid_time DATETIME DEFAULT NULL COMMENT 'Ö§¸¶³É¹¦Ê±¼ä',
-  created_time DATETIME NOT NULL COMMENT 'Ö§¸¶¼ÇÂ¼´´½¨Ê±¼ä',
+  payment_id BIGINT NOT NULL COMMENT 'æ”¯ä»˜ID',
+  payment_no VARCHAR(64) NOT NULL COMMENT 'æ”¯ä»˜æµæ°´å·',
+  order_id BIGINT NOT NULL COMMENT 'è®¢å•IDï¼Œå…³è”ecommerce.orders.order_id',
+  payment_method_code VARCHAR(32) NOT NULL COMMENT 'æ”¯ä»˜æ–¹å¼ç¼–ç ï¼Œå…³è”common.payment_method_dict.method_code',
+  payment_status_code VARCHAR(32) NOT NULL COMMENT 'æ”¯ä»˜çŠ¶æ€ç¼–ç ï¼Œå…³è”common.payment_status_dict.status_code',
+  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'æ”¯ä»˜é‡‘é¢',
+  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT 'é€€æ¬¾é‡‘é¢',
+  paid_time DATETIME DEFAULT NULL COMMENT 'æ”¯ä»˜æˆåŠŸæ—¶é—´',
+  created_time DATETIME NOT NULL COMMENT 'æ”¯ä»˜è®°å½•åˆ›å»ºæ—¶é—´',
   PRIMARY KEY (payment_id),
   UNIQUE KEY uk_payment_no (payment_no),
   UNIQUE KEY uk_payment_order (order_id),
@@ -598,11 +598,11 @@ CREATE TABLE payment (
   KEY idx_payment_status (payment_status_code),
   KEY idx_payment_paid_time (paid_time),
   CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Ö§¸¶±í';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='æ”¯ä»˜è¡¨';
 
 
 -- =====================================================
--- Ò½Ôº¿â£¨ES£©
+-- åŒ»é™¢åº“ï¼ˆESï¼‰
 PUT /medical_institutions
 {
   "mappings": {
@@ -612,24 +612,24 @@ PUT /medical_institutions
       "district": { "type": "keyword" },
       "address": { "type": "text" },
       "location": { "type": "geo_point" },
-      "level": { "type": "keyword" },            // Èı¼×¡¢ÈıÒÒ¡¢¶ş¼×¡¢¶şÒÒ¡¢Ò»¼×µÈ
+      "level": { "type": "keyword" },            // ä¸‰ç”²ã€ä¸‰ä¹™ã€äºŒç”²ã€äºŒä¹™ã€ä¸€ç”²ç­‰
       "bed_count": { "type": "integer" },
       "doctor_count": { "type": "integer" },
       "nurse_count": { "type": "integer" },
-      "ambulance_count": { "type": "integer" },   // ¾È»¤³µÊıÁ¿
-      "department_count": { "type": "integer" },  // ¿ÆÊÒÊıÁ¿
-      "annual_outpatient": { "type": "long" },    // ÄêÃÅÕïÁ¿£¨ÈË´Î£©
-      "has_icu": { "type": "boolean" },           // ÊÇ·ñÓĞICU
-      "is_teaching_hospital": { "type": "boolean" }, // ÊÇ·ñ½ÌÑ§Ò½Ôº
+      "ambulance_count": { "type": "integer" },   // æ•‘æŠ¤è½¦æ•°é‡
+      "department_count": { "type": "integer" },  // ç§‘å®¤æ•°é‡
+      "annual_outpatient": { "type": "long" },    // å¹´é—¨è¯Šé‡ï¼ˆäººæ¬¡ï¼‰
+      "has_icu": { "type": "boolean" },           // æ˜¯å¦æœ‰ICU
+      "is_teaching_hospital": { "type": "boolean" }, // æ˜¯å¦æ•™å­¦åŒ»é™¢
       "emergency_24h": { "type": "boolean" },
       "rating": { "type": "float" },
-      "founded_year": { "type": "integer" }       // ³ÉÁ¢Äê·İ
+      "founded_year": { "type": "integer" }       // æˆç«‹å¹´ä»½
     }
   }
 }
 
 -- =====================================================
--- ´¬²°ÊµÊ±¿â£¨PG£©
+-- èˆ¹èˆ¶å®æ—¶åº“ï¼ˆPGï¼‰
 CREATE TABLE public.vessel_ais_data (
     id bigint NOT NULL,
     mmsi integer NOT NULL,
@@ -655,14 +655,14 @@ CREATE TABLE public.vessel_ais_data (
 );
 ALTER TABLE public.vessel_ais_data OWNER TO postgres;
 
-COMMENT ON TABLE public.vessel_ais_data IS '´¬²°AISÊı¾İ´æ´¢±í';
-COMMENT ON COLUMN public.vessel_ais_data.id IS 'Ö÷¼üID';
-COMMENT ON COLUMN public.vessel_ais_data.mmsi IS '´¬²°MMSIÂë';
-COMMENT ON COLUMN public.vessel_ais_data."timestamp" IS 'Êı¾İÊ±¼ä';
-COMMENT ON COLUMN public.vessel_ais_data.longitude IS '¾­¶È';
-COMMENT ON COLUMN public.vessel_ais_data.latitude IS 'Î³¶È';
-COMMENT ON COLUMN public.vessel_ais_data.sog IS 'º½ËÙ';
-COMMENT ON COLUMN public.vessel_ais_data.cog IS 'º½Ïò';
-COMMENT ON COLUMN public.vessel_ais_data.heading IS '´¬Ê×Ïò';
-COMMENT ON COLUMN public.vessel_ais_data.nav_status IS 'º½ĞĞ×´Ì¬';
-COMMENT ON COLUMN public.vessel_ais_data.geom IS '¿Õ¼äÎ»ÖÃ';
+COMMENT ON TABLE public.vessel_ais_data IS 'èˆ¹èˆ¶AISæ•°æ®å­˜å‚¨è¡¨';
+COMMENT ON COLUMN public.vessel_ais_data.id IS 'ä¸»é”®ID';
+COMMENT ON COLUMN public.vessel_ais_data.mmsi IS 'èˆ¹èˆ¶MMSIç ';
+COMMENT ON COLUMN public.vessel_ais_data."timestamp" IS 'æ•°æ®æ—¶é—´';
+COMMENT ON COLUMN public.vessel_ais_data.longitude IS 'ç»åº¦';
+COMMENT ON COLUMN public.vessel_ais_data.latitude IS 'çº¬åº¦';
+COMMENT ON COLUMN public.vessel_ais_data.sog IS 'èˆªé€Ÿ';
+COMMENT ON COLUMN public.vessel_ais_data.cog IS 'èˆªå‘';
+COMMENT ON COLUMN public.vessel_ais_data.heading IS 'èˆ¹é¦–å‘';
+COMMENT ON COLUMN public.vessel_ais_data.nav_status IS 'èˆªè¡ŒçŠ¶æ€';
+COMMENT ON COLUMN public.vessel_ais_data.geom IS 'ç©ºé—´ä½ç½®';

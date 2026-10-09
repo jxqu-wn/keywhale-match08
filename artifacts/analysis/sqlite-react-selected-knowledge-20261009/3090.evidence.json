@@ -1,0 +1,421 @@
+{
+  "question_id": 3090,
+  "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+  "initial_user_prompt": {
+    "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "book_publishing_company"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "weak",
+      "reason": "首条训练示例，仅为候选",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema_adjudications": [],
+    "schema_candidates": [
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.authors"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.jobs"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.publishers"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.employee"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.pub_info"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.stores"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.discounts"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.titles"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.roysched"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.sales"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.titleauthor"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.dict_grade_level"
+      },
+      {
+        "source": "MYSQL",
+        "table": "energy.energy_company"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.administrative_division"
+      },
+      {
+        "source": "MYSQL",
+        "table": "finance_tax.stock_daily_trades"
+      }
+    ],
+    "tools": {
+      "get_schema": {
+        "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+        "args": {
+          "tables": [
+            "可选，完整库名.表名或PG裸表名"
+          ],
+          "query": "可选关键词",
+          "source": "可选数据源",
+          "database": "可选数据库",
+          "limit": "可选1到12，默认8"
+        }
+      },
+      "search_knowledge": {
+        "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到12，默认10"
+        }
+      },
+      "search_examples": {
+        "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到5，默认3"
+        }
+      },
+      "check_query": {
+        "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+        "args": {
+          "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+        }
+      },
+      "finish": {
+        "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+        "args": {
+          "prediction": "完整查询对象"
+        }
+      }
+    },
+    "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+  },
+  "observations": [
+    {
+      "step": 0,
+      "action": "get_schema",
+      "args": {
+        "tables": [
+          "book_publishing_company.employee",
+          "book_publishing_company.jobs",
+          "book_publishing_company.publishers"
+        ]
+      },
+      "observation": {
+        "ok": true,
+        "tables": [
+          {
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "jobs",
+            "columns": [
+              {
+                "name": "job_id",
+                "type": "INTEGER",
+                "definition": "job_id   INTEGER\r\n        primary key"
+              },
+              {
+                "name": "job_desc",
+                "type": "TEXT",
+                "definition": "job_desc TEXT not null"
+              },
+              {
+                "name": "min_lvl",
+                "type": "INTEGER",
+                "definition": "min_lvl  INTEGER     not null"
+              },
+              {
+                "name": "max_lvl",
+                "type": "INTEGER",
+                "definition": "max_lvl  INTEGER     not null"
+              }
+            ],
+            "ddl": "CREATE TABLE jobs\r\n(\r\n    job_id   INTEGER\r\n        primary key,\r\n    job_desc TEXT not null,\r\n    min_lvl  INTEGER     not null,\r\n    max_lvl  INTEGER     not null\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": []
+          },
+          {
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "publishers",
+            "columns": [
+              {
+                "name": "pub_id",
+                "type": "TEXT",
+                "definition": "pub_id   TEXT\r\n        primary key"
+              },
+              {
+                "name": "pub_name",
+                "type": "TEXT",
+                "definition": "pub_name TEXT"
+              },
+              {
+                "name": "city",
+                "type": "TEXT",
+                "definition": "city     TEXT"
+              },
+              {
+                "name": "state",
+                "type": "TEXT",
+                "definition": "state    TEXT"
+              },
+              {
+                "name": "country",
+                "type": "TEXT",
+                "definition": "country  TEXT"
+              }
+            ],
+            "ddl": "CREATE TABLE publishers\r\n(\r\n    pub_id   TEXT\r\n        primary key,\r\n    pub_name TEXT,\r\n    city     TEXT,\r\n    state    TEXT,\r\n    country  TEXT\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": []
+          },
+          {
+            "source": "SQLite",
+            "database": "book_publishing_company",
+            "table": "employee",
+            "columns": [
+              {
+                "name": "emp_id",
+                "type": "TEXT",
+                "definition": "emp_id    TEXT\r\n        primary key"
+              },
+              {
+                "name": "fname",
+                "type": "TEXT",
+                "definition": "fname     TEXT not null"
+              },
+              {
+                "name": "minit",
+                "type": "TEXT",
+                "definition": "minit     TEXT"
+              },
+              {
+                "name": "lname",
+                "type": "TEXT",
+                "definition": "lname     TEXT not null"
+              },
+              {
+                "name": "job_id",
+                "type": "INTEGER",
+                "definition": "job_id    INTEGER     not null"
+              },
+              {
+                "name": "job_lvl",
+                "type": "INTEGER",
+                "definition": "job_lvl   INTEGER"
+              },
+              {
+                "name": "pub_id",
+                "type": "TEXT",
+                "definition": "pub_id    TEXT     not null"
+              },
+              {
+                "name": "hire_date",
+                "type": "DATETIME",
+                "definition": "hire_date DATETIME    not null"
+              }
+            ],
+            "ddl": "CREATE TABLE employee\r\n(\r\n    emp_id    TEXT\r\n        primary key,\r\n    fname     TEXT not null,\r\n    minit     TEXT,\r\n    lname     TEXT not null,\r\n    job_id    INTEGER     not null,\r\n    job_lvl   INTEGER,\r\n    pub_id    TEXT     not null,\r\n    hire_date DATETIME    not null,\r\n    foreign key (job_id) references jobs(job_id)\r\n            on update cascade on delete cascade,\r\n    foreign key (pub_id) references publishers(pub_id)\r\n            on update cascade on delete cascade\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": [
+              "foreign key (job_id) references jobs(job_id)\r",
+              "foreign key (pub_id) references publishers(pub_id)\r"
+            ]
+          }
+        ],
+        "missing_tables": [],
+        "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+      }
+    },
+    {
+      "step": 1,
+      "action": "search_knowledge",
+      "args": {
+        "query": "出版社 员工 职位级别 job_lvl 最高 全名"
+      },
+      "observation": {
+        "ok": true,
+        "knowledge": [
+          {
+            "knowledge_id": 6,
+            "knowledge_text": "在数据库book_publishing_company的表employee中，fname表示员工的名，lname表示员工的姓，minit表示中间名（minit=''表示没有中间名），emp_id表示员工ID，hire_date表示入职日期，job_lvl表示职位级别，job_id和pub_id分别表示关联的职位ID和出版社ID。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 540,
+            "knowledge_text": "在数据库book_publishing_company的表jobs中，字段max_lvl，数据类型为整数（integer），表示最高职位级别，取值为常识证据：职位描述中提及的职位级别范围是（最低级别，最高级别）。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 534,
+            "knowledge_text": "在数据库book_publishing_company的表employee中，字段job_lvl，数据类型为整数（integer），表示职位级别，取值为常识证据：数值越高表示职位级别越高。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 539,
+            "knowledge_text": "在数据库book_publishing_company的表jobs中，字段min_lvl，数据类型为整数（integer），表示最低职位级别。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 7,
+            "knowledge_text": "在数据库book_publishing_company的表jobs中，job_desc表示职位描述（如'Chief Financial Officier'表示首席财务官，'Managing Editor'表示总编辑），max_lvl表示该职位的最高级别，job_id是主键。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 4,
+            "knowledge_text": "在数据库book_publishing_company的表publishers中，pub_name表示出版社名称，country表示国家（如'USA'表示美国，'France'表示法国），pub_id是主键。country!='USA'表示非美国出版社。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 570,
+            "knowledge_text": "在数据库book_publishing_company的表titles中，字段pub_id，数据类型为文本（text），表示出版社ID。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 530,
+            "knowledge_text": "在数据库book_publishing_company的表employee中，字段fname，数据类型为文本（text），表示员工的名。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 9,
+            "knowledge_text": "在数据库book_publishing_company的表pub_info中，pr_info表示出版社的详细信息，pub_id与publishers表关联。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 542,
+            "knowledge_text": "在数据库book_publishing_company的表publishers中，字段pub_name，数据类型为文本（text），表示出版社名称。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          }
+        ],
+        "dictionary": [],
+        "schema_adjudications": [],
+        "query_helpers": []
+      }
+    }
+  ],
+  "prediction": {
+    "db": "SQLite",
+    "query": "SELECT e.fname || ' ' || e.lname AS full_name FROM book_publishing_company.employee e ORDER BY e.job_lvl DESC LIMIT 1"
+  },
+  "original_training_annotation": {
+    "question_id": 3090,
+    "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+    "db": "SQLite",
+    "query": "SELECT T1.fname, T1.minit, T1.lname FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.job_lvl DESC LIMIT 1"
+  },
+  "assessment": "知识基本足够，最终输出未完整利用",
+  "analysis": "知识ID6给出fname、lname、minit（中间名）和job_lvl；534明确数值越高职位级别越高。employee Schema包含这四个字段，足以支持按员工job_lvl取最高者。\n\njobs.max_lvl相关知识540/7和min_lvl知识539属于职位等级范围，可能干扰“员工实际级别”判断；出版社国家与名称、pub_info、titles.pub_id等信息没有必要。\n\n最终只拼接fname与lname，遗漏已有知识明确说明的minit；原始标注返回fname/minit/lname。因此主要问题是“全名”返回列检查未发挥作用，而不是缺少中间名知识。可明确全名包含非空minit，并处理空值。"
+}

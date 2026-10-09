@@ -21,7 +21,9 @@ class ReactTests(unittest.TestCase):
         cls.rows = {r['question_id']: r for r in load(RAW / 'QA_test.json')}
 
     def tools(self, qid):
-        return QueryTools(self.context, self.context.build(self.rows[qid]['question']))
+        tools = QueryTools(self.context, self.context.build(self.rows[qid]['question']))
+        tools.dispatch('search_examples', {})
+        return tools
 
     def test_normalization_preserves_conditions_and_rejects_conflicts(self):
         raw = {'db': 'Elasticsearch', 'query': {'query': {'bool': {'filter': [{'range': {'rating': {'gte': 4.6}}}]},
@@ -72,6 +74,7 @@ class ReactTests(unittest.TestCase):
 
     def test_mandatory_knowledge_survives_short_search(self):
         tools = self.tools(4123)
+        tools.dispatch('get_schema', {'tables':['public_review_platform.Business', 'public_review_platform.Business_Hours']})
         result = tools.dispatch('search_knowledge', {'query': '营业时间', 'limit': 1})
         self.assertIn(149, {x['knowledge_id'] for x in result['knowledge']})
         self.assertTrue(any('Automotive' in x['knowledge_text'] for x in result['knowledge']))
@@ -100,6 +103,7 @@ class ReactTests(unittest.TestCase):
         good = {'db': 'POSTGRESQL', 'query': 'SELECT * FROM vessel_ais_data WHERE vessel_type=70'}
         bad = {'db': 'POSTGRESQL', 'query': 'SELECT * FROM vessel_info WHERE vessel_type=70'}
         actions = [
+            {'action': 'search_examples', 'args': {}},
             {'action': 'get_schema', 'args': {'tables': ['public.vessel_ais_data']}},
             {'action': 'search_knowledge', 'args': {}},
             {'action': 'check_query', 'args': {'prediction': bad}},
@@ -119,20 +123,34 @@ class ReactTests(unittest.TestCase):
             finished = run_question(row, self.context, directory, 'mock', 'local', max_steps=6, call=fake)
             self.assertEqual(finished['prediction'], good)
             self.assertEqual(summarize([finished])['check_failures'], 1)
-            self.assertIn('vessel_info', calls[3]['messages'][-1]['content'])
+            self.assertIn('vessel_info', calls[4]['messages'][-1]['content'])
             (directory / '999.json').unlink()
             resumed = run_question(row, self.context, directory, 'mock', 'local', max_steps=6, offline=True)
             self.assertEqual(resumed['prediction'], good)
             self.assertEqual(resumed['trace'], finished['trace'])
-            self.assertEqual(len(calls), 5)
+            self.assertEqual(len(calls), 6)
 
     def test_step_budget_does_not_export_unfinished_candidate(self):
+        calls = []
         def fake(base, endpoint, payload):
-            return {'choices': [{'message': {'content': '{"action":"search_knowledge","args":{}}'}, 'finish_reason': 'stop'}]}
+            calls.append(payload)
+            return {'choices': [{'message': {'content': json.dumps({'action':'get_schema', 'args':{'tables':[str(len(calls))]}})}, 'finish_reason': 'stop'}]}
         with tempfile.TemporaryDirectory() as temp:
             result = run_question(self.rows[2990], self.context, Path(temp), 'mock', 'local', max_steps=4, call=fake)
             self.assertIsNone(result['prediction'])
             self.assertEqual(result['errors'], ['step_budget_exhausted'])
+
+    def test_same_failure_stops_without_consuming_all_steps(self):
+        calls = []
+        def fake(base, endpoint, payload):
+            calls.append(payload)
+            return {'choices': [{'message': {'content': '{"action":"search_knowledge","args":{}}'}, 'finish_reason': 'stop'}]}
+        with tempfile.TemporaryDirectory() as temp:
+            result = run_question(self.rows[2990], self.context, Path(temp), 'mock', 'local', max_steps=16, call=fake)
+            self.assertIsNone(result['prediction'])
+            self.assertEqual(result['errors'], ['repeated_error_without_progress'])
+            self.assertEqual(len(calls), 2)
+            self.assertEqual(len(result['trace']), 2)
 
 
 if __name__ == '__main__':

@@ -56,7 +56,16 @@ PYTHONPATH=src python3 -B -m unittest discover -s tests -p 'test_react.py' -v
 | `--output` | 运行父目录；入口在其中创建指纹子目录 |
 | `--offline` | 写入请求并消费已保存的响应，不直接访问接口 |
 
-`api()` 从环境变量 `MODEL_API_KEY` 读取可选认证信息；凭据文件及本地环境配置由Git忽略。普通模式通过 `completion_payload()` 构造供应方参数，ReAct当前单独构造请求，没有 `--provider` 参数。
+`api()` 从环境变量 `MODEL_API_KEY` 读取可选认证信息；凭据文件及本地环境配置由Git忽略。普通模式与ReAct均通过 `completion_payload()` 构造供应方参数，也都支持 `--provider vllm|deepseek`。
+
+完整原始训练集的SQLite问题可使用DeepSeek Flash ReAct批处理：
+
+```sh
+# 预先设置 MODEL_API_KEY；凭据不要写入代码或结果文件。
+python scripts/run_sqlite_train_react.py --workers 24 --max-steps 16
+```
+
+范围为 `QA_train.json` 中 `db/db1/db2` 包含SQLite的全部原始记录，保留原始问题ID。检索上下文使用 `Context(False, raw_evidence=True)`，包含原始训练示例及附加修订，因此该运行不是独立验证集评测。当前默认结果目录为 `artifacts/runs/sqlite-train-react-v4-deepseek-flash/`，其中 `answers.json` 保存题目及生成结果，`predictions.json` 保存成功提交的查询，`failures.json` 保存未完成的问题，`metrics.json` 保存覆盖率和检查统计，`questions/` 保存逐题请求、响应及工具轨迹。每25题更新汇总；已有失败记录保持原样，不自动重试，网络失败也不自动重试。使用 `--sample-file` 可运行指定问题集合。成功指流程检查通过，不代表真实数据库执行结果。
 
 离线调用普通RAG时，先使用已保存的服务模型列表生成请求，再通过curl传输：
 
@@ -70,7 +79,21 @@ python3 scripts/run.py model predict --offline --ids 442
 
 `RUN_DIR` 是需要替换的目录占位符。非默认服务应在模型入口和 `curl-batch --base-url` 中使用一致的URL；离线模型列表应包含实际选用的模型ID。curl认证可通过 `curl-batch --auth-header-file` 引用私有请求头文件，该配置只保存文件路径。普通流程若生成新的修复请求，需要再次生成批量配置、传输并执行同一模型命令。
 
-ReAct也支持离线生成。每轮传输后重复相同的 `react` 命令消费响应，直到 `pending_count=0`，再检查 `unresolved_count`。ReAct默认最多10个动作，可通过 `--max-steps` 调整，当前上限24。
+ReAct v2固定依赖顺序为 `search_examples → get_schema → search_knowledge → check_query → finish`。首轮 `exact_examples` 通过归一化题目索引提供全部同题记录，精确匹配优先于模糊排序、不受Top-K限制；无同题时由示例工具检索相关题目。重复、冲突和被人工排除的原始标注仍保留，附带状态和来源；不能把原始标注当作已审定答案。任何证据检索都会使成功检查失效；新增物理表或重新查示例后须重新查知识。知识适用库由已核对Schema决定，跨源查询保留所有相关源。
+
+ReAct直接读取 `QA_train.json`、`knowledge.json` 和原始Schema/字典文件。已有人工修订作为附加证据，保留 `raw_annotation`、来源文件、行号或记录ID及校验和。`get_schema` 的 `raw_schema` 保留中文表注释、表前说明、表选项、列注释及后续SQL；用于召回，也直接返回给模型。`include_source_documents=true` 可查看完整Schema文件和参考说明，`search_knowledge` 的 `include_dictionary_text=true` 可查看匹配字典完整INSERT。验证模式仍按既有dev划分排除对应参数模板，避免把验证答案重新加入检索。
+
+离线审计与覆盖率检查：
+
+```sh
+python scripts/audit_react_evidence.py
+```
+
+默认写入 `artifacts/analysis/react-evidence-v2/`，含原始/处理后抽样与全量字段比较、中文表注释召回排名、训练及测试问题的实际首轮案例注入覆盖率。覆盖率分开报告“同题案例是否存在”和“有案例时是否完整注入”，不把相似问题计为同题。当前训练5830题全部注入；测试400题中只有10题有归一化同题案例，这10题全部注入。
+
+ReAct也支持离线生成。每轮传输后重复相同的 `react` 命令消费响应，直到 `pending_count=0`，再检查 `unresolved_count`。ReAct默认最多10个动作，可通过 `--max-steps` 调整，当前上限24、下限5。
+
+当前ReAct v4按同题案例的实际库表引用确定候选领域，有同题时默认不混入其他问题，可用 `include_related=true` 请求相关案例；知识检索过滤明确属于未查询表的内容。ReAct不再继承普通RAG的全部领域先验。`check_query` 在本地检查后调用独立LLM，按题意、Schema、知识及字典复核语义，不以原始案例为正确性标准，记录 `accept/revise/uncertain` 和完整请求响应。这会增加API调用；v4尚未完成真实API验证。相同动作和错误连续出现两次、没有进展时，保存 `repeated_error_without_progress` 并结束该题。诊断证据见[44题逐项报告](../../artifacts/analysis/react-v2-deviations-44/README.md)。
 
 运行目录由问题集合、模型、数据和实现等配置的指纹确定。使用入口打印的路径；缓存响应与原请求不一致时会归档为过期响应，不能将历史目录名称直接当作新运行路径。
 

@@ -1,0 +1,659 @@
+{
+  "question_id": 6204,
+  "question": "列出菲律宾国家的至少3个城市。",
+  "initial_user_prompt": {
+    "question": "列出菲律宾国家的至少3个城市。",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "movie_3"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "weak",
+      "reason": "首条训练示例，仅为候选",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema_adjudications": [
+      {
+        "rule_id": "administrative_division_actual_key",
+        "status": "implemented",
+        "source": "以common.administrative_division实际CREATE TABLE定义为准，电商字段注释存在过时引用；用户授权自主处理",
+        "tables": [
+          "common.administrative_division"
+        ],
+        "trigger_pattern": "行政|区划|省份|城市|收货|家庭地区",
+        "instruction": "common.administrative_division的行政区划代码字段是id CHAR(6)，没有division_code。电商Schema注释中common.administrative_division.division_code是过时引用，关联省、市或收货区划代码时使用common.administrative_division.id，保留业务表自身province_code/city_code/receiver_province_code等真实列名。区划代码按字符串比较，保留前导零；不臆造division_code。"
+      }
+    ],
+    "schema_candidates": [
+      {
+        "source": "SQLite",
+        "table": "books.address_status"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.author"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.book_language"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.country"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.address"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.customer"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.customer_address"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.order_status"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.publisher"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.book"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.book_author"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.shipping_method"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.cust_order"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.order_history"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.order_line"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.film_text"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.actor"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.address"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.category"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.city"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.country"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.customer"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.film"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.film_actor"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.film_category"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.inventory"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.language"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.payment"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.rental"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.staff"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.store"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.city"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.games"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.games_city"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.medal"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.noc_region"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.person"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.games_competitor"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.person_region"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.sport"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.event"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.competitor_event"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Attributes"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Categories"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Compliments"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Days"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Years"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Business_Attributes"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Business_Categories"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Business_Hours"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Checkins"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Elite"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Reviews"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Tips"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Users_Compliments"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Business"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Users"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Batting_Style"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Bowling_Style"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.City"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Country"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Extra_Type"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Extra_Runs"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Out_Type"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Outcome"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Player"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Rolee"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Season"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Team"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Toss_Decision"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Umpire"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Venue"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Win_By"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Match"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Ball_by_Ball"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Batsman_Scored"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Player_Match"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.Wicket_Taken"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.dict_grade_level"
+      },
+      {
+        "source": "SQLite",
+        "table": "disney.revenue"
+      },
+      {
+        "source": "MYSQL",
+        "table": "education_2024.course"
+      },
+      {
+        "source": "MYSQL",
+        "table": "education_2025.course"
+      },
+      {
+        "source": "MYSQL",
+        "table": "finance_tax.corporate_income_tax_returns"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.inventory"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.administrative_division"
+      }
+    ],
+    "tools": {
+      "get_schema": {
+        "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+        "args": {
+          "tables": [
+            "可选，完整库名.表名或PG裸表名"
+          ],
+          "query": "可选关键词",
+          "source": "可选数据源",
+          "database": "可选数据库",
+          "limit": "可选1到12，默认8"
+        }
+      },
+      "search_knowledge": {
+        "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到12，默认10"
+        }
+      },
+      "search_examples": {
+        "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到5，默认3"
+        }
+      },
+      "check_query": {
+        "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+        "args": {
+          "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+        }
+      },
+      "finish": {
+        "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+        "args": {
+          "prediction": "完整查询对象"
+        }
+      }
+    },
+    "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+  },
+  "observations": [
+    {
+      "step": 0,
+      "action": "get_schema",
+      "args": {
+        "tables": [
+          "movie_3.city",
+          "movie_3.country"
+        ]
+      },
+      "observation": {
+        "ok": true,
+        "tables": [
+          {
+            "source": "SQLite",
+            "database": "movie_3",
+            "table": "city",
+            "columns": [
+              {
+                "name": "city_id",
+                "type": "INTEGER",
+                "definition": "city_id     INTEGER\r\n        primary key autoincrement"
+              },
+              {
+                "name": "city",
+                "type": "TEXT",
+                "definition": "city        TEXT                               not null"
+              },
+              {
+                "name": "country_id",
+                "type": "INTEGER",
+                "definition": "country_id  INTEGER                            not null\r\n        references country\r\n            on update cascade"
+              },
+              {
+                "name": "last_update",
+                "type": "DATETIME",
+                "definition": "last_update DATETIME default CURRENT_TIMESTAMP not null"
+              }
+            ],
+            "ddl": "CREATE TABLE \"city\"\r\n(\r\n    city_id     INTEGER\r\n        primary key autoincrement,\r\n    city        TEXT                               not null,\r\n    country_id  INTEGER                            not null\r\n        references country\r\n            on update cascade,\r\n    last_update DATETIME default CURRENT_TIMESTAMP not null\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": []
+          },
+          {
+            "source": "SQLite",
+            "database": "movie_3",
+            "table": "country",
+            "columns": [
+              {
+                "name": "country_id",
+                "type": "INTEGER",
+                "definition": "country_id  INTEGER\r\n        primary key autoincrement"
+              },
+              {
+                "name": "country",
+                "type": "TEXT",
+                "definition": "country     TEXT                               not null"
+              },
+              {
+                "name": "last_update",
+                "type": "DATETIME",
+                "definition": "last_update DATETIME default CURRENT_TIMESTAMP not null"
+              }
+            ],
+            "ddl": "CREATE TABLE \"country\"\r\n(\r\n    country_id  INTEGER\r\n        primary key autoincrement,\r\n    country     TEXT                               not null,\r\n    last_update DATETIME default CURRENT_TIMESTAMP not null\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": []
+          }
+        ],
+        "missing_tables": [],
+        "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+      }
+    },
+    {
+      "step": 2,
+      "action": "search_knowledge",
+      "args": {
+        "query": "movie_3 country Philippines city 国家 城市"
+      },
+      "observation": {
+        "ok": true,
+        "knowledge": [
+          {
+            "knowledge_id": 354,
+            "knowledge_text": "在数据库movie_3的表country中，country_id表示国家ID，country表示国家名称；'India'表示印度，'Italy'表示意大利，'United States'表示美国，'Australia'表示澳大利亚，'Canada'表示加拿大，'Algeria'表示阿尔及利亚，'United Arab Emirates'表示阿拉伯联合酋长国，'Philippines'表示菲律宾。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 1092,
+            "knowledge_text": "在数据库movie_3的表city中，字段country_id，数据类型为整数（integer），表示标识该城市所属国家的编号。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 355,
+            "knowledge_text": "在数据库movie_3的表city中，city_id表示城市ID，city表示城市名称（如'Woodridge'、'Clarksville'、'Lethbridge'、'Abu Dhabi'、'Arlington'），country_id关联所属国家。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 1094,
+            "knowledge_text": "在数据库movie_3的表country中，字段country_id，数据类型为整数（integer），表示标识国家的唯一ID编号。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 1091,
+            "knowledge_text": "在数据库movie_3的表city中，字段city，数据类型为文本（text），表示城市名称。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 369,
+            "knowledge_text": "在数据库movie_3中，计算某国与另一国每天平均租借电影数量的差值：AVG(IIF(country = '国家A', 1, 0)) - AVG(IIF(country = '国家B', 1, 0))。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 390,
+            "knowledge_text": "在数据库movie_3中，计算意大利客户在电影租借上的总花费：SUM(amount) WHERE country = 'Italy'，需关联payment、customer、address、city、country表。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 391,
+            "knowledge_text": "在数据库movie_3中，计算意大利客户单次电影租借的平均花费：AVG(amount) WHERE country = 'Italy'，需关联payment、customer、address、city、country表。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 1090,
+            "knowledge_text": "在数据库movie_3的表city中，字段city_id，数据类型为整数（integer），表示标识城市的唯一ID编号。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 365,
+            "knowledge_text": "在数据库movie_3中，计算位于特定国家（如印度）的顾客占总顾客的百分比：CAST(SUM(CASE WHEN country = 'India' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(customer_id)。",
+            "scope": {
+              "databases": [
+                "movie_3"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          }
+        ],
+        "dictionary": [],
+        "schema_adjudications": [
+          {
+            "rule_id": "administrative_division_actual_key",
+            "status": "implemented",
+            "source": "以common.administrative_division实际CREATE TABLE定义为准，电商字段注释存在过时引用；用户授权自主处理",
+            "tables": [
+              "common.administrative_division"
+            ],
+            "trigger_pattern": "行政|区划|省份|城市|收货|家庭地区",
+            "instruction": "common.administrative_division的行政区划代码字段是id CHAR(6)，没有division_code。电商Schema注释中common.administrative_division.division_code是过时引用，关联省、市或收货区划代码时使用common.administrative_division.id，保留业务表自身province_code/city_code/receiver_province_code等真实列名。区划代码按字符串比较，保留前导零；不臆造division_code。"
+          }
+        ],
+        "query_helpers": []
+      }
+    }
+  ],
+  "prediction": {
+    "db": "SQLite",
+    "query": "SELECT c.city FROM movie_3.city c JOIN movie_3.country co ON c.country_id = co.country_id WHERE co.country = 'Philippines' LIMIT 3"
+  },
+  "original_training_annotation": {
+    "question_id": 6204,
+    "question": "列出菲律宾国家的至少3个城市。",
+    "db": "SQLite",
+    "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE country = 'Philippines'"
+  },
+  "assessment": "核心知识命中，但噪声和跨源裁决明显",
+  "analysis": "ID354明确Philippines对应菲律宾；1092/355提供city.country_id含义与城市国家关系，1094/1091提供国家ID和城市名称。city/country Schema齐全，足够支持查询。\n\n369（租借数量差）、390/391（意大利租借花费）、365（印度客户占比）均不相关。首轮候选表达85张，来自11个库。首轮及知识结果还携带common.administrative_division的id/division_code裁决，这是另一套库的行政区划定义，因“城市”关键词触发，不能为movie_3查询提供依据。\n\n模型先生成SQL，被检查要求补做知识检索；检索后SQL不变。因此知识至少确认了国家名称，但未促使新逻辑调整。最终LIMIT 3，原始标注不限制条数。题干“至少3个”允许存在多种输出解释；LIMIT 3只在匹配记录充足时返回3个，未检查数量。这里缺少的是输出数量口径，不是城市关联知识。"
+}
