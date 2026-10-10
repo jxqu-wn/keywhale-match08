@@ -12,9 +12,11 @@ def provenance(path, **identifiers):
             'sha256': hashlib.sha256(path.read_bytes()).hexdigest(), **identifiers}
 
 
-def raw_dictionaries(catalog):
+def raw_dictionaries(catalog, raw_only=False):
     documents = []
-    paths = sorted((RAW / 'Schema').glob('*.txt')) + sorted(REFERENCE.rglob('*.sql'))
+    paths = sorted((RAW / 'Schema').glob('*.txt'))
+    if not raw_only:
+        paths += sorted(REFERENCE.rglob('*.sql'))
     for path in paths:
         text, encoding = read_text(path)
         for match in re.finditer(r"INSERT\s+INTO\s+(?:[^;'\"]|'(?:''|[^'])*'|\"[^\"]*\")*;", text, re.I):
@@ -38,7 +40,7 @@ def raw_dictionaries(catalog):
     return documents
 
 
-def load_raw_evidence(evaluate, overlays):
+def load_raw_evidence(evaluate, overlays, raw_only=False):
     rows = load(RAW / 'QA_train.json')
     held_out_templates = {template(r['question']) for r in load(OUT / 'dev.json')} if evaluate else set()
     groups = defaultdict(list)
@@ -51,7 +53,7 @@ def load_raw_evidence(evaluate, overlays):
     for row in rows:
         if template(row['question']) in held_out_templates:
             continue
-        reviewed = apply_examples([row], overlays)
+        reviewed = [row] if raw_only else apply_examples([row], overlays)
         effective = reviewed[0] if reviewed else row
         status = ('excluded_by_review' if not reviewed else
                   'reviewed' if effective.get('annotation_origin') else
@@ -66,7 +68,8 @@ def load_raw_evidence(evaluate, overlays):
     knowledge = []
     originals = load(RAW / 'knowledge.json')
     knowledge_source = provenance(RAW / 'knowledge.json')
-    for original, effective in zip(originals, apply_knowledge(originals, overlays)):
+    effective_knowledge = originals if raw_only else apply_knowledge(originals, overlays)
+    for original, effective in zip(originals, effective_knowledge):
         item = {**effective, 'raw_annotation': original,
                 'provenance': {**knowledge_source, 'knowledge_id':original['knowledge_id']}}
         if effective.get('knowledge_text') != original['knowledge_text']:
@@ -75,14 +78,18 @@ def load_raw_evidence(evaluate, overlays):
     catalog, _ = schema_catalog(preserve_raw=True)
     available_ids = {r['question_id'] for r in examples}
     allowed_conflicts = [[r for r in g if r['question_id'] in available_ids] for g in conflicts]
-    reference_documents = [{'text': read_text(path)[0], 'provenance': provenance(path)}
-                           for path in sorted(REFERENCE.rglob('*.txt'))]
+    reference_documents = [] if raw_only else [
+        {'text': read_text(path)[0], 'provenance': provenance(path)}
+        for path in sorted(REFERENCE.rglob('*.txt'))]
+    evidence_files = sorted(RAW.rglob('*'))
+    if not raw_only:
+        evidence_files += sorted(REFERENCE.rglob('*'))
     return {'catalog': catalog, 'examples': examples, 'knowledge': knowledge,
-            'dictionaries': raw_dictionaries(catalog),
-            'ambiguous': ambiguous_examples([g for g in allowed_conflicts if g]),
+            'dictionaries': raw_dictionaries(catalog, raw_only=raw_only),
+            'ambiguous': ambiguous_examples([g for g in allowed_conflicts if g], include_resolutions=not raw_only),
             'reference_documents': reference_documents,
-            'evidence_manifest': {'mode': 'raw_with_reviewed_overlays', 'raw_example_count': len(rows),
+            'evidence_manifest': {'mode': 'raw_only' if raw_only else 'raw_with_reviewed_overlays',
+                'raw_example_count': len(rows),
                 'retrievable_example_count': len(examples), 'raw_knowledge_count': len(originals),
                 'held_out_template_count': len(held_out_templates),
-                'files': [provenance(path) for path in sorted(RAW.rglob('*')) if path.is_file()] +
-                         [provenance(path) for path in sorted(REFERENCE.rglob('*')) if path.is_file()]}}
+                'files': [provenance(path) for path in evidence_files if path.is_file()]}}

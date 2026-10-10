@@ -1,4 +1,4 @@
-"""Reviewed retrieval context shared by the existing two generation strategies."""
+"""Preprocessed retrieval context, with raw-derived and reviewed evidence modes."""
 import json
 import re
 from collections import defaultdict
@@ -39,14 +39,18 @@ def prompt_example(row, catalog):
 
 
 class Context:
-    def __init__(self, evaluate, raw_evidence=False):
-        self.curation = load_overlays()
-        self.raw_evidence = raw_evidence
+    def __init__(self, evaluate, raw_evidence=False, evidence_mode='raw-only'):
+        if evidence_mode not in ('raw-only', 'reviewed'):
+            raise ValueError('evidence_mode must be raw-only or reviewed')
+        self.raw_only = evidence_mode == 'raw-only'
+        self.curation = ({'example_patches': [], 'knowledge_patches': [], 'excluded_examples': []}
+                         if self.raw_only else load_overlays())
+        self.raw_evidence = raw_evidence or self.raw_only
         self.evidence_manifest = {'mode': 'processed'}
         self.reference_documents = []
-        if raw_evidence:
+        if self.raw_evidence:
             from .raw_evidence import load_raw_evidence
-            for key, value in load_raw_evidence(evaluate, self.curation).items():
+            for key, value in load_raw_evidence(evaluate, self.curation, raw_only=self.raw_only).items():
                 setattr(self, key, value)
         else:
             self.catalog = load(OUT/'catalog.json')
@@ -63,13 +67,13 @@ class Context:
             ambiguous_path = OUT/'ambiguous_examples.json'
             self.ambiguous = load(ambiguous_path) if ambiguous_path.exists() else ambiguous_examples(load(OUT/'audit.json')['conflicting_groups'])
         rules_path = CURATED/'business_rules.json'
-        self.business_rules = load(rules_path) if rules_path.exists() else []
+        self.business_rules = load(rules_path) if not self.raw_only and rules_path.exists() else []
         resolution_path = CURATED/'education_conflict_resolutions.json'
-        self.resolutions = load(resolution_path) if resolution_path.exists() else {}
+        self.resolutions = load(resolution_path) if not self.raw_only and resolution_path.exists() else {}
         correction_path = CURATED/'question_corrections.json'
-        self.corrections = load(correction_path) if correction_path.exists() else []
+        self.corrections = load(correction_path) if not self.raw_only and correction_path.exists() else []
         adjudication_path = CURATED/'schema_adjudications.json'
-        self.schema_adjudications = load(adjudication_path) if adjudication_path.exists() else []
+        self.schema_adjudications = load(adjudication_path) if not self.raw_only and adjudication_path.exists() else []
         for group in self.ambiguous:
             resolution = self.resolutions.get('groups',{}).get(group['group_id'])
             if resolution:
@@ -154,13 +158,13 @@ class Context:
                     selected.append(target)
                     pinned.add((target['source'],target.get('database'),target['table']))
         # Hypernym triggers pin the dictionary tables a keyword like 车辆/船舶 should expose.
-        for target in dict_tables_for(question,self.catalog):
+        for target in [] if self.raw_only else dict_tables_for(question,self.catalog):
             if target not in selected:
                 selected.append(target)
             pinned.add((target['source'],target.get('database'),target['table']))
-        knowledge = select_knowledge(question,self.knowledge,self.kr,scope,self.catalog)
+        knowledge = select_knowledge(question,self.knowledge,self.kr,scope,self.catalog, use_rules=not self.raw_only)
         dictionary = dictionary_matches(question,self.dictionaries,scope)
-        for item in triggered_dictionary(question,self.dictionaries,scope,self.catalog):
+        for item in [] if self.raw_only else triggered_dictionary(question,self.dictionaries,scope,self.catalog):
             if not any(doc['id']==item['id'] for doc in dictionary):
                 dictionary.append(item)
         if scope['confidence'] != 'weak':
@@ -170,18 +174,18 @@ class Context:
         prompt_candidates = [{**group,'candidate_annotations':[prompt_example(row,self.catalog) for row in group['candidate_annotations']]} for group in candidate_groups]
         adjudications = [rule for rule in self.schema_adjudications
                         if refs.intersection(table.lower() for table in rule['tables']) or re.search(rule['trigger_pattern'],question)]
-        return {'question':question,'requirements':requirements(question),'business_rules':business_rules,
+        return {'question':question,'requirements':[] if self.raw_only else requirements(question),'business_rules':business_rules,
                 'evidence_mode':self.evidence_manifest['mode'],
                 'routing':scope,
-                'education_merge':merge_context(question,self.catalog,business_rules),
-                'education_scope':education_query_mode(question) if any(ref.startswith('education_') for ref in refs) else {},
+                'education_merge':{} if self.raw_only else merge_context(question,self.catalog,business_rules),
+                'education_scope':education_query_mode(question) if not self.raw_only and any(ref.startswith('education_') for ref in refs) else {},
                 'schema':selected,'knowledge':knowledge,'dictionary':dictionary,
                 'examples':[prompt_example(row,self.catalog) for row in examples],
                 'exact_examples':[prompt_example(row,self.catalog) for row in exact],
                 'corrected_examples':corrected,'question_correction':exact_correction,
                 'schema_adjudications':adjudications,
                 'query_helpers':[{'purpose':'营业时间文本解析、跨午夜及全天24小时', 'cte_sql':hours_cte()}]
-                    if 'public_review_platform' in scope['databases'] and re.search(r'营业|小时',question) else [],
+                    if not self.raw_only and 'public_review_platform' in scope['databases'] and re.search(r'营业|小时',question) else [],
                 'ambiguous_examples':prompt_candidates}
 
 
@@ -195,5 +199,3 @@ def corrected_prediction(context, catalog):
     if errors:
         raise ValueError('修正查询校验失败：'+json.dumps(errors,ensure_ascii=False))
     return prediction
-
-

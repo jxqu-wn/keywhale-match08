@@ -27,6 +27,24 @@ TOOLS = {
                'args': {'prediction': '完整查询对象'}},
 }
 
+# The raw-derived corpus uses the same retrieval protocol, with no curated
+# business rules or whole-file injection advertised in the tool descriptions.
+RAW_TOOLS = {name: {**spec, 'args': dict(spec['args'])} for name, spec in TOOLS.items()}
+RAW_TOOLS['get_schema']['args'].pop('include_source_documents')
+RAW_TOOLS['search_knowledge']['args'].pop('include_dictionary_text')
+RAW_TOOLS['search_examples']['purpose'] = '检索训练问答及schema_refs；精确匹配保留重复与冲突标注，结合题意与证据判断。'
+RAW_TOOLS['check_query']['purpose'] = '检查候选的格式、表字段、SQLite编译和ES mapping；按检索证据复核语义。返回错误和标准化prediction。'
+
+
+def tool_descriptions(raw_only=False, semantic_review=False):
+    descriptions = {name: {**spec, 'args': dict(spec['args'])}
+                    for name, spec in (RAW_TOOLS if raw_only else TOOLS).items()}
+    if not semantic_review:
+        descriptions['check_query']['purpose'] = descriptions['check_query']['purpose'].replace(
+            '；按检索证据复核语义', '')
+        descriptions['check_query']['args']['case_review'] = '可选简短改动说明'
+    return descriptions
+
 IDENT = r'(?:"[^"]+"|`[^`]+`|[A-Za-z_][\w$]*)'
 TABLE_PATTERN = re.compile(r'\b(?:FROM|JOIN)\s+(?:LATERAL\s+)?('+IDENT+r'(?:\s*\.\s*'+IDENT+r')?)', re.I)
 CTE_PATTERN = re.compile(r'(?:\bWITH(?:\s+RECURSIVE)?|,)\s*('+IDENT+r')\s*(?:\([^)]*\)\s*)?AS\s+(?:(?:NOT\s+)?MATERIALIZED\s+)?\(', re.I)
@@ -126,7 +144,8 @@ class QueryTools:
         else:
             ranked = [self.context.catalog[i] for score, i in self.sr.search(query, len(self.context.catalog)) if score > 0]
             # A hypernym (车辆/船舶/驾照...) or an explicit table-name mention outranks generic BM25 hits.
-            triggers = {(t['source'], t.get('database'), t['table']) for t in dict_tables_for(query, self.context.catalog)}
+            triggers = {(t['source'], t.get('database'), t['table']) for t in
+                        ([] if self.context.raw_only else dict_tables_for(query, self.context.catalog))}
             ql = query.lower()
             def evidence(table):
                 key = (table['source'], table.get('database'), table['table'])
@@ -149,11 +168,13 @@ class QueryTools:
                           'databases':sorted({t['database'] for t in inspected if t.get('database')}),
                           'confidence':'schema', 'reason':'已获取的真实Schema，知识按此范围检索'}
         source_documents = []
-        if args.get('include_source_documents'):
+        if args.get('include_source_documents') and not self.context.raw_only:
             from ..shared.paths import RAW, ROOT
             from ..shared.data import read_text
+            from ..shared.raw_evidence import provenance
             source_documents = [{'file':str((RAW/'Schema'/name).relative_to(ROOT)),
-                                 'text':read_text(RAW/'Schema'/name)[0]}
+                                 'text':read_text(RAW/'Schema'/name)[0],
+                                 'provenance':provenance(RAW/'Schema'/name)}
                                 for name in sorted({t['file'] for t in tables})]
         return {'ok': not missing and bool(tables), 'tables': tables, 'missing_tables': missing,
                 'scope':self.scope, 'source_documents':source_documents,
@@ -170,17 +191,17 @@ class QueryTools:
         query = self.ctx['question'] + ' ' + extra
         items = select_knowledge(query, self.context.knowledge, self.context.kr, self.scope, self.context.catalog,
                                  inspected_tables={name for _, name in self.inspected}
-                                 if self.context.raw_evidence else None)
+                                 if self.context.raw_evidence else None, use_rules=not self.context.raw_only)
         # Mandatory facts are retained even if a caller asks for a short result.
         mandatory = [x for x in items if x['retrieval_reason'] == '字段/公式依赖，必须同时提供']
         others = [x for x in items if x not in mandatory]
         self.knowledge_searched = True
         self.invalidate()
         dictionaries = dictionary_matches(query, self.context.dictionaries, self.scope)
-        for item in triggered_dictionary(query, self.context.dictionaries, self.scope, self.context.catalog):
+        for item in [] if self.context.raw_only else triggered_dictionary(query, self.context.dictionaries, self.scope, self.context.catalog):
             if not any(doc['id'] == item['id'] for doc in dictionaries):
                 dictionaries.append(item)
-        if args.get('include_dictionary_text'):
+        if args.get('include_dictionary_text') and not self.context.raw_only:
             by_id = {d['id']:d for d in self.context.dictionaries}
             for item in dictionaries:
                 if item['id'] in by_id:
@@ -195,11 +216,15 @@ class QueryTools:
         adjudications = [rule for rule in self.ctx['schema_adjudications'] if any(
             name.lower() == table.lower() for _, name in self.inspected for table in rule['tables'])]
         self.retrieved_knowledge = mandatory + others[:max(0, limit - len(mandatory))]
-        return {'ok': True, 'knowledge': self.retrieved_knowledge,
+        result = {'ok': True, 'knowledge': self.retrieved_knowledge,
                 'dictionary': dictionaries, 'scope':self.scope,
                 'schema_adjudications': adjudications,
                 'query_helpers': self.ctx['query_helpers'],
                 'instruction': '知识未区分表/字段却列出多种格式时视为未消解歧义，不能据此随意修改同题案例；必要时补查具体字段证据。'}
+        if self.context.raw_only:
+            for key in ('schema_adjudications', 'query_helpers'):
+                result.pop(key)
+        return result
 
     def search_examples(self, args):
         limit = self.limit(args, 3, 5)
@@ -214,13 +239,18 @@ class QueryTools:
         self.invalidate(knowledge=True)
         related = [row for row in candidates if row not in exact]
         examples = [] if exact and not args.get('include_related') else candidates
-        return {'ok': True, 'examples': [prompt_example(x, self.context.catalog) for x in examples[:limit]],
+        result = {'ok': True, 'examples': [prompt_example(x, self.context.catalog) for x in examples[:limit]],
                 'exact_matches':[prompt_example(x, self.context.catalog) for x in exact],
                 'exact_match_count':len(exact),
                 'corrected_examples': self.ctx['corrected_examples'],
                 'question_correction': self.ctx['question_correction'],
                 'related_examples_available': len(related),
                 'instruction': '精确匹配优先核对，但原始标注不保证正确；保留重复与冲突，区分raw_annotation和reviewed_annotation。按schema_refs补查物理表，再检索知识。'}
+        if self.context.raw_only:
+            for key in ('corrected_examples', 'question_correction'):
+                result.pop(key)
+            result['instruction'] = '结合题意核对同题标注及重复/冲突；按schema_refs补查表结构，再检索知识。'
+        return result
 
     def check_query(self, args):
         self.accepted = None
@@ -229,10 +259,12 @@ class QueryTools:
             raise ValueError('prediction必须为查询对象')
         raw = parse_output(json.dumps(raw, ensure_ascii=False))
         normalized, transforms = normalize_prediction(raw)
-        prediction = expand_prediction(normalized, self.ctx, self.context.catalog)
+        prediction = normalized if self.context.raw_only else expand_prediction(normalized, self.ctx, self.context.catalog)
         if prediction != normalized:
             transforms.append('education_view_cte_expansion')
-        errors = model_query_errors(normalized, self.ctx) + validate(prediction, self.context.catalog, self.ctx['question'], self.ctx['business_rules'])
+        errors = ([] if self.context.raw_only else model_query_errors(normalized, self.ctx)) + validate(
+            prediction, self.context.catalog, None if self.context.raw_only else self.ctx['question'],
+            self.ctx['business_rules'])
         pairs = [(prediction.get('db'), prediction.get('query'))] if 'db' in prediction else [
             (prediction.get('db1'), prediction.get('query1')), (prediction.get('db2'), prediction.get('query2'))]
         for db, sql in pairs:
@@ -260,7 +292,8 @@ class QueryTools:
         review = args.get('case_review')
         semantic_review = None
         if not errors and self.semantic_reviewer is not None:
-            semantic_review = self.semantic_reviewer({
+            evidence = {
+                'evidence_mode':self.context.evidence_manifest['mode'],
                 'question': self.ctx['question'], 'candidate': prediction,
                 'case_review': review,
                 'same_question_cases': [prompt_example(row, self.context.catalog) for row in exact],
@@ -270,7 +303,11 @@ class QueryTools:
                 'dictionary': self.retrieved_dictionaries,
                 'schema_adjudications': self.ctx['schema_adjudications'],
                 'education_scope': self.ctx['education_scope'],
-                'business_rules': self.ctx['business_rules']})
+                'business_rules': self.ctx['business_rules']}
+            if self.context.raw_only:
+                for key in ('schema_adjudications', 'education_scope', 'business_rules'):
+                    evidence.pop(key)
+            semantic_review = self.semantic_reviewer(evidence)
             if semantic_review['verdict'] == 'revise':
                 errors.append('独立LLM语义复核要求修正：' + json.dumps(semantic_review, ensure_ascii=False))
         result = {'ok': not errors, 'errors': sorted(set(errors)), 'candidate': normalized, 'prediction': prediction,
@@ -278,7 +315,7 @@ class QueryTools:
                   'case_review': review, 'modified_exact_case': changed,
                   'semantic_review': semantic_review,
                   'semantics_reviewed': semantic_review is not None,
-                  'checks': ['format/read-only', 'catalog references', 'PG physical aliases', 'SQLite raw-DDL EXPLAIN', 'ES mapping/clauses', 'question rules', 'retrieved evidence']}
+                  'checks': ['format/read-only', 'catalog references', 'PG physical aliases', 'SQLite raw-DDL EXPLAIN', 'ES mapping/clauses', 'retrieved evidence'] + ([] if self.context.raw_only else ['question rules'])}
         if result['ok']:
             self.accepted = result
         return result

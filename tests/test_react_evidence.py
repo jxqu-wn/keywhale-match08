@@ -13,7 +13,7 @@ from text2query.react.tools import QueryTools
 class ReactEvidenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.context = Context(False, raw_evidence=True)
+        cls.context = Context(False, raw_evidence=True, evidence_mode='reviewed')
         cls.rows = load(RAW / 'QA_train.json')
 
     def tools(self, question='列出所有书籍的书名'):
@@ -65,7 +65,7 @@ class ReactEvidenceTests(unittest.TestCase):
 
     def test_triggered_dictionary_keeps_original_documents_in_both_modes(self):
         question = '统计企业登记注册类型的分布'
-        for context in (self.context, Context(False)):
+        for context in (self.context, Context(False, evidence_mode='reviewed')):
             with self.subTest(raw_evidence=context.raw_evidence):
                 tools = QueryTools(context, context.build(question))
                 tools.dispatch('search_examples', {})
@@ -123,7 +123,7 @@ class ReactEvidenceTests(unittest.TestCase):
             self.assertNotIn('book_publishing_company', item['scope']['databases'])
 
     def test_evaluation_does_not_restore_held_out_answers(self):
-        context = Context(True, raw_evidence=True)
+        context = Context(True, raw_evidence=True, evidence_mode='reviewed')
         held_out = {template(r['question']) for r in load(OUT / 'dev.json')}
         self.assertFalse(any(template(r['question']) in held_out for r in context.examples))
         for row in load(OUT / 'dev.json')[:10]:

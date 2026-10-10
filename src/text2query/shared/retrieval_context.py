@@ -223,8 +223,8 @@ def mandatory_knowledge(question, scope):
     return list(dict.fromkeys(result))
 
 
-def select_knowledge(question, knowledge, retriever, scope, catalog, inspected_tables=None):
-    mandatory = mandatory_knowledge(question, scope)
+def select_knowledge(question, knowledge, retriever, scope, catalog, inspected_tables=None, use_rules=True):
+    mandatory = mandatory_knowledge(question, scope) if use_rules else []
     by_id = {item['knowledge_id']:item for item in knowledge}
     chosen = []
     domains, sources = set(scope['databases']), set(scope['sources'])
@@ -258,7 +258,7 @@ def select_knowledge(question, knowledge, retriever, scope, catalog, inspected_t
             if named_tables and not named_tables.intersection(inspected_tables):
                 continue
         chosen.append({**item,'scope':declared,'retrieval_reason':'域内关键词召回'})
-    for item in chosen:
+    for item in chosen if use_rules else []:
         coordinates = []
         for degrees, minutes, seconds, direction in re.findall(r'(\d+)°\s*(\d+(?:\.\d+)?)\s*[′\x27’]\s*(?:(\d+(?:\.\d+)?)\s*[″"]\s*)?([NSEW])',item['knowledge_text'],re.I):
             value = float(degrees)+float(minutes)/60+float(seconds or 0)/3600
@@ -292,5 +292,6 @@ def dictionary_matches(question, documents, scope):
         if matches:
             result.append({'id':doc['id'],'header':doc['text'].split('VALUES',1)[0]+'VALUES',
                            'source':declared_source,'database':doc.get('database'),
+                           **({'provenance':doc['provenance']} if 'provenance' in doc else {}),
                            'rows':matches[:20], 'instruction':'仅对声明的数据源/字典引用表解释；不能把MySQL枚举套到PG AIS。'})
     return result

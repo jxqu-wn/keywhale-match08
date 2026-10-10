@@ -14,7 +14,7 @@ directory = ROOT/'artifacts/runs/regression/rag-improvements-20261009'
 baseline = json.loads((directory/'baseline.json').read_text())
 before = {r['question_id']:r for r in json.loads((directory/'before_contexts.json').read_text())}
 questions = {r['question_id']:r['question'] for r in json.loads((RAW/'QA_test.json').read_text())}
-ctx = Context(True)
+ctx = Context(True, evidence_mode='reviewed')
 after = {qid:ctx.build(questions[qid]) for qid in before}
 (directory/'after_contexts.json').write_text(json.dumps([dict(question_id=qid,**c) for qid,c in after.items()],ensure_ascii=False,indent=2)+'\n')
 required = {3576:[51,83,1248,1249],4682:[188,189],442:[1624,1625],4207:[159,163]}

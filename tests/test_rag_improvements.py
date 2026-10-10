@@ -21,7 +21,7 @@ from text2query.shared.validation import sqlite_connection
 class ImprovementTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.context = Context(True)
+        cls.context = Context(True, evidence_mode='reviewed')
         cls.predictions = {r['question_id']:r for r in json.loads((ROOT/'artifacts/runs/prediction/predict-ee19c0abd953/predictions.json').read_text())}
         cls.questions = {r['question_id']:r['question'] for r in json.loads((RAW/'QA_test.json').read_text())}
 

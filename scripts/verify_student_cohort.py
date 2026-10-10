@@ -26,7 +26,7 @@ def payload(messages):
 
 
 def prepare(directory):
-    ctx = Context(True).build(QUESTION)
+    ctx = Context(True, evidence_mode='reviewed').build(QUESTION)
     request = directory/'1674.request.0.json'
     response = directory/'1674.response.0.json'
     data = payload([{'role':'system','content':SYSTEM},
@@ -35,7 +35,7 @@ def prepare(directory):
         raise ValueError('历史响应对应不同请求，请使用新的--directory')
     save('1674.context.json',ctx,directory)
     save(request.name,data,directory)
-    catalog = Context(True).catalog
+    catalog = Context(True, evidence_mode='reviewed').catalog
     reference = expand_prediction({'db':'MYSQL','query':QUERY},ctx,catalog)
     save('reference.json',{'question':QUESTION,'model_query':QUERY,'prediction':reference,
         'source':'用户授权的2023级试验，仅作为本地构造验证参考；不发送给模型'},directory)
@@ -46,7 +46,7 @@ def prepare(directory):
 def check_local(directory):
     ctx = load(directory/'1674.context.json')
     prediction = load(directory/'reference.json')['prediction']
-    catalog = Context(True).catalog
+    catalog = Context(True, evidence_mode='reviewed').catalog
     db,oracle = fixture(catalog,student_cohort_rows(catalog))
     classes = {row['class_id']:row for row in oracle['class'].values()}
     eligible = [row for row in oracle['student'].values() if row['student_status_code']=='ACTIVE'
@@ -70,7 +70,7 @@ def check_local(directory):
 
 def check(directory):
     context = load(directory/'1674.context.json')
-    catalog = Context(True).catalog
+    catalog = Context(True, evidence_mode='reviewed').catalog
     db,oracle = fixture(catalog,student_cohort_rows(catalog))
     classes = {row['class_id']:row for row in oracle['class'].values()}
     eligible = [row for row in oracle['student'].values() if row['student_status_code']=='ACTIVE'

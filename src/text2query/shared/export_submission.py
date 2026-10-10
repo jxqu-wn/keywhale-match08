@@ -19,7 +19,8 @@ def export(directory, output):
             continue
         record = load(path)
         pred = record.get('prediction')
-        errors = validate(pred,catalog,row['question'],record.get('context',{}).get('business_rules',[])) if isinstance(pred,dict) else ['missing prediction']
+        ctx = record.get('context', {})
+        errors = validate(pred,catalog,None if ctx.get('evidence_mode') == 'raw_only' else row['question'],ctx.get('business_rules',[])) if isinstance(pred,dict) else ['missing prediction']
         if record.get('errors'):
             errors += record['errors']
         if record.get('question') != row['question']:

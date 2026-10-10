@@ -182,7 +182,7 @@ def expected_rows(ident,oracle,rows,db):
 
 
 def verify(corrections):
-    ctx = Context(True)
+    ctx = Context(True, evidence_mode='reviewed')
     rows = correction_rows(ctx.catalog)
     db,oracle = fixture(ctx.catalog,rows)
     extra_databases(db)

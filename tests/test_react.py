@@ -17,7 +17,7 @@ from text2query.react.tools import QueryTools, pg_references
 class ReactTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.context = Context(False)
+        cls.context = Context(False, evidence_mode='reviewed')
         cls.rows = {r['question_id']: r for r in load(RAW / 'QA_test.json')}
 
     def tools(self, qid):

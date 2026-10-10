@@ -52,7 +52,7 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(validate(obj,catalog,question),[])
 
     def test_conflicting_year_candidates_keep_their_schemas(self):
-        context = Context(True)
+        context = Context(True, evidence_mode='reviewed')
         ctx = context.build('统计教师中电话不为空的数量，并返回数量。')
         self.assertEqual([r['rule_id'] for r in ctx['business_rules']],['education_teacher_latest_union'])
         schemas = {(t.get('database'),t['table']):t for t in ctx['schema']}
@@ -66,7 +66,7 @@ class ModelTests(unittest.TestCase):
         self.assertTrue(all(r['schema_refs'] for r in ctx['examples']))
 
     def test_explicit_year_overrides_default_merge_rule(self):
-        context = Context(True)
+        context = Context(True, evidence_mode='reviewed')
         for question in ('统计2024年教师电话不为空的数量','统计2025年教师数量','统计去年教师数量'):
             self.assertEqual(applicable_business_rules(question,context.business_rules),[])
         obj = {'db':'MYSQL','query':"SELECT COUNT(*) FROM `education_2024`.`teacher` WHERE phone IS NOT NULL AND phone <> ''"}
@@ -75,7 +75,7 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(validate(obj,context.catalog,'统计2024年教师电话不为空的数量',context.business_rules),[])
 
     def test_teacher_count_checks_same_year_duplicates(self):
-        context = Context(True)
+        context = Context(True, evidence_mode='reviewed')
         question = '统计教师中电话不为空的数量'
         sql = '''SELECT COUNT(*) FROM (
             SELECT teacher_no,phone FROM education_2025.teacher

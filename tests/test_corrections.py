@@ -9,7 +9,7 @@ from text2query.shared.context import Context, corrected_prediction
 class CorrectionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.context = Context(True)
+        cls.context = Context(True, evidence_mode='reviewed')
 
     def test_only_exact_questions_use_deterministic_corrections(self):
         question = '查询入学年份为2022的班级，返回班级编号与名称，并按班级编号升序取前20条。'

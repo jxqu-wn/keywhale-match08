@@ -9,10 +9,10 @@ from ..shared.context import Context
 from ..shared.generation import api, parse_output, stratified_sample, write_offline_request, completion_payload
 from ..shared.paths import ROOT, OUT, RAW, RUNS
 from ..shared.data import load, queries, source
-from .tools import QueryTools, TOOLS
+from .tools import QueryTools, TOOLS, tool_descriptions
 from ..shared.fingerprints import implementation_hash
 
-WORKFLOW_VERSION = 4
+WORKFLOW_VERSION = 6
 
 REACT_SYSTEM = '''你是多源只读查询生成器，使用当前问题和按需检索的证据生成查询。
 单源prediction格式为 {"db":"MYSQL|POSTGRESQL|SQLite|Elasticsearch","query":"SQL或原生ES DSL对象"}。
@@ -43,8 +43,27 @@ check_query返回ok=true后，使用其candidate调用finish。自动展开的ed
 finish前检查当前问题全部返回列、参数、粒度、关联、分母和排序，不增加题目没有的条件。若要改查询先再次check_query。
 每轮只调用一个工具；不要在args里夹带其他动作或把多个动作合成数组。'''
 
+# Keep the established general workflow; omit instructions whose objects are
+# curated business rules, revised cases or automatically expanded education views.
+RAW_REACT_SYSTEM = REACT_SYSTEM.replace('题意和明确业务规则优先；', '题意优先；').replace(
+    '首轮exact_examples保留同题原始案例及修订；', '首轮exact_examples保留同题训练案例；').replace(
+    '原始案例与修订同时保留；先核对同题案例，再按需查其他案例。不可只凭案例直接finish。',
+    '先核对同题案例，再按需查其他案例。不可只凭案例直接finish。').replace(
+    '；跨年edu_*视图对应的两年物理表也要查', '').replace(
+    '自动展开的education CTE保留在prediction，由程序导出，无须手抄。', '')
 
-def initial_prompt(ctx):
+
+def react_system(raw_only=False, semantic_review=False):
+    system = RAW_REACT_SYSTEM if raw_only else REACT_SYSTEM
+    if not semantic_review:
+        system = system.replace(
+            'check_query中独立LLM按题意及证据复核实际SQL，不以原始案例为正确性标准。', '')
+        system = system.replace(
+            '独立复核明确指出案例错误时按具体问题修正，不能再次提交相同错误SQL。', '')
+    return system
+
+
+def initial_prompt(ctx, semantic_review=False):
     pinned = {key: ctx[key] for key in ('question', 'requirements', 'business_rules', 'routing',
               'education_merge', 'education_scope', 'schema_adjudications')}
     exact_refs = {(ref['source'], f"{ref['database']}.{ref['table']}".lower())
@@ -57,7 +76,12 @@ def initial_prompt(ctx):
         t.get('database') in ctx['routing']['databases'] and
         f"{t.get('database')}.{t['table']}".lower() in {name.lower() for name in rule['tables']}
         for t in ctx['schema'])]
-    pinned['tools'] = TOOLS
+    raw_only = ctx.get('evidence_mode') == 'raw_only'
+    if raw_only:
+        for key in ('requirements', 'business_rules', 'education_merge', 'education_scope', 'schema_adjudications'):
+            pinned.pop(key, None)
+    pinned['tools'] = tool_descriptions(raw_only, semantic_review)
+    pinned['semantic_review_enabled'] = semantic_review
     pinned['evidence_mode'] = ctx.get('evidence_mode', 'processed')
     pinned['exact_examples'] = ctx.get('exact_examples', [])
     pinned['workflow'] = {'next_action':'search_examples',
@@ -70,28 +94,36 @@ def initial_prompt(ctx):
     return pinned
 
 
-def run_question(row, context, directory, model, base_url, max_steps=10, offline=False, call=None, provider='vllm'):
+def run_question(row, context, directory, model, base_url, max_steps=10, offline=False, call=None, provider='vllm', semantic_review=False):
+    review_enabled = bool(semantic_review and context.raw_evidence)
     path = directory / f"{row['question_id']}.json"
     if path.exists():
         cached = load(path)
+        if 'semantic_review_enabled' in cached and cached['semantic_review_enabled'] != review_enabled:
+            raise ValueError('语义复核设置与已有运行记录不同，请使用新的输出目录')
         if cached.get('errors') and not offline:
             # A fresh experiment must use a fresh output directory. Failed
             # records are evidence, not an invitation to rerun automatically.
             return cached
         if (cached.get('workflow_version') == WORKFLOW_VERSION and cached.get('prediction') and not cached.get('errors')
                 and cached.get('question') == row['question']
-                and cached.get('context', {}).get('evidence_mode') == context.evidence_manifest['mode']):
+                and cached.get('context', {}).get('evidence_mode') == context.evidence_manifest['mode']
+                and cached.get('semantic_review_enabled') == review_enabled):
             return cached
     ctx = context.build(row['question'])
-    from .semantic_review import SemanticReviewer
-    reviewer = SemanticReviewer(directory, row['question_id'], model, base_url, provider, call or api, offline)
-    tools = QueryTools(context, ctx, semantic_reviewer=reviewer if context.raw_evidence else None)
-    messages = [{'role': 'system', 'content': REACT_SYSTEM},
-                {'role': 'user', 'content': json.dumps(initial_prompt(ctx), ensure_ascii=False)}]
+    reviewer = None
+    if review_enabled:
+        from .semantic_review import SemanticReviewer
+        reviewer = SemanticReviewer(directory, row['question_id'], model, base_url, provider, call or api, offline,
+                                    raw_only=context.raw_only)
+    tools = QueryTools(context, ctx, semantic_reviewer=reviewer)
+    system = react_system(context.raw_only, review_enabled)
+    messages = [{'role': 'system', 'content': system},
+                {'role': 'user', 'content': json.dumps(initial_prompt(ctx, review_enabled), ensure_ascii=False)}]
     record = {'question_id': row['question_id'], 'question': row['question'], 'context': ctx,
               'strategy': 'react', 'workflow_version': WORKFLOW_VERSION, 'provider': provider,
               'trace': [], 'attempts': [], 'prediction': None,
-              'errors': [], 'manual_query_edits': False}
+              'errors': [], 'manual_query_edits': False, 'semantic_review_enabled':review_enabled}
     started = time.monotonic()
     last_failure = None
     for step in range(max_steps):
@@ -156,8 +188,8 @@ def run_question(row, context, directory, model, base_url, max_steps=10, offline
         record['errors'] = ['step_budget_exhausted']
         record['last_observation'] = record['trace'][-1]['observation'] if record['trace'] else None
     record['seconds'] = round(time.monotonic() - started, 3)
-    record['semantic_review_api_calls'] = reviewer.calls
-    record['api_calls'] = len(record['attempts']) + reviewer.calls
+    record['semantic_review_api_calls'] = reviewer.calls if reviewer is not None else 0
+    record['api_calls'] = len(record['attempts']) + record['semantic_review_api_calls']
     path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     return record
 
@@ -169,6 +201,7 @@ def summarize(records):
             'unresolved_count': len(records) - finished - pending,
             'format_and_lexical_check_rate': None if pending else finished / max(1, len(records)),
             'api_calls': sum(r.get('api_calls', 0) for r in records),
+            'semantic_review_api_calls': sum(r.get('semantic_review_api_calls', 0) for r in records),
             'check_failures': sum(t['action'] == 'check_query' and not t['observation'].get('ok') for r in records for t in r['trace']),
             'automatic_es_normalizations': sum('es_dsl_level_normalization' in r.get('automatic_transforms', []) for r in records),
             'manual_query_edits': 0, 'execution_accuracy': None}
@@ -180,6 +213,8 @@ def main():
     parser.add_argument('--base-url', default='http://192.168.15.119:28081/v1')
     parser.add_argument('--model', default='contest-qwen')
     parser.add_argument('--provider', choices=['vllm', 'deepseek'], default='vllm')
+    parser.add_argument('--evidence-mode', choices=['raw-only', 'reviewed'], default='raw-only')
+    parser.add_argument('--semantic-review', action='store_true', help='启用独立LLM语义复核；当前默认关闭')
     parser.add_argument('--ids', help='逗号分隔的问题ID')
     parser.add_argument('--sample', type=int, default=0)
     parser.add_argument('--seed', type=int, default=42)
@@ -192,7 +227,7 @@ def main():
         parser.error('workers需为正数，max-steps需为5到24')
     if args.ids and args.sample:
         parser.error('--ids和--sample不能同时指定')
-    context = Context(args.command == 'evaluate', raw_evidence=True)
+    context = Context(args.command == 'evaluate', raw_evidence=True, evidence_mode=args.evidence_mode)
     rows = load(OUT / 'dev.json' if args.command == 'evaluate' else RAW / 'QA_test.json')
     if args.ids:
         requested = [int(x) for x in args.ids.split(',')]
@@ -203,14 +238,15 @@ def main():
     if args.sample:
         rows = stratified_sample(rows, args.sample, args.seed)
     config = {'strategy': 'react', 'workflow_version':WORKFLOW_VERSION, 'command': args.command, 'model': args.model, 'base_url': args.base_url,
-              'provider':args.provider, 'evidence_manifest':context.evidence_manifest,
+              'provider':args.provider, 'evidence_mode':args.evidence_mode, 'evidence_manifest':context.evidence_manifest,
+              'semantic_review':args.semantic_review,
               'sample_ids': [r['question_id'] for r in rows], 'seed': args.seed, 'max_steps': args.max_steps,
               'sample_hash': hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest(),
               'data_hash': hashlib.sha256(json.dumps([context.examples, context.catalog, context.knowledge,
                  context.dictionaries, context.ambiguous, context.business_rules, context.resolutions,
                  context.corrections, context.schema_adjudications, context.curation], sort_keys=True).encode()).hexdigest(),
               'implementation_hash': implementation_hash(),
-              'system': REACT_SYSTEM}
+              'system': react_system(context.raw_only, args.semantic_review)}
     fingerprint = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()[:12]
     parent = args.output or RUNS / ('evaluation' if args.command == 'evaluate' else 'prediction')
     directory = parent / ('react-' + args.command + '-' + fingerprint)
@@ -220,7 +256,7 @@ def main():
 
     def process(row):
         result = run_question(row, context, directory, args.model, args.base_url, args.max_steps, args.offline,
-                              provider=args.provider)
+                              provider=args.provider, semantic_review=args.semantic_review)
         print(f"{row['question_id']}: {'OK' if not result.get('errors') else result['errors']}", flush=True)
         return result
 

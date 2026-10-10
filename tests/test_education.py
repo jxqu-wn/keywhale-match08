@@ -36,7 +36,7 @@ class EducationTests(unittest.TestCase):
         self.assertEqual(education_query_mode('统计去年教师数量')['mode'],'explicit_time')
 
     def test_expansion_with_model_ctes_and_identity_checks(self):
-        ctx = Context(True).build('统计每个班级的在读学生数量')
+        ctx = Context(True, evidence_mode='reviewed').build('统计每个班级的在读学生数量')
         pred = {'db':'MYSQL','query':'WITH active AS (SELECT * FROM edu_student WHERE student_status_code=\'ACTIVE\') SELECT COUNT(*) FROM active'}
         expanded = expand_prediction(pred,ctx,self.catalog)
         self.assertIn('active AS',expanded['query'])
@@ -65,7 +65,7 @@ class EducationTests(unittest.TestCase):
     def test_scope_guard_does_not_apply_education_rules_to_other_sources(self):
         from text2query.shared.query_rules import applicable_business_rules
         self.assertEqual(applicable_business_rules('查询所有学生',load(CURATED/'business_rules.json'),['college.student']),[])
-        ctx = Context(True).build('加泰罗尼亚语中出现次数最多的单词是哪个？')
+        ctx = Context(True, evidence_mode='reviewed').build('加泰罗尼亚语中出现次数最多的单词是哪个？')
         self.assertEqual(ctx['business_rules'],[])
         self.assertFalse(ctx['education_merge'])
 
@@ -77,19 +77,19 @@ class EducationTests(unittest.TestCase):
             self.assertEqual(db.execute(sql).fetchall(),[('T3',),('T9',)])
         finally:
             db.close()
-        ctx = Context(True).build('统计教师数量')
+        ctx = Context(True, evidence_mode='reviewed').build('统计教师数量')
         bad = {'db':'MYSQL','query':'SELECT COUNT(DISTINCT teacher_id) FROM edu_teacher'}
         self.assertTrue(model_query_errors(bad,ctx))
 
     def test_display_identifiers_and_semester_filters_are_not_business_codes(self):
-        ctx = Context(True).build('查询学期编号为1中选课人数排名第一的课程，返回课程编号与课程名。')
+        ctx = Context(True, evidence_mode='reviewed').build('查询学期编号为1中选课人数排名第一的课程，返回课程编号与课程名。')
         bad = {'db':'MYSQL','query':"SELECT c.course_code,c.course_name FROM edu_course c JOIN edu_enrollment e ON e.course_code=c.course_code WHERE e.semester_code='1'"}
         errors = model_query_errors(bad,ctx)
         self.assertTrue(any('course_id' in error for error in errors))
         self.assertTrue(any('semester_id' in error for error in errors))
 
     def test_default_score_statistics_exclude_withdrawals(self):
-        ctx = Context(True).build('统计学期一中得分分项出现次数最多的分项名称')
+        ctx = Context(True, evidence_mode='reviewed').build('统计学期一中得分分项出现次数最多的分项名称')
         self.assertTrue(ctx['education_merge'])
         self.assertTrue(any('education_2025.exam_score' in group['tables'] for group in ctx['ambiguous_examples']))
         bad = {'db':'MYSQL','query':'SELECT exam_item,COUNT(*) FROM edu_exam_score GROUP BY exam_item'}
@@ -102,7 +102,7 @@ class EducationTests(unittest.TestCase):
 
     def test_user_cohort_trial_replaces_prefix_only_for_the_requested_question(self):
         question = '查询学号前缀为2023的在读学生，返回学号与姓名，并按学号升序取前25名。'
-        retriever = Context(True)
+        retriever = Context(True, evidence_mode='reviewed')
         ctx = retriever.build(question)
         self.assertTrue(ctx['education_merge']['query_contract']['question_overrides'])
         other = retriever.build('查询学号前缀为2024的在读学生，返回学号与姓名，并按学号升序取前25名。')

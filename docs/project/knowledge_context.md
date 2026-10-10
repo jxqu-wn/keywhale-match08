@@ -2,7 +2,21 @@
 
 `knowledge.json` 的1800条知识全部加载到程序内存，用于建立检索索引。每个问题通常选取最多10条知识发送给模型，选择方式是领域与数据源约束、规则指定的必需知识以及关键词评分。普通RAG和ReAct共用筛选函数，注入消息的时机不同。
 
-## 数据与调用链
+## 当前默认：原始资料预处理与检索
+
+普通模型生成与ReAct默认使用 `--evidence-mode raw-only`。程序从 `data/raw/subject/` 建立独立的预处理检索内容，不复用已包含人工修订的 `data/processed/clean.json` 或 `knowledge.json`。Schema解析为表、字段、类型、约束及该表注释片段；知识保留原文；问答保留原始查询并附加 `schema_refs`；字典INSERT解析后按匹配值返回相关行。检索使用现有关键词索引与库表范围判断。模型接收检索片段，不直接读取目录或完整文件。
+
+所有外部知识的来源记录均位于 `data/raw/`，包括文件路径、SHA256、问答/知识ID或Schema行号。ReAct初始消息仍包含同题训练案例，后续通过 `search_examples`、`get_schema`、`search_knowledge` 按需补查；默认模式不提供整份Schema文件注入工具。
+
+此模式停用：`data/curated/` 修订问答及知识、冲突人工决议、教育合并政策与自动CTE、字段裁定、营业时间辅助SQL、固定知识ID补齐、主题字典触发和按题目硬编码的业务校验。`data/reference/` 也不作为默认知识来源。题目格式、只读限制、表字段检查、SQLite原始DDL编译、ES结构检查保留。通用工具提示词不要求模型读取 `data/raw` 文件。
+
+独立LLM语义复核按用户要求暂时默认关闭。`check_query` 通过基础检查后即允许 `finish`，不发出额外复核请求；逐题记录中 `semantic_review_enabled=false`、`semantic_review_api_calls=0`。需要恢复时使用 `--semantic-review`，该开关与知识来源模式相互独立。历史开启复核的运行及报告保留。
+
+原始重复和冲突标注保留；训练集实验不排除抽中题或同模板示例。正式 `evaluate` 命令仍遵守已有验证集隔离，避免改变该命令的评测含义。原始资料本身的错误和歧义可能被模型修正或产生误判，不能把查询文字一致率当作执行准确率。
+
+切回原修订模式：在 `model`、`react` 或SQLite训练集运行脚本后添加 `--evidence-mode reviewed`。文件和历史提交没有删除。以下详细说明记录的是该修订模式。
+
+## 修订模式的数据与调用链
 
 ```mermaid
 flowchart TD

@@ -51,7 +51,7 @@ def cases():
 
 
 def prepare(directory=None):
-    ctx = Context(True)
+    ctx = Context(True, evidence_mode='reviewed')
     sample = cases()
     config = {'model':'/models/qwen3-8-27b-fp8','system':SYSTEM,'rules':ctx.business_rules,'sample':sample,
               'retrieval_data_sha256':hashlib.sha256(json.dumps([ctx.examples,ctx.catalog,ctx.knowledge,ctx.dictionaries,ctx.ambiguous,ctx.resolutions],sort_keys=True).encode()).hexdigest(),

@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from ..shared.context import Context, corrected_prediction
 from ..shared.data import load, save, source, queries
 from ..shared.paths import ROOT, OUT, RAW, SERVICE, RUNS
-from ..shared.prompts import SYSTEM, repair_feedback
+from ..shared.prompts import SYSTEM, RAW_SYSTEM, repair_feedback
 from ..shared.generation import api, completion_payload, parse_output, validate, stratified_sample, write_offline_request
 from ..shared.education import expand_prediction, model_query_errors
 from ..shared.fingerprints import implementation_hash
@@ -19,6 +19,7 @@ def main():
     parser.add_argument('--base-url',default='http://192.168.15.119:28081/v1')
     parser.add_argument('--model',default='contest-qwen')
     parser.add_argument('--provider',choices=['vllm','deepseek'],default='vllm')
+    parser.add_argument('--evidence-mode',choices=['raw-only','reviewed'],default='raw-only')
     parser.add_argument('--models-file',type=Path,help='Provider-specific model discovery JSON for offline mode')
     parser.add_argument('--limit',type=int,default=0)
     parser.add_argument('--workers',type=int,default=2)
@@ -32,7 +33,8 @@ def main():
     models = load(args.models_file or SERVICE/'models.json')['data'] if args.offline else api(args.base_url,'/models')['data']
     if args.model not in {x['id'] for x in models}:
         raise ValueError(f'Model unavailable: {args.model}')
-    context = Context(args.command=='evaluate')
+    context = Context(args.command=='evaluate', evidence_mode=args.evidence_mode)
+    system = RAW_SYSTEM if context.raw_only else SYSTEM
     rows = load(OUT/'dev.json' if args.command=='evaluate' else RAW/'QA_test.json')
     if args.sample_file:
         if args.command != 'evaluate' or args.sample or args.ids or args.limit:
@@ -62,8 +64,9 @@ def main():
             rows = [bucket[i] for i in range(max(map(len,buckets.values()))) for bucket in buckets.values() if i<len(bucket)][:args.limit]
         else:
             rows = rows[:args.limit]
-    run_config = {'sample_ids':[r['question_id'] for r in rows], 'sampling_seed':args.seed, 'model':args.model,'base_url':args.base_url,'system':SYSTEM,
+    run_config = {'sample_ids':[r['question_id'] for r in rows], 'sampling_seed':args.seed, 'model':args.model,'base_url':args.base_url,'system':system,
                   'provider':args.provider,
+                  'evidence_mode':args.evidence_mode, 'evidence_manifest':context.evidence_manifest,
                   'sample_target_hash':hashlib.sha256(json.dumps(rows,sort_keys=True).encode()).hexdigest(),
                   'data_hash':hashlib.sha256(json.dumps([context.examples,context.catalog,context.knowledge,context.dictionaries,context.ambiguous,context.business_rules,context.resolutions,context.corrections,context.schema_adjudications,context.curation],sort_keys=True).encode()).hexdigest(),
                   'implementation_hash':implementation_hash()}
@@ -80,7 +83,11 @@ def main():
             if cached.get('prediction') and not cached.get('errors') and cached['question']==row['question']:
                 return cached
         ctx = context.build(row['question'])
-        messages = [{'role':'system','content':SYSTEM},{'role':'user','content':json.dumps(ctx,ensure_ascii=False)}]
+        prompt_context = dict(ctx)
+        if context.raw_only:
+            for key in ('requirements','business_rules','education_merge','education_scope','corrected_examples','question_correction','schema_adjudications','query_helpers'):
+                prompt_context.pop(key, None)
+        messages = [{'role':'system','content':system},{'role':'user','content':json.dumps(prompt_context,ensure_ascii=False)}]
         record = {'question_id':row['question_id'],'question':row['question'],'context':ctx,'attempts':[],'prediction':None}
         corrected = corrected_prediction(ctx,context.catalog)
         if corrected:
@@ -107,10 +114,10 @@ def main():
                 content = choice['message'].get('content') or ''
                 record['attempts'].append({'content':content,'finish_reason':choice.get('finish_reason'),'usage':response.get('usage')})
                 raw_prediction = parse_output(content)
-                prediction = expand_prediction(raw_prediction,ctx,context.catalog)
+                prediction = raw_prediction if context.raw_only else expand_prediction(raw_prediction,ctx,context.catalog)
                 record['model_prediction'] = raw_prediction
                 record['automatic_transforms'] = ['education_view_cte_expansion'] if prediction!=raw_prediction else []
-                errors = model_query_errors(raw_prediction,ctx)+validate(prediction,context.catalog,row['question'],ctx['business_rules'])
+                errors = ([] if context.raw_only else model_query_errors(raw_prediction,ctx))+validate(prediction,context.catalog,None if context.raw_only else row['question'],ctx['business_rules'])
                 if choice.get('finish_reason')=='length':
                     errors.append('输出被截断')
                 record['prediction'], record['errors'] = prediction, errors
@@ -133,7 +140,7 @@ def main():
     pending = sum(record.get('errors')==['pending_request'] for record in records)
     metrics = {'count':len(rows),'pending_count':pending,'evaluated_count':len(rows)-pending,
                'valid_count':len(predictions),'format_and_lexical_check_rate':None if pending else len(predictions)/max(1,len(rows)),
-               'validation_checks':['format/read-only/table references','SQLite raw-DDL EXPLAIN','MySQL FULL JOIN restriction','ES nested clauses/mapping','question-derived rules'],
+               'validation_checks':['format/read-only/table references','SQLite raw-DDL EXPLAIN','MySQL FULL JOIN restriction','ES nested clauses/mapping'] + ([] if context.raw_only else ['question-derived rules']),
                'execution_accuracy':None}
     if args.command=='evaluate':
         targets = {r['question_id']:r for r in rows}

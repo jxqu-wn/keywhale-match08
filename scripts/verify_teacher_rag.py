@@ -42,7 +42,7 @@ def fixture():
 
 
 def prepare(directory):
-    context = Context(True)
+    context = Context(True, evidence_mode='reviewed')
     for case in CASES:
         ctx = context.build(case['question'])
         payload = {'model':'/models/qwen3-8-27b-fp8','temperature':0,'max_tokens':4096,
@@ -60,7 +60,7 @@ def prepare(directory):
 
 
 def check(directory):
-    catalog = Context(True).catalog
+    catalog = Context(True, evidence_mode='reviewed').catalog
     results = []
     with fixture() as conn:
         for case in CASES:

@@ -12,7 +12,7 @@ from text2query.shared.context import Context
 from text2query.shared.generation import api
 from text2query.shared.paths import RAW
 from text2query.shared.data import load
-from text2query.react.pipeline import REACT_SYSTEM, WORKFLOW_VERSION, run_question, summarize
+from text2query.react.pipeline import react_system, WORKFLOW_VERSION, run_question, summarize
 
 
 def save(path, value):
@@ -26,6 +26,8 @@ def main():
     parser.add_argument('--output', type=Path, default=Path(f'artifacts/runs/sqlite-train-react-v{WORKFLOW_VERSION}-deepseek-flash'))
     parser.add_argument('--workers', type=int, default=24)
     parser.add_argument('--max-steps', type=int, default=16)
+    parser.add_argument('--evidence-mode', choices=['raw-only','reviewed'], default='raw-only')
+    parser.add_argument('--semantic-review', action='store_true', help='启用独立LLM语义复核；当前默认关闭')
     parser.add_argument('--sample-file', type=Path,
                         help='JSON list of raw-training question IDs or question_id/question objects')
     args = parser.parse_args()
@@ -45,18 +47,22 @@ def main():
                for r in requested):
             parser.error('sample-file question text does not match raw training input')
         rows = [by_id[qid] for qid in ids]
-    context = Context(False, raw_evidence=True)
+    context = Context(False, raw_evidence=True, evidence_mode=args.evidence_mode)
     config = {'model': 'deepseek-flash', 'base_url': 'https://api.deepseek.com',
               'provider': 'deepseek', 'strategy': 'react', 'thinking': {'type': 'disabled'},
               'input': str(RAW / 'QA_train.json'), 'count': len(rows),
               'sample_file':str(args.sample_file) if args.sample_file else None,
-              'context': 'Context(False, raw_evidence=True)', 'workflow_version':WORKFLOW_VERSION,
+              'context': 'production preprocessing and retrieval', 'evidence_mode':args.evidence_mode, 'workflow_version':WORKFLOW_VERSION,
               'evidence_manifest': context.evidence_manifest,
+              'semantic_review':args.semantic_review,
               'workers': args.workers, 'max_steps': args.max_steps,
-              'retry_step_budget_exhausted': False, 'system': REACT_SYSTEM,
+              'retry_step_budget_exhausted': False, 'system': react_system(context.raw_only, args.semantic_review),
               'retry_failed_questions': False, 'api_transport_retries': 0,
               'input_sha256': hashlib.sha256((RAW / 'QA_train.json').read_bytes()).hexdigest()}
-    save(args.output / 'config.json', config)
+    config_path = args.output / 'config.json'
+    if config_path.exists() and load(config_path) != config:
+        parser.error('Existing output configuration differs; use a new directory')
+    save(config_path, config)
     save(args.output / 'questions.json', [{'question_id': r['question_id'], 'question': r['question']} for r in rows])
     records = {}
     started = time.monotonic()
@@ -69,7 +75,7 @@ def main():
                 return previous
         return run_question({'question_id': row['question_id'], 'question': row['question']},
             context, detail, config['model'], config['base_url'], max_steps=args.max_steps,
-            provider='deepseek', call=api)
+            provider='deepseek', call=api, semantic_review=args.semantic_review)
 
     def export():
         ordered = [records[r['question_id']] for r in rows if r['question_id'] in records]

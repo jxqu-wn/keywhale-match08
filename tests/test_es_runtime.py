@@ -91,7 +91,7 @@ class ESRuntimeTests(unittest.TestCase):
             normalize_es(raw)
 
     def test_context_exposes_missing_formula_and_excludes_invalid_training_examples(self):
-        context = Context(False)
+        context = Context(False, evidence_mode='reviewed')
         ctx = context.build('上海静安寺周围4公里内，找出日均门诊量大于10000的医院。')
         rule = next(item for item in ctx['schema_adjudications']
                     if item['rule_id'] == 'es_daily_outpatient_missing_formula')

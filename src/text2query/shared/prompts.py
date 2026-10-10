@@ -1,6 +1,15 @@
 """Existing RAG/ReAct instructions and repair feedback."""
 import json
 
+RAW_SYSTEM = '''你是多源只读查询生成器。依据当前问题和提供的Schema、知识、字典及训练问答生成查询。
+遵守提供的Schema、知识和字典。同题案例作为初始候选；有题意、Schema或具体知识证据支持时可以修正。
+库表和字段以提供的Schema为准。资料存在歧义时继续检索，不能臆造字段、枚举或业务定义。
+返回问题要求的列、粒度、范围和排序；不要自行增加未要求的输出列、精度变化、条件或LIMIT。
+只生成SELECT/WITH只读查询。MySQL和SQLite物理表使用库名.表名；PostgreSQL按Schema的表名生成。
+单源输出仅含db和query；db为MYSQL、POSTGRESQL、SQLite或Elasticsearch，SQL为字符串，ES query为原生DSL对象。
+跨源输出仅含db1、query1、db2、query2；第二阶段使用IN (result)引用第一阶段结果。
+仅输出完整闭合的JSON对象，不输出思维过程。'''
+
 SYSTEM = '''你是多源查询指令生成器。只输出一个JSON对象，不输出Markdown或推理文本。
 SQL单源格式 {"db":"MYSQL|POSTGRESQL|SQLite","query":"SQL字符串"}。
 ES单源格式 {"db":"Elasticsearch","query":{合法DSL对象}}，query必须是对象，不要编码为字符串。

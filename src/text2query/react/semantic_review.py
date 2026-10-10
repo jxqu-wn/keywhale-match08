@@ -14,22 +14,27 @@ same_question_cases是原始案例而非正确性标准。不要为追求案例�
 输出完整JSON对象：{"verdict":"accept|revise|uncertain","issues":[{"aspect":"问题方面","problem":"具体问题","evidence":"问题原文/Schema/knowledge_id等实际证据"}],"guidance":"简短修正建议或不确定性说明"}。
 accept表示未发现有证据支持的实质错误；revise必须有非空issues和具体证据；uncertain保留歧义，不能当作证明正确。'''
 
+# Eligibility of evidence is enforced by the tools, not a file-reading prompt.
+RAW_REVIEW_SYSTEM = REVIEW_SYSTEM
+
 
 class SemanticReviewer:
-    def __init__(self, directory, question_id, model, base_url, provider, call, offline=False):
+    def __init__(self, directory, question_id, model, base_url, provider, call, offline=False, raw_only=False):
         self.directory, self.question_id = directory, question_id
         self.model, self.base_url, self.provider = model, base_url, provider
         self.call, self.offline, self.calls = call, offline, 0
+        self.raw_only = raw_only
 
     def __call__(self, evidence):
         # Keep source data intact on disk; repeated metadata/identical raw copies
         # add no new evidence to this independent review.
         compact = {**evidence}
-        compact['schema'] = [{k: t[k] for k in ('source', 'database', 'table', 'raw_schema', 'ddl', 'table_comments') if k in t}
+        compact['schema'] = [{k: t[k] for k in ('source', 'database', 'table', 'raw_schema', 'ddl', 'table_comments', 'provenance') if k in t}
                              for t in evidence['schema']]
         compact['knowledge'] = [{k: row[k] for k in ('knowledge_id', 'knowledge_text', 'raw_annotation',
-                                  'reviewed_knowledge_text') if k in row} for row in evidence['knowledge']]
-        payload = completion_payload(self.model, [{'role': 'system', 'content': REVIEW_SYSTEM},
+                                  'reviewed_knowledge_text', 'provenance') if k in row} for row in evidence['knowledge']]
+        system = RAW_REVIEW_SYSTEM if self.raw_only else REVIEW_SYSTEM
+        payload = completion_payload(self.model, [{'role': 'system', 'content': system},
                     {'role': 'user', 'content': json.dumps(compact, ensure_ascii=False)}], self.provider)
         digest = hashlib.sha256(json.dumps({'base_url': self.base_url, 'payload': payload}, sort_keys=True).encode()).hexdigest()[:20]
         stem = f'{self.question_id}.semantic_review.{digest}'

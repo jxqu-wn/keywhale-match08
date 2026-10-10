@@ -191,11 +191,11 @@ def split_groups(rows, ratio=0.2, seed=42):
     return sorted(train, key=lambda x: x['question_id']), sorted(dev, key=lambda x: x['question_id'])
 
 
-def ambiguous_examples(groups):
+def ambiguous_examples(groups, include_resolutions=True):
     """Keep conflicting annotations as alternatives, never as a single gold answer."""
     result = []
     resolution_path = CURATED/'education_conflict_resolutions.json'
-    resolutions = load(resolution_path).get('groups',{}) if resolution_path.exists() else {}
+    resolutions = load(resolution_path).get('groups',{}) if include_resolutions and resolution_path.exists() else {}
     for group in groups:
         tables = sorted({ref for row in group for query in queries(row) for ref in references(query)})
         item = {'group_id':'ambiguous-'+str(group[0]['question_id']),

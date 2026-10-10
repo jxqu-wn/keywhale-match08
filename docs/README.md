@@ -21,6 +21,9 @@
 
 ## 业务口径与验证记录
 
+- [DeepSeek Flash与Qwen相同40题ReAct对比](reports/DeepSeekFlash与Qwen_SQLite40题ReAct对比.md)：相同首轮输入的新一轮DeepSeek作答、三方答案对照、修改来源及构造执行。
+- [Qwen Track8 SQLite训练集40题ReAct评测](reports/QwenTrack8_SQLite40题ReAct评测.md)：指定本地模型的不一致率、上下文适配、逐题原因及原始资料来源审计。
+- [SQLite训练集40题原始资料模式对比](reports/SQLite40题原始资料模式对比.md)：停用人工修订后的相同40题重测、不一致率、逐题原因及实际请求来源审计。
 - [RAG与校验改进](reports/RAG与校验改进报告.md)：训练示例、知识与领域约束的修订依据。
 - [DeepSeek Flash ReAct与初轮Qwen对比](reports/DeepSeek_Flash_ReAct与初轮Qwen对比.md)：当前400条提交、构造执行对比、改善与退化及评测范围。
 - [DeepSeek Flash与Qwen的SQLite对比](reports/DeepSeek_Flash_SQLite对比.md)：普通RAG轮次在相同首轮上下文下的生成差异、构造反例及该轮提交来源。

@@ -4,7 +4,11 @@
 
 文档入口：[文档索引](docs/README.md)、[项目结构与调用链](docs/project/structure.md)、[知识检索与上下文注入](docs/project/knowledge_context.md)、[开发与版本管理](docs/project/development.md)。
 
-普通 RAG 会将全部知识加载到本地检索器，针对当前问题按领域、数据源、必需公式和关键词选取通常最多10条知识，再放入首轮用户消息的 `knowledge` 数组。ReAct 初始消息不传入该数组，模型调用 `search_knowledge` 后通过 `observation` 获得筛选结果。两种流程共用知识选择逻辑，详见[完整流程及示例](docs/project/knowledge_context.md)。
+普通 RAG 将知识加载到本地检索器，针对当前问题选取相关片段，放入首轮用户消息的 `knowledge` 数组。ReAct 通过 `search_knowledge` 的 `observation` 获取片段。两种流程默认使用 `--evidence-mode raw-only`：由 `data/raw/subject/` 预处理得到Schema、字典、知识和训练问答，按需检索注入；模型不直接读取文件或接收完整Schema文件。人工修订、业务规则、辅助SQL、字段裁定及按题目硬编码的业务校验均停用，来源记录保留原文件路径、记录ID和SHA256。详见[完整流程及示例](docs/project/knowledge_context.md)。
+
+`--evidence-mode reviewed` 可恢复原有修订内容；修订文件和历史提交保留。下文教育合并、修订示例及必需公式规则的说明属于此模式，默认模式保留原始重复和冲突问答，生成过程中仍进行通用结构检查。
+
+独立LLM语义复核已暂时默认关闭，ReAct保留检索、格式和库表检查、SQLite编译等基础检查；检查通过后可 `finish`。如需恢复复核，在 `react` 或SQLite样本/批量运行脚本中添加 `--semantic-review`。复核设置记录在配置中，新旧设置使用不同运行目录。
 
 ## 本地开始
 
@@ -68,7 +72,7 @@ python -m unittest discover -s tests -v
 
 模型生成入口会打印实际运行目录。数据、代码和问题集合变化会产生新的运行指纹；后续操作使用该目录，不要照搬历史运行的指纹。
 
-普通 `model` 和 `react` 入口支持 `--base-url`、`--model`、`--provider vllm|deepseek`；普通入口另有离线模式的 `--models-file`。两种流程共用供应方请求构建，DeepSeek关闭思考模式。在线认证通过环境变量 `MODEL_API_KEY` 读取；curl批量调用可指定私有认证头文件。`react` 默认读取原始证据并保留中文表注释、同题原始案例及修订；完整训练集SQLite题目的DeepSeek ReAct运行使用 `scripts/run_sqlite_train_react.py`。参数及离线流程见[开发说明](docs/project/development.md#模型服务与离线运行)。
+普通 `model` 和 `react` 入口支持 `--base-url`、`--model`、`--provider vllm|deepseek`、`--evidence-mode raw-only|reviewed`；普通入口另有离线模式的 `--models-file`。两种流程共用供应方请求构建，DeepSeek关闭思考模式。在线认证通过环境变量 `MODEL_API_KEY` 读取；curl批量调用可指定私有认证头文件。完整训练集SQLite题目的DeepSeek ReAct运行使用 `scripts/run_sqlite_train_react.py`；40题原始训练答案比较使用 `scripts/sample_sqlite_train_flash.py`，默认不排除抽中题目或同模板示例。参数及离线流程见[开发说明](docs/project/development.md#模型服务与离线运行)。
 
 ## 使用 curl 批量调用
 
