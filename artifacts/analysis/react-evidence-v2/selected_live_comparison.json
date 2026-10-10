@@ -1,0 +1,149 @@
+[
+  {
+    "question_id": 3040,
+    "question": "哪一天的订单数量最多？该天的总订单数量是多少？",
+    "previous_prediction": {
+      "db": "SQLite",
+      "query": "SELECT DATE(order_date) AS order_day, COUNT(*) AS order_count FROM books.cust_order GROUP BY DATE(order_date) ORDER BY order_count DESC LIMIT 1"
+    },
+    "new_prediction": {
+      "db": "SQLite",
+      "query": "SELECT ord_date, SUM(qty) FROM book_publishing_company.sales GROUP BY ord_date ORDER BY SUM(qty) DESC LIMIT 1"
+    },
+    "actions": [
+      "search_examples",
+      "get_schema",
+      "search_knowledge",
+      "check_query",
+      "finish"
+    ],
+    "errors": [],
+    "exact_case_in_every_request": true
+  },
+  {
+    "question_id": 3041,
+    "question": "1992年订购数量最多的书名是什么？",
+    "previous_prediction": {
+      "db": "SQLite",
+      "query": "SELECT t.title FROM book_publishing_company.sales s JOIN book_publishing_company.titles t ON s.title_id = t.title_id WHERE strftime('%Y', s.ord_date) = '1992' GROUP BY t.title_id, t.title ORDER BY SUM(s.qty) DESC LIMIT 1"
+    },
+    "new_prediction": {
+      "db": "SQLite",
+      "query": "SELECT T2.title FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.titles AS T2 ON T1.title_id = T2.title_id WHERE STRFTIME('%Y', T1.ord_date) = '1992' GROUP BY T2.title_id, T2.title ORDER BY SUM(T1.qty) DESC LIMIT 1"
+    },
+    "actions": [
+      "search_examples",
+      "get_schema",
+      "search_knowledge",
+      "check_query",
+      "finish"
+    ],
+    "errors": [],
+    "exact_case_in_every_request": true
+  },
+  {
+    "question_id": 3044,
+    "question": "列出书名ID为 'BU2075' 且在10000到50000范围内的书名和版税百分比。",
+    "previous_prediction": {
+      "db": "SQLite",
+      "query": "SELECT t.title, r.royalty FROM book_publishing_company.titles t JOIN book_publishing_company.roysched r ON t.title_id = r.title_id WHERE t.title_id = 'BU2075' AND r.lorange >= 10000 AND r.hirange <= 50000"
+    },
+    "new_prediction": {
+      "db": "SQLite",
+      "query": "SELECT T1.title, T2.royalty FROM book_publishing_company.titles AS T1 INNER JOIN book_publishing_company.roysched AS T2 ON T1.title_id = T2.title_id WHERE T1.title_id = 'BU2075' AND T2.lorange >= 10000 AND T2.hirange <= 50000"
+    },
+    "actions": [
+      "search_examples",
+      "get_schema",
+      "search_knowledge",
+      "check_query",
+      "finish"
+    ],
+    "errors": [],
+    "exact_case_in_every_request": true
+  },
+  {
+    "question_id": 3090,
+    "question": "出版社中哪个员工的职位级别最高？给出他的全名。",
+    "previous_prediction": {
+      "db": "SQLite",
+      "query": "SELECT e.fname || ' ' || e.lname AS full_name FROM book_publishing_company.employee e ORDER BY e.job_lvl DESC LIMIT 1"
+    },
+    "new_prediction": {
+      "db": "SQLite",
+      "query": "SELECT fname, minit, lname FROM book_publishing_company.employee ORDER BY job_lvl DESC LIMIT 1"
+    },
+    "actions": [
+      "search_examples",
+      "get_schema",
+      "search_knowledge",
+      "check_query",
+      "finish"
+    ],
+    "errors": [],
+    "exact_case_in_every_request": true
+  },
+  {
+    "question_id": 3099,
+    "question": "1993年，Fremont 的书店比 Portland 的书店在图书销售数量上多出百分之多少？",
+    "previous_prediction": {
+      "db": "SQLite",
+      "query": "SELECT CAST(SUM(CASE WHEN T2.city = 'Fremont' THEN T1.qty END) - SUM(CASE WHEN T2.city = 'Portland' THEN T1.qty END) AS REAL) * 100 / SUM(CASE WHEN T2.city = 'Portland' THEN T1.qty END) FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.stores AS T2 ON T1.stor_id = T2.stor_id WHERE STRFTIME('%Y', T1.ord_date) = '1993'"
+    },
+    "new_prediction": {
+      "db": "SQLite",
+      "query": "SELECT CAST(SUM(CASE WHEN T2.city = 'Fremont' THEN T1.qty ELSE 0 END) - SUM(CASE WHEN T2.city = 'Portland' THEN T1.qty ELSE 0 END) AS REAL) * 100 / SUM(CASE WHEN T2.city = 'Portland' THEN T1.qty ELSE 0 END) FROM book_publishing_company.sales AS T1 INNER JOIN book_publishing_company.stores AS T2 ON T1.stor_id = T2.stor_id WHERE STRFTIME('%Y', T1.ord_date) = '1993'"
+    },
+    "actions": [
+      "search_examples",
+      "get_schema",
+      "search_knowledge",
+      "check_query",
+      "finish"
+    ],
+    "errors": [],
+    "exact_case_in_every_request": true
+  },
+  {
+    "question_id": 3877,
+    "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+    "previous_prediction": {
+      "db": "SQLite",
+      "query": "SELECT g.genre_name FROM video_games.game AS ga JOIN video_games.genre AS g ON ga.genre_id = g.id WHERE ga.game_name = 'Games in 1: Sonic Advance & ChuChu Rocket!'"
+    },
+    "new_prediction": {
+      "db": "SQLite",
+      "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2 Games in 1: Sonic Advance & ChuChu Rocket!'"
+    },
+    "actions": [
+      "search_examples",
+      "get_schema",
+      "search_knowledge",
+      "check_query",
+      "finish"
+    ],
+    "errors": [],
+    "exact_case_in_every_request": true
+  },
+  {
+    "question_id": 6204,
+    "question": "列出菲律宾国家的至少3个城市。",
+    "previous_prediction": {
+      "db": "SQLite",
+      "query": "SELECT c.city FROM movie_3.city c JOIN movie_3.country co ON c.country_id = co.country_id WHERE co.country = 'Philippines' LIMIT 3"
+    },
+    "new_prediction": {
+      "db": "SQLite",
+      "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE T2.country = 'Philippines' LIMIT 3"
+    },
+    "actions": [
+      "search_examples",
+      "get_schema",
+      "search_knowledge",
+      "check_query",
+      "finish"
+    ],
+    "errors": [],
+    "exact_case_in_every_request": true
+  }
+]

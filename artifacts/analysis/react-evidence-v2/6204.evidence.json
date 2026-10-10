@@ -1,0 +1,749 @@
+{
+  "question": "列出菲律宾国家的至少3个城市。",
+  "initial_prompt": {
+    "question": "列出菲律宾国家的至少3个城市。",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "movie_3"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "weak",
+      "reason": "首条训练示例，仅为候选",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema_adjudications": [],
+    "schema_candidates": [
+      {
+        "source": "SQLite",
+        "table": "books.country"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.address"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.city"
+      },
+      {
+        "source": "SQLite",
+        "table": "movie_3.country"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.noc_region"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.person"
+      },
+      {
+        "source": "SQLite",
+        "table": "olympics.person_region"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Categories"
+      },
+      {
+        "source": "SQLite",
+        "table": "public_review_platform.Business_Categories"
+      },
+      {
+        "source": "SQLite",
+        "table": "soccer_2016.City"
+      },
+      {
+        "source": "MYSQL",
+        "table": "finance_tax.corporate_income_tax_returns"
+      },
+      {
+        "source": "SQLite",
+        "table": "disney.revenue"
+      },
+      {
+        "source": "MYSQL",
+        "table": "education_2025.course"
+      },
+      {
+        "source": "MYSQL",
+        "table": "education_2024.course"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.administrative_division"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.dict_grade_level"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.inventory"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.customer"
+      }
+    ],
+    "tools": {
+      "get_schema": {
+        "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+        "args": {
+          "tables": [
+            "可选，完整库名.表名或PG裸表名"
+          ],
+          "query": "可选关键词",
+          "source": "可选数据源",
+          "database": "可选数据库",
+          "limit": "可选1到12，默认8",
+          "include_source_documents": "可选布尔值；返回对应完整原始Schema文件"
+        }
+      },
+      "search_knowledge": {
+        "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到12，默认10",
+          "include_dictionary_text": "可选布尔值；返回匹配字典的完整原始INSERT"
+        }
+      },
+      "search_examples": {
+        "purpose": "首先检索训练示例及schema_refs；精确匹配保留全部原始候选、重复/冲突标注和附加修订，原始标注不保证正确。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到5，默认3"
+        }
+      },
+      "check_query": {
+        "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+        "args": {
+          "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+        }
+      },
+      "finish": {
+        "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+        "args": {
+          "prediction": "完整查询对象"
+        }
+      }
+    },
+    "evidence_mode": "raw_with_reviewed_overlays",
+    "exact_examples": [
+      {
+        "question_id": 6204,
+        "question": "列出菲律宾国家的至少3个城市。",
+        "db": "SQLite",
+        "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE country = 'Philippines'",
+        "raw_annotation": {
+          "question_id": 6204,
+          "question": "列出菲律宾国家的至少3个城市。",
+          "db": "SQLite",
+          "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE country = 'Philippines'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 6204
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "movie_3",
+            "table": "city"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "movie_3",
+            "table": "country"
+          }
+        ]
+      }
+    ],
+    "workflow": {
+      "next_action": "search_examples",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ]
+    },
+    "instruction": "同题案例完整提供且不受Top-K限制；先search_examples，再查Schema和知识，检查成功后finish。"
+  },
+  "search_examples": {
+    "ok": true,
+    "examples": [
+      {
+        "question_id": 6204,
+        "question": "列出菲律宾国家的至少3个城市。",
+        "db": "SQLite",
+        "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE country = 'Philippines'",
+        "raw_annotation": {
+          "question_id": 6204,
+          "question": "列出菲律宾国家的至少3个城市。",
+          "db": "SQLite",
+          "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE country = 'Philippines'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 6204
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "movie_3",
+            "table": "city"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "movie_3",
+            "table": "country"
+          }
+        ]
+      },
+      {
+        "question_id": 4871,
+        "question": "有多少菲律宾女性奥运运动员？",
+        "db": "SQLite",
+        "query": "SELECT COUNT(T2.person_id) FROM olympics.noc_region AS T1 INNER JOIN olympics.person_region AS T2 ON T1.id = T2.region_id INNER JOIN olympics.person AS T3 ON T2.person_id = T3.id WHERE T1.region_name = 'Philippines' AND T3.gender = 'F'",
+        "raw_annotation": {
+          "question_id": 4871,
+          "question": "有多少菲律宾女性奥运运动员？",
+          "db": "SQLite",
+          "query": "SELECT COUNT(T2.person_id) FROM olympics.noc_region AS T1 INNER JOIN olympics.person_region AS T2 ON T1.id = T2.region_id INNER JOIN olympics.person AS T3 ON T2.person_id = T3.id WHERE T1.region_name = 'Philippines' AND T3.gender = 'F'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 4871
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "olympics",
+            "table": "noc_region"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "olympics",
+            "table": "person"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "olympics",
+            "table": "person_region"
+          }
+        ]
+      },
+      {
+        "question_id": 4136,
+        "question": "中餐类比菲律宾菜类Yelp商家多多少家？",
+        "db": "SQLite",
+        "query": "SELECT SUM(CASE WHEN T1.category_name LIKE 'Chinese' THEN 1 ELSE 0 END) - SUM(CASE WHEN T1.category_name LIKE 'Filipino' THEN 1 ELSE 0 END) FROM public_review_platform.Categories AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.category_id = T2.category_id",
+        "raw_annotation": {
+          "question_id": 4136,
+          "question": "中餐类比菲律宾菜类Yelp商家多多少家？",
+          "db": "SQLite",
+          "query": "SELECT SUM(CASE WHEN T1.category_name LIKE 'Chinese' THEN 1 ELSE 0 END) - SUM(CASE WHEN T1.category_name LIKE 'Filipino' THEN 1 ELSE 0 END) FROM public_review_platform.Categories AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.category_id = T2.category_id"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 4136
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Categories"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "public_review_platform",
+            "table": "Business_Categories"
+          }
+        ]
+      }
+    ],
+    "exact_matches": [
+      {
+        "question_id": 6204,
+        "question": "列出菲律宾国家的至少3个城市。",
+        "db": "SQLite",
+        "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE country = 'Philippines'",
+        "raw_annotation": {
+          "question_id": 6204,
+          "question": "列出菲律宾国家的至少3个城市。",
+          "db": "SQLite",
+          "query": "SELECT T1.city FROM movie_3.city AS T1 INNER JOIN movie_3.country AS T2 ON T2.country_id = T1.country_id WHERE country = 'Philippines'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 6204
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "movie_3",
+            "table": "city"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "movie_3",
+            "table": "country"
+          }
+        ]
+      }
+    ],
+    "exact_match_count": 1,
+    "corrected_examples": [],
+    "question_correction": null,
+    "instruction": "精确匹配优先核对，但原始标注不保证正确；保留重复与冲突，区分raw_annotation和reviewed_annotation。按schema_refs补查物理表，再检索知识。",
+    "workflow": {
+      "next_action": "get_schema",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": false,
+        "search_knowledge": false,
+        "check_query": false
+      },
+      "scope": {
+        "databases": [
+          "movie_3"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  },
+  "get_schema": {
+    "ok": true,
+    "tables": [
+      {
+        "source": "SQLite",
+        "database": "movie_3",
+        "table": "city",
+        "columns": [
+          {
+            "name": "city_id",
+            "type": "INTEGER",
+            "definition": "city_id     INTEGER\r\n        primary key autoincrement"
+          },
+          {
+            "name": "city",
+            "type": "TEXT",
+            "definition": "city        TEXT                               not null"
+          },
+          {
+            "name": "country_id",
+            "type": "INTEGER",
+            "definition": "country_id  INTEGER                            not null\r\n        references country\r\n            on update cascade"
+          },
+          {
+            "name": "last_update",
+            "type": "DATETIME",
+            "definition": "last_update DATETIME default CURRENT_TIMESTAMP not null"
+          }
+        ],
+        "ddl": "CREATE TABLE \"city\"\r\n(\r\n    city_id     INTEGER\r\n        primary key autoincrement,\r\n    city        TEXT                               not null,\r\n    country_id  INTEGER                            not null\r\n        references country\r\n            on update cascade,\r\n    last_update DATETIME default CURRENT_TIMESTAMP not null\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [],
+        "raw_schema": "\r\n-- 表: city\r\nCREATE TABLE \"city\"\r\n(\r\n    city_id     INTEGER\r\n        primary key autoincrement,\r\n    city        TEXT                               not null,\r\n    country_id  INTEGER                            not null\r\n        references country\r\n            on update cascade,\r\n    last_update DATETIME default CURRENT_TIMESTAMP not null\r\n)\r\n",
+        "table_comments": [],
+        "provenance": {
+          "file": "data/raw/subject/Schema/bird_schemas.txt",
+          "encoding": "utf-8-sig",
+          "start_line": 1509,
+          "end_line": 1521,
+          "sha256": "ac29c850c2507718656a9cb89ceba95796d3bf286a26413b4bd43486ad39db6c"
+        }
+      },
+      {
+        "source": "SQLite",
+        "database": "movie_3",
+        "table": "country",
+        "columns": [
+          {
+            "name": "country_id",
+            "type": "INTEGER",
+            "definition": "country_id  INTEGER\r\n        primary key autoincrement"
+          },
+          {
+            "name": "country",
+            "type": "TEXT",
+            "definition": "country     TEXT                               not null"
+          },
+          {
+            "name": "last_update",
+            "type": "DATETIME",
+            "definition": "last_update DATETIME default CURRENT_TIMESTAMP not null"
+          }
+        ],
+        "ddl": "CREATE TABLE \"country\"\r\n(\r\n    country_id  INTEGER\r\n        primary key autoincrement,\r\n    country     TEXT                               not null,\r\n    last_update DATETIME default CURRENT_TIMESTAMP not null\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [],
+        "raw_schema": "\r\n-- 表: country\r\nCREATE TABLE \"country\"\r\n(\r\n    country_id  INTEGER\r\n        primary key autoincrement,\r\n    country     TEXT                               not null,\r\n    last_update DATETIME default CURRENT_TIMESTAMP not null\r\n)\r\n",
+        "table_comments": [],
+        "provenance": {
+          "file": "data/raw/subject/Schema/bird_schemas.txt",
+          "encoding": "utf-8-sig",
+          "start_line": 1521,
+          "end_line": 1530,
+          "sha256": "ac29c850c2507718656a9cb89ceba95796d3bf286a26413b4bd43486ad39db6c"
+        }
+      }
+    ],
+    "missing_tables": [],
+    "scope": {
+      "sources": [
+        "SQLite"
+      ],
+      "databases": [
+        "movie_3"
+      ],
+      "confidence": "schema",
+      "reason": "已获取的真实Schema，知识按此范围检索"
+    },
+    "source_documents": [],
+    "reference_documents": [],
+    "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。",
+    "workflow": {
+      "next_action": "search_knowledge",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": true,
+        "search_knowledge": false,
+        "check_query": false
+      },
+      "scope": {
+        "sources": [
+          "SQLite"
+        ],
+        "databases": [
+          "movie_3"
+        ],
+        "confidence": "schema",
+        "reason": "已获取的真实Schema，知识按此范围检索"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  },
+  "search_knowledge": {
+    "ok": true,
+    "knowledge": [
+      {
+        "knowledge_id": 354,
+        "knowledge_text": "在数据库movie_3的表country中，country_id表示国家ID，country表示国家名称；'India'表示印度，'Italy'表示意大利，'United States'表示美国，'Australia'表示澳大利亚，'Canada'表示加拿大，'Algeria'表示阿尔及利亚，'United Arab Emirates'表示阿拉伯联合酋长国，'Philippines'表示菲律宾。",
+        "raw_annotation": {
+          "knowledge_id": 354,
+          "knowledge_text": "在数据库movie_3的表country中，country_id表示国家ID，country表示国家名称；'India'表示印度，'Italy'表示意大利，'United States'表示美国，'Australia'表示澳大利亚，'Canada'表示加拿大，'Algeria'表示阿尔及利亚，'United Arab Emirates'表示阿拉伯联合酋长国，'Philippines'表示菲律宾。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 354
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1092,
+        "knowledge_text": "在数据库movie_3的表city中，字段country_id，数据类型为整数（integer），表示标识该城市所属国家的编号。",
+        "raw_annotation": {
+          "knowledge_id": 1092,
+          "knowledge_text": "在数据库movie_3的表city中，字段country_id，数据类型为整数（integer），表示标识该城市所属国家的编号。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1092
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 355,
+        "knowledge_text": "在数据库movie_3的表city中，city_id表示城市ID，city表示城市名称（如'Woodridge'、'Clarksville'、'Lethbridge'、'Abu Dhabi'、'Arlington'），country_id关联所属国家。",
+        "raw_annotation": {
+          "knowledge_id": 355,
+          "knowledge_text": "在数据库movie_3的表city中，city_id表示城市ID，city表示城市名称（如'Woodridge'、'Clarksville'、'Lethbridge'、'Abu Dhabi'、'Arlington'），country_id关联所属国家。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 355
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1094,
+        "knowledge_text": "在数据库movie_3的表country中，字段country_id，数据类型为整数（integer），表示标识国家的唯一ID编号。",
+        "raw_annotation": {
+          "knowledge_id": 1094,
+          "knowledge_text": "在数据库movie_3的表country中，字段country_id，数据类型为整数（integer），表示标识国家的唯一ID编号。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1094
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 369,
+        "knowledge_text": "在数据库movie_3中，计算某国与另一国每天平均租借电影数量的差值：AVG(IIF(country = '国家A', 1, 0)) - AVG(IIF(country = '国家B', 1, 0))。",
+        "raw_annotation": {
+          "knowledge_id": 369,
+          "knowledge_text": "在数据库movie_3中，计算某国与另一国每天平均租借电影数量的差值：AVG(IIF(country = '国家A', 1, 0)) - AVG(IIF(country = '国家B', 1, 0))。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 369
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1091,
+        "knowledge_text": "在数据库movie_3的表city中，字段city，数据类型为文本（text），表示城市名称。",
+        "raw_annotation": {
+          "knowledge_id": 1091,
+          "knowledge_text": "在数据库movie_3的表city中，字段city，数据类型为文本（text），表示城市名称。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1091
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1090,
+        "knowledge_text": "在数据库movie_3的表city中，字段city_id，数据类型为整数（integer），表示标识城市的唯一ID编号。",
+        "raw_annotation": {
+          "knowledge_id": 1090,
+          "knowledge_text": "在数据库movie_3的表city中，字段city_id，数据类型为整数（integer），表示标识城市的唯一ID编号。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1090
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1774,
+        "knowledge_text": "春运期间为农历腊月十六至正月廿五（约40天），查询时需转换为公历日期。例如2024年春运为1月26日至3月5日。",
+        "declared_scope": {
+          "databases": [],
+          "sources": [
+            "MYSQL",
+            "SQLite",
+            "POSTGRESQL"
+          ]
+        },
+        "raw_annotation": {
+          "knowledge_id": 1774,
+          "knowledge_text": "春运期间为农历腊月十六至正月廿五（约40天），查询时需转换为公历日期。例如2024年春运为1月26日至3月5日。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1774
+        },
+        "scope": {
+          "databases": [],
+          "sources": [
+            "MYSQL",
+            "SQLite",
+            "POSTGRESQL"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 365,
+        "knowledge_text": "在数据库movie_3中，计算位于特定国家（如印度）的顾客占总顾客的百分比：CAST(SUM(CASE WHEN country = 'India' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(customer_id)。",
+        "raw_annotation": {
+          "knowledge_id": 365,
+          "knowledge_text": "在数据库movie_3中，计算位于特定国家（如印度）的顾客占总顾客的百分比：CAST(SUM(CASE WHEN country = 'India' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(customer_id)。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 365
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 356,
+        "knowledge_text": "在数据库movie_3的表address中，address_id表示地址ID，address表示地址行1，address2表示地址行2，district表示地区（如'Nordrhein-Westfalen'、'Texas'表示德克萨斯州，'Nagasaki'），postal_code表示邮政编码，phone表示电话号码，city_id关联所属城市。",
+        "raw_annotation": {
+          "knowledge_id": 356,
+          "knowledge_text": "在数据库movie_3的表address中，address_id表示地址ID，address表示地址行1，address2表示地址行2，district表示地区（如'Nordrhein-Westfalen'、'Texas'表示德克萨斯州，'Nagasaki'），postal_code表示邮政编码，phone表示电话号码，city_id关联所属城市。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 356
+        },
+        "scope": {
+          "databases": [
+            "movie_3"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      }
+    ],
+    "dictionary": [],
+    "scope": {
+      "sources": [
+        "SQLite"
+      ],
+      "databases": [
+        "movie_3"
+      ],
+      "confidence": "schema",
+      "reason": "已获取的真实Schema，知识按此范围检索"
+    },
+    "schema_adjudications": [],
+    "query_helpers": [],
+    "workflow": {
+      "next_action": "check_query",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": true,
+        "search_knowledge": true,
+        "check_query": false
+      },
+      "scope": {
+        "sources": [
+          "SQLite"
+        ],
+        "databases": [
+          "movie_3"
+        ],
+        "confidence": "schema",
+        "reason": "已获取的真实Schema，知识按此范围检索"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  }
+}

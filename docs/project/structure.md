@@ -11,9 +11,11 @@ src/text2query/
 │   └── baseline.py       最近训练示例复制基线
 ├── react/
 │   ├── pipeline.py       ReAct模型动作与工具观察循环
-│   └── tools.py          Schema、知识、示例、查询检查与完成工具
+│   ├── tools.py          Schema、知识、示例、查询检查与完成工具
+│   └── semantic_review.py 独立模型按题意及检索证据复核查询
 ├── shared/
 │   ├── context.py        两种现有模式共用的RAG上下文
+│   ├── raw_evidence.py   ReAct原始示例、知识、Schema和字典证据及来源
 │   ├── prompts.py        现有指令与修复反馈
 │   ├── generation.py     模型接口、供应方参数、解析、校验与抽样
 │   ├── data.py           数据读取、Schema解析、清洗、划分与关键词检索
@@ -25,14 +27,16 @@ src/text2query/
 └── __main__.py           python -m text2query入口
 ```
 
-两种模式均直接依赖shared；ReAct不再通过普通生成模块获取工具。原始文件注入的新版本按用户要求暂停，目前没有该版本的入口或代码目录。
+两种模式均直接依赖shared；ReAct直接读取原始证据并附加人工修订，普通RAG使用处理后的数据。原始证据加载由 `shared/raw_evidence.py` 提供，ReAct独立语义复核由 `react/semantic_review.py` 提供。
 
 | 目录/模块 | 职责 |
 |---|---|
 | `non_react/pipeline.py` | 检索后直接生成查询，错误反馈后重试 |
 | `non_react/baseline.py` | 复制最近训练示例作为检索基线 |
 | `react/pipeline.py`、`react/tools.py` | 模型选择工具、读取观察、检查及结束 |
+| `react/semantic_review.py` | 按当前问题与证据独立复核查询，不以案例一致性作为正确性标准 |
 | `shared/context.py`、`shared/prompts.py` | 共用上下文与当前提示词 |
+| `shared/raw_evidence.py` | 保留原始记录、修订、中文Schema注释、字典INSERT及来源 |
 | `shared/generation.py` | 请求、解析、共同校验及分层抽样 |
 | `shared/data.py` | 读取、Schema解析、清洗、划分及关键词检索 |
 | `shared/retrieval_context.py`、`shared/curation.py` | 领域知识、字典与人工修订 |

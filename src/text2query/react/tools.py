@@ -12,13 +12,17 @@ from ..shared.retrieval_context import compatible_example, dictionary_matches, d
 TOOLS = {
     'get_schema': {'purpose': '查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。',
                    'args': {'tables': ['可选，完整库名.表名或PG裸表名'], 'query': '可选关键词',
-                            'source': '可选数据源', 'database': '可选数据库', 'limit': '可选1到12，默认8'}},
+                            'source': '可选数据源', 'database': '可选数据库', 'limit': '可选1到12，默认8',
+                            'include_source_documents': '可选布尔值；返回对应完整原始Schema文件'}},
     'search_knowledge': {'purpose': '查知识、枚举、公式、单位与字典，保留原题必需的知识。',
-                         'args': {'query': '补充检索词', 'limit': '可选1到12，默认10'}},
-    'search_examples': {'purpose': '查已修正训练示例及其schema_refs；必须按当前题目修改参数。',
-                        'args': {'query': '补充检索词', 'limit': '可选1到5，默认3'}},
+                         'args': {'query': '补充检索词', 'limit': '可选1到12，默认10',
+                                  'include_dictionary_text': '可选布尔值；返回匹配字典的完整原始INSERT'}},
+    'search_examples': {'purpose': '首先检索训练示例及schema_refs；精确匹配保留全部原始候选、重复/冲突标注和附加修订，原始标注不保证正确。',
+                        'args': {'query': '补充检索词', 'limit': '可选1到5，默认3',
+                                 'include_related': '存在同题案例时默认不混入其他问题；需要比较时设为true'}},
     'check_query': {'purpose': '检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。',
-                    'args': {'prediction': '规定的单源或双阶段查询对象，ES query使用对象'}},
+                    'args': {'prediction': '规定的单源或双阶段查询对象，ES query使用对象',
+                             'case_review': '可选简短改动说明；独立LLM会按题意和检索证据复核候选，合理修正可以保留'}},
     'finish': {'purpose': '提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。',
                'args': {'prediction': '完整查询对象'}},
 }
@@ -64,14 +68,36 @@ def pg_references(sql, catalog):
 
 
 class QueryTools:
-    def __init__(self, context, question_context):
+    def __init__(self, context, question_context, semantic_reviewer=None):
         self.context = context
         self.ctx = question_context
         self.scope = self.ctx['routing']
         self.inspected = set()
+        self.examples_searched = False
         self.knowledge_searched = False
         self.accepted = None
         self.sr = context.sr
+        self.semantic_reviewer = semantic_reviewer
+        self.retrieved_knowledge = []
+        self.retrieved_dictionaries = []
+
+    def workflow(self):
+        next_action = ('search_examples' if not self.examples_searched else
+                       'get_schema' if not self.inspected else
+                       'search_knowledge' if not self.knowledge_searched else
+                       'finish' if self.accepted is not None else 'check_query')
+        return {'next_action':next_action,
+                'required_order':['search_examples','get_schema','search_knowledge','check_query','finish'],
+                'completed':{'search_examples':self.examples_searched, 'get_schema':bool(self.inspected),
+                             'search_knowledge':self.knowledge_searched,
+                             'check_query':self.accepted is not None},
+                'scope':self.scope,
+                'instruction':'可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。'}
+
+    def invalidate(self, knowledge=False):
+        self.accepted = None
+        if knowledge:
+            self.knowledge_searched = False
 
     @staticmethod
     def limit(args, default, maximum):
@@ -81,6 +107,8 @@ class QueryTools:
         return number
 
     def get_schema(self, args):
+        if not self.examples_searched:
+            return {'ok':False, 'errors':['请先调用search_examples获取原始示例与候选表，再get_schema']}
         limit = self.limit(args, 8, 12)
         requested = args.get('tables', [])
         if not isinstance(requested, list) or any(not isinstance(x, str) for x in requested) or len(requested) > 12:
@@ -110,30 +138,68 @@ class QueryTools:
             preferred = [t for t in ranked if t in self.ctx['schema']]
             tables = [t for t in preferred + [t for t in ranked if t not in preferred] if t in candidates][:limit]
         missing = sorted(name for name in names if not any(name in (t['table'].lower(), f"{t.get('database')}.{t['table']}".lower()) for t in tables))
+        previous = set(self.inspected)
         for table in tables:
             self.inspected.add((table['source'], f"{table.get('database')}.{table['table']}".lower()))
+        if tables:
+            self.invalidate(knowledge=self.inspected != previous)
+            inspected = [t for t in self.context.catalog
+                         if (t['source'], f"{t.get('database')}.{t['table']}".lower()) in self.inspected]
+            self.scope = {'sources':sorted({t['source'] for t in inspected}),
+                          'databases':sorted({t['database'] for t in inspected if t.get('database')}),
+                          'confidence':'schema', 'reason':'已获取的真实Schema，知识按此范围检索'}
+        source_documents = []
+        if args.get('include_source_documents'):
+            from ..shared.paths import RAW, ROOT
+            from ..shared.data import read_text
+            source_documents = [{'file':str((RAW/'Schema'/name).relative_to(ROOT)),
+                                 'text':read_text(RAW/'Schema'/name)[0]}
+                                for name in sorted({t['file'] for t in tables})]
         return {'ok': not missing and bool(tables), 'tables': tables, 'missing_tables': missing,
+                'scope':self.scope, 'source_documents':source_documents,
+                'reference_documents':self.context.reference_documents if args.get('include_source_documents') else [],
                 'instruction': '表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。'}
 
     def search_knowledge(self, args):
+        if not self.examples_searched or not self.inspected:
+            return {'ok':False, 'errors':['请先完成search_examples和get_schema，再search_knowledge']}
         limit = self.limit(args, 10, 12)
         extra = args.get('query', '')
         if not isinstance(extra, str):
             raise ValueError('query必须为字符串')
         query = self.ctx['question'] + ' ' + extra
-        items = select_knowledge(query, self.context.knowledge, self.context.kr, self.scope, self.context.catalog)
+        items = select_knowledge(query, self.context.knowledge, self.context.kr, self.scope, self.context.catalog,
+                                 inspected_tables={name for _, name in self.inspected}
+                                 if self.context.raw_evidence else None)
         # Mandatory facts are retained even if a caller asks for a short result.
         mandatory = [x for x in items if x['retrieval_reason'] == '字段/公式依赖，必须同时提供']
         others = [x for x in items if x not in mandatory]
         self.knowledge_searched = True
-        dictionary = dictionary_matches(query, self.context.dictionaries, self.scope)
+        self.invalidate()
+        dictionaries = dictionary_matches(query, self.context.dictionaries, self.scope)
         for item in triggered_dictionary(query, self.context.dictionaries, self.scope, self.context.catalog):
-            if not any(doc['id'] == item['id'] for doc in dictionary):
-                dictionary.append(item)
-        return {'ok': True, 'knowledge': mandatory + others[:max(0, limit - len(mandatory))],
-                'dictionary': dictionary,
-                'schema_adjudications': self.ctx['schema_adjudications'],
-                'query_helpers': self.ctx['query_helpers']}
+            if not any(doc['id'] == item['id'] for doc in dictionaries):
+                dictionaries.append(item)
+        if args.get('include_dictionary_text'):
+            by_id = {d['id']:d for d in self.context.dictionaries}
+            for item in dictionaries:
+                if item['id'] in by_id:
+                    item['raw_document'] = by_id[item['id']]
+                else:
+                    # A triggered table can combine multiple original INSERT documents.
+                    item['raw_documents'] = [doc for doc in self.context.dictionaries
+                        if doc['table'].lower() == item['id'].removeprefix('trigger:')
+                        and doc.get('source', 'MYSQL') == item['source']
+                        and doc.get('database') == item['database']]
+        self.retrieved_dictionaries = dictionaries
+        adjudications = [rule for rule in self.ctx['schema_adjudications'] if any(
+            name.lower() == table.lower() for _, name in self.inspected for table in rule['tables'])]
+        self.retrieved_knowledge = mandatory + others[:max(0, limit - len(mandatory))]
+        return {'ok': True, 'knowledge': self.retrieved_knowledge,
+                'dictionary': dictionaries, 'scope':self.scope,
+                'schema_adjudications': adjudications,
+                'query_helpers': self.ctx['query_helpers'],
+                'instruction': '知识未区分表/字段却列出多种格式时视为未消解歧义，不能据此随意修改同题案例；必要时补查具体字段证据。'}
 
     def search_examples(self, args):
         limit = self.limit(args, 3, 5)
@@ -142,10 +208,19 @@ class QueryTools:
             raise ValueError('query必须为字符串')
         candidates = [self.context.examples[i] for score, i in self.context.er.search(self.ctx['question'] + ' ' + extra, 40)
                       if score > 0 and compatible_example(self.context.examples[i], self.scope)]
-        return {'ok': True, 'examples': [prompt_example(x, self.context.catalog) for x in candidates[:limit]],
+        exact = self.context.exact_examples(self.ctx['question'])
+        candidates = exact + [row for row in candidates if row not in exact]
+        self.examples_searched = True
+        self.invalidate(knowledge=True)
+        related = [row for row in candidates if row not in exact]
+        examples = [] if exact and not args.get('include_related') else candidates
+        return {'ok': True, 'examples': [prompt_example(x, self.context.catalog) for x in examples[:limit]],
+                'exact_matches':[prompt_example(x, self.context.catalog) for x in exact],
+                'exact_match_count':len(exact),
                 'corrected_examples': self.ctx['corrected_examples'],
                 'question_correction': self.ctx['question_correction'],
-                'instruction': '仅供参考，不复制原参数；Schema、业务规则和当前问题优先。'}
+                'related_examples_available': len(related),
+                'instruction': '精确匹配优先核对，但原始标注不保证正确；保留重复与冲突，区分raw_annotation和reviewed_annotation。按schema_refs补查物理表，再检索知识。'}
 
     def check_query(self, args):
         self.accepted = None
@@ -176,8 +251,33 @@ class QueryTools:
                 errors.append('请先用get_schema核对这些物理表: ' + ', '.join(unseen))
         if not self.knowledge_searched:
             errors.append('请先调用search_knowledge核对知识与字典')
+        if not self.examples_searched:
+            errors.append('请先调用search_examples核对原始示例和冲突候选')
+        exact = self.context.exact_examples(self.ctx['question']) if self.context.raw_evidence else []
+        baseline_predictions = [{key: row[key] for key in ('db', 'query', 'db1', 'query1', 'db2', 'query2') if key in row}
+                                for row in exact]
+        changed = bool(exact) and normalized not in baseline_predictions
+        review = args.get('case_review')
+        semantic_review = None
+        if not errors and self.semantic_reviewer is not None:
+            semantic_review = self.semantic_reviewer({
+                'question': self.ctx['question'], 'candidate': prediction,
+                'case_review': review,
+                'same_question_cases': [prompt_example(row, self.context.catalog) for row in exact],
+                'schema': [table for table in self.context.catalog if
+                           (table['source'], f"{table.get('database')}.{table['table']}".lower()) in self.inspected],
+                'knowledge': self.retrieved_knowledge,
+                'dictionary': self.retrieved_dictionaries,
+                'schema_adjudications': self.ctx['schema_adjudications'],
+                'education_scope': self.ctx['education_scope'],
+                'business_rules': self.ctx['business_rules']})
+            if semantic_review['verdict'] == 'revise':
+                errors.append('独立LLM语义复核要求修正：' + json.dumps(semantic_review, ensure_ascii=False))
         result = {'ok': not errors, 'errors': sorted(set(errors)), 'candidate': normalized, 'prediction': prediction,
                   'automatic_transforms': sorted(set(transforms)), 'execution_validated': False,
+                  'case_review': review, 'modified_exact_case': changed,
+                  'semantic_review': semantic_review,
+                  'semantics_reviewed': semantic_review is not None,
                   'checks': ['format/read-only', 'catalog references', 'PG physical aliases', 'SQLite raw-DDL EXPLAIN', 'ES mapping/clauses', 'question rules', 'retrieved evidence']}
         if result['ok']:
             self.accepted = result
@@ -199,7 +299,8 @@ class QueryTools:
         if not isinstance(action, str) or action not in TOOLS or not isinstance(args, dict):
             return {'ok': False, 'errors': ['未知action或args不是对象'], 'available_actions': list(TOOLS)}
         try:
-            return getattr(self, action)(args)
+            result = getattr(self, action)(args)
+            return {**result, 'workflow':self.workflow()}
         except (ValueError, TypeError, KeyError) as exc:
             self.accepted = None
-            return {'ok': False, 'errors': [str(exc)]}
+            return {'ok': False, 'errors': [str(exc)], 'workflow':self.workflow()}

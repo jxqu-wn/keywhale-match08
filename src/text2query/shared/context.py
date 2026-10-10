@@ -1,12 +1,13 @@
 """Reviewed retrieval context shared by the existing two generation strategies."""
 import json
 import re
+from collections import defaultdict
 from .data import load, Retriever, references, queries, source, normalize, ambiguous_examples
 from .paths import OUT, CURATED
 from .query_rules import requirements, mask_sql, applicable_business_rules
 from .education import merge_context, expand_prediction, education_query_mode, model_query_errors
 from .curation import load_overlays, apply_examples, apply_knowledge, hours_cte
-from .retrieval_context import infer_scope, compatible_example, select_knowledge, dictionary_matches, dict_tables_for, triggered_dictionary
+from .retrieval_context import infer_scope, evidence_scope, compatible_example, select_knowledge, dictionary_matches, dict_tables_for, triggered_dictionary
 from .generation import validate
 
 def example_schema_refs(row, catalog):
@@ -38,21 +39,29 @@ def prompt_example(row, catalog):
 
 
 class Context:
-    def __init__(self, evaluate):
-        self.catalog = load(OUT/'catalog.json')
+    def __init__(self, evaluate, raw_evidence=False):
         self.curation = load_overlays()
-        # Do not teach malformed DSL through retrieved examples. Original labels remain unchanged.
-        self.examples = []
-        for row in apply_examples(load(OUT/('train.json' if evaluate else 'clean.json')), self.curation):
-            if row.get('db') == 'Elasticsearch':
-                pred = {'db':row['db'],'query':row['query']}
-                if validate(pred,self.catalog):
-                    continue
-            self.examples.append(row)
-        self.knowledge = apply_knowledge(load(OUT/'knowledge.json'), self.curation)
-        self.dictionaries = load(OUT/'dictionary_documents.json')
-        ambiguous_path = OUT/'ambiguous_examples.json'
-        self.ambiguous = load(ambiguous_path) if ambiguous_path.exists() else ambiguous_examples(load(OUT/'audit.json')['conflicting_groups'])
+        self.raw_evidence = raw_evidence
+        self.evidence_manifest = {'mode': 'processed'}
+        self.reference_documents = []
+        if raw_evidence:
+            from .raw_evidence import load_raw_evidence
+            for key, value in load_raw_evidence(evaluate, self.curation).items():
+                setattr(self, key, value)
+        else:
+            self.catalog = load(OUT/'catalog.json')
+            # Ordinary RAG keeps its existing filtered retrieval behavior.
+            self.examples = []
+            for row in apply_examples(load(OUT/('train.json' if evaluate else 'clean.json')), self.curation):
+                if row.get('db') == 'Elasticsearch':
+                    pred = {'db':row['db'],'query':row['query']}
+                    if validate(pred,self.catalog):
+                        continue
+                self.examples.append(row)
+            self.knowledge = apply_knowledge(load(OUT/'knowledge.json'), self.curation)
+            self.dictionaries = load(OUT/'dictionary_documents.json')
+            ambiguous_path = OUT/'ambiguous_examples.json'
+            self.ambiguous = load(ambiguous_path) if ambiguous_path.exists() else ambiguous_examples(load(OUT/'audit.json')['conflicting_groups'])
         rules_path = CURATED/'business_rules.json'
         self.business_rules = load(rules_path) if rules_path.exists() else []
         resolution_path = CURATED/'education_conflict_resolutions.json'
@@ -72,14 +81,28 @@ class Context:
                     group['status'] = 'query_correction_resolved'
                     group['instruction'] = '此组已按问题、Schema和知识修正；原始候选只保留证据，优先使用question_correction或corrected_examples。'
         self.er = Retriever([x['question'] for x in self.examples])
+        self.examples_by_question = defaultdict(list)
+        for row in self.examples:
+            self.examples_by_question[normalize(row['question'])].append(row)
         self.ar = Retriever([x['question'] for x in self.ambiguous])
         self.kr = Retriever([x['knowledge_text'] for x in self.knowledge])
         self.sr = Retriever([json.dumps(x,ensure_ascii=False) for x in self.catalog])
         self.cr = Retriever([x['question'] for x in self.corrections])
 
+    def exact_examples(self, question):
+        rows = self.examples_by_question.get(normalize(question), [])
+        return sorted(rows, key=lambda row: row['question'] != question)
+
     def build(self, question):
-        candidates = [self.examples[i] for s,i in self.er.search(question,30) if s>0]
-        scope = infer_scope(question,candidates[:5],self.catalog)
+        exact = self.exact_examples(question)
+        ranked = [(s, self.examples[i]) for s,i in self.er.search(question,30) if s>0]
+        candidates = [row for _, row in ranked]
+        if self.raw_evidence:
+            candidates = exact + [row for row in candidates if row not in exact]
+            ranked = [(ranked[0][0] if ranked else 1, row) for row in exact] + [
+                (score, row) for score, row in ranked if row not in exact]
+        scope = (evidence_scope(question, ranked, self.catalog) if self.raw_evidence
+                 else infer_scope(question,candidates[:5],self.catalog))
         examples = [row for row in candidates if compatible_example(row,scope)][:5]
         refs = {r.lower() for x in examples for q in queries(x) for r in references(q)}
         exact_correction = next((x for x in self.corrections if normalize(x['question'])==normalize(question)),None)
@@ -109,6 +132,9 @@ class Context:
         selected = [x for x in self.catalog if x.get('database','') in databases or
                     (x['source'],x.get('database'),x['table']) in schema_keys or
                     (x['source'] in {source(e) for e in examples} and x['source'] in ('POSTGRESQL','Elasticsearch'))]
+        if self.raw_evidence:
+            selected = [x for x in selected if f"{x.get('database')}.{x['table']}".lower() in refs
+                        or (x['source'],x.get('database'),x['table']) in schema_keys]
         for ref in refs:
             if ref.split('.')[0] != 'common':
                 continue
@@ -145,11 +171,13 @@ class Context:
         adjudications = [rule for rule in self.schema_adjudications
                         if refs.intersection(table.lower() for table in rule['tables']) or re.search(rule['trigger_pattern'],question)]
         return {'question':question,'requirements':requirements(question),'business_rules':business_rules,
+                'evidence_mode':self.evidence_manifest['mode'],
                 'routing':scope,
                 'education_merge':merge_context(question,self.catalog,business_rules),
                 'education_scope':education_query_mode(question) if any(ref.startswith('education_') for ref in refs) else {},
                 'schema':selected,'knowledge':knowledge,'dictionary':dictionary,
                 'examples':[prompt_example(row,self.catalog) for row in examples],
+                'exact_examples':[prompt_example(row,self.catalog) for row in exact],
                 'corrected_examples':corrected,'question_correction':exact_correction,
                 'schema_adjudications':adjudications,
                 'query_helpers':[{'purpose':'营业时间文本解析、跨午夜及全天24小时', 'cte_sql':hours_cte()}]

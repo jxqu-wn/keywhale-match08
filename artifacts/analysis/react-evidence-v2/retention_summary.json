@@ -1,0 +1,41 @@
+{
+  "examples": {
+    "raw_count": 5830,
+    "processed_clean_count": 5605,
+    "missing_record_count": 225,
+    "changed_annotation_count": 20,
+    "v2_retained_count": 5830,
+    "v2_status_counts": {
+      "raw_unreviewed": 5694,
+      "raw_conflicting": 113,
+      "reviewed": 21,
+      "excluded_by_review": 2
+    }
+  },
+  "knowledge": {
+    "raw_count": 1800,
+    "processed_count": 1800,
+    "changed_text_count": 7,
+    "v2_retains_original_and_reviewed_text": true
+  },
+  "schema": {
+    "raw_table_count": 265,
+    "processed_table_count": 265,
+    "table_comment_count": 46,
+    "comments_absent_before": 46,
+    "comments_retained_after": 46,
+    "comment_top1_before": 31,
+    "comment_top1_after": 46,
+    "comment_top5_before": 44,
+    "comment_top5_after": 46
+  },
+  "dictionary": {
+    "raw_insert_count": 344,
+    "processed_insert_count": 344,
+    "raw_inserts_missing_or_changed_in_processed": 0
+  },
+  "reference_documents": {
+    "raw_text_file_count": 2,
+    "previous_context_retained_text_file_count": 0
+  }
+}

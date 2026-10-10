@@ -1,0 +1,463 @@
+{
+  "question_id": 3040,
+  "question": "哪一天的订单数量最多？该天的总订单数量是多少？",
+  "initial_user_prompt": {
+    "question": "哪一天的订单数量最多？该天的总订单数量是多少？",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "book_publishing_company"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "weak",
+      "reason": "首条训练示例，仅为候选",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema_adjudications": [],
+    "schema_candidates": [
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.authors"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.jobs"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.publishers"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.employee"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.pub_info"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.stores"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.discounts"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.titles"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.roysched"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.sales"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.titleauthor"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.address_status"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.author"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.book_language"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.country"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.address"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.customer"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.customer_address"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.order_status"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.publisher"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.book"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.book_author"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.shipping_method"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.cust_order"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.order_history"
+      },
+      {
+        "source": "SQLite",
+        "table": "books.order_line"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.customer"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.product"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.inventory"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.orders"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.order_item"
+      },
+      {
+        "source": "MYSQL",
+        "table": "ecommerce.payment"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.order_status_dict"
+      }
+    ],
+    "tools": {
+      "get_schema": {
+        "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+        "args": {
+          "tables": [
+            "可选，完整库名.表名或PG裸表名"
+          ],
+          "query": "可选关键词",
+          "source": "可选数据源",
+          "database": "可选数据库",
+          "limit": "可选1到12，默认8"
+        }
+      },
+      "search_knowledge": {
+        "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到12，默认10"
+        }
+      },
+      "search_examples": {
+        "purpose": "查已修正训练示例及其schema_refs；必须按当前题目修改参数。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到5，默认3"
+        }
+      },
+      "check_query": {
+        "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+        "args": {
+          "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+        }
+      },
+      "finish": {
+        "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+        "args": {
+          "prediction": "完整查询对象"
+        }
+      }
+    },
+    "instruction": "候选表仅是检索线索；用get_schema获取完整定义，用search_knowledge确认知识。"
+  },
+  "observations": [
+    {
+      "step": 0,
+      "action": "get_schema",
+      "args": {
+        "tables": [
+          "books.cust_order",
+          "books.order_line",
+          "books.order_history",
+          "books.order_status"
+        ],
+        "source": "SQLite"
+      },
+      "observation": {
+        "ok": true,
+        "tables": [
+          {
+            "source": "SQLite",
+            "database": "books",
+            "table": "order_status",
+            "columns": [
+              {
+                "name": "status_id",
+                "type": "INTEGER",
+                "definition": "status_id    INTEGER\r\n            primary key"
+              },
+              {
+                "name": "status_value",
+                "type": "TEXT",
+                "definition": "status_value TEXT"
+              }
+            ],
+            "ddl": "CREATE TABLE order_status\r\n(\r\n    status_id    INTEGER\r\n            primary key,\r\n    status_value TEXT\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": []
+          },
+          {
+            "source": "SQLite",
+            "database": "books",
+            "table": "cust_order",
+            "columns": [
+              {
+                "name": "order_id",
+                "type": "INTEGER",
+                "definition": "order_id           INTEGER\r\n        primary key autoincrement"
+              },
+              {
+                "name": "order_date",
+                "type": "DATETIME",
+                "definition": "order_date         DATETIME"
+              },
+              {
+                "name": "customer_id",
+                "type": "INTEGER",
+                "definition": "customer_id        INTEGER\r\n        references customer"
+              },
+              {
+                "name": "shipping_method_id",
+                "type": "INTEGER",
+                "definition": "shipping_method_id INTEGER\r\n        references shipping_method"
+              },
+              {
+                "name": "dest_address_id",
+                "type": "INTEGER",
+                "definition": "dest_address_id    INTEGER\r\n        references address"
+              }
+            ],
+            "ddl": "CREATE TABLE \"cust_order\"\r\n(\r\n    order_id           INTEGER\r\n        primary key autoincrement,\r\n    order_date         DATETIME,\r\n    customer_id        INTEGER\r\n        references customer,\r\n    shipping_method_id INTEGER\r\n        references shipping_method,\r\n    dest_address_id    INTEGER\r\n        references address\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": []
+          },
+          {
+            "source": "SQLite",
+            "database": "books",
+            "table": "order_history",
+            "columns": [
+              {
+                "name": "history_id",
+                "type": "INTEGER",
+                "definition": "history_id  INTEGER\r\n        primary key autoincrement"
+              },
+              {
+                "name": "order_id",
+                "type": "INTEGER",
+                "definition": "order_id    INTEGER\r\n        references cust_order"
+              },
+              {
+                "name": "status_id",
+                "type": "INTEGER",
+                "definition": "status_id   INTEGER\r\n        references order_status"
+              },
+              {
+                "name": "status_date",
+                "type": "DATETIME",
+                "definition": "status_date DATETIME"
+              }
+            ],
+            "ddl": "CREATE TABLE \"order_history\"\r\n(\r\n    history_id  INTEGER\r\n        primary key autoincrement,\r\n    order_id    INTEGER\r\n        references cust_order,\r\n    status_id   INTEGER\r\n        references order_status,\r\n    status_date DATETIME\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": []
+          },
+          {
+            "source": "SQLite",
+            "database": "books",
+            "table": "order_line",
+            "columns": [
+              {
+                "name": "line_id",
+                "type": "INTEGER",
+                "definition": "line_id  INTEGER\r\n        primary key autoincrement"
+              },
+              {
+                "name": "order_id",
+                "type": "INTEGER",
+                "definition": "order_id INTEGER\r\n        references cust_order"
+              },
+              {
+                "name": "book_id",
+                "type": "INTEGER",
+                "definition": "book_id  INTEGER\r\n        references book"
+              },
+              {
+                "name": "price",
+                "type": "REAL",
+                "definition": "price    REAL"
+              }
+            ],
+            "ddl": "CREATE TABLE \"order_line\"\r\n(\r\n    line_id  INTEGER\r\n        primary key autoincrement,\r\n    order_id INTEGER\r\n        references cust_order,\r\n    book_id  INTEGER\r\n        references book,\r\n    price    REAL\r\n)",
+            "file": "bird_schemas.txt",
+            "foreign_keys": []
+          }
+        ],
+        "missing_tables": [],
+        "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。"
+      }
+    },
+    {
+      "step": 1,
+      "action": "search_knowledge",
+      "args": {
+        "query": "订单数量 按天 统计 cust_order order_date"
+      },
+      "observation": {
+        "ok": true,
+        "knowledge": [
+          {
+            "knowledge_id": 1,
+            "knowledge_text": "在数据库book_publishing_company的表sales中，qty表示销售数量，ord_date表示订单日期，payterms表示付款条件（如'ON invoice'表示发票付款），ord_num表示订单编号，stor_id和title_id分别表示关联的商店ID和书名ID。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 526,
+            "knowledge_text": "在数据库book_publishing_company的表discounts中，字段lowqty，数据类型为整数（integer），表示最低数量（数量下限），取值为常识证据：享受折扣的最低数量。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 527,
+            "knowledge_text": "在数据库book_publishing_company的表discounts中，字段highqty，数据类型为整数（integer），表示最高数量（最大数量），取值为常识证据：享受折扣的最高数量。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 555,
+            "knowledge_text": "在数据库book_publishing_company的表sales中，字段ord_date，数据类型为日期时间（datetime），表示订单日期。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 554,
+            "knowledge_text": "在数据库book_publishing_company的表sales中，字段ord_num，数据类型为文本（text），表示标识订单的ID编号。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 556,
+            "knowledge_text": "在数据库book_publishing_company的表sales中，字段qty，数据类型为整数（integer），表示销售数量。",
+            "scope": {
+              "databases": [
+                "book_publishing_company"
+              ],
+              "sources": [
+                "SQLite"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          },
+          {
+            "knowledge_id": 1766,
+            "knowledge_text": "计算某类别数量占总数的百分比公式：ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM 总表), 2)。",
+            "declared_scope": {
+              "databases": [],
+              "sources": [
+                "MYSQL",
+                "SQLite",
+                "POSTGRESQL",
+                "Elasticsearch"
+              ]
+            },
+            "scope": {
+              "databases": [],
+              "sources": [
+                "MYSQL",
+                "SQLite",
+                "POSTGRESQL",
+                "Elasticsearch"
+              ]
+            },
+            "retrieval_reason": "域内关键词召回"
+          }
+        ],
+        "dictionary": [],
+        "schema_adjudications": [],
+        "query_helpers": []
+      }
+    }
+  ],
+  "prediction": {
+    "db": "SQLite",
+    "query": "SELECT DATE(order_date) AS order_day, COUNT(*) AS order_count FROM books.cust_order GROUP BY DATE(order_date) ORDER BY order_count DESC LIMIT 1"
+  },
+  "original_training_annotation": {
+    "question_id": 3040,
+    "question": "哪一天的订单数量最多？该天的总订单数量是多少？",
+    "db": "SQLite",
+    "query": "SELECT ord_date, SUM(qty) FROM book_publishing_company.sales GROUP BY ord_date ORDER BY SUM(qty) DESC LIMIT 1"
+  },
+  "assessment": "不理想：跨库Schema与知识不一致",
+  "analysis": "首轮routing指向book_publishing_company，候选却同时包含books与ecommerce等33张表。模型只获取books的4张表Schema，最终使用books.cust_order按DATE(order_date)统计COUNT(*)。知识工具却仍返回出版公司sales的qty/ord_date/ord_num等信息，没有提供所选books.cust_order的对应业务知识。\n\n原始训练标注使用book_publishing_company.sales，按ord_date计算SUM(qty)。题干独立看没有库名且“订单数量”存在口径歧义，不能仅凭标注认定自然语言唯一解；但本次输出明显偏离训练记录的目标库和统计口径。知识ID1、555、554、556支持目标出版库，526、527（折扣上下限）、1766（占比公式）与题意无关。\n\n理想上下文应明确订单笔数与订购件数的区别、所属库、日期粒度。关键问题是Schema允许跨库检索，而search_knowledge固定使用初始scope；本次两类证据失配后check_query仍通过。"
+}

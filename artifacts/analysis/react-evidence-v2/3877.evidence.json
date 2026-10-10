@@ -1,0 +1,707 @@
+{
+  "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+  "initial_prompt": {
+    "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+    "requirements": [],
+    "business_rules": [],
+    "routing": {
+      "databases": [
+        "video_games"
+      ],
+      "sources": [
+        "SQLite"
+      ],
+      "confidence": "weak",
+      "reason": "首条训练示例，仅为候选",
+      "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+    },
+    "education_merge": {},
+    "education_scope": {},
+    "schema_adjudications": [],
+    "schema_candidates": [
+      {
+        "source": "SQLite",
+        "table": "video_games.genre"
+      },
+      {
+        "source": "SQLite",
+        "table": "video_games.game"
+      },
+      {
+        "source": "MYSQL",
+        "table": "transportation.vessel"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.energy_type_dict"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.dict_grade_level"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.platform_dict"
+      },
+      {
+        "source": "SQLite",
+        "table": "disney.revenue"
+      },
+      {
+        "source": "SQLite",
+        "table": "book_publishing_company.titles"
+      },
+      {
+        "source": "MYSQL",
+        "table": "energy.energy_station"
+      },
+      {
+        "source": "POSTGRESQL",
+        "table": "public.vessel_ais_data"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.administrative_division"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.vessel_type_dict"
+      },
+      {
+        "source": "MYSQL",
+        "table": "common.station_type_dict"
+      }
+    ],
+    "tools": {
+      "get_schema": {
+        "purpose": "查真实库表、字段、类型、DDL或ES mapping；未指定表时关键词搜索。可跨候选域查找。",
+        "args": {
+          "tables": [
+            "可选，完整库名.表名或PG裸表名"
+          ],
+          "query": "可选关键词",
+          "source": "可选数据源",
+          "database": "可选数据库",
+          "limit": "可选1到12，默认8",
+          "include_source_documents": "可选布尔值；返回对应完整原始Schema文件"
+        }
+      },
+      "search_knowledge": {
+        "purpose": "查知识、枚举、公式、单位与字典，保留原题必需的知识。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到12，默认10",
+          "include_dictionary_text": "可选布尔值；返回匹配字典的完整原始INSERT"
+        }
+      },
+      "search_examples": {
+        "purpose": "首先检索训练示例及schema_refs；精确匹配保留全部原始候选、重复/冲突标注和附加修订，原始标注不保证正确。",
+        "args": {
+          "query": "补充检索词",
+          "limit": "可选1到5，默认3"
+        }
+      },
+      "check_query": {
+        "purpose": "检查候选的格式、表字段、SQLite编译、ES mapping、教育合并和已知语义错误；自动调整ES层级。返回具体错误和标准化prediction。",
+        "args": {
+          "prediction": "规定的单源或双阶段查询对象，ES query使用对象"
+        }
+      },
+      "finish": {
+        "purpose": "提交与最近一次成功check_query一致的完整prediction；必须先获取所用表Schema和检索知识。",
+        "args": {
+          "prediction": "完整查询对象"
+        }
+      }
+    },
+    "evidence_mode": "raw_with_reviewed_overlays",
+    "exact_examples": [
+      {
+        "question_id": 3877,
+        "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2 Games in 1: Sonic Advance & ChuChu Rocket!'",
+        "raw_annotation": {
+          "question_id": 3877,
+          "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+          "db": "SQLite",
+          "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2 Games in 1: Sonic Advance & ChuChu Rocket!'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3877
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "genre"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "game"
+          }
+        ]
+      }
+    ],
+    "workflow": {
+      "next_action": "search_examples",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ]
+    },
+    "instruction": "同题案例完整提供且不受Top-K限制；先search_examples，再查Schema和知识，检查成功后finish。"
+  },
+  "search_examples": {
+    "ok": true,
+    "examples": [
+      {
+        "question_id": 3877,
+        "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2 Games in 1: Sonic Advance & ChuChu Rocket!'",
+        "raw_annotation": {
+          "question_id": 3877,
+          "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+          "db": "SQLite",
+          "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2 Games in 1: Sonic Advance & ChuChu Rocket!'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3877
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "genre"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "game"
+          }
+        ]
+      },
+      {
+        "question_id": 3847,
+        "question": "游戏2Xtreme的类型是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2Xtreme'",
+        "raw_annotation": {
+          "question_id": 3847,
+          "question": "游戏2Xtreme的类型是什么？",
+          "db": "SQLite",
+          "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2Xtreme'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3847
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "genre"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "game"
+          }
+        ]
+      },
+      {
+        "question_id": 3949,
+        "question": "游戏ID 119的类型是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.id = 119",
+        "raw_annotation": {
+          "question_id": 3949,
+          "question": "游戏ID 119的类型是什么？",
+          "db": "SQLite",
+          "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.id = 119"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3949
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "genre"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "game"
+          }
+        ]
+      }
+    ],
+    "exact_matches": [
+      {
+        "question_id": 3877,
+        "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+        "db": "SQLite",
+        "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2 Games in 1: Sonic Advance & ChuChu Rocket!'",
+        "raw_annotation": {
+          "question_id": 3877,
+          "question": "游戏2 Games in 1: Sonic Advance & ChuChu Rocket!的类型是什么？",
+          "db": "SQLite",
+          "query": "SELECT T2.genre_name FROM video_games.game AS T1 INNER JOIN video_games.genre AS T2 ON T1.genre_id = T2.id WHERE T1.game_name = '2 Games in 1: Sonic Advance & ChuChu Rocket!'"
+        },
+        "annotation_status": "raw_unreviewed",
+        "provenance": {
+          "file": "data/raw/subject/QA_train.json",
+          "sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+          "question_id": 3877
+        },
+        "schema_refs": [
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "genre"
+          },
+          {
+            "query_key": "query",
+            "source": "SQLite",
+            "database": "video_games",
+            "table": "game"
+          }
+        ]
+      }
+    ],
+    "exact_match_count": 1,
+    "corrected_examples": [],
+    "question_correction": null,
+    "instruction": "精确匹配优先核对，但原始标注不保证正确；保留重复与冲突，区分raw_annotation和reviewed_annotation。按schema_refs补查物理表，再检索知识。",
+    "workflow": {
+      "next_action": "get_schema",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": false,
+        "search_knowledge": false,
+        "check_query": false
+      },
+      "scope": {
+        "databases": [
+          "video_games"
+        ],
+        "sources": [
+          "SQLite"
+        ],
+        "confidence": "weak",
+        "reason": "首条训练示例，仅为候选",
+        "instruction": "数据源是候选范围，最终按当前题目及字段归属选择；同名字段/业务枚举必须按源库解释，不强行把跨源查询变单源。"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  },
+  "get_schema": {
+    "ok": true,
+    "tables": [
+      {
+        "source": "SQLite",
+        "database": "video_games",
+        "table": "genre",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "definition": "id         INTEGER not null\r\n            primary key"
+          },
+          {
+            "name": "genre_name",
+            "type": "TEXT",
+            "definition": "genre_name TEXT default NULL"
+          }
+        ],
+        "ddl": "CREATE TABLE genre\r\n(\r\n    id         INTEGER not null\r\n            primary key,\r\n    genre_name TEXT default NULL\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [],
+        "raw_schema": "\r\n-- 表: genre\r\nCREATE TABLE genre\r\n(\r\n    id         INTEGER not null\r\n            primary key,\r\n    genre_name TEXT default NULL\r\n)\r\n",
+        "table_comments": [],
+        "provenance": {
+          "file": "data/raw/subject/Schema/bird_schemas.txt",
+          "encoding": "utf-8-sig",
+          "start_line": 2734,
+          "end_line": 2742,
+          "sha256": "ac29c850c2507718656a9cb89ceba95796d3bf286a26413b4bd43486ad39db6c"
+        }
+      },
+      {
+        "source": "SQLite",
+        "database": "video_games",
+        "table": "game",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "definition": "id        INTEGER not null\r\n            primary key"
+          },
+          {
+            "name": "genre_id",
+            "type": "INTEGER",
+            "definition": "genre_id  INTEGER          default NULL"
+          },
+          {
+            "name": "game_name",
+            "type": "TEXT",
+            "definition": "game_name TEXT default NULL"
+          }
+        ],
+        "ddl": "CREATE TABLE game\r\n(\r\n    id        INTEGER not null\r\n            primary key,\r\n    genre_id  INTEGER          default NULL,\r\n    game_name TEXT default NULL,\r\n    foreign key (genre_id) references genre(id)\r\n)",
+        "file": "bird_schemas.txt",
+        "foreign_keys": [
+          "foreign key (genre_id) references genre(id)\r"
+        ],
+        "raw_schema": "\r\n-- 表: game\r\nCREATE TABLE game\r\n(\r\n    id        INTEGER not null\r\n            primary key,\r\n    genre_id  INTEGER          default NULL,\r\n    game_name TEXT default NULL,\r\n    foreign key (genre_id) references genre(id)\r\n)\r\n",
+        "table_comments": [],
+        "provenance": {
+          "file": "data/raw/subject/Schema/bird_schemas.txt",
+          "encoding": "utf-8-sig",
+          "start_line": 2742,
+          "end_line": 2752,
+          "sha256": "ac29c850c2507718656a9cb89ceba95796d3bf286a26413b4bd43486ad39db6c"
+        }
+      }
+    ],
+    "missing_tables": [],
+    "scope": {
+      "sources": [
+        "SQLite"
+      ],
+      "databases": [
+        "video_games"
+      ],
+      "confidence": "schema",
+      "reason": "已获取的真实Schema，知识按此范围检索"
+    },
+    "source_documents": [],
+    "reference_documents": [],
+    "instruction": "表名和字段以本工具返回为准；缺失表可继续搜索其他数据源，不能臆造。",
+    "workflow": {
+      "next_action": "search_knowledge",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": true,
+        "search_knowledge": false,
+        "check_query": false
+      },
+      "scope": {
+        "sources": [
+          "SQLite"
+        ],
+        "databases": [
+          "video_games"
+        ],
+        "confidence": "schema",
+        "reason": "已获取的真实Schema，知识按此范围检索"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  },
+  "search_knowledge": {
+    "ok": true,
+    "knowledge": [
+      {
+        "knowledge_id": 120,
+        "knowledge_text": "在数据库video_games的表game_platform中，release_year表示游戏发行年份。",
+        "raw_annotation": {
+          "knowledge_id": 120,
+          "knowledge_text": "在数据库video_games的表game_platform中，release_year表示游戏发行年份。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 120
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "字段/公式依赖，必须同时提供"
+      },
+      {
+        "knowledge_id": 121,
+        "knowledge_text": "在数据库video_games的表中，game表和game_publisher表通过game_id关联，game_publisher表和publisher表通过publisher_id关联，game_publisher表和game_platform表通过id和game_publisher_id关联，game_platform表和platform表通过platform_id关联，game_platform表和region_sales表通过id和game_platform_id关联，region_sales表和region表通过region_id关联。",
+        "raw_annotation": {
+          "knowledge_id": 121,
+          "knowledge_text": "在数据库video_games的表中，game表和game_publisher表通过game_id关联，game_publisher表和publisher表通过publisher_id关联，game_publisher表和game_platform表通过id和game_publisher_id关联，game_platform表和platform表通过platform_id关联，game_platform表和region_sales表通过id和game_platform_id关联，region_sales表和region表通过region_id关联。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 121
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "字段/公式依赖，必须同时提供"
+      },
+      {
+        "knowledge_id": 123,
+        "knowledge_text": "在数据库video_games的表game_platform中，id表示游戏平台记录的唯一标识。",
+        "raw_annotation": {
+          "knowledge_id": 123,
+          "knowledge_text": "在数据库video_games的表game_platform中，id表示游戏平台记录的唯一标识。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 123
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "字段/公式依赖，必须同时提供"
+      },
+      {
+        "knowledge_id": 1539,
+        "knowledge_text": "在数据库video_games的表game_platform中，字段release_year，数据类型为整数（integer），表示游戏的发行年份。",
+        "raw_annotation": {
+          "knowledge_id": 1539,
+          "knowledge_text": "在数据库video_games的表game_platform中，字段release_year，数据类型为整数（integer），表示游戏的发行年份。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1539
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "字段/公式依赖，必须同时提供"
+      },
+      {
+        "knowledge_id": 1534,
+        "knowledge_text": "在数据库video_games的表game中，字段genre_id，数据类型为整数（integer），表示游戏类型的ID，取值为常识证据：如果游戏A和游戏B具有相同的类型，那么喜欢游戏A的用户可能也会喜欢游戏B。",
+        "raw_annotation": {
+          "knowledge_id": 1534,
+          "knowledge_text": "在数据库video_games的表game中，字段genre_id，数据类型为整数（integer），表示游戏类型的ID，取值为常识证据：如果游戏A和游戏B具有相同的类型，那么喜欢游戏A的用户可能也会喜欢游戏B。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1534
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1544,
+        "knowledge_text": "在数据库video_games的表genre中，字段genre_name，数据类型为文本（text），表示游戏类型，取值为常识证据：游戏类型对游戏有重大影响。类型指的是游戏的类别或种类，例如动作、冒险、策略或角色扮演。类型可以决定游戏的总体风格和玩法，以及玩家的期望。类型也会影响游戏的受众，因为不同的类型可能吸引不同的玩家群体。",
+        "raw_annotation": {
+          "knowledge_id": 1544,
+          "knowledge_text": "在数据库video_games的表genre中，字段genre_name，数据类型为文本（text），表示游戏类型，取值为常识证据：游戏类型对游戏有重大影响。类型指的是游戏的类别或种类，例如动作、冒险、策略或角色扮演。类型可以决定游戏的总体风格和玩法，以及玩家的期望。类型也会影响游戏的受众，因为不同的类型可能吸引不同的玩家群体。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1544
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1546,
+        "knowledge_text": "在数据库video_games的表platform中，字段platform_name，数据类型为文本（text），表示平台名称，取值为常识证据：游戏平台，即游戏运行的平台，对游戏有重大影响。平台决定了游戏可以运行在什么硬件和软件上，以及游戏的技术能力。平台也会影响游戏的受众，因为不同的平台可能吸引不同的玩家群体。",
+        "raw_annotation": {
+          "knowledge_id": 1546,
+          "knowledge_text": "在数据库video_games的表platform中，字段platform_name，数据类型为文本（text），表示平台名称，取值为常识证据：游戏平台，即游戏运行的平台，对游戏有重大影响。平台决定了游戏可以运行在什么硬件和软件上，以及游戏的技术能力。平台也会影响游戏的受众，因为不同的平台可能吸引不同的玩家群体。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1546
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 107,
+        "knowledge_text": "在数据库video_games的表genre中，genre_name表示游戏类型：genre_name = 'Action' 表示动作类游戏。",
+        "raw_annotation": {
+          "knowledge_id": 107,
+          "knowledge_text": "在数据库video_games的表genre中，genre_name表示游戏类型：genre_name = 'Action' 表示动作类游戏。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 107
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 122,
+        "knowledge_text": "在数据库video_games的表game中，game_name表示游戏名称，genre_id与genre表的id关联表示游戏类型。",
+        "raw_annotation": {
+          "knowledge_id": 122,
+          "knowledge_text": "在数据库video_games的表game中，game_name表示游戏名称，genre_id与genre表的id关联表示游戏类型。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 122
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      },
+      {
+        "knowledge_id": 1542,
+        "knowledge_text": "在数据库video_games的表game_publisher中，字段publisher_id，数据类型为整数（integer），表示发行商的ID，取值为常识证据：如果游戏A和游戏B由同一发行商发行，并且用户是该发行商公司的粉丝，那么喜欢游戏A的用户可能也会喜欢游戏B。",
+        "raw_annotation": {
+          "knowledge_id": 1542,
+          "knowledge_text": "在数据库video_games的表game_publisher中，字段publisher_id，数据类型为整数（integer），表示发行商的ID，取值为常识证据：如果游戏A和游戏B由同一发行商发行，并且用户是该发行商公司的粉丝，那么喜欢游戏A的用户可能也会喜欢游戏B。"
+        },
+        "provenance": {
+          "file": "data/raw/subject/knowledge.json",
+          "sha256": "86ea4937db153a6d2c20765b7ef2a7921394f6551a61cc484d2232a1f53c8bc0",
+          "knowledge_id": 1542
+        },
+        "scope": {
+          "databases": [
+            "video_games"
+          ],
+          "sources": [
+            "SQLite"
+          ]
+        },
+        "retrieval_reason": "域内关键词召回"
+      }
+    ],
+    "dictionary": [],
+    "scope": {
+      "sources": [
+        "SQLite"
+      ],
+      "databases": [
+        "video_games"
+      ],
+      "confidence": "schema",
+      "reason": "已获取的真实Schema，知识按此范围检索"
+    },
+    "schema_adjudications": [],
+    "query_helpers": [],
+    "workflow": {
+      "next_action": "check_query",
+      "required_order": [
+        "search_examples",
+        "get_schema",
+        "search_knowledge",
+        "check_query",
+        "finish"
+      ],
+      "completed": {
+        "search_examples": true,
+        "get_schema": true,
+        "search_knowledge": true,
+        "check_query": false
+      },
+      "scope": {
+        "sources": [
+          "SQLite"
+        ],
+        "databases": [
+          "video_games"
+        ],
+        "confidence": "schema",
+        "reason": "已获取的真实Schema，知识按此范围检索"
+      },
+      "instruction": "可重复检索；补查Schema或重新检索示例后必须重新查知识；任何证据检索后必须重新check_query才能finish。"
+    }
+  }
+}
